@@ -8,14 +8,31 @@
   background: repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
 }
 
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap > section.elementor-section{
-  // fix for menu drop down
-  position: relative;
-  z-index: 2;
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap {
+  section.elementor-section {
+    // fix for menu drop down
+    position: relative;
+    &:nth-child(1){
+      z-index: 7;
+    }
+    &:nth-child(2){
+      z-index: 6;
+    }
+    &:nth-child(3){
+      z-index: 5;
+    }
+    &:nth-child(4){
+      z-index: 4;
+    }
+    &:nth-child(5){
+      z-index: 3;
+    }
+    &:nth-child(6){
+      z-index: 2;
+    }
+  }
 }
-section.section-dtbaker-has-inner{
-  z-index: 1 !important;
-}
+
 
 /**
 StylePress Custom Addons:
@@ -28,4 +45,3 @@ StylePress Custom Addons:
     }
   }
 }
-

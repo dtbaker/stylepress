@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
  */
 class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
+
 	/**
 	 * Get Widgets name
 	 *
@@ -144,6 +145,90 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 		$this->end_controls_section();
 
+		$this->start_controls_section(
+			'section_stylepress_menu_style',
+			[
+				'label' => __( 'Menu Style', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'menu_align',
+			[
+				'label' => __( 'Alignment', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'prefix_class' => 'elementor-align-',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_background',
+			[
+				'label' => __( 'Background Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#f8f8f8',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation, {{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_control(
+			'menu_background_hover',
+			[
+				'label' => __( 'Background Color (hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#eaeaea',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover a' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'font_color',
+			[
+				'label' => __( 'Font Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-menu-toggle, {{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'font_color_hover',
+			[
+				'label' => __( 'Font Color (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li a:hover' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+
 		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
 
 	}
@@ -175,12 +260,15 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
             }else{
 			    ob_start();
 			    ?>
-                <nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" class="main-navigation">
-                    <div class="inside-navigation grid-container grid-parent">
+                <nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" class="stylepress-main-navigation">
+                    <button class="stylepress-menu-toggle" aria-controls="<?php echo $this->get_id();?>-menu" aria-expanded="false">
+                        <span class="stylepress-mobile-menu"><?php esc_html_e('Menu','stylepress');?></span>
+                    </button>
+                    <div id="<?php echo $this->get_id();?>-menu" class="stylepress-inside-navigation">
 						<?php
 						wp_nav_menu(
 							array(
-								'theme_location' => 'primary',
+								'theme_location' => $settings['menu_location'],
 								'container' => 'div',
 								'container_class' => 'main-nav',
 								'container_id' => 'primary-menu',

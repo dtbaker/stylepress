@@ -6,12 +6,26 @@
   background: -webkit-repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
   background: repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap > section.elementor-section {
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
   position: relative;
-  z-index: 2;
 }
-section.section-dtbaker-has-inner {
-  z-index: 1 !important;
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(1) {
+  z-index: 7;
+}
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(2) {
+  z-index: 6;
+}
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(3) {
+  z-index: 5;
+}
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(4) {
+  z-index: 4;
+}
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(5) {
+  z-index: 3;
+}
+body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(6) {
+  z-index: 2;
 }
 /**
 StylePress Custom Addons:

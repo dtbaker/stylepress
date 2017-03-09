@@ -1,0 +1,133 @@
+.stylepress-main-navigation{
+  clear: both;
+  display: block;
+  text-align: left;
+  background-color: #f8f8f8;
+
+  .stylepress-inside-navigation {
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+      @media (max-width: 768px){
+        display:none;
+      }
+      li {
+        display: inline-block;
+        position: relative;
+        a {
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 60px;
+          color: #000;
+          display: block;
+          box-shadow: none;
+          text-decoration: none;
+          font-family: inherit;
+          font-size: 15px;
+          &:hover {
+            color: #000;
+            background: #eaeaea;
+          }
+        }
+        &.menu-item-has-children > a {
+          padding-right: 0;
+          position: relative;
+        }
+        &:hover {
+          > a {
+            background: #eaeaea;
+          }
+          > ul {
+            display: block;
+          }
+        }
+      }
+      ul {
+        top: auto;
+        background-color: #f8f8f8;
+        display: none;
+        float: left;
+        position: absolute;
+        left: 0;
+        z-index: 99999;
+        width: 200px;
+        text-align: left;
+        li {
+          width: 100%;
+          a {
+            font-size: 14px;
+            padding: 10px 20px;
+            line-height: normal;
+          }
+        }
+        ul {
+          left: 100%;
+          top: 0;
+        }
+      }
+    }
+    &:after{
+      clear:both;
+      display:table;
+      content:'';
+    }
+  }
+  .stylepress-menu-toggle{
+    &:before{
+      content: "\f0c9";
+      font-family: FontAwesome;
+      line-height: 1em;
+      speak: none;
+    }
+    padding-left: 20px;
+    padding-right: 20px;
+    line-height: 60px;
+    width: 100%;
+    text-align: center;
+    display: none;
+    color:#000;
+    cursor: pointer;
+    @media (max-width: 768px){
+      display:block;
+    }
+    .stylepress-mobile-menu{
+      margin-left: 10px;
+    }
+  }
+  .stylepress-menu-toggle,
+  .stylepress-menu-toggle:active,
+  .stylepress-menu-toggle:focus,
+  .stylepress-menu-toggle:hover{
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+  }
+
+
+  @media (max-width: 768px){
+    .stylepress-inside-navigation {
+      .main-nav > ul {
+        > li {
+          float: none;
+          clear: both;
+          display: block !important;
+          text-align: left !important;
+        }
+      }
+    }
+    &.toggled{
+      .stylepress-menu-toggle:before{
+        content: "\f00d";
+        speak: none;
+      }
+      .main-nav > ul{
+        display:block;
+      }
+    }
+  }
+
+
+
+}

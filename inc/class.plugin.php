@@ -144,6 +144,9 @@ class DtbakerElementorManager {
     }
 
     public function widget_ajax_calls(){
+
+	    // todo: only if widget is registered.
+
 	    add_action( 'wp_ajax_stylepress_email_sub', function(){
 
 	        $return = array();
@@ -220,7 +223,7 @@ class DtbakerElementorManager {
 
     public function section_before_render($section){
 
-	    if( 'section' === $section->get_name() ) {
+	    /*if( 'section' === $section->get_name() ) {
 		    $children  = $section->get_children();
 		    $has_inner = false;
 		    $column_count = 0;
@@ -242,7 +245,7 @@ class DtbakerElementorManager {
 				    ]
 			    );
 		    }
-	    }
+	    }*/
     }
 
     public function has_permission( $post = false ){
@@ -545,10 +548,21 @@ class DtbakerElementorManager {
 		wp_enqueue_style( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, '1.0.6' );
 		wp_enqueue_script( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, '1.0.6', true );
 
-         if( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-	         wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, '1.0.6' );
-	         wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, '1.0.6', true );
-         }
+        if( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+            wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, '1.0.6' );
+            wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, '1.0.6', true );
+        }
+
+        // plugin css:
+        // todo: only show if registered.
+
+        wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.css', false );
+        wp_enqueue_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
+        wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+
+		wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/menu.css', false );
+		wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/navigation.js', array('jquery') );
+
 
 	}
 

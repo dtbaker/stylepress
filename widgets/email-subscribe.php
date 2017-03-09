@@ -20,16 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 
 
-    public function __construct( array $data = [], array $args = null ) {
-
-	    wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.css', false );
-	    wp_enqueue_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
-
-	    wp_localize_script( 'stylepress-email-script', 'stylepress_email',
-		    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-
-        parent::__construct( $data, $args );
-    }
 
 	/**
 	 * Get Widgets name
