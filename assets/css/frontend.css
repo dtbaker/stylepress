@@ -27,6 +27,9 @@ body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-sec
 body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(6) {
   z-index: 2;
 }
+body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
+  z-index: 1 !important;
+}
 /**
 StylePress Custom Addons:
  */

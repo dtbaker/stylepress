@@ -197,7 +197,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#eaeaea',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover > a' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -223,6 +223,13 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li a:hover' => 'color: {{VALUE}};',
 				],
+			]
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
 			]
 		);
 

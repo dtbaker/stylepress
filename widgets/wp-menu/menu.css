@@ -27,7 +27,6 @@
   box-shadow: none;
   text-decoration: none;
   font-family: inherit;
-  font-size: 15px;
 }
 .stylepress-main-navigation .stylepress-inside-navigation ul li a:hover {
   color: #000;
@@ -58,7 +57,7 @@
   width: 100%;
 }
 .stylepress-main-navigation .stylepress-inside-navigation ul ul li a {
-  font-size: 14px;
+  font-size: 0.9em;
   padding: 10px 20px;
   line-height: normal;
 }
