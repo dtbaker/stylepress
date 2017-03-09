@@ -197,7 +197,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#eaeaea',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover > a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover a' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
