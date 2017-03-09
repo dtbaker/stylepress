@@ -34,6 +34,6 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 StylePress Custom Addons:
  */
 .stylepress-icon-inline .elementor-icon-list-items > li {
-  float: left;
+  display: inline-block;
   padding: 6px;
 }
