@@ -55,18 +55,17 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 
 <div class="wrap">
 
+	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
 
-	<div id="stylepress-header">
-		<a href="https://stylepress.org" target="_blank" id="stylepress-logo"><img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/logo-stylepress-sml.png' );?>"></a>
-	</div>
-
-	<!-- <h1><?php esc_html_e( 'StylePress for Elementor', 'stylepress' ); ?>
-		<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style' ) ); ?>" class="page-title-action"><?php echo esc_html__( 'Add New Style', 'stylepress' ); ?></a>
-	</h1> -->
 
     <?php if(isset($_GET['saved'])){ ?>
         <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
     <?php } ?>
+
+	<?php if(!get_theme_support('stylepress-elementor')){ ?>
+        <div class="notice notice-error"><p>Warning: The current theme does not specify <code>stylepress-elementor</code> support. Some functions may not work correctly. Use our recommended theme if you have layout issues.</p></div>
+	<?php } ?>
+
 
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 		<input type="hidden" name="action" value="dtbaker_elementor_save" />
@@ -76,7 +75,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 			<div>
 				<div>
 					<h3>Outer Styles:</h3>
-					<p>Choose which outer style to apply on your entire website:</p>
+					<p>Choose which outer style to apply on your entire website.</p>
 
 					<table>
 						<thead>
@@ -129,6 +128,9 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 				</div>
 				<div>
 					<h3>Inner Components:</h3>
+                    <p>
+                        <strong>Note: this is currently disabled, it will NOT do anything... </strong>
+                    </p>
 					<p>Choose which inner styles to apply to various parts of the site:</p>
 
 					<ul class="dtbaker-elementor-settings">
@@ -150,10 +152,10 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 				<div>
 					<h3>Instructions:</h3>
 					<ol>
-						<li>Create your "Site Style" below using Elementor.</li>
-						<li>Make sure you have a single "Inner Content" widget added.</li>
-						<li>Choose which style to apply globally to your site.</li>
-						<li>When editing individual pages/posts you can choose a different style from site default.</li>
+						<li>Create your "Site Style" in Elementor.</li>
+						<li>Choose which styles to apply globally to your site.</li>
+						<li>Tick the "overwrite" option if you want the style to overwrite all theme output (test it on and off to see the difference)</li>
+						<li>When editing individual pages you can apply a different style in the metabox area.</li>
 					</ol>
 					<h3>Recommended Plugins:</h3>
 					<p>It is recommended to install these plugins to get best results:</p>
@@ -163,9 +165,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						<li><a href="https://wordpress.org/plugins/easy-google-fonts/" target="_blank">Easy Google Fonts</a></li>
 					</ol>
 					<h3>Recommended Theme:</h3>
-                    <?php if(!get_theme_support('stylepress-elementor')){ ?>
-                    <div class="notice notice-error"><p>Warning: The current theme does not specify <code>stylepress-elementor</code> support. Some functions may not work correctly. Use our recommended theme if you have layout issues.</p></div>
-                    <?php } ?>
+
 					<p>This plugin works best with a basic default theme. If your current theme is causing layout problems please <a href="https://dtbaker.net/labs/stylepress-basic-wordpress-theme/" target="_blank">click here</a> to download our recommended basic theme.</p>
 				</div>
 			</div>

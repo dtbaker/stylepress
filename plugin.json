@@ -2,18 +2,18 @@
   "slug": "stylepress",
   "skip-banner": true,
   "name": "StylePress for Elementor",
-  "description": "Easily apply full site layout templates to the entire website. No coding required.",
-  "url": "https://dtbaker.net",
-  "version": "1.0.6",
+  "description": "Easy Full Site Builder for the powerful Elementor plugin. Apply styles to your entire website - no coding required.",
+  "url": "https://stylepress.org",
+  "version": "1.0.9",
      "author": {
        "name": "dtbaker",
        "url": "https://dtbaker.net"
      },
   "history": {
-    "1.0.6": {
-      "date": "2017-03-08",
+    "1.0.9": {
+      "date": "2017-03-09",
       "changes": [
-        "Initial Release"
+        "Initial Dev Work"
       ]
     }
   }

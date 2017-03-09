@@ -53,9 +53,7 @@ add_thickbox();
 <div class="wrap">
 
 
-    <div id="stylepress-header">
-        <a href="https://stylepress.org" target="_blank" id="stylepress-logo"><img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/logo-stylepress-sml.png' );?>"></a>
-    </div>
+	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
 
 
 	<div class="dtbaker-elementor-browser">
@@ -83,13 +81,13 @@ add_thickbox();
 					<h3 class="design-name"><?php echo esc_html( $design ); ?></h3>
 
 					<div class="theme-actions">
-						<a class="button button" href="#" onclick="alert('Coming soon');"><?php esc_html_e( 'Copy', 'stylepress' ); ?></a>
+<!--						<a class="button button" href="#" onclick="alert('Coming soon');">--><?php //esc_html_e( 'Copy', 'stylepress' ); ?><!--</a>-->
 						<a class="button button-primary" href="<?php echo esc_url( get_edit_post_link( $design_id ) ); ?>"><?php esc_html_e( 'Edit Style', 'stylepress' ); ?></a>
 					</div>
 				</div>
 			<?php endforeach; ?>
 		</div>
 	</div>
-    <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style' ) ); ?>" class="button button-primary">Create New Style</a>
+
 	<div class="theme-overlay"></div>
 </div>

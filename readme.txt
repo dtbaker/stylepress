@@ -1,7 +1,7 @@
 === StylePress for Elementor ===
 Contributors: dtbaker
 Donate link: https://dtbaker.net
-Tags: elementor
+Tags: page builder, editor, elementor, builder, visual editor, front-end editor, design, drag and drop builder, front-end builder, landing page, page builder plugin, site builder, template builder, visual builder, website builder, wysiwyg
 Requires at least: 4.4
 Tested up to: 4.7.3
 Stable tag: trunk
@@ -17,6 +17,8 @@ This nifty plugin turns the Elementor Page Builder into a Full Site Editor.
 You can design your entire website layout (header, footer, sidebars, etc..) and apply that layout to every page of your website.
 
 Update the layout once and it applies to every page automatically.
+
+More details on our dedicated website: https://stylepress.org
 
 == Installation ==
 

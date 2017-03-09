@@ -104,30 +104,56 @@
   #dtbaker-return-to-style{
     padding: 0 0 20px;
   }
-  #stylepress-metabox{
-    h3{
+  .stylepress-metabox{
+    > h3{
+      background:#f5f5f5;
+      padding: 15px 20px;
+      position: relative;
+      margin: 0 0 30px;
+      &:before{
+        position:absolute;
+        left:0;
+        content:'';
+        display:block;
+        top:0;
+        bottom:0;
+        width:4px;
+        background:#e6e6e6
+      }
+      span{
+        font-weight:bold;
+        display:block;
+        padding: 0 0 5px;
+      }
+      small{
+        font-weight:normal;
+        display:block;
+      }
       a{
+        float:right;
       }
     }
-    > ul{
-      display:block;
-      margin:0;
-      padding:0;
-      > li{
-        display:inline-block;
-        width: 24%;
-        padding:5px;
-        .style{
-border:1px solid #EFEFEF;
-          border-radius: 5px;
-          padding:5px;
-          .thumb{
-            img{
-              max-width:100%;
-              height:auto;
+    .inner-wrap {
+      margin: 0 0 40px;
+      > ul {
+        display: block;
+        padding: 0;
+        > li {
+          display: inline-block;
+          width: 24%;
+          padding: 5px;
+          .style {
+            border: 1px solid #EFEFEF;
+            border-radius: 5px;
+            padding: 5px;
+            .thumb {
+              img {
+                max-width: 100%;
+                height: auto;
+              }
             }
-          }
 
+          }
         }
       }
     }
@@ -138,14 +164,46 @@ border:1px solid #EFEFEF;
   }
 }
 
+.wp-admin.post-type-dtbaker_style.post-new-php{
+  #elementor-editor{
+    display:none !important;
+  }
+}
 .sub2-dtbaker-stylepress a{
   color:#8bcc3c;
 }
 
 #stylepress-header{
-  margin-top: 40px;
-  img{
-    width:334px;
-    height:75px;
+  margin: 40px 0 40px;
+  background: #FFF;
+  padding: 20px;
+  border-radius: 10px;
+  .stylepress-logo{
+    img{
+      width:334px;
+      height:75px;
+    }
+  }
+  .icons{
+    float:right;
+    text-align: right;
+    padding: 5px 4px 20px;
+    a{
+      text-decoration: none;
+      color: #545c63;
+      &:after{
+        content:'|';
+        color: #545c63;
+        padding: 0 4px 0 7px;
+      }
+      &:last-child:after{
+        display:none;
+      }
+    }
+  }
+  .buttons{
+    float:right;
+    clear:right;
+    text-align: right
   }
 }

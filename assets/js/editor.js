@@ -52,4 +52,25 @@
 	$('body').on('change','select[data-setting="dynamic_field_value"]',function(){
 		$('#dtbaker-dynamic-code').text( $(this).val() ? '{{' + $(this).val() + '}}' : '');
 	});
+
+    var $templatewrap = $( '#tmpl-elementor-panel-categories' );
+    if( $templatewrap.length ) {
+        var $template = $('<div>' + $templatewrap.html() + '</div>');
+        $template.find('a[href^="https://go.elementor.com"]').each(function(){
+            $(this).attr('href', $(this).attr('href') + '?ref=1164&campaign=jslink');
+        });
+        $templatewrap.html($template.html());
+    }
+
+    var $templatewrap = $( '#tmpl-elementor-panel-global' );
+    if( $templatewrap.length ) {
+        var $template = $('<div>' + $templatewrap.html() + '</div>');
+        $template.find('a[href^="https://go.elementor.com"]').each(function(){
+            $(this).attr('href', $(this).attr('href') + '?ref=1164&campaign=jslink');
+        });
+        $templatewrap.html($template.html());
+    }
+
+    elementor.config.pro_library_url = 'https://go.elementor.com/pro/?ref=1164&campaign=prolib';
+
 } )(jQuery);

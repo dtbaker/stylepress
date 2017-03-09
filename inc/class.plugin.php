@@ -78,8 +78,8 @@ class DtbakerElementorManager {
 		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
 		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 		add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
-//		$this->add_json_overrides();
 		add_action( 'init', array( $this, 'add_json_overrides' ) );
+		add_action( 'init', array( $this, 'elementor_ref' ) );
 
 		add_filter( 'template_include', array( $this, 'template_include' ) );
 		add_action( 'get_header', array( $this, 'get_header' ), 999 );
@@ -398,6 +398,7 @@ class DtbakerElementorManager {
 			return $dropdown_args;
         }  );
 		add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
+		add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
 
 	}
 
@@ -431,7 +432,26 @@ class DtbakerElementorManager {
 		), DTBAKER_ELEMENTOR_URI .'assets/img/icon.png' );
 		// hack to rmeove default submenu
 		$page = add_submenu_page('dtbaker-stylepress', __('StylePress', 'stylepress'), __( 'Styles', 'stylepress' ), 'manage_options',  'dtbaker-stylepress' , array($this, 'styles_page_callback'));
+		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
+
+		$page = add_submenu_page('dtbaker-stylepress', __('Add-Ons', 'stylepress'), __( 'Add-Ons', 'stylepress' ), 'manage_options',  'dtbaker-stylepress-addons' , array($this, 'addons_page_callback'));
+		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
+
 		$page = add_submenu_page('dtbaker-stylepress', __('Settings', 'stylepress'), __( 'Settings', 'stylepress' ), 'manage_options',  'dtbaker-stylepress-settings' , array($this, 'settings_page_callback'));
+		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
+
+	}
+
+	/**
+	 * Font Awesome and other assets for admin pages.
+	 *
+	 * @since 1.0.9
+	 */
+	public function admin_page_assets() {
+		wp_enqueue_style(
+			'fontawesome',
+			'//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'
+		);
 
 	}
 
@@ -442,7 +462,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function styles_page_callback() {
-		include DTBAKER_ELEMENTOR_PATH . 'templates/admin-page.php';
+		include DTBAKER_ELEMENTOR_PATH . 'admin/styles-page.php';
 	}
 
 	/**
@@ -452,7 +472,17 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function settings_page_callback() {
-		include DTBAKER_ELEMENTOR_PATH . 'templates/settings-page.php';
+		include DTBAKER_ELEMENTOR_PATH . 'admin/settings-page.php';
+	}
+
+	/**
+	 * This is our callback for rendering our custom menu page.
+	 * This page shows all our site styles and currently selected defaults.
+	 *
+	 * @since 1.0.8
+	 */
+	public function addons_page_callback() {
+		include DTBAKER_ELEMENTOR_PATH . 'admin/addons-page.php';
 	}
 
 	/**
@@ -489,6 +519,27 @@ class DtbakerElementorManager {
 		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'elementor-editor' ), '1.0.6', true );
 	}
 
+	public function elementor_ref(){
+
+		if ( isset( $_GET['page'] ) && 'go_elementor_pro' === $_GET['page'] ) {
+			wp_redirect( 'https://elementor.com/pro/?ref=1164&campaign=mainmenu' );
+			exit;
+		}
+
+		if( defined( 'ELEMENTOR_PLUGIN_BASE' ) ) {
+			add_filter( 'plugin_action_links_' . ELEMENTOR_PLUGIN_BASE, function( $links ) {
+
+				if( isset( $links['go_pro'] ) ) {
+					$links['go_pro'] = sprintf( '<a href="%s" target="_blank" class="elementor-plugins-gopro">%s</a>', 'https://elementor.com/pro/?ref=1164&campaign=pluginget', __( 'Go Pro', 'elementor' ) );
+				}
+
+				return $links;
+
+			}, 99, 1 );
+		}
+
+	}
+
 
 	/**
 	 * Adds a meta box to every post type.
@@ -514,12 +565,29 @@ class DtbakerElementorManager {
 				}
 			}
 			add_meta_box(
+				'dtbaker_stylepress_export',
+				__( 'Export', 'stylepress' ),
+				array( $this, 'meta_box_export' ),
+				'dtbaker_style',
+				'side',
+				'low'
+			);
+
+			add_meta_box(
 				'dtbaker_sub_style',
-				__( 'Configuration', 'stylepress' ),
+				__( 'Styles', 'stylepress' ),
 				array( $this, 'meta_box_sub_styles' ),
 				'dtbaker_style',
 				'normal',
 				'high'
+			);
+			add_meta_box(
+				'dtbaker_sub_style_advanced',
+				__( 'Advanced Configuration', 'stylepress' ),
+				array( $this, 'meta_box_sub_advanced' ),
+				'dtbaker_style',
+				'normal',
+				'low'
 			);
 		}
 
@@ -591,9 +659,46 @@ class DtbakerElementorManager {
 	 */
 	public function meta_box_sub_styles( $post ) {
 
-		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type && 'publish' === get_post_status( $post->ID ) ) {
+		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
 
-			include_once DTBAKER_ELEMENTOR_PATH . 'templates/style-meta-box.php';
+		    if(isset($_GET['post_parent']) && empty($post->post_parent)){
+			    $post->post_parent = (int)$_GET['post_parent'];
+            }
+
+			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/style-meta-box.php';
+		}
+	}
+
+	/**
+	 * This renders our metabox on the style edit page
+	 *
+	 * @since 1.0.3
+	 *
+	 * @param WP_Post $post Current post object.
+	 */
+	public function meta_box_export( $post ) {
+
+		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
+
+			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/export.php';
+		}
+	}
+
+
+	/**
+	 * This renders our metabox on the style edit page
+	 *
+	 * @since 1.0.9
+	 *
+	 * @param WP_Post $post Current post object.
+	 */
+	public function meta_box_sub_advanced( $post ) {
+
+		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
+			if(isset($_GET['post_parent']) && empty($post->post_parent)){
+				$post->post_parent = (int)$_GET['post_parent'];
+			}
+			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/advanced-meta-box.php';
 		}
 	}
 
@@ -608,7 +713,7 @@ class DtbakerElementorManager {
 
 		if ( $this->has_permission( $post ) ) {
 
-			include_once DTBAKER_ELEMENTOR_PATH . 'templates/post-meta-box.php';
+			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/post-meta-box.php';
 
 		}
 	}
@@ -882,6 +987,7 @@ class DtbakerElementorManager {
 		}
 
 		wp_redirect( admin_url('admin.php?page=dtbaker-stylepress-settings&saved') );
+		exit;
 
 
 	}
@@ -1157,6 +1263,34 @@ class DtbakerElementorManager {
 	public function get_style_elementor_overrides($style_id){
 	    // todo: meta post these.
 	    return json_decode(file_get_contents(DTBAKER_ELEMENTOR_PATH.'styles/wellness/elementor.json'),true);
+    }
+
+    public function stylepress_export() {
+
+	    if ( ! isset( $_POST['stylepress_export_data'] ) || empty( $_POST['post_id'] ) ) { // WPCS: input var okay.
+		    return;
+	    }
+
+	    // Verify that the nonce is valid.
+	    if ( ! wp_verify_nonce( $_POST['stylepress_export_data'], 'stylepress_export_data' ) ) { // WPCS: sanitization ok. input var okay.
+		    return;
+	    }
+
+	    $post_id = (int) $_POST['post_id'];
+
+	    if ( ! $this->has_permission( $post_id ) ) {
+		    return;
+	    }
+
+	    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
+	    $import_export = DtbakerElementorImportExport::get_instance();
+	    $data          = $import_export->export_data( $post_id );
+
+	    echo '<pre>'; print_r( $data ); echo '</pre>'; exit;
+
+	    wp_send_json( $data );
+
+	    exit;
     }
 
 }
