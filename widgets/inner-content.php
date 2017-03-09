@@ -141,3 +141,6 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	}
 
 }
+
+
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Inner_Content() );

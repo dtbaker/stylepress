@@ -1,0 +1,100 @@
+@-webkit-keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    opacity: 0;
+  }
+}
+@keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+.stylepress-email-subscribe {
+  min-height: 55px;
+  position: relative;
+  display: inline-block;
+}
+.stylepress-email-subscribe .stylepress-email-status {
+  font-size: 14px;
+}
+.stylepress-email-subscribe.submitting .loading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 4;
+}
+.stylepress-email-subscribe.submitting .loading:before {
+  top: 9px;
+  left: 41%;
+  z-index: 5;
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  border-radius: 100%;
+  -webkit-animation: sk-scaleout 1s infinite ease-in-out;
+  animation: sk-scaleout 1s infinite ease-in-out;
+}
+.stylepress-email-subscribe.submitting input {
+  opacity: 0.4;
+}
+.stylepress-email-subscribe.error .stylepress-email-status {
+  color: #FF0000;
+}
+.stylepress-email-subscribe.success input {
+  display: none;
+}
+.stylepress-email-subscribe input[type="text"],
+.stylepress-email-subscribe input[type="email"],
+.stylepress-email-subscribe input[type="url"],
+.stylepress-email-subscribe input[type="password"],
+.stylepress-email-subscribe input[type="search"],
+.stylepress-email-subscribe textarea {
+  color: #666666;
+  background-color: #fafafa;
+  border-color: #cccccc;
+}
+.stylepress-email-subscribe input[type="text"]:focus,
+.stylepress-email-subscribe input[type="email"]:focus,
+.stylepress-email-subscribe input[type="url"]:focus,
+.stylepress-email-subscribe input[type="password"]:focus,
+.stylepress-email-subscribe input[type="search"]:focus,
+.stylepress-email-subscribe textarea:focus {
+  color: #666666;
+  background-color: #ffffff;
+  border-color: #bfbfbf;
+}
+.stylepress-email-subscribe button,
+.stylepress-email-subscribe input[type="button"],
+.stylepress-email-subscribe input[type="reset"],
+.stylepress-email-subscribe input[type="submit"],
+.stylepress-email-subscribe .button,
+.stylepress-email-subscribe .button:visited {
+  color: #ffffff;
+  background-color: #666666;
+}
+.stylepress-email-subscribe button:hover,
+.stylepress-email-subscribe input[type="button"]:hover,
+.stylepress-email-subscribe input[type="reset"]:hover,
+.stylepress-email-subscribe input[type="submit"]:hover,
+.stylepress-email-subscribe .button:hover,
+.stylepress-email-subscribe button:focus,
+.stylepress-email-subscribe input[type="button"]:focus,
+.stylepress-email-subscribe input[type="reset"]:focus,
+.stylepress-email-subscribe input[type="submit"]:focus,
+.stylepress-email-subscribe .button:focus {
+  color: #666666;
+  background-color: #eaeaea;
+}

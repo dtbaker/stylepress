@@ -29,5 +29,8 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
         text-align: center;
         padding: 30px;
     }
+#elementor-controls [class*="elementor-control-stylepress"]{
+    border:4px solid #3d99d4;
 
+}
 </style>

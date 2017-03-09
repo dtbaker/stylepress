@@ -13,8 +13,10 @@ body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-sec
 section.section-dtbaker-has-inner {
   z-index: 1 !important;
 }
-.dtb-icon-inline .elementor-icon-list-items > li {
+/**
+StylePress Custom Addons:
+ */
+.stylepress-icon-inline .elementor-icon-list-items > li {
   float: left;
   padding: 6px;
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi90aGVtZXMvcGx1Z2lucy9zdHlsZXByZXNzL2Fzc2V0cy9jc3MvZnJvbnRlbmQubGVzcyIsIjxpbnB1dCBjc3MgND4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7RUFDRSxtQkFBQTtFQUNBLG1CQUFBO0VBQ0EsWUFBQTtFQUNBLGlCQUFBO0VBQ0Esd0dBQUE7RUFDQSxnR0FBQTtDQ0FEO0FER0Q7RUFFRSxtQkFBQTtFQUNBLFdBQUE7Q0NGRDtBRElEO0VBQ0Usc0JBQUE7Q0NGRDtBREtEO0VBR00sWUFBQTtFQUNBLGFBQUE7Q0NMTCIsImZpbGUiOiJ0by5jc3MifQ== */

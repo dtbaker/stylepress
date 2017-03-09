@@ -38,6 +38,8 @@ wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce'
 	}
 	?>
 </select>
+<!--
 <p>
 <input type="checkbox" value="1" name="dtbaker_style[overwrite]" id="dtbaker_page_style_overwrite"<?php echo $current_overwrite ? ' checked':'';?>> Overwrite Theme Output
 </p>
+-->

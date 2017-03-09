@@ -42,6 +42,7 @@ class DtbakerElementorImportExport {
 
 	public function export_data($post_id){
 
+		if(!$post_id)return;
 		$post_data = get_post($post_id);
 		$final_export_data = array();
 
@@ -167,6 +168,16 @@ class DtbakerElementorImportExport {
 					'post_mime_type' => $post_data->post_mime_type,
 					'meta'           => $meta,
 				);
+			}
+
+			// also need to export the Google Font settings for this style.
+			$final_export_data['easy_google_font'] = array();
+			$all_options     = get_option( 'tt_font_theme_options', array() );
+			foreach($all_options as $key=>$val){
+				if(preg_match('#^'. (int)$post_id .'[a-z]#', $key )){
+					$new_key = str_replace( (int)$post_id, '', $key );
+					$final_export_data['easy_google_font'][$new_key] = $val;
+				}
 			}
 
 		}

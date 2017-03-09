@@ -69,6 +69,7 @@ class DtbakerElementorManager {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_action( 'init', array( $this, 'register_new_nav_menu' ) );
+		add_action( 'init', array( $this, 'widget_ajax_calls' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
@@ -128,43 +129,93 @@ class DtbakerElementorManager {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
-							// inner content widget.
-							$widget_file   = 'plugins/elementor/inner-content.php';
-							$template_file = locate_template( $widget_file );
-							if ( ! $template_file || ! is_readable( $template_file ) ) {
-								$template_file = DTBAKER_ELEMENTOR_PATH . 'widgets/inner-content.php';
-							}
-							if ( $template_file && is_readable( $template_file ) ) {
-								require_once $template_file;
-								Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Elementor\Widget_Dtbaker_Inner_Content() );
-							}
+                            // todo: option these out in 'Add-Ons' section
+						    require_once DTBAKER_ELEMENTOR_PATH . 'widgets/inner-content.php';
+                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/wp-menu.php';
+                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/dynamic-field.php';
+                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/email-subscribe.php';
 
-							// menu plugin widget.
-							$widget_file   = 'plugins/elementor/wp-menu.php';
-							$template_file = locate_template( $widget_file );
-							if ( ! $template_file || ! is_readable( $template_file ) ) {
-								$template_file = DTBAKER_ELEMENTOR_PATH . 'widgets/wp-menu.php';
-							}
-							if ( $template_file && is_readable( $template_file ) ) {
-								require_once $template_file;
-								Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Elementor\Widget_Dtbaker_WP_Menu() );
-							}
 
-							// dynamic field widget.
-							$widget_file   = 'plugins/elementor/dynamic-field.php';
-							$template_file = locate_template( $widget_file );
-							if ( ! $template_file || ! is_readable( $template_file ) ) {
-								$template_file = DTBAKER_ELEMENTOR_PATH . 'widgets/dynamic-field.php';
-							}
-							if ( $template_file && is_readable( $template_file ) ) {
-								require_once $template_file;
-								Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Elementor\Widget_Dtbaker_Dynamic_Field() );
-							}
 						}
 					}
 				}
 			}
 		}
+    }
+
+    public function widget_ajax_calls(){
+	    add_action( 'wp_ajax_stylepress_email_sub', function(){
+
+	        $return = array();
+
+		    $post = isset($_POST['post']) ? (int)$_POST['post'] : false;
+		    $elm = isset($_POST['elm']) ? $_POST['elm'] : false;
+		    $email = isset($_POST['email']) ? strtolower($_POST['email']) : '';
+		    if($post && $elm){
+
+			    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				    wp_send_json_error( "Invalid Email. Please try again." );
+			    }
+		        // find this elementor post and it widget settings.
+                $data = @json_decode( get_post_meta( $post, '_elementor_data', true), true );
+                if($data) {
+	                function stylepress_email_find( $data, $findkey ) {
+	                    if(is_array($data)){
+	                        foreach($data as $d){
+		                        if ( $d && ! empty( $d['id'] ) && $d['id'] === $findkey ) {
+			                        return $d;
+		                        }
+		                        if ( $d && ! empty( $d['elements'] ) && is_array($d['elements']) ) {
+                                    $value = stylepress_email_find( $d['elements'], $findkey );
+                                    if($value){
+                                        return $value;
+                                    }
+		                        }
+                            }
+                        }
+		                return false;
+	                }
+	                $element = stylepress_email_find( $data, $elm );
+	                if($element && !empty($element['settings']['mailchimp_api_key']) && !empty($element['settings']['mailchimp_list_id'])){
+
+	                    // shoot this off to mailchimp via api
+                        $status = 'pending';
+
+                        $args = array(
+                            'method' => 'PUT',
+                            'headers' => array(
+                                'Authorization' => 'Basic ' . base64_encode( 'user:'. $element['settings']['mailchimp_api_key'] )
+                            ),
+                            'body' => json_encode(array(
+                                'email_address' => $email,
+                                'status'        => $status
+                            ))
+                        );
+                        $response = wp_remote_post( 'https://' . substr($element['settings']['mailchimp_api_key'],strpos($element['settings']['mailchimp_api_key'],'-')+1) . '.api.mailchimp.com/3.0/lists/' . $element['settings']['mailchimp_list_id'] . '/members/' . md5(strtolower($email)), $args );
+
+                        $body = json_decode( $response['body'] );
+
+                        if ( $response['response']['code'] == 200 && $body->status == $status ) {
+	                        wp_send_json_success( !empty($element['settings']['thank_you'] ) ? $element['settings']['thank_you'] : 'Subscribed. Please check your email.' );
+                        } else {
+	                        wp_send_json_error( $body->title.": ".$body->detail );
+                        }
+                    }else{
+		                wp_send_json_error( "Missing Mailchimp API Details" );
+                    }
+                }else{
+	                wp_send_json_error( "Missing Elementor Widget" );
+                }
+
+
+		    }else{
+
+			    wp_send_json_error("Invalid Request");
+		    }
+
+		    exit;
+
+	    } );
     }
 
     public function section_before_render($section){
@@ -945,6 +996,11 @@ class DtbakerElementorManager {
 			update_post_meta( $post_id, 'dtbaker_style', $_POST['dtbaker_style'] ); // WPCS: sanitization ok. input var okay.
 		}
 
+
+		if ( isset( $_POST['stylepress_advanced'] ) && is_array( $_POST['stylepress_advanced'] ) ) { // WPCS: sanitization ok. input var okay.
+			update_post_meta( $post_id, 'stylepress_advanced', $_POST['stylepress_advanced'] ); // WPCS: sanitization ok. input var okay.
+		}
+
 		if ( isset( $_POST['dtbaker_is_component_check'] ) ){
 			update_post_meta( $post_id, 'dtbaker_is_component', ! empty( $_POST['dtbaker_is_component'] ) ); // WPCS: sanitization ok. input var okay.
 		}
@@ -1087,6 +1143,7 @@ class DtbakerElementorManager {
 		if ( ! is_array( $json ) || ! $json ) {
 			return;
 		}
+
 
 		if ( $json && ! empty( $json['attributes'] ) ) {
 
@@ -1256,27 +1313,58 @@ class DtbakerElementorManager {
 	    return $options;
 	}
 
+	/**
+     * Returns advanced details for the current style.
+     * These are CSS/Font/Elementor tweaks.
+     *
+	 * @param int $style_id Current post id of the selected style.
+     *
+     * @return array
+	 */
+	public function get_advanced( $style_id, $format = true ){
+
+	    $advanced = get_post_meta( $style_id, 'stylepress_advanced', true );
+	    if(!is_array($advanced)){
+		    $advanced = array();
+        }
+        if($format) {
+	        if ( ! empty( $advanced['font'] ) ) {
+		        $advanced['font'] = @json_decode( $advanced['font'], true );
+	        }
+	        if ( ! empty( $advanced['elementor'] ) ) {
+		        $advanced['font'] = @json_decode( $advanced['elementor'], true );
+	        }
+        }
+        return apply_filters( 'stylepress_style_advanced', $advanced, $style_id );
+
+    }
 	public function get_page_style_font_json($style_id){
-	    // todo: meta post these
-	    return json_decode(file_get_contents(DTBAKER_ELEMENTOR_PATH.'styles/wellness/font.json'),true);
+	    $advanced = $this->get_advanced($style_id);
+	    if($advanced && !empty($advanced['font']) && is_array($advanced['font'])){
+            return $advanced['font'];
+        }
+	    return array();
     }
 	public function get_style_elementor_overrides($style_id){
-	    // todo: meta post these.
-	    return json_decode(file_get_contents(DTBAKER_ELEMENTOR_PATH.'styles/wellness/elementor.json'),true);
+	    $advanced = $this->get_advanced($style_id);
+	    if($advanced && !empty($advanced['elementor']) && is_array($advanced['elementor'])){
+            return $advanced['elementor'];
+        }
+	    return array();
     }
 
     public function stylepress_export() {
 
-	    if ( ! isset( $_POST['stylepress_export_data'] ) || empty( $_POST['post_id'] ) ) { // WPCS: input var okay.
+	    if ( ! isset( $_GET['stylepress_export_data'] ) || empty( $_GET['post_id'] ) ) { // WPCS: input var okay.
 		    return;
 	    }
 
 	    // Verify that the nonce is valid.
-	    if ( ! wp_verify_nonce( $_POST['stylepress_export_data'], 'stylepress_export_data' ) ) { // WPCS: sanitization ok. input var okay.
+	    if ( ! wp_verify_nonce( $_GET['stylepress_export_data'], 'stylepress_export_data' ) ) { // WPCS: sanitization ok. input var okay.
 		    return;
 	    }
 
-	    $post_id = (int) $_POST['post_id'];
+	    $post_id = (int) $_GET['post_id'];
 
 	    if ( ! $this->has_permission( $post_id ) ) {
 		    return;

@@ -202,3 +202,6 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	}
 
 }
+
+
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Dynamic_Field() );

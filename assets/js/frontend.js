@@ -4,6 +4,7 @@
  * @package dtbaker-elementor
  */
 
-( function() {
 
-} )();
+( function($) {
+
+} )(jQuery);

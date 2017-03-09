@@ -3,7 +3,7 @@
     {
       "element": "icon-list",
       "appendto": "section_icon_style",
-      "name": "dtbaker_icon_inline",
+      "name": "stylepress_icon_inline",
       "title": "Icon Layout",
       "type": "select",
       "default": "normal",
@@ -11,12 +11,12 @@
         "normal": "Normal",
         "inline": "Inline"
       },
-      "prefix_class": "dtb-icon-"
+      "prefix_class": "stylepress-icon-"
     },
     {
       "element": "image-box",
       "appendto": "section_image",
-      "name": "dtbaker_image_size",
+      "name": "stylepress_image_size",
       "title": "Image Size",
       "type": "select",
       "default": "full",
@@ -26,7 +26,20 @@
         "dtbwp_gallery_rounded": "Rounded",
         "thumbnail": "Thumbnail"
       },
-      "prefix_class": "dtb-image-size-"
+      "prefix_class": "stylepress-image-size-"
+    },
+    {
+      "element": "heading",
+      "appendto": "stylepress_title_style",
+      "name": "dtbaker_title_under",
+      "title": "Title Underline",
+      "type": "select",
+      "default": "underline",
+      "options": {
+        "underline": "Underline",
+        "normal": "Normal"
+      },
+      "prefix_class": "stylepress-title-"
     }
   ]
 }

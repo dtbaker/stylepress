@@ -71,6 +71,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
         <li>Post Slider</li>
         <li>WooCommerce Product Slider</li>
         <li>Blog Post Output</li>
+        <li>Single Image Lightbox</li>
     </ul>
 
 
