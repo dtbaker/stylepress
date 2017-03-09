@@ -1,0 +1,210 @@
+# Copyright (C) 2017 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stylepress\n"
+"POT-Creation-Date: 2017-03-09 02:26:11+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 0.5.3\n"
+
+#: dtbaker-elementor.php:86
+msgid ""
+"The dtbaker Elementor plugin requires PHP version 5.4+, plugin is currently "
+"NOT ACTIVE."
+msgstr ""
+
+#: inc/class.plugin.php:377
+msgid ""
+"Please install Elementor before attempting to use the Full Site Editor "
+"plugin.."
+msgstr ""
+
+#: inc/class.plugin.php:428 inc/class.plugin.php:433
+msgid "StylePress"
+msgstr ""
+
+#: inc/class.plugin.php:433
+msgid "Styles"
+msgstr ""
+
+#: inc/class.plugin.php:434 templates/style-meta-box.php:83
+#: templates/style-meta-box.php:115
+msgid "Settings"
+msgstr ""
+
+#: inc/class.plugin.php:508
+msgid "Style"
+msgstr ""
+
+#: inc/class.plugin.php:518
+msgid "Configuration"
+msgstr ""
+
+#: inc/class.plugin.php:544
+msgid "&laquo; Return To Parent Style"
+msgstr ""
+
+#: inc/class.plugin.php:551
+msgid "&laquo; Return To All Styles"
+msgstr ""
+
+#: inc/class.plugin.php:1077
+#. Translators: %s is the name of the style from Appearance > Full Site Builder
+msgid "Style: %s"
+msgstr ""
+
+#: inc/class.plugin.php:1079
+msgid "Styles for this custom design."
+msgstr ""
+
+#: inc/class.plugin.php:1083
+msgid "Style Fonts"
+msgstr ""
+
+#: inc/class.plugin.php:1084
+msgid "Custom style font options"
+msgstr ""
+
+#: templates/admin-page.php:10 templates/settings-page.php:10
+msgid "Full Site Editor"
+msgstr ""
+
+#: templates/admin-page.php:15 templates/settings-page.php:15
+msgid "This is help text. I will add some information in here soon."
+msgstr ""
+
+#: templates/admin-page.php:19 templates/settings-page.php:19
+msgid "Editing a Site Style"
+msgstr ""
+
+#: templates/admin-page.php:44 templates/settings-page.php:44
+msgid "For more information:"
+msgstr ""
+
+#: templates/admin-page.php:45 templates/settings-page.php:45
+msgid ""
+"<a href=\"https://dtbaker.net/labs/elementor-full-page-site-builder/\">Read "
+"More on dtbaker.net</a>"
+msgstr ""
+
+#: templates/admin-page.php:86 templates/style-meta-box.php:85
+#: templates/style-meta-box.php:117
+msgid "Copy"
+msgstr ""
+
+#: templates/admin-page.php:87
+msgid "Edit Style"
+msgstr ""
+
+#: templates/post-meta-box.php:17
+msgid "Page Style"
+msgstr ""
+
+#: templates/post-meta-box.php:21
+#. Translators: The first %s is a link <a href=""> and the second %s is a
+#. closing link </a>.
+msgid ""
+"You can override the default style here. Choose the style to apply to this "
+"particular page. Edit these styles from the %1$sStylePress%2$s page."
+msgstr ""
+
+#: templates/post-meta-box.php:26
+#. Translators: The %s is the current post type
+msgid "This page type is: %s"
+msgstr ""
+
+#: templates/post-meta-box.php:32
+#. Translators: %s contains the current default style.
+msgid "Default (%s)"
+msgstr ""
+
+#: templates/post-meta-box.php:33
+msgid "Use Default Theme"
+msgstr ""
+
+#: templates/settings-page.php:63
+msgid "StylePress for Elementor"
+msgstr ""
+
+#: templates/settings-page.php:64
+msgid "Add New Style"
+msgstr ""
+
+#: templates/style-meta-box.php:61 templates/style-meta-box.php:93
+msgid "New"
+msgstr ""
+
+#: templates/style-meta-box.php:86 templates/style-meta-box.php:118
+msgid "Edit"
+msgstr ""
+
+#: widgets/dynamic-field.php:37 widgets/dynamic-field.php:76
+msgid "Dynamic Field"
+msgstr ""
+
+#: widgets/dynamic-field.php:83
+msgid ""
+"Choose from the available dynamic fields below. You can even mix HTML into "
+"the output if you need to create something more advanced."
+msgstr ""
+
+#: widgets/dynamic-field.php:89 widgets/wp-menu.php:102
+msgid " - choose - "
+msgstr ""
+
+#: widgets/dynamic-field.php:98
+msgid "Choose Field"
+msgstr ""
+
+#: widgets/dynamic-field.php:108
+msgid "Code"
+msgstr ""
+
+#: widgets/dynamic-field.php:119
+msgid "Optional HTML Output"
+msgstr ""
+
+#: widgets/dynamic-field.php:122 widgets/dynamic-field.php:123
+msgid "Combine dynamic fields with HTML code here."
+msgstr ""
+
+#: widgets/inner-content.php:38
+msgid "Inner Content"
+msgstr ""
+
+#: widgets/inner-content.php:79
+msgid "Inner Website Content"
+msgstr ""
+
+#: widgets/inner-content.php:86
+msgid ""
+"This will display the inside website content. <br/><br/>i.e. the output "
+"from <code>the_content();</code>"
+msgstr ""
+
+#: widgets/wp-menu.php:37 widgets/wp-menu.php:76
+msgid "WordPress Menu"
+msgstr ""
+
+#: widgets/wp-menu.php:83
+msgid ""
+"Choose the WordPress menu to output below. To change menu items please go "
+"to the <a href=\"%s\" target=\"_blank\">WordPress Menu Editor</a> page."
+msgstr ""
+
+#: widgets/wp-menu.php:94
+#. Translators: %s is the URL for MegaMenu plugin
+msgid ""
+"We recommend installing the <a href=\"%s\" target=\"_blank\">Max Mega "
+"Menu</a> plugin to get an awesome menu layout."
+msgstr ""
+
+#: widgets/wp-menu.php:113
+msgid "Choose Menu"
+msgstr ""

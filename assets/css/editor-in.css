@@ -1,0 +1,19 @@
+.elementor-editor-active.dtbaker-elementor-template-component .elementor-edit-mode:before {
+  content: 'Use Dynamic Fields to Build Your Component';
+  position: absolute;
+  display: block;
+  left: 50%;
+  padding: 18px;
+  margin-left: -265px;
+  font-size: 25px;
+}
+.elementor-editor-active.dtbaker-elementor-template-component .elementor-inner {
+  margin-top: 0 !important;
+  padding: 120px 50px;
+  background: #f5f5f5;
+}
+.elementor-editor-active.dtbaker-elementor-template-component .elementor-inner > .elementor-section-wrap {
+  background: #FFF;
+  padding: 50px 0;
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi90aGVtZXMvcGx1Z2lucy9zdHlsZXByZXNzL2Fzc2V0cy9jc3MvZWRpdG9yLWluLmxlc3MiLCI8aW5wdXQgY3NzIDI+Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVJO0VBQ0Usc0RBQUE7RUFDQSxtQkFBQTtFQUNBLGVBQUE7RUFDQSxVQUFBO0VBQ0EsY0FBQTtFQUNBLG9CQUFBO0VBQ0EsZ0JBQUE7Q0NETDtBRFJEO0VBYUkseUJBQUE7RUFDQSxvQkFBQTtFQUNBLG9CQUFBO0NDRkg7QURiRDtFQWlCTSxpQkFBQTtFQUNBLGdCQUFBO0NDREwiLCJmaWxlIjoidG8uY3NzIn0= */

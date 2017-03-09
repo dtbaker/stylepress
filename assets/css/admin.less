@@ -1,0 +1,151 @@
+.dtbaker-elementor-browser{
+  margin-top:40px;
+  .design {
+    float: left;
+    margin: 0 4% 4% 0;
+    width: 30.6%;
+  }
+  .stylebox{
+    cursor: pointer;
+    position: relative;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 1px -1px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 1px -1px rgba(0,0,0,0.1);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    .thumb{
+      display: block;
+      overflow: hidden;
+      position: relative;
+      -webkit-backface-visibility: hidden;
+      -webkit-transition: opacity 0.2s ease-in-out;
+      transition: opacity 0.2s ease-in-out;
+      img{
+        max-width:100%;
+        height: auto;
+      }
+    }
+    h3.design-name{
+      font-size: 15px;
+      font-weight: 600;
+      height: 18px;
+      margin: 0;
+      padding: 15px;
+      -webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,0.1);
+      box-shadow: inset 0 1px 0 rgba(0,0,0,0.1);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background: #fff;
+      background: rgba(255,255,255,0.65);
+    }
+    .theme-actions{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 38px;
+      padding: 9px 10px 0 10px;
+      background: rgba(244, 244, 244, 0.7);
+      border-left: 1px solid rgba(0,0,0,0.05);
+    }
+    &.add-new{
+      a{
+        text-decoration: none;
+        display: block;
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.dtbaker-elementor-instructions{
+  background:#FFF;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+  margin: 40px 0 0;
+  > div{
+    display:table;
+    table-layout: fixed;
+    border-spacing: 15px;
+    > div{
+      display:table-cell;
+      width: 25%;
+      h3{
+        color: #000;
+        font-size: 16px;
+        font-weight: 400;
+        margin: 0 0 .2em;
+        padding:0;
+      }
+    }
+  }
+  &:after{
+    clear:both;
+    display:table;
+    content:'';
+  }
+}
+
+.wp-admin.post-type-dtbaker_style{
+  #elementor-switch-mode,
+  #elementor-editor{
+    display:none;
+  }
+  #titlediv{
+    margin-bottom:20px;
+  }
+  #edit-slug-box{
+    display: none;
+  }
+  #dtbaker-return-to-style{
+    padding: 0 0 20px;
+  }
+  #stylepress-metabox{
+    h3{
+      a{
+      }
+    }
+    > ul{
+      display:block;
+      margin:0;
+      padding:0;
+      > li{
+        display:inline-block;
+        width: 24%;
+        padding:5px;
+        .style{
+border:1px solid #EFEFEF;
+          border-radius: 5px;
+          padding:5px;
+          .thumb{
+            img{
+              max-width:100%;
+              height:auto;
+            }
+          }
+
+        }
+      }
+    }
+    .advanced-settings{
+      width: 70%;
+      min-height: 150px;
+    }
+  }
+}
+
+.sub2-dtbaker-stylepress a{
+  color:#8bcc3c;
+}
+
+#stylepress-header{
+  margin-top: 40px;
+  img{
+    width:334px;
+    height:75px;
+  }
+}

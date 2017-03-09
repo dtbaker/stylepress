@@ -1,0 +1,32 @@
+{
+  "attributes": [
+    {
+      "element": "icon-list",
+      "appendto": "section_icon_style",
+      "name": "dtbaker_icon_inline",
+      "title": "Icon Layout",
+      "type": "select",
+      "default": "normal",
+      "options": {
+        "normal": "Normal",
+        "inline": "Inline"
+      },
+      "prefix_class": "dtb-icon-"
+    },
+    {
+      "element": "image-box",
+      "appendto": "section_image",
+      "name": "dtbaker_image_size",
+      "title": "Image Size",
+      "type": "select",
+      "default": "full",
+      "options": {
+        "full": "Large",
+        "dtbwp_gallery_square": "Square",
+        "dtbwp_gallery_rounded": "Rounded",
+        "thumbnail": "Thumbnail"
+      },
+      "prefix_class": "dtb-image-size-"
+    }
+  ]
+}
