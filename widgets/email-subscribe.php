@@ -124,6 +124,81 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 
 		$this->end_controls_section();
 
+
+		$this->start_controls_section(
+			'section_stylepress_menu_style',
+			[
+				'label' => __( 'Input Styles', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+
+		$this->add_control(
+			'input_bg',
+			[
+				'label' => __( 'Email Background', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#fafafa',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-subscribe-email' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_control(
+			'input_fg',
+			[
+				'label' => __( 'Email Forground', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#666666',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-subscribe-email' => 'color: {{VALUE}};',
+				],
+			]
+        );
+		$this->add_control(
+			'input_b',
+			[
+				'label' => __( 'Email Border', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#cccccc',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-subscribe-email' => 'border-color: {{VALUE}};',
+				],
+			]
+		);
+
+
+
+		$this->add_control(
+			'submit_bg',
+			[
+				'label' => __( 'Submit Background', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#666666',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-subscribe-send' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_control(
+			'submit_fg',
+			[
+				'label' => __( 'Submit Forground', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-subscribe-send' => 'color: {{VALUE}};',
+				],
+			]
+        );
+
+
+
+
+		$this->end_controls_section();
+
+
 		do_action( 'stylepress_email_subscribe_options', $this );
 
 	}

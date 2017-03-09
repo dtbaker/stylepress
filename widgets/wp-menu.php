@@ -182,7 +182,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->add_control(
 			'menu_background',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => __( 'Background', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#f8f8f8',
 				'selectors' => [
@@ -193,7 +193,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->add_control(
 			'menu_background_hover',
 			[
-				'label' => __( 'Background Color (hover)', 'elementor' ),
+				'label' => __( 'Background (hover)', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#eaeaea',
 				'selectors' => [
