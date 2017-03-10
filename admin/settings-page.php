@@ -78,6 +78,8 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 					<h3>Outer Styles:</h3>
 					<p>Choose which outer style to apply on your entire website.</p>
 
+                    <input type="hidden" name="stylepress_settings[overwrite][_do_save_]" value="1">
+
 					<table>
 						<thead>
 						<tr>
@@ -87,21 +89,6 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td>Global</td>
-							<td>
-								<select name="stylepress_styles[_global]">
-									<option value="0">None - Use Normal Theme</option>
-									<?php foreach($styles as $style_id => $style){ ?>
-										<option value="<?php echo (int)$style_id;?>"<?php echo $settings && !empty($settings['defaults']['_global']) && (int)$settings['defaults']['_global'] === (int)$style_id ? ' selected' : '';?>><?php echo esc_html($style);?></option>
-									<?php } ?>
-								</select>
-							</td>
-							<td>
-                                <input type="hidden" name="stylepress_settings[overwrite][_do_save_]" value="1">
-								<input type="checkbox" name="stylepress_settings[overwrite][_global]" value="1"<?php echo !empty($settings['overwrite']['_global']) ? ' checked':'';?>>
-							</td>
-						</tr>
 						<?php
 						foreach ( $page_types as $post_type => $post_type_title ) {
 							?>
@@ -109,7 +96,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 								<td><?php echo esc_html( $post_type_title);?></td>
 								<td>
 									<select name="stylepress_styles[<?php echo esc_attr($post_type);?>]">
-										<option value="0"> - Use Global Setting - </option>
+										<option value="0"><?php echo '_global' === $post_type ? 'None - Use Normal Theme' : ' - Use Global Setting - ';?></option>
 										<?php foreach ( $styles as $style_id => $style ) { ?>
 											<option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
 										<?php } ?>

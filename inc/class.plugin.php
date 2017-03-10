@@ -79,7 +79,7 @@ class DtbakerElementorManager {
 		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
 		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 		add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
-		add_action( 'init', array( $this, 'add_json_overrides' ) );
+		add_action( 'wp', array( $this, 'add_json_overrides' ) );
 		add_action( 'init', array( $this, 'elementor_ref' ) );
 
 		add_filter( 'template_include', array( $this, 'template_include' ) );
@@ -739,6 +739,7 @@ class DtbakerElementorManager {
 				array(
 					'body' => array(
 						'action' => 'stylepress_get_available',
+						'plugin_version'   => DTBAKER_ELEMENTOR_VERSION,
 						'blog'   => get_site_url(),
 					),
 				)
@@ -773,6 +774,8 @@ class DtbakerElementorManager {
 		    if(isset($_GET['post_parent']) && empty($post->post_parent)){
 			    $post->post_parent = (int)$_GET['post_parent'];
             }
+
+			$this->admin_page_assets();
 
 			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/style-meta-box.php';
 		}
@@ -1004,6 +1007,7 @@ class DtbakerElementorManager {
 	 */
 	public function get_possible_page_types(){
 	    $defaults = array(
+	        '_global' => 'Global',
 	        'page' => 'Page',
 	        'post' => 'Post',
 	        'attachment' => 'Attachment',
@@ -1181,13 +1185,13 @@ class DtbakerElementorManager {
 		$json = json_decode( $wp_filesystem->get_contents( trailingslashit( plugin_dir_path( __DIR__ ) ) . 'elementor.json' ), true );
 		$json = apply_filters( 'dtbaker_elementor_json', $json );
 		$this->_apply_json_overrides( $json );
-		/*$current_style = $this->get_current_style();
+		$current_style = $this->get_current_style();
 		if( $current_style ){
 		    // check if this one has a json elementor override
             $json = $this->get_style_elementor_overrides( $current_style );
 			$json = apply_filters( 'dtbaker_elementor_style_json', $json, $current_style );
 			$this->_apply_json_overrides( $json );
-        }*/
+        }
 	}
 
 	/**
@@ -1330,6 +1334,9 @@ class DtbakerElementorManager {
                 foreach($json as $key=>$val){
                     $font_key = $style_id.$key;
 
+                    if(empty($val['selector'])){
+                        continue;
+                    }
 
 	                $bits = explode(',',$val['selector']);
 	                foreach($bits as $bit_id => $bit){
@@ -1390,7 +1397,7 @@ class DtbakerElementorManager {
 		        $advanced['font'] = @json_decode( $advanced['font'], true );
 	        }
 	        if ( ! empty( $advanced['elementor'] ) ) {
-		        $advanced['font'] = @json_decode( $advanced['elementor'], true );
+		        $advanced['elementor'] = @json_decode( $advanced['elementor'], true );
 	        }
         }
         return apply_filters( 'stylepress_style_advanced', $advanced, $style_id );
@@ -1450,6 +1457,33 @@ class DtbakerElementorManager {
 	    }
 
 	    $slug = $_GET['slug'];
+
+	    // hit up our server for a copy of this style.
+	    $url      = 'https://styleserver.stylepress.org/wp-admin/admin-ajax.php';
+	    $response = wp_remote_post(
+		    $url,
+		    array(
+			    'body' => array(
+				    'action' => 'stylepress_download',
+				    'slug' => $slug,
+				    'plugin_version'   => DTBAKER_ELEMENTOR_VERSION,
+				    'blog'   => get_site_url(),
+			    ),
+		    )
+	    );
+
+
+
+	    if ( ! is_wp_error( $response ) ) {
+		    $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
+		    if ( $api_response && ! empty( $api_response['success'] ) && ! empty( $api_response['data'] ) ) {
+			    $style_to_import = $api_response['data'];
+			    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
+			    $import_export = DtbakerElementorImportExport::get_instance();
+			    $result          = $import_export->import_data( $style_to_import );
+		    }
+	    }
+
 
 	    echo 'Not there yet, next version will work :) ';exit;
 

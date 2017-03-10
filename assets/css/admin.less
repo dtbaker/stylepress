@@ -3,7 +3,10 @@
   .design {
     float: left;
     margin: 0 4% 4% 0;
-    width: 30.6%;
+    width: 21.6%;
+    &:nth-child(4n+4) {
+      margin-right: 0;
+    }
   }
   .stylebox{
     cursor: pointer;
@@ -26,6 +29,18 @@
         height: auto;
       }
     }
+    .theme-usage{
+      padding:6px 0 6px 12px;
+      font-size: 12px;
+      background-color: #fafafa;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      height:18px;
+      a{
+        text-decoration: none;
+        color:#444;
+      }
+    }
     h3.design-name{
       font-size: 15px;
       font-weight: 600;
@@ -37,8 +52,7 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      background: #fff;
-      background: rgba(255,255,255,0.65);
+      background-color: #fafafa;
     }
     .theme-actions{
       position: absolute;

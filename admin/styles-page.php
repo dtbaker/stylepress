@@ -48,6 +48,11 @@ get_current_screen()->set_help_sidebar(
 
 add_thickbox();
 
+$settings = DtbakerElementorManager::get_instance()->get_settings();
+$page_types = DtbakerElementorManager::get_instance()->get_possible_page_types();
+
+$designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
+
 ?>
 
 <div class="wrap">
@@ -56,7 +61,10 @@ add_thickbox();
 	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
 
 
+
 	<div class="dtbaker-elementor-browser">
+
+        <?php if($designs ){ ?>
 		<div class="wp-clearfix">
 
             <h3 class="stylepress-header">
@@ -69,39 +77,77 @@ add_thickbox();
                 <small>These are your website styles. A style can be applied to your website from the <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">Settings</a> page.</small>
             </h3>
 
-			<?php
-
-			$designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
-			if(!$designs){
-			    ?>
-                <p>None yet! Create your own.</p>
+            <div class="stylepress-item-wrapper">
                 <?php
-            }
 
-			foreach ( $designs as $design_id => $design ) :
-				$post = get_post($design_id);
-				if($post->post_parent)continue;
-				?>
-                <div class="design stylebox" tabindex="0">
-					<?php if ( has_post_thumbnail( $design_id ) ) { ?>
-                        <a href="<?php echo esc_url( get_edit_post_link( $design_id ) );?>" class="thumb">
-							<?php echo get_the_post_thumbnail( $design_id, 'full' );?>
-                        </a>
-					<?php }else{ ?>
-                        <a href="<?php echo esc_url( get_edit_post_link( $design_id ) );?>" class="thumb">
-                            <img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/wp-theme-thumb-logo-sml.jpg' );?>">
-                        </a>
-					<?php } ?>
+                if(!$designs){
+                    ?>
+                    <p>None yet! Create your own or install from the list below.</p>
+                    <?php
+                }
 
-                    <h3 class="design-name"><?php echo esc_html( $design ); ?></h3>
+                foreach ( $designs as $design_id => $design ) :
+                    $post = get_post($design_id);
+                    if($post->post_parent)continue;
+                    ?>
+                    <div class="design stylebox" tabindex="0">
+                        <?php if ( has_post_thumbnail( $design_id ) ) { ?>
+                            <a href="<?php echo esc_url( get_edit_post_link( $design_id ) );?>" class="thumb">
+                                <?php echo get_the_post_thumbnail( $design_id, 'full' );?>
+                            </a>
+                        <?php }else{ ?>
+                            <a href="<?php echo esc_url( get_edit_post_link( $design_id ) );?>" class="thumb">
+                                <img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/wp-theme-thumb-logo-sml.jpg' );?>">
+                            </a>
+                        <?php } ?>
 
-                    <div class="theme-actions">
-                        <!--						<a class="button button" href="#" onclick="alert('Coming soon');">--><?php //esc_html_e( 'Copy', 'stylepress' ); ?><!--</a>-->
-                        <a class="button button-primary" href="<?php echo esc_url( get_edit_post_link( $design_id ) ); ?>"><?php esc_html_e( 'Edit Style', 'stylepress' ); ?></a>
+                        <?php
+                        // find out where it's applied, if anywhere.
+                        $used = array();
+                        $args        = array(
+	                        'post_type'           => 'dtbaker_style',
+	                        'post_parent'         => $design_id,
+	                        'post_status'         => 'any',
+	                        'posts_per_page'      => -1,
+	                        'ignore_sticky_posts' => 1,
+                        );
+                        $posts_array = get_posts( $args );
+
+                        foreach($page_types as $post_type => $post_type_title){
+                            if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $design_id){
+	                            $used[$post_type] = $post_type_title;
+                            }
+                            // check if any of the child posts are used in this particular post type.
+	                        foreach ( $posts_array as $post_array ) {
+		                        if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $post_array->ID){
+			                        $used[$post_type] = $post_type_title;
+		                        }
+	                        }
+                        }
+
+                        ?>
+                        <div class="theme-usage">
+                            <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">
+                                <?php if ( $used ){ ?>
+                                    <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
+                                <?php }else{ ?>
+                                    <i class="fa fa-times"></i> Style Not Used.
+                                <?php } ?>
+                            </a>
+                        </div>
+
+                        <h3 class="design-name"><?php echo esc_html( $design ); ?></h3>
+
+                        <div class="theme-actions">
+                            <!--						<a class="button button" href="#" onclick="alert('Coming soon');">--><?php //esc_html_e( 'Copy', 'stylepress' ); ?><!--</a>-->
+                            <a class="button button-primary" href="<?php echo esc_url( get_edit_post_link( $design_id ) ); ?>"><?php esc_html_e( 'Edit Style', 'stylepress' ); ?></a>
+                        </div>
+
                     </div>
-                </div>
-			<?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
 		</div>
+        <?php } ?>
 
         <div class="wp-clearfix">
             <h3 class="stylepress-header">
@@ -109,27 +155,29 @@ add_thickbox();
                 <small>These are styles that can be downloaded from StylePress.org - Once downloaded these styles can be edited to suit your needs.</small>
             </h3>
 
-	        <?php
+            <div class="stylepress-item-wrapper">
+                <?php
 
-	        $designs = DtbakerElementorManager::get_instance()->get_downloadable_styles();
+                $designs = DtbakerElementorManager::get_instance()->get_downloadable_styles();
 
-	        foreach ( $designs as $design_slug => $design ) :
-		        ?>
-                <div class="design stylebox" tabindex="0">
-                    <a href="<?php echo esc_url( $design['demo'] );?>" class="thumb" target="_blank">
-				        <img src="<?php echo esc_html($design['thumb']);?>">
-                    </a>
+                foreach ( $designs as $design_slug => $design ) :
+                    ?>
+                    <div class="design stylebox" tabindex="0">
+                        <a href="<?php echo esc_url( $design['demo'] );?>" class="thumb" target="_blank">
+                            <img src="<?php echo esc_html($design['thumb']);?>">
+                        </a>
 
-                    <h3 class="design-name"><?php echo esc_html( $design['title'] ); ?></h3>
+                        <h3 class="design-name"><?php echo esc_html( $design['title'] ); ?></h3>
 
-                    <div class="theme-actions">
-                        <a class="button" href="<?php echo esc_url( $design['demo'] ); ?>" target="_blank"><?php esc_html_e( 'Preview', 'stylepress' ); ?></a>
-                        <a class="button button-primary" href="<?php echo esc_url( wp_nonce_url(admin_url('admin.php?action=stylepress_download&slug=' . $design_slug), 'stylepress_download', 'stylepress_download') ); ?>"><?php esc_html_e( 'Install', 'stylepress' ); ?></a>
+                        <div class="theme-actions">
+                            <a class="button" href="<?php echo esc_url( $design['demo'] ); ?>" target="_blank"><?php esc_html_e( 'Preview', 'stylepress' ); ?></a>
+                            <a class="button button-primary" href="<?php echo esc_url( wp_nonce_url(admin_url('admin.php?action=stylepress_download&slug=' . $design_slug), 'stylepress_download', 'stylepress_download') ); ?>"><?php esc_html_e( 'Install', 'stylepress' ); ?></a>
+                        </div>
                     </div>
-                </div>
-	        <?php endforeach; ?>
+                <?php endforeach; ?>
 
 
+            </div>
         </div>
 	</div>
 
