@@ -43,10 +43,21 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 StylePress Custom Addons:
  */
 .stylepress-icon-inline{
-  .elementor-icon-list-items{
+  ul.elementor-icon-list-items{
+    display:flex;
+    justify-content: center;
     > li{
-      display: inline-block;
       padding: 6px;
+    }
+  }
+  &.elementor-align-left{
+    ul.elementor-icon-list-items {
+      justify-content: flex-start;
+    }
+  }
+  &.elementor-align-right{
+    ul.elementor-icon-list-items {
+      justify-content: flex-end;
     }
   }
 }
