@@ -36,7 +36,8 @@
 
 
     $(function() {
-        $('.stylepress-subscribe-send').click(do_email_subscribe).on('keyup', '.stylepress-subscribe-email', function (event) {
+        $('.stylepress-subscribe-send').click(do_email_subscribe);
+        $('.stylepress-subscribe-email').on('keyup', function (event) {
             if (event.keyCode == 13) {
                 do_email_subscribe.call(this);
             }
