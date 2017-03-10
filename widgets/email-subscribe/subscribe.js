@@ -35,10 +35,12 @@
     }
 
 
-    $('body').on('click','.stylepress-subscribe-send',do_email_subscribe).on('keyup', '.stylepress-subscribe-email', function(event) {
-        if (event.keyCode == 13) {
-            do_email_subscribe.call( this );
-        }
+    $(function() {
+        $('.stylepress-subscribe-send').click(do_email_subscribe).on('keyup', '.stylepress-subscribe-email', function (event) {
+            if (event.keyCode == 13) {
+                do_email_subscribe.call(this);
+            }
+        });
     });
 
 } )(jQuery);
