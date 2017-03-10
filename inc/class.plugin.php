@@ -298,6 +298,7 @@ class DtbakerElementorManager {
             add_filter( 'body_class', function ( $classes ) use ( $post )  {
                 $classes[] = 'dtbaker-elementor-template';
                 $classes[] = 'dtbaker-elementor-template-preview';
+	            $classes[] = 'dtbaker-elementor-style-' . $post->ID;
                 if( $post->post_parent && get_post_meta( $post->ID, 'dtbaker_is_component', true ) ){
 	                $classes[] = 'dtbaker-elementor-template-component';
                 }
@@ -1196,7 +1197,7 @@ class DtbakerElementorManager {
 							$section->start_controls_section(
 								'section_' . $attributes['name'],
 								[
-									'label' => $attributes['title'],
+									'label' => $attributes['section_title'],
 									'tab'   => 'style' === $attributes['tab'] ? Elementor\Controls_Manager::TAB_STYLE : Elementor\Controls_Manager::TAB_CONTENT,
 								]
 							);
