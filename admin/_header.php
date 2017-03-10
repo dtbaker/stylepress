@@ -7,7 +7,7 @@
 		<a href="https://twitter.com/WPStylePress" target="_blank"><i class="fa fa-twitter"></i></a>
 		<a href="https://github.com/dtbaker/stylepress" target="_blank"><i class="fa fa-github"></i></a>
 	</div>
-	<?php switch($_GET['page']) {
+	<?php /*switch($_GET['page']) {
 		case 'dtbaker-stylepress': ?>
 			<div class="buttons">
 				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style' ) ); ?>" class="button">Import</a>
@@ -16,6 +16,6 @@
 			</div>
 			<?php
 			break;
-	}
+	}*/
 	?>
 </div>

@@ -454,6 +454,7 @@ class DtbakerElementorManager {
         }  );
 		add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
 		add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
+		add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 
 	}
 
@@ -712,6 +713,48 @@ class DtbakerElementorManager {
 		foreach ( $posts_array as $style ) {
 			$styles[ $style->ID ] = $style->post_title;
 		}
+
+		return $styles;
+	}
+
+
+	/**
+	 * Returns a list of all availalbe page styles.
+	 * This list is used in the style select drop down visible on most pages.
+	 *
+	 * @since 1.0.9
+	 *
+	 * @return array
+	 */
+	public function get_downloadable_styles() {
+
+		$styles = get_transient('stylepress_downloadable');
+		if(!$styles) {
+			$styles = array();
+
+			// json query to stylepress.org to get a list of available styles.
+			$url      = 'https://styleserver.stylepress.org/wp-admin/admin-ajax.php';
+			$response = wp_remote_post(
+				$url,
+				array(
+					'body' => array(
+						'action' => 'stylepress_get_available',
+						'blog'   => get_site_url(),
+					),
+				)
+			);
+
+
+			if ( ! is_wp_error( $response ) ) {
+				$api_response = json_decode( wp_remote_retrieve_body( $response ), true );
+				if ( $api_response && ! empty( $api_response['data'] ) ) {
+					$styles = $api_response['data'];
+					set_transient( 'stylepress_downloadable', $styles, HOUR_IN_SECONDS );
+
+				}
+			}
+		}
+
 
 		return $styles;
 	}
@@ -1392,6 +1435,28 @@ class DtbakerElementorManager {
 	    echo '<pre>'; print_r( $data ); echo '</pre>'; exit;
 
 	    wp_send_json( $data );
+
+	    exit;
+    }
+    public function stylepress_download() {
+
+	    if ( ! isset( $_GET['stylepress_download'] ) || empty( $_GET['slug'] ) ) { // WPCS: input var okay.
+		    return;
+	    }
+
+	    // Verify that the nonce is valid.
+	    if ( ! wp_verify_nonce( $_GET['stylepress_download'], 'stylepress_download' ) ) { // WPCS: sanitization ok. input var okay.
+		    return;
+	    }
+
+	    $slug = $_GET['slug'];
+
+	    echo 'Not there yet, next version will work :) ';exit;
+
+	    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
+	    $import_export = DtbakerElementorImportExport::get_instance();
+	    $data          = $import_export->export_data( $post_id );
+
 
 	    exit;
     }

@@ -164,6 +164,35 @@
   }
 }
 
+.stylepress-header{
+  background:#FFF;
+  padding: 15px 20px;
+  position: relative;
+  margin: 0 0 30px;
+  &:before{
+    position:absolute;
+    left:0;
+    content:'';
+    display:block;
+    top:0;
+    bottom:0;
+    width:4px;
+    background:#e6e6e6
+  }
+  span{
+    font-weight:bold;
+    display:block;
+    padding: 0 0 5px;
+  }
+  small{
+    font-weight:normal;
+    display:block;
+  }
+  .buttons{
+    font-weight:normal;
+    float:right;
+  }
+}
 .wp-admin.post-type-dtbaker_style.post-new-php{
   #elementor-editor{
     display:none !important;

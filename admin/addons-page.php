@@ -61,13 +61,16 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
         <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
     <?php } ?>
 
+    <div class="notice notice-error"><p>TODO: Create a toggle button to enable/disable these. </p></div>
+    <div class="notice notice-error"><p>TODO: Include the rest of these missing plugins into this package. </p></div>
+
 
     <p>Choose which add-ons to enable for this website:</p>
-    (interface coming soon)
     <ul>
         <li>Styled Google Maps</li>
         <li>Insert Page</li>
         <li>Page Slider</li>
+        <li>Mailchimp Signup</li>
         <li>Post Slider</li>
         <li>WooCommerce Product Slider</li>
         <li>Blog Post Output</li>

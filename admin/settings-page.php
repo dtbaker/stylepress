@@ -66,6 +66,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
         <div class="notice notice-error"><p>Warning: The current theme does not specify <code>stylepress-elementor</code> support. Some functions may not work correctly. Use our recommended theme if you have layout issues.</p></div>
 	<?php } ?>
 
+    <div class="notice notice-error"><p>Warning: Most of these settings won't work just yet. Components are disabled. Try the "Global" setting, that should work.</p></div>
 
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 		<input type="hidden" name="action" value="dtbaker_elementor_save" />
@@ -128,9 +129,6 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 				</div>
 				<div>
 					<h3>Inner Components:</h3>
-                    <p>
-                        <strong>Note: this is currently disabled, it will NOT do anything... </strong>
-                    </p>
 					<p>Choose which inner styles to apply to various parts of the site:</p>
 
 					<ul class="dtbaker-elementor-settings">

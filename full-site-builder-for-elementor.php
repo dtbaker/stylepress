@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 
 /* Set plugin version constant. */
-define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.6' );
+define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.9' );
 
 /* Set constant path to the plugin directory. */
 define( 'DTBAKER_ELEMENTOR_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
