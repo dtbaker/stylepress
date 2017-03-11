@@ -740,7 +740,7 @@ class DtbakerElementorManager {
 					'body' => array(
 						'action' => 'stylepress_get_available',
 						'plugin_version'   => DTBAKER_ELEMENTOR_VERSION,
-						'blog'   => get_site_url(),
+						'blog_url'   => get_site_url(),
 					),
 				)
 			);
@@ -1467,7 +1467,7 @@ class DtbakerElementorManager {
 				    'action' => 'stylepress_download',
 				    'slug' => $slug,
 				    'plugin_version'   => DTBAKER_ELEMENTOR_VERSION,
-				    'blog'   => get_site_url(),
+				    'blog_url'   => get_site_url(),
 			    ),
 		    )
 	    );

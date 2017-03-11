@@ -46,6 +46,8 @@ class DtbakerElementorImportExport {
 		$post_data = get_post($post_id);
 		$final_export_data = array(
 			'slug' => $post_data->post_name,
+			'version' => '',
+			'cost' => '',
 			'styles' => array(),
 			'easy_google_font' => array(),
 			'options' => array(),
