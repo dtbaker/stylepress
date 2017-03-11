@@ -242,6 +242,8 @@ class DtbakerElementorImportExport {
 
 			$this->_handle_post_orphans();
 
+			print_r($this->logs);
+
 		}
 
 		return false;
@@ -320,7 +322,7 @@ class DtbakerElementorImportExport {
 	}
 
 
-	private function _process_post_data( $post_type, $post_data, $delayed = 0, $debug = false ) {
+	private function _process_post_data( $post_type, $post_data, $delayed = 0, $debug = true ) {
 
 		$this->log( " Processing $post_type " . $post_data['post_id'] );
 		$original_post_data = $post_data;
@@ -605,6 +607,13 @@ class DtbakerElementorImportExport {
 			$post_css->update();
 		}
 
+	}
+
+
+
+	// return the difference in length between two strings
+	public function cmpr_strlen( $a, $b ) {
+		return strlen( $b ) - strlen( $a );
 	}
 
 

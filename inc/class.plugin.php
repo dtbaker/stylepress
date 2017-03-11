@@ -70,6 +70,7 @@ class DtbakerElementorManager {
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_action( 'init', array( $this, 'register_new_nav_menu' ) );
 		add_action( 'init', array( $this, 'widget_ajax_calls' ) );
+		add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
@@ -146,6 +147,7 @@ class DtbakerElementorManager {
     public function widget_ajax_calls(){
 
 	    // todo: only if widget is registered.
+
 
 	    add_action( 'wp_ajax_stylepress_email_sub', function(){
 
@@ -508,6 +510,24 @@ class DtbakerElementorManager {
 			'fontawesome',
 			'//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'
 		);
+		/*wp_enqueue_script(
+			'stripe-payments',
+			'https://js.stripe.com/v2/'
+		);*/
+		wp_enqueue_script( 'jquery-ui-dialog' ); // jquery and jquery-ui should be dependencies, didn't check though...
+		wp_enqueue_style( 'wp-jquery-ui-dialog' );
+
+		wp_register_script( 'stylepress-payments', DTBAKER_ELEMENTOR_URI . 'assets/js/payment.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+		wp_localize_script( 'stylepress-payments', 'stylepress_payment', array(
+		        'payment_nonce' => wp_create_nonce('payment_nonce'),
+		        'hostname' => get_home_url(),
+		        'plugin_version' => DTBAKER_ELEMENTOR_VERSION,
+            ) );
+		wp_enqueue_script( 'stylepress-payments' );
+
+		wp_enqueue_script( 'stylepress-slider', DTBAKER_ELEMENTOR_URI . 'assets/js/omni-slider.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
+//		wp_enqueue_script( 'stylepress-rangeslider', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.min.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
+//		wp_enqueue_style( 'stylepress-rangeslider-style', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.css', false, DTBAKER_ELEMENTOR_VERSION, true );
 
 	}
 
@@ -547,20 +567,21 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function frontend_css() {
-		wp_enqueue_style( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, '1.0.6' );
-		wp_enqueue_script( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, '1.0.6', true );
+		wp_enqueue_style( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, DTBAKER_ELEMENTOR_VERSION );
+		wp_enqueue_script( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, DTBAKER_ELEMENTOR_VERSION, true );
 
         if( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-            wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, '1.0.6' );
-            wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, '1.0.6', true );
+            wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, DTBAKER_ELEMENTOR_VERSION );
+            wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, DTBAKER_ELEMENTOR_VERSION, true );
         }
 
         // plugin css:
         // todo: only show if registered.
 
         wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.css', false );
-        wp_enqueue_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
-        wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
+		wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_enqueue_script( 'stylepress-email-script' );
 
 		wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/menu.css', false );
 		wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/navigation.js', array('jquery') );
@@ -574,7 +595,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function admin_css() {
-		wp_enqueue_style( 'dtbaker-elementor-admin', DTBAKER_ELEMENTOR_URI . 'assets/css/admin.css', false, '1.0.6' );
+		wp_enqueue_style( 'dtbaker-elementor-admin', DTBAKER_ELEMENTOR_URI . 'assets/css/admin.css', false, DTBAKER_ELEMENTOR_VERSION );
 	}
 
 	/**
@@ -583,7 +604,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function editor_scripts() {
-		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'elementor-editor' ), '1.0.6', true );
+		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'elementor-editor' ), DTBAKER_ELEMENTOR_VERSION, true );
 	}
 
 	public function elementor_ref(){
@@ -755,6 +776,24 @@ class DtbakerElementorManager {
 				}
 			}
 		}
+		// look for pay nonces for these
+		$purchase = get_option('stylepress_purchases',array());
+		if(!$purchase)$purchase = array();
+		if(isset($_GET['reset-purchases'])){
+			unset($purchase[$_GET['reset-purchases']]);
+			update_option('stylepress_purchases',$purchase);
+        }
+        foreach($styles as $style_id => $style){
+		    $styles[$style_id]['pay_nonce'] = false;
+		    if(!empty($purchase[$style_id])){
+		        // todo: check get_home_url against recorded pament. meh.
+                foreach($purchase[$style_id] as $purchase){
+                    if(!empty($purchase['server']['payment_id'])){
+	                    $styles[$style_id]['pay_nonce'] = $purchase['server']['payment_id'];
+                    }
+                }
+            }
+        }
 
 
 		return $styles;
@@ -1458,6 +1497,12 @@ class DtbakerElementorManager {
 
 	    $slug = $_GET['slug'];
 
+	    // see if this slug exists in the available styles to download.
+	    $designs = $this->get_downloadable_styles();
+	    if(!isset($designs[$slug])){
+		    wp_die( __( 'Sorry this style was not found to install.' ), __( 'Style Install Failed.' ), 403 );
+        }
+
 	    // hit up our server for a copy of this style.
 	    $url      = 'https://styleserver.stylepress.org/wp-admin/admin-ajax.php';
 	    $response = wp_remote_post(
@@ -1466,13 +1511,12 @@ class DtbakerElementorManager {
 			    'body' => array(
 				    'action' => 'stylepress_download',
 				    'slug' => $slug,
+				    'pay_nonce' => $designs[$slug]['pay_nonce'],
 				    'plugin_version'   => DTBAKER_ELEMENTOR_VERSION,
 				    'blog_url'   => get_site_url(),
 			    ),
 		    )
 	    );
-
-
 
 	    if ( ! is_wp_error( $response ) ) {
 		    $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -1481,18 +1525,37 @@ class DtbakerElementorManager {
 			    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
 			    $import_export = DtbakerElementorImportExport::get_instance();
 			    $result          = $import_export->import_data( $style_to_import );
-		    }
-	    }
-
-
-	    echo 'Not there yet, next version will work :) ';exit;
-
-	    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
-	    $import_export = DtbakerElementorImportExport::get_instance();
-	    $data          = $import_export->export_data( $post_id );
-
+			    print_r($style_to_import);
+		    }else if(isset($api_response['success']) && !$api_response['success']){
+			    wp_die( sprintf( __( 'Failed to install style: %s ' ), $api_response['data']), __( 'Style Install Failed.' ), 403 );
+            }
+	    }else{
+		    wp_die( __( 'Failed to contact style server. Please try again.' ), __( 'Style Install Failed.' ), 403 );
+        }
 
 	    exit;
+    }
+
+
+    public function payment_complete(){
+
+	    if(!empty($_POST['payment']['payment_nonce']) && wp_verify_nonce($_POST['payment']['payment_nonce'],'payment_nonce')){
+            if(!empty($_POST['server']['slug'])){
+                // we've purchased this slug. store it in options array.
+                $purchase = get_option('stylepress_purchases',array());
+                if(!$purchase)$purchase = array();
+
+	            if(!isset($purchase[$_POST['server']['slug']])) $purchase[$_POST['server']['slug']] = array();
+	            $purchase[$_POST['server']['slug']][] = array(
+	                'time' => time(),
+                    'server' => $_POST['server'],
+                );
+	            update_option('stylepress_purchases',$purchase);
+	            wp_send_json_success('Success');
+            }
+        }
+        wp_send_json_error('Failed to record payment');
+
     }
 
 }

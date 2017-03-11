@@ -152,7 +152,7 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
         <div class="wp-clearfix">
             <h3 class="stylepress-header">
                 <span>Available Styles</span>
-                <small>These are styles that can be downloaded from StylePress.org - Once downloaded these styles can be edited to suit your needs.</small>
+                <small>These site styles can be installed and then edited with Elementor.</small>
             </h3>
 
             <div class="stylepress-item-wrapper">
@@ -161,17 +161,37 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
                 $designs = DtbakerElementorManager::get_instance()->get_downloadable_styles();
 
                 foreach ( $designs as $design_slug => $design ) :
+
+                    $type = !empty($design['cost']) ? 'paid' : 'free';
+	                $has_purchased = false;
+                    if( 'paid' === $type && !empty($design['pay_nonce'])){
+                        $has_purchased = true;
+                    }else{
+
+                    }
+
                     ?>
-                    <div class="design stylebox" tabindex="0">
+                    <div class="design stylebox stylepress-<?php echo esc_attr($type); if($has_purchased) echo ' stylepress-purchased'?>" tabindex="0">
                         <a href="<?php echo esc_url( $design['demo'] );?>" class="thumb" target="_blank">
                             <img src="<?php echo esc_html($design['thumb']);?>">
                         </a>
 
-                        <h3 class="design-name"><?php echo esc_html( $design['title'] ); ?></h3>
+                        <h3 class="design-name"><?php echo esc_html( $design['title'] ); ?>
+                        <small>v<?php echo esc_html($design['version']);?><?php
+                            if($has_purchased){
+                                echo ' - purchased';
+                            }else if($type == 'free'){
+                                echo ' - free';
+                            }
+                            ?></small></h3>
 
                         <div class="theme-actions">
                             <a class="button" href="<?php echo esc_url( $design['demo'] ); ?>" target="_blank"><?php esc_html_e( 'Preview', 'stylepress' ); ?></a>
-                            <a class="button button-primary" href="<?php echo esc_url( wp_nonce_url(admin_url('admin.php?action=stylepress_download&slug=' . $design_slug), 'stylepress_download', 'stylepress_download') ); ?>"><?php esc_html_e( 'Install', 'stylepress' ); ?></a>
+                            <?php if('paid' === $type && !$has_purchased){ ?>
+                                <a class="button button-primary button-stylepress-pay" href="<?php echo esc_url( wp_nonce_url(admin_url('admin.php?action=stylepress_download&slug=' . $design_slug), 'stylepress_download', 'stylepress_download') ); ?>" data-stylename="<?php echo esc_attr( $design['title'] );?>" data-styleslug="<?php echo esc_attr( $design_slug );?>" data-stylecost="<?php echo esc_attr( $design['cost'] );?>"><?php esc_html_e( 'Purchase', 'stylepress' ); ?></a>
+                            <?php }else{ ?>
+                                <a class="button button-primary" href="<?php echo esc_url( wp_nonce_url(admin_url('admin.php?action=stylepress_download&slug=' . $design_slug), 'stylepress_download', 'stylepress_download') ); ?>"><?php esc_html_e( 'Install', 'stylepress' ); ?></a>
+                            <?php } ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -183,3 +203,5 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
 
 	<div class="theme-overlay"></div>
 </div>
+
+<?php require_once DTBAKER_ELEMENTOR_PATH .'admin/payment-modal.php';
