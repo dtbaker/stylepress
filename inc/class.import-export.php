@@ -210,15 +210,26 @@ class DtbakerElementorImportExport {
 
 		if( $style && !empty($style['slug'])){
 			if(get_transient('import_style_'.$style['slug'])){
-				return false; // doing duplicates.
+				//return false; // doing duplicates.
 			}
 			// hacky way to stop people clicking twice.
 			set_transient('import_style_'.$style['slug'], time(), 60 );
 
 
 			if(!empty($style['styles'])){
+				if(!empty($style['styles']['attachment'])){
+
+					// import attachments first before the actual content that will use them.
+					foreach($style['styles']['attachment'] as $data) {
+						$this->_process_post_data( 'attachment', $data );
+					}
+					unset($style['styles']['attachment']);
+				}
+
 				foreach($style['styles'] as $post_type => $post_data){
-					$this->_process_post_data($post_type, $post_data);
+					foreach($post_data as $data) {
+						$this->_process_post_data( $post_type, $data );
+					}
 
 				}
 			}
@@ -227,12 +238,28 @@ class DtbakerElementorImportExport {
 			if(!empty($style['options'])){
 			}
 
+			$this->_handle_post_orphans();
+
 		}
 
 		return false;
 
 	}
 
+	private function _handle_post_orphans() {
+		$orphans = $this->_post_orphans();
+		foreach ( $orphans as $original_post_id => $original_post_parent_id ) {
+			if ( $original_post_parent_id ) {
+				if ( $this->_imported_post_id( $original_post_id ) && $this->_imported_post_id( $original_post_parent_id ) ) {
+					$post_data                = array();
+					$post_data['ID']          = $this->_imported_post_id( $original_post_id );
+					$post_data['post_parent'] = $this->_imported_post_id( $original_post_parent_id );
+					wp_update_post( $post_data );
+					$this->_post_orphans( $original_post_id, 0 ); // ignore future
+				}
+			}
+		}
+	}
 
 	private function _imported_post_id( $original_id = false, $new_id = false ) {
 		if ( is_array( $original_id ) || is_object( $original_id ) ) {
@@ -273,6 +300,24 @@ class DtbakerElementorImportExport {
 	}
 
 
+	private function _post_orphans( $original_id = false, $missing_parent_id = false ) {
+		$post_ids = get_transient( 'stylepresspostorphans' );
+		if ( ! is_array( $post_ids ) ) {
+			$post_ids = array();
+		}
+		if ( $missing_parent_id ) {
+			$post_ids[ $original_id ] = $missing_parent_id;
+			set_transient( 'stylepresspostorphans', $post_ids, 60 * 60 );
+		} else if ( $original_id && isset( $post_ids[ $original_id ] ) ) {
+			return $post_ids[ $original_id ];
+		} else if ( $original_id === false ) {
+			return $post_ids;
+		}
+
+		return false;
+	}
+
+
 	private function _process_post_data( $post_type, $post_data, $delayed = 0, $debug = false ) {
 
 		$this->log( " Processing $post_type " . $post_data['post_id'] );
@@ -306,7 +351,8 @@ class DtbakerElementorImportExport {
 				$post_data['post_parent'] = $this->_imported_post_id( $post_parent );
 				// otherwise record the parent for later
 			}else{
-				return false;
+				$this->_post_orphans( intval( $post_data['post_id'] ), $post_parent );
+				$post_data['post_parent'] = 0;//
 			}
 		}
 
