@@ -741,7 +741,7 @@ class DtbakerElementorManager {
 	                    admin_url( 'customize.php' )
                     );
                     ?>
-                    <a href="<?php echo esc_url( $url );?>" class="button"><?php echo esc_html__('Customize Font & Colors', 'stylepress');?></a>
+                    <a href="<?php echo esc_url( $url );?>" class="button"><?php echo esc_html__('Customize Font & Color Defaults', 'stylepress');?></a>
                 </div>
 			    <?php
             }
