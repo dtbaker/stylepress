@@ -1445,7 +1445,7 @@ class DtbakerElementorManager {
 	                    'tab'         => 'style-'.$style_id,
 	                    'description' => '',
 	                    'properties'  => array( 'selector' => $val['selector'] ),
-                        'default' => array(
+                        'default' => $val['defaults'],
 	                        /*'font_id'           => 'open_sans',
 	                        'font_name'         => 'Open Sans',
 	                        'font_weight'       => '100',
@@ -1456,7 +1456,6 @@ class DtbakerElementorManager {
 		                        'amount' => '15',
 		                        'unit'   => 'px',
 	                        ),*/
-                        ),
                     );
 	                $options[$font_key] = $new_font_style;
                 }
