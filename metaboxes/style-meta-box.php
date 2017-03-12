@@ -42,7 +42,7 @@ if( $post->post_parent ){
 
 	$styles = $components = array();
 
-	$post->post_title = 'Main';
+	$post->post_title = $post->post_title . ' (Main)';
 	$styles[]         = $post;
 
 	foreach ( $posts_array as $post_array ) {
@@ -97,7 +97,7 @@ if( $post->post_parent ){
 	                                <?php if ( $used ){ ?>
                                         <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
 	                                <?php }else{ ?>
-                                        <i class="fa fa-times"></i> Style Not Used.
+                                        <i class="fa fa-times"></i> Style Not Used. Apply style.
                                     <?php } ?>
                                 </a>
                             </div>

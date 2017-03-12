@@ -57,7 +57,7 @@ class DtbakerElementorManager {
 	 *
 	 * @var bool
 	 */
-	public $overwrite_theme_output = false;
+	public $overwrite_theme_output = true;
 
 	/**
 	 * Initializes the plugin and sets all required filters.
@@ -89,6 +89,7 @@ class DtbakerElementorManager {
 		add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
+		add_filter( 'elementor/widget/icon-list/skins_init', array( $this, 'plugin_skins' ), 999 );
 
 		// stylepress plugin hooks
 		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon'), 10, 4 );
@@ -584,6 +585,19 @@ class DtbakerElementorManager {
 		include DTBAKER_ELEMENTOR_PATH . 'admin/addons-page.php';
 	}
 
+
+	/**
+     * Check if the current theme/plugin/hosting setup supports a particular feature.
+     *
+	 * @param string $feature Feature name. e.g. theme-inner
+	 *
+	 * @return bool
+	 */
+	public function supports( $feature ){
+	    return false;
+	    return (bool) get_theme_support('stylepress-elementor');
+    }
+
 	/**
 	 * Register some frontend css files
 	 *
@@ -766,13 +780,87 @@ class DtbakerElementorManager {
 			'posts_per_page'      => - 1,
 			'ignore_sticky_posts' => 1,
 			'suppress_filters'    => false,
+			'order'=> 'ASC',
+            'orderby' => 'title',
 		);
 		$posts_array = get_posts( $args );
+		$children = array();
 		foreach ( $posts_array as $style ) {
-			$styles[ $style->ID ] = $style->post_title;
+		    if( !$style->post_parent ) {
+			    $styles[ $style->ID ] = $style->post_title;
+		    }else if ( ! get_post_meta( $style->ID, 'dtbaker_is_component', true ) ) {
+		        if(!isset($children[$style->post_parent])){
+			        $children[$style->post_parent] = array();
+                }
+			    $children[$style->post_parent][$style->ID] = $style->post_title;
+            }
+		}
+		// todo: sort alpha:
+
+        $return = array();
+		//we're only doing 1 level deep, not themes all the way down, so we don't need recursion here.
+
+        foreach($styles as $style_id => $style_name){
+            $return[$style_id] = $style_name;
+            if(isset($children[$style_id])){
+                foreach($children[$style_id] as $child_style_id => $child_name){
+	                $return[$child_style_id] = ' - ' . $child_name;
+                }
+            }
+        }
+
+
+		return $return;
+	}
+
+
+
+	/**
+	 * Returns a list of all availalbe page styles.
+	 * This list is used in the style select drop down visible on most pages.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function get_all_page_components() {
+		$styles      = array();
+		$args        = array(
+			'post_type'           => 'dtbaker_style',
+			'post_status'         => 'publish',
+			'posts_per_page'      => - 1,
+			'ignore_sticky_posts' => 1,
+			'suppress_filters'    => false,
+			'order'=> 'ASC',
+			'orderby' => 'title',
+		);
+		$posts_array = get_posts( $args );
+		$children = array();
+		foreach ( $posts_array as $style ) {
+			if ( ! $style->post_parent ) {
+				$styles[ $style->ID ] = $style->post_title;
+			} else if ( get_post_meta( $style->ID, 'dtbaker_is_component', true ) ) {
+				if ( ! isset( $children[ $style->post_parent ] ) ) {
+					$children[ $style->post_parent ] = array();
+				}
+				$children[ $style->post_parent ][ $style->ID ] = $style->post_title;
+			}
+		}
+		// todo: sort alpha:
+
+		$return = array();
+		//we're only doing 1 level deep, not themes all the way down, so we don't need recursion here.
+
+		foreach($styles as $style_id => $style_name){
+//			$return[$style_id] = $style_name;
+			if(isset($children[$style_id])){
+				foreach($children[$style_id] as $child_style_id => $child_name){
+					$return[$child_style_id] = $style_name . ' / ' . $child_name;
+				}
+			}
 		}
 
-		return $styles;
+		return $return;
 	}
 
 
@@ -985,8 +1073,8 @@ class DtbakerElementorManager {
 				    }
 				    if ( $home_page_id ) {
 					    $style = (int)$this->get_page_template( $home_page_id );
-					    if( $this->get_page_current_overwrite($home_page_id ) ){
-					        $this->overwrite_theme_output = true;
+					    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite( $home_page_id ) ){
+					        $this->overwrite_theme_output = false;
                         }
 					    if( -1 === $style ){
 					        return false; // Use theme by default.
@@ -1001,8 +1089,8 @@ class DtbakerElementorManager {
 			    global $post;
 			    if ( $post && $post->ID ) {
                     $style = (int)$this->get_page_template( $post->ID );
-				    if( $this->get_page_current_overwrite($post->ID ) ){
-					    $this->overwrite_theme_output = true;
+				    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite($post->ID ) ){
+					    $this->overwrite_theme_output = false;
 				    }
                     if( -1 === $style ){
                         return false; // Use theme by default.
@@ -1015,15 +1103,53 @@ class DtbakerElementorManager {
 		$style_settings = $this->get_settings();
 
         // check for defaults for this page type
+
         $page_type = $this->get_current_page_type();
+        $has_page_type_overwrite_setting_already = false;
+        if($page_type){
+	        if( $this->supports( 'theme-inner' ) ){
+		        if(empty($style_settings['overwrite'][$page_type])) {
+			        // this means we're going to use the global settings.
+			        if( empty($style_settings['overwrite']['_global'])){
+				        // default empty global setting means we overwrite inner.
+				        $this->overwrite_theme_output = true;
+			        }else if($style_settings['overwrite']['_global'] == -1){
+				        // use default theme output
+				        $this->overwrite_theme_output = false;
+			        }else{
+				        // use stylepress
+				        $this->overwrite_theme_output = true;
+			        }
+		        }else if($style_settings['overwrite'][$page_type] == -1){
+			        // we're using default theme output for inner bit.
+			        $has_page_type_overwrite_setting_already = true;
+			        $this->overwrite_theme_output = false;
+		        }else{
+			        $has_page_type_overwrite_setting_already = true;
+			        // we're using stylepress output
+			        $this->overwrite_theme_output = true;
+		        }
+
+	        }
+        }
 		if( $page_type && !empty($style_settings['defaults'][$page_type])){
-		    $this->overwrite_theme_output = apply_filters( 'dtbaker_elementor_overwrite_theme', empty($style_settings['overwrite'][$page_type]) ? false : true, $style_settings['defaults'][$page_type] );
 			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults'][$page_type] );
 		}
 
 		// otherwise check for site wide default:
 		if( !empty($style_settings['defaults']['_global'])){
-			$this->overwrite_theme_output = apply_filters( 'dtbaker_elementor_overwrite_theme', empty($style_settings['overwrite']['_global']) ? false : true, $style_settings['defaults']['_global'] );
+            if( ! $has_page_type_overwrite_setting_already ){
+	            if( empty($style_settings['overwrite']['_global'])){
+		            // default empty global setting means we overwrite inner.
+		            $this->overwrite_theme_output = true;
+	            }else if($style_settings['overwrite']['_global'] == -1){
+		            // use default theme output
+		            $this->overwrite_theme_output = false;
+	            }else{
+		            // use stylepress
+		            $this->overwrite_theme_output = true;
+	            }
+            }
 			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults']['_global'] );
 		}
 
@@ -1114,6 +1240,22 @@ class DtbakerElementorManager {
     }
 
 	/**
+	 * Returns a list of all our configurable componente areas.
+	 *
+	 * @since 1.0.10
+	 *
+	 */
+	public function get_component_regions(){
+	    $defaults = array(
+	        'post_summary' => 'Post Summary',
+	        'post_single' => 'Post Single',
+	        'shop_catalog' => 'Shop Catalog',
+	        'shop_single' => 'Shop Single',
+        );
+		return $defaults;
+    }
+
+	/**
 	 * Saves our metabox details, which is the style for a particular page.
 	 *
 	 * @since 1.0.0
@@ -1146,7 +1288,7 @@ class DtbakerElementorManager {
 		}
 
 		if ( isset( $_POST['dtbaker_is_component_check'] ) ){
-			update_post_meta( $post_id, 'dtbaker_is_component', ! empty( $_POST['dtbaker_is_component'] ) ); // WPCS: sanitization ok. input var okay.
+			update_post_meta( $post_id, 'dtbaker_is_component', empty( $_POST['dtbaker_is_component'] ) ? 0 : 1 ); // WPCS: sanitization ok. input var okay.
 		}
 
 	}
@@ -1511,6 +1653,9 @@ class DtbakerElementorManager {
                                             case 'font_color':
                                                 $additional_css .= 'color: '.esc_attr($font_options[$font_key][$additional_style]).';';
                                                 break;
+                                            case 'font_size':
+                                                $additional_css .= 'font-size: '.esc_attr($font_options[$font_key][$additional_style]['amount'].$font_options[$font_key][$additional_style]['unit']).';';
+                                                break;
                                         }
                                     }
                                 }
@@ -1689,5 +1834,18 @@ class DtbakerElementorManager {
 
     }
 
+	/**
+     * Apply skins to existing Elementor widgets.
+     * todo: move basic skins into json as well.
+     *
+	 * @param Elementor\Widget_Base $element
+	 */
+    public function plugin_skins($element){
+//        if('icon-list' === $element->get_name() ){
+//	        require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skin-icon-list.php';
+//	        $element->add_skin( new StylePress\Elementor\Skins\Skin_Icon_List_Dtbaker( $element ) );
+//
+//        }
+    }
 }
 

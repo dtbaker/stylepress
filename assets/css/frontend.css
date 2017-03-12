@@ -33,16 +33,27 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 /**
 StylePress Custom Addons:
  */
-.stylepress-icon-inline ul.elementor-icon-list-items {
+.elementor-widget-icon-list.stylepress-icon-inline ul.elementor-icon-list-items {
   display: flex;
   justify-content: center;
 }
-.stylepress-icon-inline ul.elementor-icon-list-items > li {
-  padding: 6px;
+.elementor-widget-icon-list.stylepress-icon-inline ul.elementor-icon-list-items > li.elementor-icon-list-item {
+  padding: 6px 10px;
 }
-.stylepress-icon-inline.elementor-align-left ul.elementor-icon-list-items {
+.elementor-widget-icon-list.stylepress-icon-inline ul.elementor-icon-list-items > li.elementor-icon-list-item:after {
+  border-top: 0 !important;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #ddd;
+  left: auto;
+  bottom: auto;
+  right: 0;
+  height: 58%;
+  width: auto;
+}
+.elementor-widget-icon-list.stylepress-icon-inline.elementor-align-left ul.elementor-icon-list-items {
   justify-content: flex-start;
 }
-.stylepress-icon-inline.elementor-align-right ul.elementor-icon-list-items {
+.elementor-widget-icon-list.stylepress-icon-inline.elementor-align-right ul.elementor-icon-list-items {
   justify-content: flex-end;
 }

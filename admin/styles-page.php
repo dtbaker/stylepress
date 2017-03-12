@@ -131,7 +131,7 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
                                 <?php if ( $used ){ ?>
                                     <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
                                 <?php }else{ ?>
-                                    <i class="fa fa-times"></i> Style Not Used.
+                                    <i class="fa fa-times"></i> Style Not Used. Apply style.
                                 <?php } ?>
                             </a>
                         </div>

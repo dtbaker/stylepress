@@ -49,8 +49,11 @@ get_current_screen()->set_help_sidebar(
 add_thickbox();
 
 $styles = DtbakerElementorManager::get_instance()->get_all_page_styles();
+$components = DtbakerElementorManager::get_instance()->get_all_page_components();
 $settings = DtbakerElementorManager::get_instance()->get_settings();
 $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types();
+
+$inner_component_regions = DtbakerElementorManager::get_instance()->get_component_regions();
 ?>
 
 <div class="wrap">
@@ -83,28 +86,46 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 					<table>
 						<thead>
 						<tr>
-							<th>Type</th>
-							<th>Style</th>
-							<th>Overwrite</th>
+							<th>Page Type</th>
+							<th>Outer Style</th>
+                            <?php if( $this->supports( 'theme-inner' ) ){ ?>
+							<th>Inner Style</th>
+                            <?php } ?>
 						</tr>
 						</thead>
 						<tbody>
 						<?php
 						foreach ( $page_types as $post_type => $post_type_title ) {
 							?>
-							<tr>
+							<tr class="post-type=<?php echo esc_attr($post_type);?>">
 								<td><?php echo esc_html( $post_type_title);?></td>
 								<td>
 									<select name="stylepress_styles[<?php echo esc_attr($post_type);?>]">
-										<option value="0"><?php echo '_global' === $post_type ? 'None - Use Normal Theme' : ' - Use Global Setting - ';?></option>
-										<?php foreach ( $styles as $style_id => $style ) { ?>
+                                        <?php if('_global' === $post_type){ ?>
+                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( 'None - Use Normal Theme' ); ?></option>
+                                        <?php }else { ?>
+                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( ' - Use Global Setting - ' ); ?></option>
+                                            <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, -1 );?>><?php _e( 'None - Use Normal Theme' ); ?></option>
+	                                        <?php
+                                        }
+                                        foreach ( $styles as $style_id => $style ) { ?>
 											<option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
 										<?php } ?>
 									</select>
 								</td>
+								<?php if( $this->supports( 'theme-inner' ) ){ ?>
 								<td>
-									<input type="checkbox" name="stylepress_settings[overwrite][<?php echo esc_attr($post_type);?>]" value="1"<?php echo !empty($settings['overwrite'][$post_type]) ? ' checked':'';?>>
+                                    <select name="stylepress_settings[overwrite][<?php echo esc_attr($post_type);?>]">
+	                                    <?php if('_global' === $post_type){ ?>
+                                            <option value="0"<?php selected( isset($settings['overwrite'][$post_type]) ? (int)$settings['overwrite'][$post_type]: 0, 0 );?>><?php _e( 'StylePress (recommended)' ); ?></option>
+                                        <?php }else{ ?>
+                                            <option value="0"<?php selected( isset($settings['overwrite'][$post_type]) ? (int)$settings['overwrite'][$post_type]: 0, 0 );?>><?php _e( ' - Use Global Setting - ' ); ?></option>
+                                        <?php } ?>
+                                        <option value="1"<?php selected( isset($settings['overwrite'][$post_type]) ? (int)$settings['overwrite'][$post_type]: 0, 1 );?>><?php _e( 'StylePress (recommended)' ); ?></option>
+                                        <option value="-1"<?php selected( isset($settings['overwrite'][$post_type]) ? (int)$settings['overwrite'][$post_type]: 0, -1 );?>><?php _e( 'Use Default Theme Output' ); ?></option>
+                                    </select>
 								</td>
+                                <?php } ?>
 							</tr>
 							<?php
 						}
@@ -115,23 +136,38 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 					<input type="submit" name="save" value="Save Settings" class="button button-primary">
 				</div>
 				<div>
-					<h3>Inner Components:</h3>
-					<p>Choose which inner styles to apply to various parts of the site:</p>
+					<h3>Inner Styles:</h3>
+					<p>Choose which inner styles to use.</p>
 
-					<ul class="dtbaker-elementor-settings">
-						<?php
-						foreach( array('Blog Grid','Comments','Shop Catalog','Shop Product') as $type){
-							?>
-							<li>
-								<?php echo esc_html( ucwords( str_replace('_',' ',$type)));?> Style: <select name="stylepress_styles[<?php echo esc_attr($type);?>]">
-									<option value="0">None - Use Normal Theme</option>
-									<?php foreach($styles as $style_id => $style){ ?>
-										<option value="<?php echo (int)$style_id;?>"<?php echo $settings && !empty($settings['defaults'][$type]) && (int)$settings['defaults'][$type] === (int)$style_id ? ' selected' : '';?>><?php echo esc_html($style);?></option>
-									<?php } ?>
-								</select>
-							</li>
-						<?php } ?>
-					</ul>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Inner Type</th>
+                            <th>Inner Style</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach( array('Blog Grid','Comments','Shop Catalog','Shop Product') as $type){
+	                        ?>
+                            <tr>
+                                <td><?php echo esc_html( ucwords( str_replace('_',' ',$type)));?></td>
+                                <td>
+                                    <select name="stylepress_styles[<?php echo esc_attr($type);?>]">
+                                        <option value="0"> - Please Select - </option>
+		                                <?php foreach($components as $style_id => $style){ ?>
+                                            <option value="<?php echo (int)$style_id;?>"<?php echo $settings && !empty($settings['defaults'][$type]) && (int)$settings['defaults'][$type] === (int)$style_id ? ' selected' : '';?>><?php echo esc_html($style);?></option>
+		                                <?php } ?>
+                                    </select>
+                                </td>
+                            </tr>
+							<?php
+						}
+						?>
+                        </tbody>
+                    </table>
+
 					<input type="submit" name="save" value="Save Settings" class="button button-primary">
 				</div>
 				<div>

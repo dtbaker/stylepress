@@ -42,14 +42,26 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 /**
 StylePress Custom Addons:
  */
-.stylepress-icon-inline{
+.elementor-widget-icon-list.stylepress-icon-inline{
   ul.elementor-icon-list-items{
     display:flex;
     justify-content: center;
-    > li{
-      padding: 6px;
+    > li.elementor-icon-list-item{
+      padding: 6px 10px;
+      &:after{
+        border-top:0 !important;
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-right-color: #ddd;
+        left: auto;
+        bottom: auto;
+        right: 0;
+        height:58%;
+        width:auto;
+      }
     }
   }
+
   &.elementor-align-left{
     ul.elementor-icon-list-items {
       justify-content: flex-start;

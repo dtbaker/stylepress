@@ -2,10 +2,12 @@
   "attributes": [
     {
       "element": "icon-list",
-      "appendto": "section_icon_style",
+      "after": "section_icon",
       "name": "stylepress_icon_inline",
+      "section_title": "StylePress",
       "title": "Icon Layout",
       "type": "select",
+      "tab": "content",
       "default": "normal",
       "options": {
         "normal": "Normal",

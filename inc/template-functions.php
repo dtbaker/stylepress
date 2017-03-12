@@ -18,6 +18,29 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 	 * @param array $settings Elementor settings from this particular widget. Empty for now but may contain settings down the track.
 	 */
 	function dtbaker_elementor_page_content( $settings = array() ) {
+
+		global $post;
+		echo $post->ID . ' = '. DtbakerElementorManager::get_instance()->get_current_page_type();
+
+		if( is_home() || is_front_page() ){
+			// home page or blog output page.
+			if ( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_option( 'page_on_front' ) ) {
+				echo "Showing standard page on front, continue to the_content() below:";
+			}else{
+				echo "Showing blog output below: ";
+				// look for a content template to use.
+
+			}
+		}else {
+
+			switch ( DtbakerElementorManager::get_instance()->get_current_page_type() ) {
+
+			}
+		}
+
+		// work out if we have an inner component for this particular post style.
+
+
 		the_content();
 	}
 }
