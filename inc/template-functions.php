@@ -20,14 +20,14 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 	function dtbaker_elementor_page_content( $settings = array() ) {
 
 		global $post;
-		echo $post->ID . ' = '. DtbakerElementorManager::get_instance()->get_current_page_type();
+//		echo $post->ID . ' = '. DtbakerElementorManager::get_instance()->get_current_page_type();
 
 		if( is_home() || is_front_page() ){
 			// home page or blog output page.
 			if ( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_option( 'page_on_front' ) ) {
-				echo "Showing standard page on front, continue to the_content() below:";
+//				echo "Showing standard page on front, continue to the_content() below:";
 			}else{
-				echo "Showing blog output below: ";
+//				echo "Showing blog output below: ";
 				// look for a content template to use.
 
 			}
