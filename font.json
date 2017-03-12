@@ -86,6 +86,11 @@
   "section_light": {
     "title": "Light Section",
     "selector": ".stylepress-section-color-light",
+    "inject_additional": {
+      ".stylepress-section-color-light a": [
+        "font_color"
+      ]
+    },
     "defaults": {
       "font_family": "Open Sans",
       "font_weight": 400,
@@ -96,6 +101,11 @@
   "section_mid": {
     "title": "Mid Section",
     "selector": ".stylepress-section-color-mid",
+    "inject_additional": {
+      ".stylepress-section-color-mid a": [
+        "font_color"
+      ]
+    },
     "defaults": {
       "font_family": "Open Sans",
       "font_weight": 400,
@@ -106,6 +116,11 @@
   "section_dark": {
     "title": "Dark Section",
     "selector": ".stylepress-section-color-dark",
+    "inject_additional": {
+      ".stylepress-section-color-dark a": [
+        "font_color"
+      ]
+    },
     "defaults": {
       "font_family": "Open Sans",
       "font_weight": 400,

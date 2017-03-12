@@ -590,8 +590,10 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function frontend_css() {
-		wp_enqueue_style( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, DTBAKER_ELEMENTOR_VERSION );
-		wp_enqueue_script( 'dtbaker-elementor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+		wp_enqueue_style( 'dtbaker-elementor-css', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, DTBAKER_ELEMENTOR_VERSION );
+		wp_enqueue_script( 'dtbaker-elementor-js', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+		// inject adds inline style against 'dtbaker-elementor'
+		$this->inject_additional_font_css();
 
         if( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
             wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, DTBAKER_ELEMENTOR_VERSION );
@@ -600,7 +602,6 @@ class DtbakerElementorManager {
 
         // plugin css:
         // todo: only show if registered.
-
         wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.css', false );
 		wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
 		wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
@@ -1463,6 +1464,70 @@ class DtbakerElementorManager {
         }
 
 	    return $options;
+	}
+
+	/**
+	 * Inject additional CSS based on font selector attributes.
+	 *
+	 * @since 1.0.10
+	 */
+	public function inject_additional_font_css() {
+
+	    $additional_css = '';
+		if ( class_exists( 'EGF_Register_Options' ) && is_callable( 'EGF_Register_Options::get_options' ) ) {
+			$font_options = EGF_Register_Options::get_options();
+			$style_id     = $this->get_current_style();
+			if ( $style_id ) {
+				$post = get_post( $style_id );
+				if ( ! $post->post_parent && $post->post_type === 'dtbaker_style' ) {
+					$json = $this->get_page_style_font_json( $style_id );
+
+					if ( $json ) {
+						foreach ( $json as $key => $val ) {
+							$font_key = $style_id . $key;
+
+							if ( empty( $val['selector'] ) || empty( $val['inject_additional'] ) ) {
+								continue;
+							}
+
+							foreach ( $val['inject_additional'] as $additional_selector => $additional_styles ) {
+
+								$bits = explode( ',', $additional_selector );
+								foreach ( $bits as $bit_id => $bit ) {
+									$bit = trim( $bit );
+									if ( strpos( $bit, 'body' ) === 0 ) {
+										$bit = str_replace( 'body', 'body.dtbaker-elementor-style-' . (int) $style_id, $bit );
+									} else {
+										$bit = '.dtbaker-elementor-style-' . (int) $style_id . ' ' . $bit;
+									}
+									$bits[ $bit_id ] = $bit;
+								}
+								$additional_selector = implode( ', ', $bits );
+
+								$additional_css .= "\n\n" . $additional_selector . '{';
+								foreach($additional_styles as $additional_style){
+								    if(!empty($font_options[$font_key][$additional_style])){
+								        switch($additional_style){
+                                            case 'font_color':
+                                                $additional_css .= 'color: '.esc_attr($font_options[$font_key][$additional_style]).';';
+                                                break;
+                                        }
+                                    }
+                                }
+								$additional_css .= '}';
+
+							}
+
+						}
+					}
+
+					if($additional_css) {
+						wp_add_inline_style( 'dtbaker-elementor-css', $additional_css );
+					}
+				}
+
+			}
+		}
 	}
 
 	/**
