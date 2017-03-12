@@ -89,6 +89,29 @@ class DtbakerElementorManager {
 		add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
+
+		// stylepress plugin hooks
+		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon'), 10, 4 );
+
+	}
+
+	public function dropdown_icon($title, $item, $args, $depth ) {
+		// Build an array with our theme location
+		$theme_locations = array(
+			'primary',
+			'secondary',
+			'slideout'
+		);
+
+		// Loop through our menu items and add our dropdown icons
+		foreach ( $item->classes as $value ) {
+			if ( 'menu-item-has-children' === $value  ) {
+				$title = $title . '<span role="button" class="dropdown-menu-toggle" aria-expanded="false"></span>';
+			}
+		}
+
+		// Return our title
+		return $title;
 	}
 
 	/**
@@ -706,6 +729,19 @@ class DtbakerElementorManager {
                 <div id="dtbaker-return-to-style">
                     <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress') );?>" class="button"><?php echo esc_html__('&laquo; Return To All Styles', 'stylepress');?></a>
                 </div>
+                <div id="stylepress-modify-font">
+                    <?php
+                    $url       = add_query_arg(
+	                    array(
+                            'autofocus[panel]' => 'tt_font_typography_panel',
+		                    'url'    => urlencode( get_permalink( $post->ID ) ),
+		                    'return' => urlencode( get_edit_post_link( $post->ID ) ),
+	                    ),
+	                    admin_url( 'customize.php' )
+                    );
+                    ?>
+                    <a href="<?php echo esc_url( $url );?>" class="button"><?php echo esc_html__('Customize Font & Colors', 'stylepress');?></a>
+                </div>
 			    <?php
             }
 
@@ -750,7 +786,7 @@ class DtbakerElementorManager {
 	public function get_downloadable_styles() {
 
 		$styles = get_transient('stylepress_downloadable');
-		if(!$styles) {
+		if(!$styles || isset($_GET['refresh-styles'])) {
 			$styles = array();
 
 			// json query to stylepress.org to get a list of available styles.
@@ -765,7 +801,6 @@ class DtbakerElementorManager {
 					),
 				)
 			);
-
 
 			if ( ! is_wp_error( $response ) ) {
 				$api_response = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -930,6 +965,13 @@ class DtbakerElementorManager {
 	 * @return int
 	 */
 	public function get_current_style( $ignore_override = false ) {
+
+
+        global $post;
+        if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type){
+            // we're previewing a style.
+            return $post->ID;
+        }
 
 	    if( !$ignore_override ) {
 		    if ( is_home() || is_front_page() ) {
@@ -1222,7 +1264,7 @@ class DtbakerElementorManager {
 		WP_Filesystem();
 		global $wp_filesystem;
 		$json = json_decode( $wp_filesystem->get_contents( trailingslashit( plugin_dir_path( __DIR__ ) ) . 'elementor.json' ), true );
-		$json = apply_filters( 'dtbaker_elementor_json', $json );
+		$json = apply_filters( 'stylepress_elementor_json', $json );
 		$this->_apply_json_overrides( $json );
 		$current_style = $this->get_current_style();
 		if( $current_style ){
@@ -1335,6 +1377,10 @@ class DtbakerElementorManager {
 	    // we have a tab for each style.
         $styles = $this->get_all_page_styles();
         foreach($styles as $style_id => $style_name){
+
+            $post = get_post($style_id);
+            if($post->post_parent || $post->post_type != 'dtbaker_style')continue;
+
             $options['style-'.$style_id] = array(
 		        'name'        => 'style-'.$style_id,
 		        // Translators: %s is the name of the style from Appearance > Full Site Builder
@@ -1366,7 +1412,10 @@ class DtbakerElementorManager {
         $styles = $this->get_all_page_styles();
         foreach($styles as $style_id => $style_name){
 
-            $json = $this->get_page_style_font_json($style_id);
+	        $post = get_post($style_id);
+	        if($post->post_parent || $post->post_type != 'dtbaker_style')continue;
+
+	        $json = $this->get_page_style_font_json($style_id);
 	        $sizes = '100,100italic,200,200italic,300,300italic,400,400italic';
 
             if($json){
@@ -1443,11 +1492,29 @@ class DtbakerElementorManager {
 
     }
 	public function get_page_style_font_json($style_id){
+
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		WP_Filesystem();
+		global $wp_filesystem;
+		$json = json_decode( $wp_filesystem->get_contents( trailingslashit( plugin_dir_path( __DIR__ ) ) . 'font.json' ), true );
+		$json = apply_filters( 'stylepress_font_json', $json );
+		if(!is_array($json))$json=array();
+
+		// and we also want to do some custom stuyff here to match our elementor.json
+        // in this case we're adding the custom footer style configuration.
+        /*foreach(array('light','mid','dark') as $color){
+	        $json['section_'.$color] = array(
+	            "title" => ucwords($color). " Section",
+                "selector" => '.stylepress-section-color-'.$color,
+                'defaults' => array(),
+            );
+        }*/
+
 	    $advanced = $this->get_advanced($style_id);
 	    if($advanced && !empty($advanced['font']) && is_array($advanced['font'])){
-            return $advanced['font'];
+            $json = array_merge($json,$advanced['font']);
         }
-	    return array();
+	    return $json;
     }
 	public function get_style_elementor_overrides($style_id){
 	    $advanced = $this->get_advanced($style_id);

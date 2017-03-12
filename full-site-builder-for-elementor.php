@@ -4,7 +4,7 @@
  * Description: Allows you to apply full site layout templates to pages on your website using Elementor.
  * Plugin URI: https://dtbaker.net/labs/elementor-full-page-site-builder/
  * Author: dtbaker
- * Version: 1.0.6
+ * Version: 1.0.10
  * Author URI: https://dtbaker.net/
  * Requires at least:   4.4
  * Tested up to:        4.7.2
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 
 /* Set plugin version constant. */
-define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.9' );
+define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.10' );
 
 /* Set constant path to the plugin directory. */
 define( 'DTBAKER_ELEMENTOR_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );

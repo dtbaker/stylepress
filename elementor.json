@@ -40,6 +40,23 @@
         "normal": "Normal"
       },
       "prefix_class": "stylepress-title-"
+    },
+    {
+      "element": "section",
+      "after": "section_background",
+      "name": "stylepress_section_color",
+      "section_title": "StylePress",
+      "title": "Section Style",
+      "type": "select",
+      "tab": "style",
+      "default": "normal",
+      "options": {
+        "normal": "Normal",
+        "light": "Light",
+        "mid": "Mid",
+        "dark": "Dark"
+      },
+      "prefix_class": "stylepress-section-color-"
     }
   ]
 }

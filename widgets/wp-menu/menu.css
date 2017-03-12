@@ -36,6 +36,19 @@
   padding-right: 0;
   position: relative;
 }
+.stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle {
+  padding-right: 20px;
+  display: inline-block;
+  height: 100%;
+  clear: both;
+  padding-left: 10px;
+}
+.stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle:before {
+  content: "\f107";
+  font-family: FontAwesome;
+  line-height: 1em;
+  speak: none;
+}
 .stylepress-main-navigation .stylepress-inside-navigation ul li:hover > a {
   background: #eaeaea;
 }
@@ -60,6 +73,16 @@
   font-size: 0.9em;
   padding: 10px 20px;
   line-height: normal;
+}
+.stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle {
+  padding-right: 15px;
+  float: right;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: -10px;
+}
+.stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle:before {
+  content: "\f105" !important;
 }
 .stylepress-main-navigation .stylepress-inside-navigation ul ul ul {
   left: 100%;

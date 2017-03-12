@@ -10,6 +10,7 @@ namespace Elementor;
 if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 }
 
+
 /**
  * Creates our custom Elementor widget
  *
@@ -86,7 +87,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 			]
 		);
 
-		if ( ! function_exists( 'max_mega_menu_is_enabled' ) ) {
+		if ( false && ! function_exists( 'max_mega_menu_is_enabled' ) ) {
 
 			$this->add_control(
 				'megamenu',
@@ -103,10 +104,18 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 			'' => esc_html__( ' - choose - ', 'stylepress' ),
 		);
 
-		$menus = get_registered_nav_menus();
-		foreach ( $menus as $location => $description ) {
-			$menu_select[ $location ] = $description;
+		if ( function_exists( 'max_mega_menu_is_enabled' ) ) {
+			$menus = get_registered_nav_menus();
+			foreach ( $menus as $location => $description ) {
+				$menu_select[ $location ] = $description;
+			}
 		}
+		// we also show a list of users menues.
+		$menus = wp_get_nav_menus();
+		foreach ( $menus as $menu ){
+		    $menu_select[$menu->term_id] = $menu->name;
+        }
+
 
 		$this->add_control(
 			'menu_location',
@@ -262,6 +271,8 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
                 }, 10, 2);
             }*/
 
+			// if the menu is a "location" then we
+
 			if ( function_exists('max_mega_menu_is_enabled') && max_mega_menu_is_enabled($settings['menu_location']) ){
 				wp_nav_menu( array( 'theme_location' => $settings['menu_location'] ) );
             }else{
@@ -273,16 +284,34 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
                     </button>
                     <div id="<?php echo $this->get_id();?>-menu" class="stylepress-inside-navigation">
 						<?php
-						wp_nav_menu(
-							array(
-								'theme_location' => $settings['menu_location'],
-								'container' => 'div',
-								'container_class' => 'main-nav',
-								'container_id' => 'primary-menu',
-								'menu_class' => '',
-								'items_wrap' => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>'
-							)
-						);
+
+                        if(is_numeric($settings['menu_location'])){
+	                        $nav_menu = wp_get_nav_menu_object( $settings['menu_location'] );
+	                        if ( $nav_menu ){
+		                        wp_nav_menu( array(
+			                        'menu'        => $nav_menu,
+			                        'fallback_cb' => '',
+			                        'container'       => 'div',
+			                        'container_class' => 'main-nav',
+			                        'container_id'    => 'primary-menu',
+			                        'menu_class'      => '',
+			                        'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
+		                        ) );
+                            }else{
+	                            echo "Menu Configuration Issue";
+                            }
+                        }else {
+	                        wp_nav_menu(
+		                        array(
+			                        'theme_location'  => $settings['menu_location'],
+			                        'container'       => 'div',
+			                        'container_class' => 'main-nav',
+			                        'container_id'    => 'primary-menu',
+			                        'menu_class'      => '',
+			                        'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>'
+		                        )
+	                        );
+                        }
 						?>
                     </div><!-- .inside-navigation -->
                 </nav><!-- #site-navigation -->
