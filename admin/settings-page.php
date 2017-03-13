@@ -190,7 +190,6 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
 						?>
                         </tbody>
                     </table>
-                    <p>(more inner types coming soon)</p>
 
 					<input type="submit" name="save" value="Save Settings" class="button button-primary">
 

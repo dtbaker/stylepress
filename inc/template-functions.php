@@ -55,6 +55,11 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 				case 'page':
 					$component_template = 'page_single';
 					break;
+				case 'search':
+					$component_template = 'search_result';
+					break;
+				default:
+					$component_template = $current_page_type . '_single';
 			}
 		}
 
@@ -69,7 +74,7 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			$style_id = false;
 			if( $component_template ){
 				// loading this component/
-				$debug_info .= "Loading compontent ".$component_template."\n";
+				$debug_info .= "Looking for inner compontent: ".$component_template."\n";
 
 				if(!empty($style_settings['defaults'][$component_template])){
 					$style_id = (int) $style_settings['defaults'][$component_template];

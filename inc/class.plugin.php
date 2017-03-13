@@ -1242,7 +1242,7 @@ class DtbakerElementorManager {
 	        '_global' => 'Global',
 	        'page' => 'Page',
 	        'post' => 'Post',
-	        'attachment' => 'Attachment',
+//	        'attachment' => 'Attachment',
 	        '404' => '404',
 	        'product' => 'Product',
 	        'product_category' => 'Product Category',
@@ -1254,7 +1254,7 @@ class DtbakerElementorManager {
         );
 		$post_types = get_post_types( array( 'public' => true ));
 		foreach ( $post_types as $post_type ) {
-			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library' ), true ) ) {
+			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
                 if(!isset($defaults[$post_type])){
 	                $defaults[$post_type] = $post_type;
                 }
@@ -1273,9 +1273,19 @@ class DtbakerElementorManager {
 	    $defaults = array(
 	        'post_summary' => 'Post Summary',
 	        'post_single' => 'Post Single',
+	        'page_single' => 'Page Single',
+	        'search_result' => 'Search Result',
 //	        'shop_catalog' => 'Shop Catalog',
 //	        'shop_single' => 'Shop Single',
         );
+		$post_types = get_post_types( array( 'public' => true ));
+		foreach ( $post_types as $post_type ) {
+			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
+				if(!isset($defaults[$post_type.'_single'])){
+					$defaults[$post_type.'_single'] = ucwords(str_replace("_"," ",$post_type)) .' Single';
+				}
+			}
+		}
 		return $defaults;
     }
 
