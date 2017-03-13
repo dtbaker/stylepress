@@ -33,13 +33,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 
 // dev stuff by dtbaker:
-set_time_limit(2);
+//set_time_limit(2);
 
 /* Set plugin version constant. */
 define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.10' );
 
 /* Debug output control. */
-define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', true );
+define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', false );
 
 /* Set constant path to the plugin directory. */
 define( 'DTBAKER_ELEMENTOR_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
