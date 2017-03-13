@@ -20,7 +20,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 <?php
 
 
-do_action( 'elementor/full-page/before' );
+do_action( 'stylepress/before-render' );
 
 if ( ! empty( $GLOBALS['our_elementor_template'] ) ) {
 	$GLOBALS['stylepress_only_render'] = 'header';

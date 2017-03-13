@@ -65,15 +65,38 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
         <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
     <?php } ?>
 
-	<?php if(!get_theme_support('stylepress-elementor')){ ?>
-        <div class="notice notice-error"><p>Warning: The current theme does not specify <code>stylepress-elementor</code> support. Some functions may not work correctly. Use our recommended theme if you have layout issues.</p></div>
-	<?php } ?>
-
-    <div class="notice notice-error"><p>Warning: Most of these settings won't work just yet. Components are disabled. Try the "Global" setting, that should work.</p></div>
-
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 		<input type="hidden" name="action" value="dtbaker_elementor_save" />
 		<?php wp_nonce_field( 'dtbaker_elementor_save_options', 'dtbaker_elementor_save_options' ); ?>
+
+
+        <div class="dtbaker-elementor-instructions">
+            <div>
+                <div>
+                    <h3>Instructions:</h3>
+                    <ol>
+                        <li>Create your "Site Style" in Elementor from the <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress'));?>">Styles</a> page.</li>
+                        <li>Choose which Outer Styles to apply to your site using the options below. The Outer Style is the header/sidebar/footer that wraps around your page content.</li>
+                        <li>Choose which Inner Styles to apply to your site components. The Inner Styles are dynamic layouts that replace the default <code>the_content()</code> output.</li>
+                        <li>When editing individual pages you can apply a different style to the default, look in the page metabox area.</li>
+                        <li>View more help and videos at <a href="https://stylepress.org/help/" target="_blank">https://stylepress.org/help/</a> </li>
+                    </ol>
+                </div>
+                <div>
+                    <h3>Recommended Plugins:</h3>
+                    <p>It is recommended to install these plugins to get best results:</p>
+                    <ol>
+                        <li><a href="https://elementor.com/pro/?ref=1164&campaign=pluginget" target="_blank">Elementor Pro</a></li>
+                        <li><a href="https://wordpress.org/plugins/megamenu/" target="_blank">Max Mega Menu</a></li>
+                        <li><a href="https://wordpress.org/plugins/easy-google-fonts/" target="_blank">Easy Google Fonts</a></li>
+                    </ol>
+                </div>
+                <div>
+                    <h3>Recommended Theme:</h3>
+                    <p>This plugin works best with a basic default theme. If your current theme is causing layout problems please <a href="https://stylepress.org/theme/" target="_blank">click here</a> to download our recommended basic theme.</p>
+                </div>
+            </div>
+        </div>
 
 		<div class="dtbaker-elementor-instructions">
 			<div>
@@ -137,7 +160,7 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
 				</div>
 				<div>
 					<h3>Inner Styles:</h3>
-					<p>Choose which inner styles to use.</p>
+					<p>Choose which inner styles to use (optional).</p>
 
 
                     <table>
@@ -149,15 +172,15 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
                         </thead>
                         <tbody>
                         <?php
-                        foreach( array('Blog Grid','Comments','Shop Catalog','Shop Product') as $type){
+                        foreach( $inner_component_regions as $component_id => $component_name ){
 	                        ?>
                             <tr>
-                                <td><?php echo esc_html( ucwords( str_replace('_',' ',$type)));?></td>
+                                <td><?php echo esc_html( $component_name);?></td>
                                 <td>
-                                    <select name="stylepress_styles[<?php echo esc_attr($type);?>]">
-                                        <option value="0"> - Please Select - </option>
+                                    <select name="stylepress_styles[<?php echo esc_attr($component_id);?>]">
+                                        <option value="0"> - Default Output - </option>
 		                                <?php foreach($components as $style_id => $style){ ?>
-                                            <option value="<?php echo (int)$style_id;?>"<?php echo $settings && !empty($settings['defaults'][$type]) && (int)$settings['defaults'][$type] === (int)$style_id ? ' selected' : '';?>><?php echo esc_html($style);?></option>
+                                            <option value="<?php echo (int)$style_id;?>"<?php echo $settings && !empty($settings['defaults'][$component_id]) && (int)$settings['defaults'][$component_id] === (int)$style_id ? ' selected' : '';?>><?php echo esc_html($style);?></option>
 		                                <?php } ?>
                                     </select>
                                 </td>
@@ -167,30 +190,33 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
 						?>
                         </tbody>
                     </table>
+                    <p>(more inner types coming soon)</p>
 
 					<input type="submit" name="save" value="Save Settings" class="button button-primary">
+
 				</div>
 				<div>
-					<h3>Instructions:</h3>
-					<ol>
-						<li>Create your "Site Style" in Elementor.</li>
-						<li>Choose which styles to apply globally to your site.</li>
-						<li>Tick the "overwrite" option if you want the style to overwrite all theme output (test it on and off to see the difference)</li>
-						<li>When editing individual pages you can apply a different style in the metabox area.</li>
-					</ol>
-					<h3>Recommended Plugins:</h3>
-					<p>It is recommended to install these plugins to get best results:</p>
-					<ol>
-						<li><a href="https://elementor.com/pro/?ref=1164&campaign=pluginget" target="_blank">Elementor Pro</a></li>
-						<li><a href="https://wordpress.org/plugins/megamenu/" target="_blank">Max Mega Menu</a></li>
-						<li><a href="https://wordpress.org/plugins/easy-google-fonts/" target="_blank">Easy Google Fonts</a></li>
-					</ol>
-					<h3>Recommended Theme:</h3>
 
-					<p>This plugin works best with a basic default theme. If your current theme is causing layout problems please <a href="https://dtbaker.net/labs/stylepress-basic-wordpress-theme/" target="_blank">click here</a> to download our recommended basic theme.</p>
+                    <h3>Coming Soon:</h3>
+                    <p>The coming soon feature can be used to hide your website from anyone who is not logged in. Enable this while you are developing your website.</p>
+
+                    <div>
+                        Page to Display: <select name="stylepress_styles[coming_soon]">
+                            <option value=""> - Disabled - </option>
+							<?php
+							foreach ( $styles as $style_id => $style ) { ?>
+                                <option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults']['coming_soon'] ) && (int) $settings['defaults']['coming_soon'] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
+							<?php } ?>
+                        </select>
+                    </div>
+
+
+
+                    <input type="submit" name="save" value="Save Settings" class="button button-primary">
 				</div>
 			</div>
 		</div>
+
 	</form>
 
 

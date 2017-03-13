@@ -50,9 +50,8 @@ add_thickbox();
 
 $settings = DtbakerElementorManager::get_instance()->get_settings();
 $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types();
-
 $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
-
+$downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles();
 ?>
 
 <div class="wrap">
@@ -123,6 +122,7 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
 			                        $used[$post_type] = $post_type_title;
 		                        }
 	                        }
+	                        // todo: query what custom pages have a different style overview
                         }
 
                         ?>
@@ -153,14 +153,16 @@ $designs = DtbakerElementorManager::get_instance()->get_all_page_styles();
             <h3 class="stylepress-header">
                 <span>Available Styles</span>
                 <small>These site styles can be installed and then edited with Elementor.</small>
+                <br/>
+                <small>Note: THESE STYLES ARE NOT COMPLETE YET, THEY ARE MISSING PAGES AND COMPONENTS</small>
             </h3>
 
             <div class="stylepress-item-wrapper">
                 <?php
 
-                $designs = DtbakerElementorManager::get_instance()->get_downloadable_styles();
 
-                foreach ( $designs as $design_slug => $design ) :
+
+                foreach ( $downloadable as $design_slug => $design ) :
 
                     $type = !empty($design['cost']) ? 'paid' : 'free';
 	                $has_purchased = false;

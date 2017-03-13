@@ -16,16 +16,20 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class('stylepress-editor'); ?>>
 <?php
 
-do_action( 'elementor/full-page/before' );
+do_action( 'stylepress/before-render' );
 
-while ( have_posts() ) : the_post();
-	do_action( 'elementor/full-page/inner' ); // Priority 20 is the_content().
-endwhile;
-
-do_action( 'elementor/full-page/after' );
+?>
+<!-- stylepress editor template begin -->
+<?php
+//do_action( 'stylepress/render-inner' ); // Priority 20 is the_content().
+the_content();
+?>
+<!-- stylepress editor template end -->
+<?php
+do_action( 'stylepress/after-render' );
 
 wp_footer();
 ?>

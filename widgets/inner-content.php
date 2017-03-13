@@ -107,8 +107,14 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 
 			if ( empty( $GLOBALS['our_elementor_template'] ) ) {
 				$this->content_template();
+				// we have to display the_content() for elementor editor to work.
+				if(Plugin::$instance->editor->is_edit_mode()){
+				    // todo; show warning about a missing elementor template .
+                    the_content();
+				}
 			} else {
-				do_action( 'elementor/full-page/inner', $settings ); // Priority 20 is the_content().
+				the_content();
+//				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}
 		} else {
 			if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
@@ -121,9 +127,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
                     ob_start();
                 }
             }else {
-				while ( have_posts() ) : the_post();
-					do_action( 'elementor/full-page/inner', $settings ); // Priority 20 is the_content().
-				endwhile;
+				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}
 		}
 

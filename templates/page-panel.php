@@ -37,4 +37,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
         background: #b1defb;
 
     }
+    .stylepress-elementor-description p{
+        padding:7px 0;
+    }
 </style>

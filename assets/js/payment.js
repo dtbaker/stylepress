@@ -7,7 +7,7 @@
 
 ( function($) {
 
-    var stripe_pub_key = 'pk_test_10TqDXIuecABY4mhJ5Stmqix';
+    var stripe_pub_key = 'pk_live_sHzlXhBGv3ySRTVbsCGkxcgd';
     var loading_stripe = false;
     var stripe_load_done = false;
     var purchasing_style = {};

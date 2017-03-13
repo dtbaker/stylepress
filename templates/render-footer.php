@@ -12,7 +12,7 @@ if ( ! empty( $GLOBALS['stylepress_footer'] ) ) {
 	echo $GLOBALS['stylepress_footer'];
 }
 
-do_action( 'elementor/full-page/after' );
+do_action( 'stylepress/after-render' );
 
 wp_footer();
 ?>

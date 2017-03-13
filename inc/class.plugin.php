@@ -51,7 +51,7 @@ class DtbakerElementorManager {
 
 
 	/**
-	 * Flag to let us know if we render entire page or overwrite get_header() and get_footer().
+	 * Flag to let us know if we render entire page or just overwrite get_header() and get_footer().
 	 *
 	 * @since 1.0.5
 	 *
@@ -65,11 +65,11 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function init() {
+
 		add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_action( 'init', array( $this, 'register_new_nav_menu' ) );
-		add_action( 'init', array( $this, 'widget_ajax_calls' ) );
 		add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
@@ -80,7 +80,7 @@ class DtbakerElementorManager {
 		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
 		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 		add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
-		add_action( 'wp', array( $this, 'add_json_overrides' ) );
+		add_action( 'wp', array( $this, 'add_elementor_overrides' ) );
 		add_action( 'init', array( $this, 'elementor_ref' ) );
 
 		add_filter( 'template_include', array( $this, 'template_include' ) );
@@ -89,9 +89,10 @@ class DtbakerElementorManager {
 		add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
 		add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
-		add_filter( 'elementor/widget/icon-list/skins_init', array( $this, 'plugin_skins' ), 999 );
+
 
 		// stylepress plugin hooks
+		add_action( 'init', array( $this, 'widget_ajax_calls' ) );
 		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon'), 10, 4 );
 
 	}
@@ -146,6 +147,11 @@ class DtbakerElementorManager {
 	}
 
 
+	/**
+	 * Adds our new widgets to the Elementor widget area.
+     *
+     * @since 1.0.8
+	 */
 	public function elementor_add_new_widgets() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 			if ( class_exists( 'Elementor\Plugin' ) ) {
@@ -305,7 +311,7 @@ class DtbakerElementorManager {
 	 * This can overwrite our site wide template for every page of the website.
 	 * This is where the magic happens! :)
 	 *
-	 * There are two "modes". We are in the editor and editing the template (loads full-page.php)
+	 * There are two "modes". We are in the editor and editing the template (loads editor.php)
 	 * Or we are on the frontend and we are rending normal page content (render.php)
 	 *
 	 * @since 1.0.0
@@ -320,7 +326,7 @@ class DtbakerElementorManager {
 
 		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type  ) {
             $this->previewing_style = true;
-            $template_include       = DTBAKER_ELEMENTOR_PATH . 'templates/full-page.php';
+            $template_include       = DTBAKER_ELEMENTOR_PATH . 'templates/editor.php';
             add_filter( 'body_class', function ( $classes ) use ( $post )  {
                 $classes[] = 'dtbaker-elementor-template';
                 $classes[] = 'dtbaker-elementor-template-preview';
@@ -454,33 +460,38 @@ class DtbakerElementorManager {
 	public function admin_init() {
 
 		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
+		    // we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
+
 			add_action( 'admin_notices', 	function() {
 				$message      = esc_html__( 'Please install Elementor before attempting to use the Full Site Editor plugin..', 'stylepress' );
 				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 				echo wp_kses_post( $html_message );
 			} );
+		}else {
+
+
+			if ( ! get_option( 'elementor_pro_license_key', '' ) || get_option( 'elementor_pro_license_key', '' ) == 'local' ) {
+				set_transient( 'elementor_pro_license_data', 'test', HOUR_IN_SECONDS );
+				update_option( 'elementor_pro_license_key', 'local' );
+			}
+
+			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+			add_action( 'save_post', array( $this, 'save_meta_box' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_css' ) );
+			add_filter( 'parent_file', array( $this, 'override_wordpress_submenu' ) );
+			add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
+			add_filter( 'page_attributes_dropdown_pages_args', function ( $dropdown_args ) {
+
+				if ( ! empty( $_GET['post_parent'] ) ) {
+					$dropdown_args['selected'] = (int) $_GET['post_parent'];
+				}
+
+				return $dropdown_args;
+			} );
+			add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
+			add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
+			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 		}
-
-		if(!get_option('elementor_pro_license_key','') || get_option('elementor_pro_license_key','') == 'local'){
-			set_transient( 'elementor_pro_license_data', 'test', HOUR_IN_SECONDS );
-			update_option( 'elementor_pro_license_key', 'local' );
-		}
-
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-		add_action( 'save_post', array( $this, 'save_meta_box' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_css' ) );
-		add_filter( 'parent_file', array( $this, 'override_wordpress_submenu' ) );
-		add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
-		add_filter( 'page_attributes_dropdown_pages_args', function( $dropdown_args ) {
-
-			if ( ! empty($_GET['post_parent']) )
-				$dropdown_args['selected'] = (int) $_GET['post_parent'];
-
-			return $dropdown_args;
-        }  );
-		add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
-		add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
-		add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 
 	}
 
@@ -1055,6 +1066,10 @@ class DtbakerElementorManager {
 	 */
 	public function get_current_style( $ignore_override = false ) {
 
+		$style_settings = $this->get_settings();
+		if(!empty($style_settings['defaults']['coming_soon']) && !is_user_logged_in()){
+            return $style_settings['defaults']['coming_soon'];
+        }
 
         global $post;
         if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type){
@@ -1100,7 +1115,7 @@ class DtbakerElementorManager {
 			    }
 		    }
 	    }
-		$style_settings = $this->get_settings();
+
 
         // check for defaults for this page type
 
@@ -1249,8 +1264,8 @@ class DtbakerElementorManager {
 	    $defaults = array(
 	        'post_summary' => 'Post Summary',
 	        'post_single' => 'Post Single',
-	        'shop_catalog' => 'Shop Catalog',
-	        'shop_single' => 'Shop Single',
+//	        'shop_catalog' => 'Shop Catalog',
+//	        'shop_single' => 'Shop Single',
         );
 		return $defaults;
     }
@@ -1402,7 +1417,7 @@ class DtbakerElementorManager {
 	 *
 	 * @since 1.0.0
 	 */
-	public function add_json_overrides() {
+	public function add_elementor_overrides() {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		WP_Filesystem();
 		global $wp_filesystem;
@@ -1416,6 +1431,19 @@ class DtbakerElementorManager {
 			$json = apply_filters( 'dtbaker_elementor_style_json', $json, $current_style );
 			$this->_apply_json_overrides( $json );
         }
+
+        // we also add some custom hacks for the dynamic field support to existing elementor features.
+		add_filter( 'elementor/widget/button/skins_init', function($element){
+            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skins/button-dynamic.php';
+            $element->add_skin( new StylePress\Elementor\Skins\Skin_StylePressButtonDynamic( $element ) );
+        });
+
+		add_filter( 'elementor/widget/image/skins_init', function($element){
+            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skins/image-dynamic.php';
+            $element->add_skin( new StylePress\Elementor\Skins\Skin_StylePressDynamic_Image( $element ) );
+        });
+
+
 	}
 
 	/**
@@ -1834,18 +1862,5 @@ class DtbakerElementorManager {
 
     }
 
-	/**
-     * Apply skins to existing Elementor widgets.
-     * todo: move basic skins into json as well.
-     *
-	 * @param Elementor\Widget_Base $element
-	 */
-    public function plugin_skins($element){
-//        if('icon-list' === $element->get_name() ){
-//	        require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skin-icon-list.php';
-//	        $element->add_skin( new StylePress\Elementor\Skins\Skin_Icon_List_Dtbaker( $element ) );
-//
-//        }
-    }
 }
 

@@ -42,10 +42,16 @@ class DtbakerDynamicField {
 
 
 	public function page_title(){
-		return get_the_title();
+		return get_the_title( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
 	}
 	public function product_title(){
-		return get_the_title();
+		return get_the_title( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+	}
+	public function permalink(){
+		return get_the_permalink( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+	}
+	public function post_thumbnail(){
+		return get_the_post_thumbnail_url( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
 	}
 
 
