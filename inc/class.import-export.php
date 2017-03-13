@@ -81,7 +81,7 @@ class DtbakerElementorImportExport {
 				foreach ( $meta as $meta_key => $meta_val ) {
 					if (
 						// which keys to nuke all the time
-						in_array( $meta_key, array( '_location_id' ) )
+						in_array( $meta_key, array( '_location_id', 'stylepress_dev' ) )
 						||
 						(
 							// which keys we want to keep all the time, using strpos:
