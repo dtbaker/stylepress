@@ -153,14 +153,10 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
             <h3 class="stylepress-header">
                 <span>Available Styles</span>
                 <small>These site styles can be installed and then edited with Elementor.</small>
-                <br/>
-                <small>Note: THESE STYLES ARE NOT COMPLETE YET, THEY ARE MISSING PAGES AND COMPONENTS</small>
             </h3>
 
             <div class="stylepress-item-wrapper">
                 <?php
-
-
 
                 foreach ( $downloadable as $design_slug => $design ) :
 
@@ -171,12 +167,14 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                     }else{
 
                     }
-
                     ?>
                     <div class="design stylebox stylepress-<?php echo esc_attr($type); if($has_purchased) echo ' stylepress-purchased'?>" tabindex="0">
                         <a href="<?php echo esc_url( $design['demo'] );?>" class="thumb" target="_blank">
                             <img src="<?php echo esc_html($design['thumb']);?>">
                         </a>
+                        <div class="theme-usage style-description">
+                            <?php echo wp_kses_post( !empty($design['included']) ? $design['included'] : '' );?>
+                        </div>
 
                         <h3 class="design-name"><?php echo esc_html( $design['title'] ); ?>
                         <small>v<?php echo esc_html($design['version']);?><?php

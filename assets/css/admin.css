@@ -9,6 +9,9 @@
 .dtbaker-elementor-browser .design:nth-child(4n+4) {
   margin-right: 0;
 }
+.dtbaker-elementor-browser .design:nth-child(4n+5) {
+  clear: left;
+}
 .dtbaker-elementor-browser .stylebox {
   cursor: pointer;
   position: relative;
@@ -38,6 +41,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
   height: 18px;
+}
+.dtbaker-elementor-browser .stylebox .theme-usage.style-description {
+  height: auto;
 }
 .dtbaker-elementor-browser .stylebox .theme-usage a {
   text-decoration: none;

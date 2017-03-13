@@ -145,5 +145,34 @@
       "background_color": "#777777",
       "font_color": "#FFFFFF"
     }
+  },
+  "wordpress_widget": {
+    "title": "WordPress Widgets",
+    "selector": "[class*='elementor-widget-wp-']",
+    "inject_additional": {
+      "[class*='elementor-widget-wp-'] a": [
+        "font_color"
+      ],
+      "[class*='elementor-widget-wp-'] p": [
+        "font_size"
+      ]
+    },
+    "defaults": {
+      "font_family": "Open Sans",
+      "font_weight": 400
+    }
+  },
+  "wordpress_widget_title": {
+    "title": "WordPress Widget Titles",
+    "selector": "[class*='elementor-widget-wp-'] h5, [class*='elementor-widget-wp-'] .widget-title",
+    "defaults": {
+      "font_family": "Open Sans",
+      "font_weight": 400,
+      "font_color": "#000000",
+      "font_size": {
+        "amount": "20",
+        "unit": "px"
+      }
+    }
   }
 }
