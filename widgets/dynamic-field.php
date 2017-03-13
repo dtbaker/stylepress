@@ -141,6 +141,10 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
             'code' => 'page_title',
             'name' => 'Page Title',
         );
+	    $fields[] = array(
+            'code' => 'search_query',
+            'name' => 'Search Query',
+        );
 
 	    // woocommerce.
 		$fields[] = array(

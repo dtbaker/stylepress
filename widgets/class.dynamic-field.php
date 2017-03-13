@@ -53,6 +53,9 @@ class DtbakerDynamicField {
 	public function post_thumbnail(){
 		return get_the_post_thumbnail_url( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
 	}
+	public function search_query(){
+		return esc_html( !empty($_GET['s']) ? $_GET['s'] : '' );
+	}
 
 
 }
