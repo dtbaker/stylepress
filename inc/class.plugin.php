@@ -1848,7 +1848,7 @@ class DtbakerElementorManager {
 			    require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
 			    $import_export = DtbakerElementorImportExport::get_instance();
 			    $result          = $import_export->import_data( $style_to_import );
-			    print_r($style_to_import);
+			    wp_redirect(admin_url('admin.php?page=dtbaker-stylepress-settings&imported'));
 		    }else if(isset($api_response['success']) && !$api_response['success']){
 			    wp_die( sprintf( __( 'Failed to install style: %s ' ), $api_response['data']), __( 'Style Install Failed.' ), 403 );
             }

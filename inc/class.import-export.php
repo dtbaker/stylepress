@@ -242,8 +242,6 @@ class DtbakerElementorImportExport {
 
 			$this->_handle_post_orphans();
 
-			print_r($this->logs);
-
 		}
 
 		return false;
@@ -322,7 +320,7 @@ class DtbakerElementorImportExport {
 	}
 
 
-	private function _process_post_data( $post_type, $post_data, $delayed = 0, $debug = true ) {
+	private function _process_post_data( $post_type, $post_data, $delayed = 0, $debug = false ) {
 
 		$this->log( " Processing $post_type " . $post_data['post_id'] );
 		$original_post_data = $post_data;

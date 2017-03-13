@@ -65,6 +65,10 @@ $inner_component_regions = DtbakerElementorManager::get_instance()->get_componen
         <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
     <?php } ?>
 
+    <?php if(isset($_GET['imported'])){ ?>
+        <div id="message" class="updated notice notice-success is-dismissible"><p><strong>Style Imported!</strong> Your new style has been imported. Please assign it to your site below (hint: Start with "Global" and test from there).</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
+    <?php } ?>
+
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 		<input type="hidden" name="action" value="dtbaker_elementor_save" />
 		<?php wp_nonce_field( 'dtbaker_elementor_save_options', 'dtbaker_elementor_save_options' ); ?>
