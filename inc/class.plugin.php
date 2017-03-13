@@ -330,7 +330,12 @@ class DtbakerElementorManager {
             add_filter( 'body_class', function ( $classes ) use ( $post )  {
                 $classes[] = 'dtbaker-elementor-template';
                 $classes[] = 'dtbaker-elementor-template-preview';
-	            $classes[] = 'dtbaker-elementor-style-' . $post->ID;
+                if($post->post_parent){
+	                $classes[] = 'dtbaker-elementor-style-' . $post->post_parent;
+	                $classes[] = 'dtbaker-elementor-sub-style-' . $post->ID;
+                }else{
+	                $classes[] = 'dtbaker-elementor-style-' . $post->ID;
+                }
                 if( $post->post_parent && get_post_meta( $post->ID, 'dtbaker_is_component', true ) ){
 	                $classes[] = 'dtbaker-elementor-template-component';
                 }
@@ -348,10 +353,14 @@ class DtbakerElementorManager {
                     if( $this->overwrite_theme_output ){
 	                    $template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
                     }
-                    add_filter( 'body_class', function ( $classes ) {
+                    add_filter( 'body_class', function ( $classes ) use ($template) {
                         $classes[] = 'dtbaker-elementor-template';
-                        $classes[] = 'dtbaker-elementor-style-' . $GLOBALS['our_elementor_template'];
-
+	                    if($template->post_parent){
+		                    $classes[] = 'dtbaker-elementor-style-' . $template->post_parent;
+		                    $classes[] = 'dtbaker-elementor-sub-style-' . $template->ID;
+	                    }else{
+		                    $classes[] = 'dtbaker-elementor-style-' . $template->ID;
+	                    }
                         return $classes;
                     } );
                 }
