@@ -713,7 +713,7 @@ class DtbakerElementorManager {
 					// todo: only for ones that are public queriable.
 					add_meta_box(
 						'dtbaker_style_metabox',
-						__( 'Style', 'stylepress' ),
+						__( 'StylePress', 'stylepress' ),
 						array( $this, 'meta_box_display' ),
 						$post_type,
 						'side',
@@ -1043,24 +1043,6 @@ class DtbakerElementorManager {
 		return false;
 	}
 
-	/**
-	 * This lets us query what the currently selected page template is for a particular post ID
-	 * We use the other function to get the defaults for non-page-ID posts (like archive etc..)
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $post_id Current post ID we're querying.
-	 *
-	 * @return bool
-	 */
-	public function get_page_current_overwrite( $post_id ) {
-		$current_option = get_post_meta( $post_id, 'dtbaker_style', true );
-		if ( $current_option && ! empty( $current_option['overwrite'] ) ) {
-			return $current_option['overwrite'];
-		}
-
-		return false;
-	}
 
 	/**
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
@@ -1108,9 +1090,9 @@ class DtbakerElementorManager {
 				    }
 				    if ( $home_page_id ) {
 					    $style = (int)$this->get_page_template( $home_page_id );
-					    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite( $home_page_id ) ){
-					        $this->overwrite_theme_output = false;
-                        }
+//					    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite( $home_page_id ) ){
+//					        $this->overwrite_theme_output = false;
+//                        }
 					    if( -1 === $style ){
 					        return false; // Use theme by default.
                         }else if( $style > 0 ){
@@ -1124,9 +1106,9 @@ class DtbakerElementorManager {
 			    global $post;
 			    if ( $post && $post->ID ) {
                     $style = (int)$this->get_page_template( $post->ID );
-				    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite($post->ID ) ){
-					    $this->overwrite_theme_output = false;
-				    }
+//				    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite($post->ID ) ){
+//					    $this->overwrite_theme_output = false;
+//				    }
                     if( -1 === $style ){
                         return false; // Use theme by default.
                     }else if( $style > 0 ) {
@@ -1143,27 +1125,12 @@ class DtbakerElementorManager {
         $has_page_type_overwrite_setting_already = false;
         if($page_type){
 	        if( $this->supports( 'theme-inner' ) ){
-		        if(empty($style_settings['overwrite'][$page_type])) {
-			        // this means we're going to use the global settings.
-			        if( empty($style_settings['overwrite']['_global'])){
-				        // default empty global setting means we overwrite inner.
-				        $this->overwrite_theme_output = true;
-			        }else if($style_settings['overwrite']['_global'] == -1){
-				        // use default theme output
-				        $this->overwrite_theme_output = false;
-			        }else{
-				        // use stylepress
-				        $this->overwrite_theme_output = true;
-			        }
-		        }else if($style_settings['overwrite'][$page_type] == -1){
-			        // we're using default theme output for inner bit.
-			        $has_page_type_overwrite_setting_already = true;
-			        $this->overwrite_theme_output = false;
-		        }else{
-			        $has_page_type_overwrite_setting_already = true;
-			        // we're using stylepress output
-			        $this->overwrite_theme_output = true;
-		        }
+
+	            // see if this inner page has the header/footer option selected.
+                if(!empty($style_settings['defaults'][$page_type.'_inner']) && $style_settings['defaults'][$page_type.'_inner'] == -2 ){
+	                $this->overwrite_theme_output = false;
+	                $has_page_type_overwrite_setting_already = true;
+                }
 
 	        }
         }
@@ -1173,16 +1140,10 @@ class DtbakerElementorManager {
 
 		// otherwise check for site wide default:
 		if( !empty($style_settings['defaults']['_global'])){
-            if( ! $has_page_type_overwrite_setting_already ){
-	            if( empty($style_settings['overwrite']['_global'])){
-		            // default empty global setting means we overwrite inner.
-		            $this->overwrite_theme_output = true;
-	            }else if($style_settings['overwrite']['_global'] == -1){
-		            // use default theme output
+            if( ! $has_page_type_overwrite_setting_already && $this->supports( 'theme-inner' ) ){
+                // see if this inner page has the header/footer option selected.
+	            if(!empty($style_settings['defaults']['_global_inner']) && $style_settings['defaults']['_global_inner'] == -2 ){
 		            $this->overwrite_theme_output = false;
-	            }else{
-		            // use stylepress
-		            $this->overwrite_theme_output = true;
 	            }
             }
 			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults']['_global'] );

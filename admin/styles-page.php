@@ -101,7 +101,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                                 <?php if ( $used ){ ?>
                                     <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
                                 <?php }else{ ?>
-                                    <i class="fa fa-times"></i> Style Not Used. Apply style.
+                                    <i class="fa fa-times"></i> Style Not Used.
                                 <?php } ?>
                             </a>
                         </div>

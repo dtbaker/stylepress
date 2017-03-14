@@ -86,9 +86,12 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
                                             <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; Use Global Setting Above &#8593; ' ); ?></option>
                                             <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, -1 );?>><?php _e( 'None - just show the_content()' ); ?></option>
 	                                        <?php
-                                        } ?>
-                                        <option value="-2"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, -2 );?>><?php _e( 'Use Theme Default Output (only compat)' ); ?></option>
-                                        <?php
+                                        }
+                                        if($this->supports( 'theme-inner' )) {
+	                                        ?>
+                                            <option value="-2"<?php selected( $settings && isset( $settings['defaults'][ $inner_post_type ] ) ? (int) $settings['defaults'][ $inner_post_type ] : 0, - 2 ); ?>><?php _e( 'Use Theme Default Inner Output' ); ?></option>
+	                                        <?php
+                                        }
                                         foreach ( $components as $style_id => $style ) { ?>
 											<option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults'][$inner_post_type] ) && (int) $settings['defaults'][$inner_post_type] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
 										<?php } ?>

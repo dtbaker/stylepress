@@ -89,6 +89,9 @@ if( $post->post_parent ){
 	                            if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $style->ID){
 		                            $used[$post_type] = $post_type_title;
 	                            }
+	                            if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type.'_inner'] === (int) $style->ID){
+		                            $used[$post_type.'_inner'] = $post_type_title .' Inner';
+	                            }
                             }
 
                             ?>
@@ -97,7 +100,7 @@ if( $post->post_parent ){
 	                                <?php if ( $used ){ ?>
                                         <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
 	                                <?php }else{ ?>
-                                        <i class="fa fa-times"></i> Style Not Used. Apply style.
+                                        <i class="fa fa-times"></i> Style Not Used.
                                     <?php } ?>
                                 </a>
                             </div>
@@ -139,7 +142,28 @@ if( $post->post_parent ){
                                 <a href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) );?>" class="thumb">
                                     <img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/wp-theme-thumb-logo-sml.jpg' );?>">
                                 </a>
-                            <?php } ?>
+                            <?php }
+
+                            $used = array();
+                            foreach($page_types as $post_type => $post_type_title){
+	                            if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type] === (int) $style->ID){
+		                            $used[$post_type] = $post_type_title;
+	                            }
+	                            if($settings && ! empty( $settings['defaults'][$post_type] ) && (int) $settings['defaults'][$post_type.'_inner'] === (int) $style->ID){
+		                            $used[$post_type.'_inner'] = $post_type_title .' Inner';
+	                            }
+                            }
+
+                            ?>
+                            <div class="theme-usage">
+                                <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">
+			                        <?php if ( $used ){ ?>
+                                        <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
+			                        <?php }else{ ?>
+                                        <i class="fa fa-times"></i> Style Not Used.
+			                        <?php } ?>
+                                </a>
+                            </div>
 
                             <h3 class="design-name"><?php echo esc_html( $style->post_title ); ?></h3>
 
