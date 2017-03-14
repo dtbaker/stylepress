@@ -6,7 +6,7 @@
 
 ( function($) {
 
-	elementor.hooks.addFilter( 'panel/elements/regionViews', function( regionViews ) {
+	/*elementor.hooks.addFilter( 'panel/elements/regionViews', function( regionViews ) {
 
 		var regions = elementor.getRegions();
 
@@ -39,15 +39,7 @@
 	$templatewrap.html( $template.html() );
 	elementor.on( 'elementor:init', function(){
 		var $tabs = $( '#elementor-panel-elements-navigation' );
-		// $tabs.append('<div id="elementor-panel-elements-navigation-dtbakerpage" class="elementor-panel-navigation-tab" data-view="dtbakerpage">Page</div>');
-		/*var foo = Marionette.CompositeView.extend( {
-            template: '#tmpl-elementor-panel-dtbaker-page',
-                    id: 'elementor-panel-dtbaker-page',
-                    initialize: function() {
-                this.listenTo( elementor.channels.panelElements, 'filter:change', this.onPanelElementsFilterChange );
-            }
-        } );*/
-	} );
+	} );*/
 
 	$('body').on('change','select[data-setting="dynamic_field_value"]',function(){
 		$('#dtbaker-dynamic-code').text( $(this).val() ? '{{' + $(this).val() + '}}' : '');

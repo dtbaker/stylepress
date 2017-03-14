@@ -30,6 +30,21 @@ body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-sec
 body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
   z-index: 1 !important;
 }
+.stylepress-debug {
+  background: #fff;
+  border-left: 4px solid #fff;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  margin: 10px 15px;
+  padding: 5px 12px;
+  position: relative;
+  font-size: 13px;
+  border-left-color: #46b450;
+  color: #444;
+}
+.stylepress-debug span {
+  color: #CCC;
+}
 /**
 StylePress Custom Addons:
  */

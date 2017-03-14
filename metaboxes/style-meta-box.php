@@ -72,7 +72,7 @@ if( $post->post_parent ){
                 <?php foreach ( $styles as $style ) {
                     ?>
                     <li>
-                        <div class="stylebox" tabindex="0">
+                        <div class="stylebox inner-style" tabindex="0">
                             <?php if ( has_post_thumbnail( $style->ID ) ) { ?>
                                 <a href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>" class="thumb">
                                     <?php echo get_the_post_thumbnail( $style->ID, 'full' ); ?>

@@ -39,8 +39,7 @@
   font-size: 12px;
   background-color: #fafafa;
   text-overflow: ellipsis;
-  overflow: hidden;
-  height: 18px;
+  min-height: 18px;
 }
 .dtbaker-elementor-browser .stylebox .theme-usage.style-description {
   height: auto;
@@ -161,17 +160,23 @@
 }
 .wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li {
   display: inline-block;
-  width: 24%;
   padding: 5px;
+  margin: 0 4% 4% 0;
+  width: 20%;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .style {
-  border: 1px solid #EFEFEF;
-  border-radius: 5px;
-  padding: 5px;
+.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+4) {
+  margin-right: 0;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .style .thumb img {
-  max-width: 100%;
-  height: auto;
+.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+5) {
+  clear: left;
+}
+.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .design-name {
+  text-align: center;
+}
+.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .theme-actions {
+  position: relative;
+  display: block;
+  text-align: center;
 }
 .wp-admin.post-type-dtbaker_style .stylepress-metabox .advanced-settings {
   width: 70%;

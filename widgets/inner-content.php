@@ -117,7 +117,12 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 //				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}
 		} else {
+
+
 			if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
+
+				\DtbakerElementorManager::get_instance()->debug_message("Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
+
 			    // we are splitting header/footer up into multiple renders.
                 // haha. Hows your brain going now trying to follow this code???
                 // e p i c
@@ -127,6 +132,13 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
                     ob_start();
                 }
             }else {
+
+			    if(!empty($GLOBALS['twodeep'])){
+//			        print_r(debug_backtrace());exit;
+                }
+
+				\DtbakerElementorManager::get_instance()->debug_message("Now rendering from inner-content.php render() method.");
+
 				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}
 		}

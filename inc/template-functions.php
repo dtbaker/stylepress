@@ -19,80 +19,109 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 	 */
 	function dtbaker_elementor_page_content( $settings = array() ) {
 
+		$current_page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
+
 		if(!empty($GLOBALS['stylepress_rendering_inner'])){
-			if(DTBAKER_ELEMENTOR_DEBUG_OUTPUT) echo "<pre>StylePress Debug: \nRendering inner content.</pre>";
-			echo '<!-- Start Inner Render Contetn --> ';
-			echo do_shortcode( get_the_content() );
-			echo '<!-- End Inner Render Contetn --> ';
+			\DtbakerElementorManager::get_instance()->debug_message("Nested inner content for ". $current_page_type .". Running do_shortcode( get_the_" . ( $current_page_type == 'archive' ? 'excerpt' : 'content' ) ."() ); ");
+
+			// save and restore global post entry while we do this.
+			if ( isset( $GLOBALS['post'] ) ) {
+				$global_post = $GLOBALS['post'];
+			}
+
+			if(!empty($GLOBALS['stylepress_post_for_dynamic_fields'])){
+				if(is_object($GLOBALS['stylepress_post_for_dynamic_fields'])){
+					$GLOBALS['post'] = $GLOBALS['stylepress_post_for_dynamic_fields'];
+					setup_postdata($GLOBALS['post']);
+				}
+			}
+			echo '<!-- Start Inner Render Content for ID '.(int)get_the_ID().' --> ';
+			$GLOBALS['twodeep'] = true;
+			// todo: make these options in the settings array.
+			switch($current_page_type){
+				case 'archive':
+					echo do_shortcode( get_the_excerpt() );
+					break;
+				default:
+					echo do_shortcode( get_the_content() );
+			}
+
+			// Restore global post
+			if ( isset( $global_post ) ) {
+				$GLOBALS['post'] = $global_post;
+				setup_postdata($GLOBALS['post']);
+			} else {
+				unset( $GLOBALS['post'] );
+			}
+
+			$GLOBALS['twodeep'] = false;
+			echo '<!-- End Inner Render Content --> ';
 			return;
 		}
 		echo '<!-- Start StylePress Render --> ';
 		$GLOBALS['stylepress_rendering_inner'] = true;
 
-		$current_page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
 
-		$debug_info = "StylePress Debug: \n";
-		$debug_info .= "Current page type: ".$current_page_type ."\n";
+		\DtbakerElementorManager::get_instance()->debug_message("Current page type for inner content style lookup is: $current_page_type ");
 
 		$style_settings = DtbakerElementorManager::get_instance()->get_settings();
 
-		$component_template = false;
+		$component_template = $current_page_type . '_inner';
 		if( is_home() || is_front_page() ){
 			// home page or blog output page.
 			if ( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_option( 'page_on_front' ) ) {
-				$debug_info .= "Showing standard page on front, just run the_content() \n";
-			}else{
-				$debug_info .= "Showing blog output on front page \n \n";
-				// look for a content template to use.
-				// we use 'post_summary' for this.
-				$component_template = 'post_summary';
-			}
-		}else if($current_page_type){
-			switch($current_page_type){
-				case 'post':
-					$component_template = 'post_single';
-					break;
-				case 'page':
-					$component_template = 'page_single';
-					break;
-				case 'search':
-					$component_template = 'search_result';
-					break;
-				default:
-					$component_template = $current_page_type . '_single';
+				//
+			}else if($component_template != 'archive_inner'){
+				$component_template = 'archive_inner';
+				\DtbakerElementorManager::get_instance()->debug_message("We're showing blog post output on home page, using inner style $component_template instead");
 			}
 		}
-
-		if(DTBAKER_ELEMENTOR_DEBUG_OUTPUT) echo '<pre>'.$debug_info.'</pre>';
 
 		while ( have_posts() ) : the_post();
 
 			global $post;
-			$debug_info = "Current Post ID is ".$post->ID."\n";
-			$GLOBALS['stylepress_post_for_dynamic_fields'] = $post->ID;
+			$debug_info = "Rendering Post ID <code>".$post->ID."</code> ";
+
+			$GLOBALS['stylepress_post_for_dynamic_fields'] = $post;
 
 			$style_id = false;
 			if( $component_template ){
 				// loading this component/
-				$debug_info .= "Looking for inner compontent: ".$component_template."\n";
-
 				if(!empty($style_settings['defaults'][$component_template])){
 					$style_id = (int) $style_settings['defaults'][$component_template];
-					$debug_info .= "Found style id " . $style_id . "\n";
+					$debug_info .= " with the $component_template style ";
+				}else{
+					// we use the global inner settings.
+					$debug_info .= " using the Global Inner style ";
+					if(!empty($style_settings['defaults']['_global_inner'])){
+						$style_id = (int) $style_settings['defaults']['_global_inner'];
+					}else{
+
+					}
 
 				}
 
 			}
 			if(!$style_id){
-				$debug_info .= "No custom style, Running the_content() \n";
+				$debug_info .= " with a call to the_content() because no custom inner style was defined ";
+			}else{
+				if($style_id == -1){
+					$debug_info .= " plain the_content() ";
+				}else if($style_id == -2){
+					$debug_info .= " theme default inner content. ";
+				}else{
+					$debug_info .= '<a href="'.get_permalink($style_id).'">' . esc_html(get_the_title($style_id)) .'</a>';
+				}
 			}
-			if(DTBAKER_ELEMENTOR_DEBUG_OUTPUT) echo '<pre>'.$debug_info.'</pre>';
+			\DtbakerElementorManager::get_instance()->debug_message($debug_info);
 
 			if($style_id) {
 				echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $style_id );
 			}else{
 				the_content();
 			}
+
+			$GLOBALS['stylepress_post_for_dynamic_fields'] = false;
 
 		endwhile;
 

@@ -4,12 +4,20 @@
   "name": "StylePress for Elementor",
   "description": "Easy Full Site Builder for the powerful Elementor plugin. Apply styles to your entire website - no coding required.",
   "url": "https://stylepress.org",
-  "version": "1.0.11",
+  "version": "1.0.12",
      "author": {
        "name": "dtbaker",
        "url": "https://dtbaker.net"
      },
   "history": {
+    "1.0.12": {
+      "date": "2017-03-14",
+      "changes": [
+        "Debug output",
+        "Better settings page",
+        "Import fixes"
+      ]
+    },
     "1.0.11": {
       "date": "2017-03-13",
       "changes": [

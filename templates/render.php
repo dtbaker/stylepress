@@ -19,8 +19,17 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 <body <?php body_class('stylepress-render'); ?>>
 <?php
 
+$page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
+DtbakerElementorManager::get_instance()->debug_message("Rendering full page output for page type '$page_type' in render.php using the style: ". (
+        !empty($GLOBALS['our_elementor_template']) ? '<a href="'.get_permalink($GLOBALS['our_elementor_template']).'">' . esc_html(get_the_title($GLOBALS['our_elementor_template'])) .'</a>' : 'NONE'
+    ).'');
+
+if(DtbakerElementorManager::get_instance()->removing_theme_css) {
+	DtbakerElementorManager::get_instance()->debug_message( "Removing the default theme CSS files" );
+}
 
 do_action( 'stylepress/before-render' );
+
 
 ?>
 <!-- stylepress render template begin -->

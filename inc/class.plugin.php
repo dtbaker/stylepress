@@ -60,6 +60,15 @@ class DtbakerElementorManager {
 	public $overwrite_theme_output = true;
 
 	/**
+	 * Flag to let us know that theme css is removed.
+	 *
+	 * @since 1.0.11
+	 *
+	 * @var bool
+	 */
+	public $removing_theme_css = false;
+
+	/**
 	 * Initializes the plugin and sets all required filters.
 	 *
 	 * @since 1.0.0
@@ -76,7 +85,7 @@ class DtbakerElementorManager {
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
 		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ) );
 		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 999 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
 		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
 		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 		add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
@@ -573,6 +582,8 @@ class DtbakerElementorManager {
 //		wp_enqueue_script( 'stylepress-rangeslider', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.min.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
 //		wp_enqueue_style( 'stylepress-rangeslider-style', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.css', false, DTBAKER_ELEMENTOR_VERSION, true );
 
+        require_once DTBAKER_ELEMENTOR_PATH . 'admin/_help_text.php';
+
 	}
 
 	/**
@@ -662,7 +673,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function editor_scripts() {
-		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'elementor-editor' ), DTBAKER_ELEMENTOR_VERSION, true );
+		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
 	}
 
 	public function elementor_ref(){
@@ -824,7 +835,7 @@ class DtbakerElementorManager {
             $return[$style_id] = $style_name;
             if(isset($children[$style_id])){
                 foreach($children[$style_id] as $child_style_id => $child_name){
-	                $return[$child_style_id] = ' - ' . $child_name;
+	                $return[$child_style_id] = '&nbsp; &#8627; ' . $child_name;
                 }
             }
         }
@@ -875,7 +886,7 @@ class DtbakerElementorManager {
 //			$return[$style_id] = $style_name;
 			if(isset($children[$style_id])){
 				foreach($children[$style_id] as $child_style_id => $child_name){
-					$return[$child_style_id] = $style_name . ' / ' . $child_name;
+					$return[$child_style_id] =  $style_name . ' &#8611; ' . $child_name;
 				}
 			}
 		}
@@ -1239,16 +1250,16 @@ class DtbakerElementorManager {
 	 */
 	public function get_possible_page_types(){
 	    $defaults = array(
-	        '_global' => 'Global',
-	        'page' => 'Page',
-	        'post' => 'Post',
+	        '_global' => 'Global Defaults',
+	        'archive' => 'Archive/Post Summary',
+	        'post' => 'Post Single',
+	        'page' => 'Page Single',
 //	        'attachment' => 'Attachment',
 	        '404' => '404',
 //	        'product' => 'Product',
 //	        'product_category' => 'Product Category',
 	        'category' => 'Category',
 	        'tag' => 'Tag',
-	        'archive' => 'Archive',
 	        'front_page' => 'Front Page',
 	        'search' => 'Search Results',
         );
@@ -1353,7 +1364,7 @@ class DtbakerElementorManager {
 
 		if ( isset( $_POST['stylepress_settings'] ) && is_array( $_POST['stylepress_settings'] ) ) { // WPCS: sanitization ok. input var okay.
             $settings = $this->get_settings();
-            $allowed = array( 'overwrite' );
+            $allowed = array( 'remove_css' );
             foreach($allowed as $key){
 	            if( !empty($_POST['stylepress_settings'][$key]) ){
 	                $settings[$key] = $_POST['stylepress_settings'][$key];
@@ -1550,6 +1561,36 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function theme_override_styles() {
+
+	    // do we remove theme styles for this current page type?
+		// get all styles data
+		$settings = $this->get_settings();
+		$current_page_type = $this->get_current_page_type();
+
+        if( !empty($settings['remove_css'][$current_page_type]) || !empty($settings['remove_css']['_global']) ) {
+            $this->removing_theme_css = true;
+	        global $wp_styles;
+	        $current_theme = wp_get_theme();
+	        $remove_slugs = array();
+	        $remove_slugs[$current_theme->get_stylesheet()] = true;
+	        $remove_slugs[$current_theme->get_template()] = true;
+
+
+	        // loop over all of the registered scripts
+	        foreach ( $wp_styles->registered as $handle => $data ) {
+		        // remove it
+                if($data && !empty($data->src)) {
+	                foreach ( $remove_slugs as $remove_slug => $tf ) {
+		                if ( strpos( $data->src, '/' . $remove_slug . '/' ) !== false ) {
+			                wp_deregister_style( $handle );
+			                wp_dequeue_style( $handle );
+		                }
+	                }
+                }
+	        }
+	        wp_enqueue_style( 'stylepress-theme-overwrites', DTBAKER_ELEMENTOR_URI . 'assets/css/theme-overwrites.css', false, DTBAKER_ELEMENTOR_VERSION );
+        }
+
 		$theme    = get_option( 'template' );
 		$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.php';
 		if ( file_exists( $filename ) ) {
@@ -1879,6 +1920,16 @@ class DtbakerElementorManager {
         }
         wp_send_json_error('Failed to record payment');
 
+    }
+
+    public function debug_message($message){
+
+        if( DTBAKER_ELEMENTOR_DEBUG_OUTPUT && is_user_logged_in() ) {
+            echo '<div class="stylepress-debug">';
+            echo '<span>StylePress:</span> &nbsp; ';
+            echo $message;
+            echo "</div>";
+        }
     }
 
 }

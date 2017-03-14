@@ -37,8 +37,7 @@
       font-size: 12px;
       background-color: #fafafa;
       text-overflow: ellipsis;
-      overflow: hidden;
-      height:18px;
+      min-height:18px;
       &.style-description{
         height:auto;
       }
@@ -165,19 +164,22 @@
         padding: 0;
         > li {
           display: inline-block;
-          width: 24%;
           padding: 5px;
-          .style {
-            border: 1px solid #EFEFEF;
-            border-radius: 5px;
-            padding: 5px;
-            .thumb {
-              img {
-                max-width: 100%;
-                height: auto;
-              }
-            }
-
+          margin: 0 4% 4% 0;
+          width: 20%;
+          &:nth-child(4n+4) {
+            margin-right: 0;
+          }
+          &:nth-child(4n+5) {
+            clear:left;
+          }
+          .design-name{
+            text-align: center;
+          }
+          .theme-actions{
+            position:relative;
+            display:block;
+            text-align: center;
           }
         }
       }
