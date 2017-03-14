@@ -83,7 +83,7 @@ class DtbakerElementorManager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
-		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ) );
+		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
 		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
@@ -561,13 +561,10 @@ class DtbakerElementorManager {
 	public function admin_page_assets() {
 		wp_enqueue_style(
 			'fontawesome',
-			'//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'
+			'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
 		);
-		/*wp_enqueue_script(
-			'stripe-payments',
-			'https://js.stripe.com/v2/'
-		);*/
-		wp_enqueue_script( 'jquery-ui-dialog' ); // jquery and jquery-ui should be dependencies, didn't check though...
+
+		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
 		wp_register_script( 'stylepress-payments', DTBAKER_ELEMENTOR_URI . 'assets/js/payment.js', false, DTBAKER_ELEMENTOR_VERSION, true );
@@ -579,8 +576,6 @@ class DtbakerElementorManager {
 		wp_enqueue_script( 'stylepress-payments' );
 
 		wp_enqueue_script( 'stylepress-slider', DTBAKER_ELEMENTOR_URI . 'assets/js/omni-slider.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
-//		wp_enqueue_script( 'stylepress-rangeslider', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.min.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
-//		wp_enqueue_style( 'stylepress-rangeslider-style', DTBAKER_ELEMENTOR_URI . 'assets/rangeslider.js/rangeslider.css', false, DTBAKER_ELEMENTOR_VERSION, true );
 
         require_once DTBAKER_ELEMENTOR_PATH . 'admin/_help_text.php';
 
@@ -673,7 +668,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function editor_scripts() {
-		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
 	}
 
 	public function elementor_ref(){

@@ -6,40 +6,49 @@
 
 ( function($) {
 
-	/*elementor.hooks.addFilter( 'panel/elements/regionViews', function( regionViews ) {
+    $( window ).on( 'elementor:init', function(){
 
-		var regions = elementor.getRegions();
+		/*elementor.hooks.addFilter( 'panel/elements/regionViews', function( regionViews ) {
 
-		regionViews.dtbakerpage = {
-			region: regionViews.global.region,
-			view: Marionette.ItemView.extend({
-				template: '#tmpl-elementor-panel-dtbakerpage',
+            var regions = elementor.getRegions();
 
-				id: 'elementor-panel-dtbakerpage',
+            regionViews.dtbakerpage = {
+                region: regionViews.global.region,
+                view: Marionette.ItemView.extend({
+                        template: '#tmpl-elementor-panel-dtbakerpage',
 
-				initialize: function () {
-					setTimeout( function(){
-						elementor.getPanelView().getCurrentPageView().search.reset();
-					}, 100);
-				},
+                        id: 'elementor-panel-dtbakerpage',
 
-				onDestroy: function () {
-					elementor.getPanelView().getCurrentPageView().showView( 'search' );
-				}
-				}
-			)
-		};
+                        initialize: function () {
+                            setTimeout(function () {
+                                elementor.getPanelView().getCurrentPageView().search.reset();
+                            }, 100);
+                        },
 
-		return regionViews;
-	} );
+                        onDestroy: function () {
+                            elementor.getPanelView().getCurrentPageView().showView('search');
+                        }
+                    }
+                )
+            };
 
-	var $templatewrap = $( '#tmpl-elementor-panel-elements' );
-	var $template = $( '<div>' + $templatewrap.html() + '</div>' );
-	$template.find( '.elementor-panel-navigation' ).append( '<div id="elementor-panel-elements-navigation-dtbakerpage" class="elementor-panel-navigation-tab" data-view="dtbakerpage">Style</div>' );
-	$templatewrap.html( $template.html() );
-	elementor.on( 'elementor:init', function(){
-		var $tabs = $( '#elementor-panel-elements-navigation' );
-	} );*/
+            return regionViews;
+        } );
+
+
+		 var $templatewrap = $( '#tmpl-elementor-panel-elements' );
+		 var $template = $( '<div>' + $templatewrap.html() + '</div>' );
+		 $template.find( '.elementor-panel-navigation' ).append( '<div id="elementor-panel-elements-navigation-dtbakerpage" class="elementor-panel-navigation-tab" data-view="dtbakerpage">Style</div>' );
+		 $templatewrap.html( $template.html() );
+		 elementor.on( 'elementor:init', function(){
+		 var $tabs = $( '#elementor-panel-elements-navigation' );
+		 } );*/
+
+
+
+        elementor.config.pro_library_url = 'https://elementor.com/pro/?ref=1164&campaign=prolib';
+        console.log && console.log('Welcome to StylePress');
+    } );
 
 	$('body').on('change','select[data-setting="dynamic_field_value"]',function(){
 		$('#dtbaker-dynamic-code').text( $(this).val() ? '{{' + $(this).val() + '}}' : '');
@@ -49,7 +58,7 @@
     if( $templatewrap.length ) {
         var $template = $('<div>' + $templatewrap.html() + '</div>');
         $template.find('a[href^="https://go.elementor.com"]').each(function(){
-            $(this).attr('href', $(this).attr('href') + '?ref=1164&campaign=jslink');
+            $(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslink');
         });
         $templatewrap.html($template.html());
     }
@@ -58,11 +67,10 @@
     if( $templatewrap.length ) {
         var $template = $('<div>' + $templatewrap.html() + '</div>');
         $template.find('a[href^="https://go.elementor.com"]').each(function(){
-            $(this).attr('href', $(this).attr('href') + '?ref=1164&campaign=jslink');
+            $(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslinkglobal');
         });
         $templatewrap.html($template.html());
     }
 
-    elementor.config.pro_library_url = 'https://go.elementor.com/pro/?ref=1164&campaign=prolib';
 
 } )(jQuery);
