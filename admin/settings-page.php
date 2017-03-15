@@ -41,19 +41,23 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 		<?php wp_nonce_field( 'dtbaker_elementor_save_options', 'dtbaker_elementor_save_options' ); ?>
 
 
+        <h3 class="stylepress-header">
+            <span>Configure Website Styles</span>
+            <small>Choose which styles to apply on various parts of your website. See the help menu above for more details.</small>
+        </h3>
+
+
 		<div class="dtbaker-elementor-instructions">
 			<div>
 				<div>
-					<h3>Configure Website Styles:</h3>
-					<p>Choose which styles to apply on this website.  </p>
 
                     <input type="hidden" name="stylepress_settings[remove_css][_do_save]" value="1">
-					<table>
+					<table class="widefat striped">
 						<thead>
 						<tr>
 							<th>Page Type</th>
-							<th>Outer Style</th>
-							<th>Inner Style</th>
+                            <th>Outer Style <small>(Header/Footer/Sidebar)</small></th>
+                            <th>Inner Style <small>(Page + CPT Layouts)</small></th>
 							<th>Remove Theme CSS?</th>
 						</tr>
 						</thead>
@@ -68,7 +72,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
                                         <?php if('_global' === $post_type){ ?>
                                             <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
                                         <?php }else { ?>
-                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( '&nbsp; Use Global Setting Above &#8593; ' ); ?></option>
+                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( '&nbsp; (default) ' ); ?></option>
                                             <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, -1 );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
 	                                        <?php
                                         }
@@ -81,9 +85,9 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
                                     <?php $inner_post_type = $post_type.'_inner'; ?>
 									<select name="stylepress_styles[<?php echo esc_attr($inner_post_type);?>]">
                                         <?php if('_global_inner' === $inner_post_type){ ?>
-                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( 'None - just show the_content()' ); ?></option>
+                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; (default)' ); // just show the_content() ?></option>
                                         <?php }else { ?>
-                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; Use Global Setting Above &#8593; ' ); ?></option>
+                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; (default) ' ); ?></option>
                                             <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, -1 );?>><?php _e( 'None - just show the_content()' ); ?></option>
 	                                        <?php
                                         }
@@ -107,43 +111,57 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						</tbody>
 					</table>
 
-					<input type="submit" name="save" value="Save Settings" class="button button-primary">
+                    <p>
+                        <input type="submit" name="save" value="Save Settings" class="button button-primary">
+                    </p>
 				</div>
 
                 <div>
-                    <h3>Inner &amp; Outer Styles Explained:</h3>
-                    <p>The Outer Style is your Header/Footer/Sidebars.<br/> The Inner Style is everything on the inside of the design.</p>
-                    <img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/inner-outer-graphic-light.png' );?>">
+                    <div style="text-align: center">
+                    <p><strong>Need help?</strong>
+                        <small>
+                    <br/>
+                        The "Outer" style is generally the same on every page of the site. <br/>
+                        It contains your logo, header, footer and sidebars. <br/>
+                        The "Inner" style is can be different for posts, pages and CPT's. <br/>
+                        It contains a page title area and other dynamic fields.
+                        </small>
+                    </p>
+                        <p>&nbsp;</p>
+                    <div>
+                        <img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/inner-outer-graphic-light.png' );?>">
+                    </div>
+                    </div>
                 </div>
 			</div>
 		</div>
 
-        <div class="dtbaker-elementor-instructions">
-			<div>
+
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+
+        <h3 class="stylepress-header">
+            <span>Coming Soon Page</span>
+            <small>The coming soon feature can be used to hide your website from anyone who is not logged in. <br/>
+                Enable this while you are developing your website. Remember to turn this off when you launch your website :)
+            </small>
+        </h3>
 
 
-				<div>
+        <div>
+            Page to Display: <select name="stylepress_styles[coming_soon]">
+                <option value=""> - Disabled - </option>
+                <?php
+                foreach ( $styles as $style_id => $style ) { ?>
+                    <option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults']['coming_soon'] ) && (int) $settings['defaults']['coming_soon'] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
+                <?php } ?>
+            </select>
+        </div>
 
-                    <h3>Coming Soon Page:</h3>
-                    <p>The coming soon feature can be used to hide your website from anyone who is not logged in. Enable this while you are developing your website.</p>
-                    <p>Remember to turn this off when you launch your website :)</p>
+       <p>
+           <input type="submit" name="save" value="Save Settings" class="button button-primary">
+       </p>
 
-                    <div>
-                        Page to Display: <select name="stylepress_styles[coming_soon]">
-                            <option value=""> - Disabled - </option>
-							<?php
-							foreach ( $styles as $style_id => $style ) { ?>
-                                <option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults']['coming_soon'] ) && (int) $settings['defaults']['coming_soon'] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
-							<?php } ?>
-                        </select>
-                    </div>
-
-
-
-                    <input type="submit" name="save" value="Save Settings" class="button button-primary">
-				</div>
-			</div>
-		</div>
 
 	</form>
 

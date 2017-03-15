@@ -31,7 +31,7 @@ wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce'
 <select name="dtbaker_style[style]" id="dtbaker_page_style">
 	<option value="0"><?php
 		// Translators: %s contains the current default style.
-		printf( esc_html__( 'Default (%s)', 'stylepress' ), esc_attr( $styles[ $current_default ] ) ); ?></option>
+		printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr( isset($styles[ $current_default ]) ? '(' . $styles[ $current_default ] . ')' : '' ) ); ?></option>
     <option value="-1"><?php esc_html_e('Original Theme Output', 'stylepress')?></option>
 	<?php foreach ( $styles as $option_id => $option_val ) {
 		?>

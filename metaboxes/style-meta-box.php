@@ -105,13 +105,16 @@ if( $post->post_parent ){
                                 </a>
                             </div>
 
-                            <h3 class="design-name"><?php echo esc_html( $style->post_title ); ?></h3>
+                            <h3 class="design-name">
+                                <?php if( $post->ID != $style->ID ) { ?>
+                                    <a href="<?php echo esc_url( get_edit_post_link( $style->ID ) ); ?>"><?php echo esc_html( $style->post_title ); ?></a>
+                                <?php }else{ ?>
+                                    <?php echo esc_html( $style->post_title ); ?>
+                                <?php } ?>
+                            </h3>
 
                             <div class="theme-actions">
-                                <?php if( $post->ID != $style->ID ) { ?>
-                                <a class="button customize load-customize hide-if-no-customize" href="<?php echo esc_url( get_edit_post_link( $style->ID ) ); ?>"><?php esc_html_e( 'Settings', 'stylepress' ); ?></a>
-                                <?php } ?>
-<!--                                <a class="button button" href="#" onclick="alert('Coming soon');">--><?php //esc_html_e( 'Copy', 'stylepress' ); ?><!--</a>-->
+                                <a class="button button" href="<?php print wp_nonce_url(admin_url('admin.php?action=stylepress_clone&post_id=' . (int)$style->ID), 'stylepress_clone', 'stylepress_clone');?>"><?php esc_html_e( 'Clone', 'stylepress' ); ?></a>
                                 <a class="button button" href="<?php echo esc_url( get_permalink( $style->ID ) );?>"><?php esc_html_e( 'Preview', 'stylepress' ); ?></a>
                                 <a class="button button-primary customize load-customize hide-if-no-customize" href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php esc_html_e( 'Edit', 'stylepress' ); ?></a>
                             </div>
@@ -165,13 +168,16 @@ if( $post->post_parent ){
                                 </a>
                             </div>
 
-                            <h3 class="design-name"><?php echo esc_html( $style->post_title ); ?></h3>
+                            <h3 class="design-name">
+		                        <?php if( $post->ID != $style->ID ) { ?>
+                                    <a href="<?php echo esc_url( get_edit_post_link( $style->ID ) ); ?>"><?php echo esc_html( $style->post_title ); ?></a>
+		                        <?php }else{ ?>
+			                        <?php echo esc_html( $style->post_title ); ?>
+		                        <?php } ?>
+                            </h3>
 
                             <div class="theme-actions">
-                                <?php if( $post->ID != $style->ID ) { ?>
-                                    <a class="button customize load-customize hide-if-no-customize" href="<?php echo esc_url( get_edit_post_link( $style->ID ) ); ?>"><?php esc_html_e( 'Settings', 'stylepress' ); ?></a>
-                                <?php } ?>
-<!--                                <a class="button button" href="#" onclick="alert('Coming soon');">--><?php //esc_html_e( 'Copy', 'stylepress' ); ?><!--</a>-->
+                                <a class="button button" href="<?php print wp_nonce_url(admin_url('admin.php?action=stylepress_clone&post_id=' . (int)$style->ID), 'stylepress_clone', 'stylepress_clone');?>"><?php esc_html_e( 'Clone', 'stylepress' ); ?></a>
                                 <a class="button button-primary customize load-customize hide-if-no-customize" href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php esc_html_e( 'Edit', 'stylepress' ); ?></a>
                             </div>
                         </div>

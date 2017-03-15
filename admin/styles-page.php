@@ -33,7 +33,6 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 
 	<div class="dtbaker-elementor-browser">
 
-        <?php if($designs ){ ?>
 		<div class="wp-clearfix">
 
             <h3 class="stylepress-header">
@@ -52,6 +51,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                 if(!$designs){
                     ?>
                     <p>None yet! Create your own or install from the list below.</p>
+                    <p>&nbsp;</p>
                     <?php
                 }
 
@@ -117,7 +117,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                 <?php endforeach; ?>
             </div>
 		</div>
-        <?php } ?>
+
 
         <div class="wp-clearfix">
             <h3 class="stylepress-header">

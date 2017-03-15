@@ -509,6 +509,7 @@ class DtbakerElementorManager {
 			add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
 			add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
 			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
+			add_action( 'admin_action_stylepress_clone', array( $this, 'stylepress_clone' ) );
 		}
 
 	}
@@ -1856,6 +1857,80 @@ class DtbakerElementorManager {
 	    exit;
     }
 
+
+	public function stylepress_clone() {
+
+		if ( ! isset( $_GET['stylepress_clone'] ) || empty( $_GET['post_id'] ) ) { // WPCS: input var okay.
+			return;
+		}
+
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $_GET['stylepress_clone'], 'stylepress_clone' ) ) { // WPCS: sanitization ok. input var okay.
+			return;
+		}
+
+		$post_id = (int)$_GET['post_id'];
+
+		$post = get_post( $post_id );
+
+		/*
+		 * if post data exists, create the post duplicate
+		 */
+		if ($post && 'dtbaker_style' === $post->post_type) {
+
+		    if(!$post->post_parent){
+			    $post->post_parent = $post_id; // we're cloaning the parent one, put it underneath itself.
+            }
+			$args = array(
+				'comment_status' => $post->comment_status,
+				'ping_status'    => $post->ping_status,
+				'post_author'    => $post->post_author,
+				'post_content'   => $post->post_content,
+				'post_excerpt'   => $post->post_excerpt,
+				'post_name'      => $post->post_name,
+				'post_parent'    => $post->post_parent,
+				'post_password'  => $post->post_password,
+				'post_status'    => $post->post_status,
+				'post_title'     => '(clone) ' . $post->post_title,
+				'post_type'      => $post->post_type,
+				'to_ping'        => $post->to_ping,
+				'menu_order'     => $post->menu_order
+			);
+
+			/*
+			 * insert the post by wp_insert_post() function
+			 */
+			$new_post_id = wp_insert_post( $args );
+
+			if($new_post_id) {
+				global $wpdb;
+				/*
+				 * duplicate all post meta just in two SQL queries
+				 */
+				$post_meta_infos = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id" );
+				if ( count( $post_meta_infos ) != 0 ) {
+					$sql_query     = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+					$sql_query_sel = array();
+					foreach ( $post_meta_infos as $meta_info ) {
+						$meta_key        = $meta_info->meta_key;
+						$meta_value      = esc_sql( $meta_info->meta_value );
+						$sql_query_sel[] = "SELECT $new_post_id, '$meta_key', '$meta_value'";
+					}
+
+					$sql_query .= implode( " UNION ALL ", $sql_query_sel );
+					$wpdb->query( $sql_query );
+				}
+
+				wp_redirect( get_edit_post_link( $new_post_id, 'edit' ) );
+				exit;
+
+			}
+
+
+		}
+        return false;
+
+    }
 
     public function payment_complete(){
 
