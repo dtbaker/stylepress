@@ -12,11 +12,29 @@ Use Elementor to design your complete website. Reuse header/footer on all pages.
 
 == Description ==
 
-This nifty plugin turns the Elementor Page Builder into a Full Site Editor.
+This plugin converts the **[Elementor Page Builder](https://elementor.com/pro/?ref=1164&campaign=readme)** into a Full Site Builder.
 
-You can design your entire website layout (header, footer, sidebars, etc..) and apply that layout to every page of your website.
+Watch this introduction video that covers some of the basics:
 
-Update the layout once and it applies to every page automatically.
+https://www.youtube.com/watch?v=2I5WLvLarKE
+
+Design your entire website without a theme. Easily apply a Style to every page of your site automatically using the drag and drop editor.
+
+= How to create a website design without a WordPress theme: =
+
+- Go to the StylePress > Styles menu.
+- Click "Create New Style".
+- Design your layout using the Easy Elementor Drag & Drop editor.
+- Add the "Inner Content" widget to the area that will display your content.
+- Go to StylePress > Settings
+- Apply your Style to the "Global" area
+
+
+= Tips: =
+
+- Make sure "Remove Theme CSS" is ticked in StylePress > Settings.
+- If you find it hard to set global font default, go into Elementor > Settings and tick "Disable Global Colors" and "Disable Global Fonts". Then install the "Easy Google Fonts" plugin and set all your defaults from Appearance > Typography.
+
 
 More details on our dedicated website: https://stylepress.org
 
@@ -24,26 +42,31 @@ More details on our dedicated website: https://stylepress.org
 
 This section describes how to install the plugin and get it working.
 
-
-1. Install the Elementor plugin first: https://wordpress.org/plugins/elementor/
-1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress.
-1. Go to Appearance > Full Site Builder.
+1. Go to Plugins > Add New and search for "Elementor" to install the Elementor Page Builder plugin.
+1. Go to Plugins > Add New and search for "StylePress for Elementor" to install this plugin.
+1. Activate the plugin through the "Plugins" screen in WordPress.
+1. Go to the new StylePress > Styles menu in WordPress backend.
 1. Create or Edit the available styles.
-1. Go to a page and apply a style to a particular page.
+1. Go to the StylePress > Settings menu and apply your styles to all or some of your pages.
 
 
 == Frequently Asked Questions ==
 
 = Is this compatible with my theme? =
 
-Maybe. Try it out. Let me know if you have any troubles. I'll be relasing a basic theme that is compatible with this plugin shortly.
+Maybe. Try it out. Tick the "Remove Theme CSS" option in StylePress > Settings. Let me know if you have any troubles.
+
+= Fonts are not working =
+
+Try to install the Easy Google Fonts plugin. This gives some great global font style features in Appearance > Customize.
+Go into the Elementor > Settings window and disable the default Elementor fonts and color
 
 == Screenshots ==
 
-1. Overview of admin page.
-2. Applying a style to a particular page
-3. Editing an Elementor page inside an Elementor design... Elementor-ception!
+1. Overview of admin page. Showing all available styles for your site. Your site can have multiple styles.
+2. Editing a particular style. A style can have multiple variations (e.g. Left Sidebar, Right Sidebar, Home Page, Blog Page)
+3. Building the website style. The shaded "inner content" part will be replaced with all your information.
+3. Overview of the settings page. You can set various default styles for various page types.
 
 == Changelog ==
 

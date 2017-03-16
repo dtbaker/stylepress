@@ -6,6 +6,8 @@
 		<a href="https://stylepress.org" target="_blank">v<?php echo DTBAKER_ELEMENTOR_VERSION;?></a>
 		<a href="https://twitter.com/WPStylePress" target="_blank"><i class="fa fa-twitter"></i></a>
 		<a href="https://github.com/dtbaker/stylepress" target="_blank"><i class="fa fa-github"></i></a>
+        <br/><br/>
+        <em>StylePress is BETA - there are bugs!</em>
 	</div>
 	<?php /*switch($_GET['page']) {
 		case 'dtbaker-stylepress': ?>

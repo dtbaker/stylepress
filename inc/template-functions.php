@@ -37,13 +37,17 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			}
 			echo '<!-- Start Inner Render Content for ID '.(int)get_the_ID().' --> ';
 			$GLOBALS['twodeep'] = true;
+			// is this page we're trying to edit an elementor page?
+
 			// todo: make these options in the settings array.
 			switch($current_page_type){
 				case 'archive':
 					echo do_shortcode( get_the_excerpt() );
 					break;
 				default:
-					echo do_shortcode( get_the_content() );
+//					echo do_shortcode( get_the_content() );
+					the_content();
+//					echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( get_the_ID() );
 			}
 
 			// Restore global post

@@ -1224,7 +1224,8 @@ class DtbakerElementorManager {
 		foreach ( $post_types as $post_type ) {
 			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
                 if(!isset($defaults[$post_type])){
-	                $defaults[$post_type] = $post_type;
+                    $data = get_post_type_object($post_type);
+	                $defaults[$post_type] = $data->labels->singular_name;
                 }
 			}
 		}
