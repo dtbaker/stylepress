@@ -10,6 +10,12 @@
        "url": "https://dtbaker.net"
      },
   "history": {
+    "1.0.14": {
+      "date": "2017-03-30",
+      "changes": [
+        "New widget"
+      ]
+    },
     "1.0.13": {
       "date": "2017-03-16",
       "changes": [

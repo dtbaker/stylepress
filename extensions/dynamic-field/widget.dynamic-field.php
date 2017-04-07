@@ -7,6 +7,7 @@
 
 namespace Elementor;
 
+
 if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 }
 
@@ -178,7 +179,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 		    $callback = $settings['dynamic_html'];
         }
         if($callback) {
-	        require_once DTBAKER_ELEMENTOR_PATH . 'widgets/class.dynamic-field.php';
+	        require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
 	        $dyno_generator = \DtbakerDynamicField::get_instance();
 
 	        if( preg_match_all('#\{\{([a-z_]+)\}\}#imsU', $callback, $matches)){

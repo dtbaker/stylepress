@@ -1,12 +1,14 @@
 <?php
+
 namespace StylePress\Elementor\Skins;
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 use Elementor\Controls_Manager;
 use Elementor\Skin_Base;
 use Elementor\Widget_Base;
 use Elementor\Scheme_Color;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * Class Skin_Dtbaker

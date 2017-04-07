@@ -75,36 +75,49 @@ class DtbakerElementorManager {
 	 */
 	public function init() {
 
-		add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'init', array( $this, 'register_custom_post_type' ) );
+	    // two modes.
+        // if we just want the extra widgets and not the full stylepress editor then we load that separately.
+
+
+        add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
+        add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+        add_action( 'init', array( $this, 'register_custom_post_type' ) );
+        add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
+        add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
+        add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
+        add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
+        add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
+//        add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
+
+        add_filter( 'template_include', array( $this, 'template_include' ) );
+        add_action( 'get_header', array( $this, 'get_header' ), 999 );
+        add_action( 'get_footer', array( $this, 'get_footer' ), 999 );
+        add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
+        add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
+        add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
+
+
+
 		add_action( 'init', array( $this, 'register_new_nav_menu' ) );
-		add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
-		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
-		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
-		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
-		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
-		add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
 		add_action( 'wp', array( $this, 'add_elementor_overrides' ) );
 		add_action( 'init', array( $this, 'elementor_ref' ) );
 
-		add_filter( 'template_include', array( $this, 'template_include' ) );
-		add_action( 'get_header', array( $this, 'get_header' ), 999 );
-		add_action( 'get_footer', array( $this, 'get_footer' ), 999 );
-		add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
-		add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
-		add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
-
-
 		// stylepress plugin hooks
-		add_action( 'init', array( $this, 'widget_ajax_calls' ) );
+        add_action( 'init', array( $this, 'load_extensions') );
 		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon'), 10, 4 );
 
+
+		add_action('wp_before_admin_bar_render', array($this, 'wp_admin_bar'));
+
 	}
+
+	public function show_full_ui(){
+	    return !(defined('STYLEPRESS_ONLY_WIDGETS') && STYLEPRESS_ONLY_WIDGETS);
+    }
 
 	public function dropdown_icon($title, $item, $args, $depth ) {
 		// Build an array with our theme location
@@ -156,6 +169,34 @@ class DtbakerElementorManager {
 	}
 
 
+	public function load_extensions(){
+
+		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
+			if ( class_exists( 'Elementor\Plugin' ) ) {
+
+				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
+					$elementor = Elementor\Plugin::instance();
+					if ( isset( $elementor->widgets_manager ) ) {
+						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
+
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/dynamic-field.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/email-subscribe/email-subscribe.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/modal-popup.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/wp-menu.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/form/form-fields.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/tooltip/tooltip.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/google-maps/google-maps.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/page-slider/dtbaker-page-slider.php';
+
+							do_action( 'stylepress_init_extensions' );
+						}
+					}
+				}
+			}
+		}
+
+	}
+
 	/**
 	 * Adds our new widgets to the Elementor widget area.
      *
@@ -164,6 +205,7 @@ class DtbakerElementorManager {
 	public function elementor_add_new_widgets() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 			if ( class_exists( 'Elementor\Plugin' ) ) {
+
 				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
 					$elementor = Elementor\Plugin::instance();
 					if ( isset( $elementor->widgets_manager ) ) {
@@ -171,10 +213,6 @@ class DtbakerElementorManager {
 
                             // todo: option these out in 'Add-Ons' section
 						    require_once DTBAKER_ELEMENTOR_PATH . 'widgets/inner-content.php';
-                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/wp-menu.php';
-                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/dynamic-field.php';
-                            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/email-subscribe.php';
-
 
 						}
 					}
@@ -183,84 +221,6 @@ class DtbakerElementorManager {
 		}
     }
 
-    public function widget_ajax_calls(){
-
-	    // todo: only if widget is registered.
-
-
-	    add_action( 'wp_ajax_stylepress_email_sub', function(){
-
-	        $return = array();
-
-		    $post = isset($_POST['post']) ? (int)$_POST['post'] : false;
-		    $elm = isset($_POST['elm']) ? $_POST['elm'] : false;
-		    $email = isset($_POST['email']) ? strtolower($_POST['email']) : '';
-		    if($post && $elm){
-
-			    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				    wp_send_json_error( "Invalid Email. Please try again." );
-			    }
-		        // find this elementor post and it widget settings.
-                $data = @json_decode( get_post_meta( $post, '_elementor_data', true), true );
-                if($data) {
-	                function stylepress_email_find( $data, $findkey ) {
-	                    if(is_array($data)){
-	                        foreach($data as $d){
-		                        if ( $d && ! empty( $d['id'] ) && $d['id'] === $findkey ) {
-			                        return $d;
-		                        }
-		                        if ( $d && ! empty( $d['elements'] ) && is_array($d['elements']) ) {
-                                    $value = stylepress_email_find( $d['elements'], $findkey );
-                                    if($value){
-                                        return $value;
-                                    }
-		                        }
-                            }
-                        }
-		                return false;
-	                }
-	                $element = stylepress_email_find( $data, $elm );
-	                if($element && !empty($element['settings']['mailchimp_api_key']) && !empty($element['settings']['mailchimp_list_id'])){
-
-	                    // shoot this off to mailchimp via api
-                        $status = 'pending';
-
-                        $args = array(
-                            'method' => 'PUT',
-                            'headers' => array(
-                                'Authorization' => 'Basic ' . base64_encode( 'user:'. $element['settings']['mailchimp_api_key'] )
-                            ),
-                            'body' => json_encode(array(
-                                'email_address' => $email,
-                                'status'        => $status
-                            ))
-                        );
-                        $response = wp_remote_post( 'https://' . substr($element['settings']['mailchimp_api_key'],strpos($element['settings']['mailchimp_api_key'],'-')+1) . '.api.mailchimp.com/3.0/lists/' . $element['settings']['mailchimp_list_id'] . '/members/' . md5(strtolower($email)), $args );
-
-                        $body = json_decode( $response['body'] );
-
-                        if ( $response['response']['code'] == 200 && $body->status == $status ) {
-	                        wp_send_json_success( !empty($element['settings']['thank_you'] ) ? $element['settings']['thank_you'] : 'Subscribed. Please check your email.' );
-                        } else {
-	                        wp_send_json_error( $body->title.": ".$body->detail );
-                        }
-                    }else{
-		                wp_send_json_error( "Missing Mailchimp API Details" );
-                    }
-                }else{
-	                wp_send_json_error( "Missing Elementor Widget" );
-                }
-
-
-		    }else{
-
-			    wp_send_json_error("Invalid Request");
-		    }
-
-		    exit;
-
-	    } );
-    }
 
     public function section_before_render($section){
 
@@ -330,6 +290,8 @@ class DtbakerElementorManager {
 	 * @return string
 	 */
 	public function template_include( $template_include ) {
+
+		if(!$this->show_full_ui())return $template_include;
 		global $post;
 
 
@@ -388,6 +350,8 @@ class DtbakerElementorManager {
 	 * @param string $name The optional header name
 	 */
 	public function get_header( $name = null ) {
+
+		if(!$this->show_full_ui())return;
 		global $post;
 
 		if ( ! $this->overwrite_theme_output ) {
@@ -417,6 +381,8 @@ class DtbakerElementorManager {
 	 * @param string $name The optional header name
 	 */
 	public function get_footer( $name = null ) {
+
+		if(!$this->show_full_ui())return;
 		global $post;
 
 		if ( ! $this->overwrite_theme_output ) {
@@ -441,6 +407,9 @@ class DtbakerElementorManager {
 	 * @param string $should_we_skip_printing Var to filter. false.
 	 */
 	public function theme_header_filter( $should_we_skip_printing ) {
+
+		if(!$this->show_full_ui())return $should_we_skip_printing;
+
 		if ( ! $this->overwrite_theme_output && $GLOBALS['our_elementor_template'] > 0 ) {
 			$should_we_skip_printing = true;
         }
@@ -457,6 +426,8 @@ class DtbakerElementorManager {
 	 * @param string $rendered_content Elementor output so far.
 	 */
 	public function elementor_footer_hack( $rendered_content ) {
+
+		if(!$this->show_full_ui())return $rendered_content;
 		if ( ! $this->overwrite_theme_output && !empty( $GLOBALS['stylepress_only_render'] ) && $GLOBALS['stylepress_only_render'] == 'header' ) {
 			// $rendered_content will contain only our footer code.
             // inner content is in outout buffer.
@@ -477,15 +448,16 @@ class DtbakerElementorManager {
 	 */
 	public function admin_init() {
 
+
 		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
 		    // we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
 
 			add_action( 'admin_notices', 	function() {
-				$message      = esc_html__( 'Please install Elementor before attempting to use the Full Site Editor plugin..', 'stylepress' );
+				$message      = esc_html__( 'Please install Elementor before attempting to use the StylePress plugin..', 'stylepress' );
 				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 				echo wp_kses_post( $html_message );
 			} );
-		}else {
+		}else if($this->show_full_ui()){
 
 
 			if ( ! get_option( 'elementor_pro_license_key', '' ) || get_option( 'elementor_pro_license_key', '' ) == 'local' ) {
@@ -510,9 +482,65 @@ class DtbakerElementorManager {
 			add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
 			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 			add_action( 'admin_action_stylepress_clone', array( $this, 'stylepress_clone' ) );
+
+
+
 		}
 
 	}
+
+
+
+	public function wp_admin_bar(){
+		if($this->show_full_ui() && $this->has_permission() && !is_admin()) {
+			$parent_menu = "stylepress_nav";
+			$this->add_root_menu(__( 'StylePress'), $parent_menu);
+			$current_page_style = $this->get_current_style();
+			if($current_page_style) {
+				$style_details = get_post( $current_page_style );
+				$this->add_sub_menu( sprintf(__('Current Outer Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
+			}
+			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress'), $parent_menu);
+		}
+    }
+
+	/**
+	 * @param $name
+	 * @param $id
+	 * @param bool $href
+	 * @return mixed
+	 * helper function to add a menu to WP header bar
+	 * adapted from demo on wp codex
+	 */
+	public function add_root_menu($name, $id, $href = FALSE) {
+		global $wp_admin_bar;
+		$wp_admin_bar->add_menu( array(
+			'id' => $id,
+			'title' => $name,
+			'href' => $href ) );
+	}
+	/**
+	 * @param $name
+	 * @param $id
+	 * @param $link
+	 * @param $root_menu
+	 * @param bool $meta
+	 * @return mixed
+	 * helper function to add a menu to WP header bar
+	 * adapted from demo on wp codex
+	 */
+	public function add_sub_menu($name, $id, $link, $root_menu, $meta = FALSE) {
+		global $wp_admin_bar;
+		$wp_admin_bar->add_menu( array(
+			'parent' => $root_menu,
+			'id' => $id,
+			'title' => $name,
+			'href' => $link,
+			'meta' => $meta) );
+
+	}
+
+
 
 	/**
 	 * We override the "submenu_file" WordPress global so that the correct submenu is highlighted when on our custom admin page.
@@ -538,19 +566,31 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function admin_menu() {
-		add_menu_page( __('StylePress', 'stylepress'), __('StylePress', 'stylepress'), 'manage_options', 'dtbaker-stylepress', array(
-			$this,
-			'styles_page_callback',
-		), DTBAKER_ELEMENTOR_URI .'assets/img/icon.png' );
-		// hack to rmeove default submenu
-		$page = add_submenu_page('dtbaker-stylepress', __('StylePress', 'stylepress'), __( 'Styles', 'stylepress' ), 'manage_options',  'dtbaker-stylepress' , array($this, 'styles_page_callback'));
-		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page('dtbaker-stylepress', __('Add-Ons', 'stylepress'), __( 'Add-Ons', 'stylepress' ), 'manage_options',  'dtbaker-stylepress-addons' , array($this, 'addons_page_callback'));
-		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
+	    if($this->show_full_ui()) {
+		    add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'dtbaker-stylepress', array(
+			    $this,
+			    'styles_page_callback',
+		    ), DTBAKER_ELEMENTOR_URI . 'assets/img/icon.png' );
+		    // hack to rmeove default submenu
+		    $page = add_submenu_page( 'dtbaker-stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'dtbaker-stylepress', array(
+			    $this,
+			    'styles_page_callback'
+		    ) );
+		    add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page('dtbaker-stylepress', __('Settings', 'stylepress'), __( 'Settings', 'stylepress' ), 'manage_options',  'dtbaker-stylepress-settings' , array($this, 'settings_page_callback'));
-		add_action( 'admin_print_styles-'.$page, array( $this, 'admin_page_assets' ) );
+		    $page = add_submenu_page( 'dtbaker-stylepress', __( 'Add-Ons', 'stylepress' ), __( 'Add-Ons', 'stylepress' ), 'manage_options', 'dtbaker-stylepress-addons', array(
+			    $this,
+			    'addons_page_callback'
+		    ) );
+		    add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+		    $page = add_submenu_page( 'dtbaker-stylepress', __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'dtbaker-stylepress-settings', array(
+			    $this,
+			    'settings_page_callback'
+		    ) );
+		    add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+	    }
 
 	}
 
@@ -641,17 +681,6 @@ class DtbakerElementorManager {
             wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, DTBAKER_ELEMENTOR_VERSION, true );
         }
 
-        // plugin css:
-        // todo: only show if registered.
-        wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.css', false );
-		wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'widgets/email-subscribe/subscribe.js', array('jquery') );
-		wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-		wp_enqueue_script( 'stylepress-email-script' );
-
-		wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/menu.css', false );
-		wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'widgets/wp-menu/navigation.js', array('jquery') );
-
-
 	}
 
 	/**
@@ -669,6 +698,7 @@ class DtbakerElementorManager {
 	 * @since 1.0.0
 	 */
 	public function editor_scripts() {
+		if(!$this->show_full_ui())return;
 		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
 	}
 
@@ -1357,6 +1387,7 @@ class DtbakerElementorManager {
 	 */
 	public function register_custom_post_type() {
 
+	    if(!$this->show_full_ui())return;
 		$labels = array(
 			'name'               => 'Styles',
 			'singular_name'      => 'Style',
@@ -1420,16 +1451,7 @@ class DtbakerElementorManager {
 			$this->_apply_json_overrides( $json );
         }
 
-        // we also add some custom hacks for the dynamic field support to existing elementor features.
-		add_filter( 'elementor/widget/button/skins_init', function($element){
-            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skins/button-dynamic.php';
-            $element->add_skin( new StylePress\Elementor\Skins\Skin_StylePressButtonDynamic( $element ) );
-        });
-
-		add_filter( 'elementor/widget/image/skins_init', function($element){
-            require_once DTBAKER_ELEMENTOR_PATH . 'widgets/skins/image-dynamic.php';
-            $element->add_skin( new StylePress\Elementor\Skins\Skin_StylePressDynamic_Image( $element ) );
-        });
+		require_once DTBAKER_ELEMENTOR_PATH . 'extensions/skins/skins.php';
 
 
 	}
@@ -1520,6 +1542,7 @@ class DtbakerElementorManager {
 	 */
 	public function theme_override_styles() {
 
+		if(!$this->show_full_ui())return;
 	    // do we remove theme styles for this current page type?
 		// get all styles data
 		$settings = $this->get_settings();
@@ -1563,6 +1586,7 @@ class DtbakerElementorManager {
 	 */
 	public function tt_font_get_settings_page_tabs( $options ) {
 
+		if(!$this->show_full_ui())return $options;
 	    // we have a tab for each style.
         $styles = $this->get_all_page_styles();
         foreach($styles as $style_id => $style_name){
@@ -1595,7 +1619,7 @@ class DtbakerElementorManager {
 	 */
 	public function tt_font_get_option_parameters( $options ) {
 
-
+		if(!$this->show_full_ui())return $options;
 
 	    // we have a tab for each style.
         $styles = $this->get_all_page_styles();

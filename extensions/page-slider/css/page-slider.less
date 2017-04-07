@@ -1,0 +1,32 @@
+.elementor-page-carousel-icons{
+  display:none;
+  @media screen and (min-width: 37.5em) {
+    display:block;
+  }
+  .page-carousel-icon-wrapper{
+    .elementor-dtbaker-page-slider-icons{
+      display:table;
+      width:100%;
+      table-layout: fixed;
+      > div{
+        cursor:pointer;
+        display:table-cell;
+        width: 1%;
+        vertical-align: middle;
+        text-align: center;
+        height: 140px;
+        background:#EFEFEF;
+        transition: background-color 300ms linear;
+        &.current{
+          background:#FFF;
+        }
+        h4{
+          margin:0;
+          padding:0;
+          font-weight:normal;
+          color:#000;
+        }
+      }
+    }
+  }
+}

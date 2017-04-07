@@ -1,0 +1,46 @@
+.stylepress-form-togglescontrol {
+  width: 100%;
+}
+.stylepress-form-togglescontrol .stylepress-form-toggleinner {
+  display: none;
+}
+.stylepress-form-togglescontrol .stylepress-form-togglecheck {
+  display: none;
+}
+.stylepress-form-togglescontrol .stylepress-form-togglecheck:checked ~ .stylepress-form-toggleinner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: 14px -13px;
+}
+.stylepress-form-togglescontrol .stylepress-form-togglelabel .off {
+  display: none;
+}
+.stylepress-form-togglescontrol .stylepress-form-togglecheck:checked ~ .stylepress-form-togglelabel .off {
+  display: block;
+}
+.stylepress-form-togglescontrol .stylepress-form-togglecheck:checked ~ .stylepress-form-togglelabel .on {
+  display: none;
+}
+.ui-datepicker {
+  z-index: 999999 !important;
+  width: 295px;
+  font-size: 16px !important;
+}
+.ui-datepicker .ui-datepicker-title {
+  font-weight: normal;
+}
+.ui-datepicker th {
+  font-weight: normal;
+}
+.ui-datepicker td span,
+.ui-datepicker td a {
+  padding: 1px;
+  text-align: center;
+}
+.stylepress-datepicker {
+  position: relative;
+  z-index: 9999900;
+}

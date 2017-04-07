@@ -4,7 +4,7 @@
  * Description: Allows you to apply full site layout templates to pages on your website using Elementor.
  * Plugin URI: https://stylepress.org/
  * Author: dtbaker
- * Version: 1.0.13
+ * Version: 1.0.15
  * Author URI: https://dtbaker.net/
  * GitHub Plugin URI: https://github.com/dtbaker/stylepress
  * Requires at least:   4.4
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 //set_time_limit(2);
 
 /* Set plugin version constant. */
-define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.12' );
+define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.15' );
 
 /* Debug output control. */
 define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', false );

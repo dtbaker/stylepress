@@ -1,0 +1,53 @@
+.stylepress-modal-pop {
+  display: none;
+}
+.wp-dialog.stylepress-modal .ui-dialog-titlebar {
+  background: transparent;
+  border: 0;
+  position: relative;
+  z-index: 111;
+}
+.wp-dialog.stylepress-modal .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close {
+  background: #EFEFEF;
+  border-radius: 50%;
+  top: -15px;
+  width: 37px;
+  height: 37px;
+  right: -15px;
+}
+.wp-dialog.stylepress-modal .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close:before {
+  font: 400 20px/1 dashicons;
+  vertical-align: top;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 36px;
+  width: 36px;
+  height: 36px;
+  text-indent: 0;
+  content: '\f158';
+  z-index: 11111;
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #666;
+}
+.wp-dialog.stylepress-modal .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close .ui-button-text,
+.wp-dialog.stylepress-modal .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close .ui-icon {
+  display: none;
+}
+.wp-dialog.stylepress-modal .ui-dialog-title {
+  display: none;
+}
+.wp-dialog.stylepress-modal .stylepress-modal-pop {
+  margin-top: -30px;
+  display: block;
+  padding: 20px;
+}
+.wp-dialog.stylepress-modal.stylepress-modal-loading .stylepress-modal-pop,
+.wp-dialog.stylepress-modal.stylepress-modal-loading .ui-dialog-titlebar {
+  display: none !important;
+}
+.wp-dialog.stylepress-modal {
+  overflow: visible;
+}

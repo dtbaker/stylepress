@@ -70,7 +70,7 @@
   },
   "icon-icon": {
     "title": "Icon Box Icon",
-    "selector": ".elementor-icon i",
+    "selector": ".elementor-social-icon",
     "defaults": {
       "font_family": "Open Sans",
       "font_weight": 400

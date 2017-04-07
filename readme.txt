@@ -12,7 +12,7 @@ Use Elementor to design your complete website. Reuse header/footer on all pages.
 
 == Description ==
 
-This plugin converts the **[Elementor Page Builder](https://elementor.com/pro/?ref=1164&campaign=readme)** into a Full Site Builder.
+This is a free Pro plugin to turn the **[Elementor Page Builder](https://elementor.com/pro/?ref=1164&campaign=readme)** into a Full Site Builder.
 
 Watch this introduction video that covers some of the basics:
 
@@ -29,12 +29,16 @@ Design your entire website without a theme. Easily apply a Style to every page o
 - Go to StylePress > Settings
 - Apply your Style to the "Global" area
 
-
 = Tips: =
 
 - Make sure "Remove Theme CSS" is ticked in StylePress > Settings.
 - If you find it hard to set global font default, go into Elementor > Settings and tick "Disable Global Colors" and "Disable Global Fonts". Then install the "Easy Google Fonts" plugin and set all your defaults from Appearance > Typography.
 
+= Contributions & Bugs: =
+
+Head over to github: https://github.com/dtbaker/stylepress
+
+Created by @dtbaker - check out our other stuff: https://dtbaker.net
 
 More details on our dedicated website: https://stylepress.org
 
@@ -70,8 +74,8 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 
 == Changelog ==
 
-= 1.0.! =
-* Initial Release
+= 1.0.13 =
+* Beta Release
 
 == Upgrade Notice ==
 
