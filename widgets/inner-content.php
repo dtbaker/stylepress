@@ -133,10 +133,6 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
                 }
             }else {
 
-			    if(!empty($GLOBALS['twodeep'])){
-//			        print_r(debug_backtrace());exit;
-                }
-
 				\DtbakerElementorManager::get_instance()->debug_message("Now rendering from inner-content.php render() method.");
 
 				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().

@@ -63,7 +63,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	 * @return bool
 	 */
 	public function show_in_panel() {
-		return true;
+		return false; // deprecated
 	}
 
 	/**

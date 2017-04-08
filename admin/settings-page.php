@@ -56,7 +56,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						<thead>
 						<tr>
 							<th>Page Type</th>
-                            <th>Outer Style <small>(Header/Footer/Sidebar)</small></th>
+                            <th>Outer Style <small>(Header/Footer)</small></th>
                             <th>Inner Style <small>(Page + CPT Layouts)</small></th>
 							<th>Remove Theme CSS?</th>
 						</tr>

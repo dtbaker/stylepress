@@ -83,6 +83,8 @@ class DtbakerElementorManager {
         add_action( 'admin_menu', array( $this, 'admin_menu' ) );
         add_action( 'init', array( $this, 'register_custom_post_type' ) );
         add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
+        add_action( 'wp_ajax_stylepress_get_css', array( $this, 'editor_get_css' ) );
+        add_action( 'wp_ajax_stylepress_save_css', array( $this, 'editor_save_css' ) );
         add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
         add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
@@ -498,9 +500,17 @@ class DtbakerElementorManager {
 			$current_page_style = $this->get_current_style();
 			if($current_page_style) {
 				$style_details = get_post( $current_page_style );
-				$this->add_sub_menu( sprintf(__('Current Outer Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
+				$this->add_sub_menu( sprintf(__('Outer Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
+				// todo: link to parent style here:
+				$this->add_sub_menu( __('Edit Style CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
 			}
-			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress'), $parent_menu);
+			if(!empty($GLOBALS['stylepress_template_turtles'])){
+			    foreach($GLOBALS['stylepress_template_turtles'] as $used_style_id){
+				    $style_details = get_post( $used_style_id );
+				    $this->add_sub_menu( sprintf(__('Inner Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'inner'.$used_style_id, \Elementor\Utils::get_edit_link( $used_style_id ), $parent_menu );
+                }
+            }
+			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
 		}
     }
 
@@ -676,12 +686,55 @@ class DtbakerElementorManager {
 		// inject adds inline style against 'dtbaker-elementor'
 		$this->inject_additional_font_css();
 
+		if($this->show_full_ui() && $this->has_permission()){
+			wp_enqueue_style( 'stylepress-css-editor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend-css-editor.css', false, DTBAKER_ELEMENTOR_VERSION );
+
+			wp_register_script( 'stylepress-css-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend-css-editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+			wp_localize_script( 'stylepress-css-editor', 'stylepress_css', array(
+				'nonce' => wp_create_nonce('stylepress_css'),
+				'ajaxurl' => admin_url('admin-ajax.php'),
+                'post_id' => get_queried_object_id(),
+                'style_id' => $this->get_current_style(),
+			) );
+			wp_enqueue_script( 'stylepress-css-editor' );
+
+        }
+
         if( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
             wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, DTBAKER_ELEMENTOR_VERSION );
             wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+
         }
 
 	}
+
+	/**
+	 * Ajax handler for getting the current page CSS..
+	 */
+	public function editor_get_css(){
+		if(!empty($_POST['nonce']) && wp_verify_nonce($_POST['nonce'],'stylepress_css')){
+			$style_id = !empty($_POST['style_id']) ? (int)$_POST['style_id'] : 0;
+			if($style_id) {
+			    $post_object = get_post($style_id);
+			    // if this is a sub post. we get the parent one.
+                if($post_object->post_parent){
+	                $post_object = get_post($post_object->post_parent);
+                }
+				$advanced = $this->get_advanced($post_object->ID,false);
+				wp_send_json_success( array(
+                    'style_id' => $post_object->ID,
+                    'css' => !empty($advanced['css']) ? $advanced['css'] : ''
+                ) );
+			}
+		}
+		wp_send_json_error('-1');
+    }
+	/**
+	 * Ajax handler for saving the current page CSS..
+	 */
+	public function editor_save_css(){
+
+    }
 
 	/**
 	 * Register some backend admin css files.
@@ -1758,6 +1811,9 @@ class DtbakerElementorManager {
 	    $advanced = get_post_meta( $style_id, 'stylepress_advanced', true );
 	    if(!is_array($advanced)){
 		    $advanced = array();
+        }
+        if(empty($advanced['css'])){
+	        $advanced['css'] = '/* Add your StylePress CSS here */' . "\n\n";
         }
         if($format) {
 	        if ( ! empty( $advanced['font'] ) ) {

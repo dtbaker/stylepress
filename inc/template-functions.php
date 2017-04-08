@@ -24,7 +24,11 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 		$current_page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
 
-		if(!empty($GLOBALS['stylepress_rendering_inner'])){
+		if(!isset($GLOBALS['stylepress_template_turtles'])){
+			$GLOBALS['stylepress_template_turtles'] = array();
+		}
+
+		if(count($GLOBALS['stylepress_template_turtles'])){
 			\DtbakerElementorManager::get_instance()->debug_message("Nested inner content for ". $current_page_type .". Running do_shortcode( get_the_" . ( $current_page_type == 'archive' ? 'excerpt' : 'content' ) ."() ); ");
 
 			// save and restore global post entry while we do this.
@@ -39,7 +43,6 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 				}
 			}
 			echo '<!-- Start Inner Render Content for ID '.(int)get_the_ID().' --> ';
-			$GLOBALS['twodeep'] = true;
 			// is this page we're trying to edit an elementor page?
 
 			// todo: make these options in the settings array.
@@ -61,12 +64,10 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 				unset( $GLOBALS['post'] );
 			}
 
-			$GLOBALS['twodeep'] = false;
 			echo '<!-- End Inner Render Content --> ';
 			return;
 		}
 		echo '<!-- Start StylePress Render --> ';
-		$GLOBALS['stylepress_rendering_inner'] = true;
 
 
 		\DtbakerElementorManager::get_instance()->debug_message("Current page type for inner content style lookup is: $current_page_type ");
@@ -123,18 +124,16 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			\DtbakerElementorManager::get_instance()->debug_message($debug_info);
 
 			if($style_id) {
+				$GLOBALS['stylepress_template_turtles'][] = $style_id;
 				echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $style_id );
 			}else{
 				the_content();
 			}
 
-			$GLOBALS['stylepress_post_for_dynamic_fields'] = false;
-
 		endwhile;
 
 		// work out if we have an inner component for this particular post style.
 		echo '<!-- End StylePress Render --> ';
-		$GLOBALS['stylepress_rendering_inner'] = false;
 
 	}
 }

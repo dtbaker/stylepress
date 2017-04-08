@@ -39,6 +39,21 @@ class DtbakerDynamicField {
 		return self::$instance;
 	}
 
+	public function get_replace_fields(){
+		$fields = array();
+		$fields['permalink'] = 'Post Permalink';
+		$fields['post_title'] = 'Post Title';
+		$fields['page_title'] = 'Page Title';
+		// grab a list of all available custom keys.
+		foreach($this->get_custom_keys() as $key => $description){
+
+		}
+		return $fields;
+	}
+
+	public function get_custom_keys(){
+		return array();
+	}
 
 
 	public function page_id(){
@@ -47,19 +62,32 @@ class DtbakerDynamicField {
 		}else if(!empty($GLOBALS['stylepress_post_for_dynamic_fields']) && (int)$GLOBALS['stylepress_post_for_dynamic_fields']){
 			return (int)$GLOBALS['stylepress_post_for_dynamic_fields'];
 		}
-		return 0;
+		return get_queried_object_id();
+	}
+	public function get_field($field){
+		if(is_callable( array($this,$field))){
+			return $this->$field();
+		}
+		// else, search for custom post type.
+		$current_page = $this->page_id();
+		if($current_page){
+			return get_post_meta($current_page, $field, true);
+		}
 	}
 	public function page_title(){
-		return get_the_title( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+		return get_the_title( $this->page_id() );
+	}
+	public function post_title(){
+		return get_the_title( $this->page_id() );
 	}
 	public function product_title(){
-		return get_the_title( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+		return get_the_title( $this->page_id() );
 	}
 	public function permalink(){
-		return get_the_permalink( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+		return get_the_permalink( $this->page_id() );
 	}
 	public function post_thumbnail(){
-		return get_the_post_thumbnail_url( !empty($GLOBALS['stylepress_post_for_dynamic_fields']) ? $GLOBALS['stylepress_post_for_dynamic_fields'] : null );
+		return get_the_post_thumbnail_url( $this->page_id() );
 	}
 	public function search_query(){
 		return esc_html( !empty($_GET['s']) ? $_GET['s'] : '' );
