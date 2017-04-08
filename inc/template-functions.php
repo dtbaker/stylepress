@@ -28,8 +28,10 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			$GLOBALS['stylepress_template_turtles'] = array();
 		}
 
+		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering from stylepress/render-inner action hook ");
+
 		if(count($GLOBALS['stylepress_template_turtles'])){
-			\DtbakerElementorManager::get_instance()->debug_message("Nested inner content for ". $current_page_type .". Running do_shortcode( get_the_" . ( $current_page_type == 'archive' ? 'excerpt' : 'content' ) ."() ); ");
+			\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Nested inner content for ". $current_page_type .".");
 
 			// save and restore global post entry while we do this.
 			if ( isset( $GLOBALS['post'] ) ) {
@@ -45,15 +47,29 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			echo '<!-- Start Inner Render Content for ID '.(int)get_the_ID().' --> ';
 			// is this page we're trying to edit an elementor page?
 
-			// todo: make these options in the settings array.
-			switch($current_page_type){
-				case 'archive':
-					echo do_shortcode( get_the_excerpt() );
-					break;
-				default:
+			if(!empty($settings['output_type'])){
+				switch($settings['output_type']){
+					case 'full':
+						the_content();
+						break;
+					case 'raw':
+						echo do_shortcode( get_the_content() );
+						break;
+					case 'excerpt':
+						echo do_shortcode( get_the_excerpt() );
+						break;
+				}
+			}else {
+				// todo: make these options in the settings array.
+				switch ( $current_page_type ) {
+					case 'archive':
+						echo do_shortcode( get_the_excerpt() );
+						break;
+					default:
 //					echo do_shortcode( get_the_content() );
-					the_content();
+						the_content();
 //					echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( get_the_ID() );
+				}
 			}
 
 			// Restore global post
@@ -70,7 +86,7 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 		echo '<!-- Start StylePress Render --> ';
 
 
-		\DtbakerElementorManager::get_instance()->debug_message("Current page type for inner content style lookup is: $current_page_type ");
+		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Current page type for inner content style lookup is: $current_page_type ");
 
 		$style_settings = DtbakerElementorManager::get_instance()->get_settings();
 
@@ -81,7 +97,7 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 				//
 			}else if($component_template != 'archive_inner'){
 				$component_template = 'archive_inner';
-				\DtbakerElementorManager::get_instance()->debug_message("We're showing blog post output on home page, using inner style $component_template instead");
+				\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: We're showing blog post output on home page, using inner style $component_template instead");
 			}
 		}
 
@@ -121,10 +137,10 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 					$debug_info .= '<a href="'.get_permalink($style_id).'">' . esc_html(get_the_title($style_id)) .'</a>';
 				}
 			}
-			\DtbakerElementorManager::get_instance()->debug_message($debug_info);
+			\DtbakerElementorManager::get_instance()->debug_message('template-functions.php: '.$debug_info);
 
 			if($style_id) {
-				$GLOBALS['stylepress_template_turtles'][] = $style_id;
+				$GLOBALS['stylepress_template_turtles'][$style_id] = $style_id;
 				echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $style_id );
 			}else{
 				the_content();

@@ -65,7 +65,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						<?php
 						foreach ( $page_types as $post_type => $post_type_title ) {
 							?>
-							<tr class="post-type=<?php echo esc_attr($post_type);?>">
+							<tr class="post-type-<?php echo esc_attr($post_type); echo !empty($_GET['highlight']) && $post_type === $_GET['highlight'] ? ' highlightstyle': '';?>">
 								<td><?php echo esc_html( $post_type_title);?></td>
 								<td>
 									<select name="stylepress_styles[<?php echo esc_attr($post_type);?>]">
@@ -137,30 +137,6 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 		</div>
 
 
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-
-        <h3 class="stylepress-header">
-            <span>Coming Soon Page</span>
-            <small>The coming soon feature can be used to hide your website from anyone who is not logged in. <br/>
-                Enable this while you are developing your website. Remember to turn this off when you launch your website :)
-            </small>
-        </h3>
-
-
-        <div>
-            Page to Display: <select name="stylepress_styles[coming_soon]">
-                <option value=""> - Disabled - </option>
-                <?php
-                foreach ( $styles as $style_id => $style ) { ?>
-                    <option value="<?php echo (int) $style_id; ?>"<?php echo $settings && ! empty( $settings['defaults']['coming_soon'] ) && (int) $settings['defaults']['coming_soon'] === (int) $style_id ? ' selected' : ''; ?>><?php echo esc_html( $style ); ?></option>
-                <?php } ?>
-            </select>
-        </div>
-
-       <p>
-           <input type="submit" name="save" value="Save Settings" class="button button-primary">
-       </p>
 
 
 	</form>

@@ -80,8 +80,23 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 			]
 		);
 
+
 		$this->add_control(
-			'per_page',
+			'output_type',
+			[
+				'label' => __( 'Output Type', 'stylepress' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'full',
+				'options' => [
+					'full' => __( 'Full Output - the_content()', 'stylepress' ),
+					'raw' => __( 'Raw Output - the_content() without hooks', 'stylepress' ),
+					'excerpt' => __( 'Summary Output - the_excerpt()', 'stylepress' ),
+				],
+			]
+		);
+
+		$this->add_control(
+			'description',
 			[
 				'label' => __( 'This will display the inside website content. <br/><br/>i.e. the output from <code>the_content();</code>', 'stylepress' ),
 				'type' => Controls_Manager::RAW_HTML,
@@ -100,6 +115,8 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings();
+
+		\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: inside render() method.");
 
 		if ( \DtbakerElementorManager::get_instance()->previewing_style ) {
 			$this->content_template();
@@ -121,7 +138,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 
 			if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
 
-				\DtbakerElementorManager::get_instance()->debug_message("Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
+				\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
 
 			    // we are splitting header/footer up into multiple renders.
                 // haha. Hows your brain going now trying to follow this code???
@@ -132,8 +149,6 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
                     ob_start();
                 }
             }else {
-
-				\DtbakerElementorManager::get_instance()->debug_message("Now rendering from inner-content.php render() method.");
 
 				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}

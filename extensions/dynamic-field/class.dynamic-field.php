@@ -89,6 +89,9 @@ class DtbakerDynamicField {
 	public function post_thumbnail(){
 		return get_the_post_thumbnail_url( $this->page_id() );
 	}
+	public function post_thumbnail_id(){
+		return get_post_thumbnail_id( $this->page_id() );
+	}
 	public function search_query(){
 		return esc_html( !empty($_GET['s']) ? $_GET['s'] : '' );
 	}

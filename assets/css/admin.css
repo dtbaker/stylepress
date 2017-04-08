@@ -104,6 +104,9 @@
   margin: 0 0 .2em;
   padding: 0;
 }
+.dtbaker-elementor-instructions tr.highlightstyle {
+  background: #CCC !important;
+}
 .dtbaker-elementor-instructions:after {
   clear: both;
   display: table;
@@ -392,4 +395,7 @@
 .stylepress-payment-popup .slider .slider-transition {
   -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease;
+}
+.style-list {
+  margin-bottom: 30px;
 }

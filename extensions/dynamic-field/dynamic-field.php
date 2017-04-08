@@ -147,6 +147,23 @@ function stylepress_dynamic_before_render( $widget ) {
 					);
 					$do_link = true;
 					break;
+				case 'image':
+					$fields = array(
+					);
+					$do_link = true;
+					break;
+				case 'button':
+					$fields = array(
+						'text',
+					);
+					$do_link = true;
+					break;
+				case 'icon-box':
+					$fields = array(
+						'editor',
+					);
+					$do_link = true;
+					break;
 			}
 			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
 			$dyno_generator = \DtbakerDynamicField::get_instance();
@@ -167,6 +184,31 @@ function stylepress_dynamic_before_render( $widget ) {
 
 				}
 			}
+			// replace the [link][url] link, usually this is just {{permalink}}
+			if($do_link && !empty($settings['link']['url'])){
+				if( preg_match_all('#\{\{([a-z_-]+)\}\}#imsU', $settings['link']['url'], $matches)){
+					foreach($matches[1] as $key=>$replace_field){
+						$replace = $dyno_generator->get_field($replace_field);
+						$settings['link']['url'] = str_replace('{{' . $replace_field . '}}', $replace, $settings['link']['url']);
+					}
+				}
+				$widget->set_settings('link', $settings['link']);
+			}
+
+
+			// dynamic image support?
+			switch($widget->get_name()) {
+				case 'image':
+					$image_url = $dyno_generator->post_thumbnail();
+					$image_id = $dyno_generator->post_thumbnail_id();
+					if($image_url && $image_id) {
+						$settings['image']['id'] = $image_id;
+						$settings['image']['url'] = $image_url;
+						$widget->set_settings('image', $settings['image']);
+					}
+					break;
+			}
+
 		}
 //		print_r($settings);
 		//$widget->set_settings($key,$val);

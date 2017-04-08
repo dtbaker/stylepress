@@ -92,7 +92,7 @@ class DtbakerElementorManager {
         add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 //        add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
 
-        add_filter( 'template_include', array( $this, 'template_include' ) );
+        add_filter( 'template_include', array( $this, 'template_include' ), 999 );
         add_action( 'get_header', array( $this, 'get_header' ), 999 );
         add_action( 'get_footer', array( $this, 'get_footer' ), 999 );
         add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
@@ -114,6 +114,7 @@ class DtbakerElementorManager {
 
 
 		add_action('wp_before_admin_bar_render', array($this, 'wp_admin_bar'));
+
 
 	}
 
@@ -189,6 +190,8 @@ class DtbakerElementorManager {
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/tooltip/tooltip.php';
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/google-maps/google-maps.php';
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/page-slider/dtbaker-page-slider.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/woocommerce/woocommerce.php';
+							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
 
 							do_action( 'stylepress_init_extensions' );
 						}
@@ -296,6 +299,7 @@ class DtbakerElementorManager {
 		if(!$this->show_full_ui())return $template_include;
 		global $post;
 
+		$original_template = $template_include;
 
 		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type  ) {
             $this->previewing_style = true;
@@ -339,6 +343,8 @@ class DtbakerElementorManager {
                 }
             }
         }
+
+		$this->debug_message('template_include: ' . $template_include . ' ' . ( $template_include != $original_template ? ' (changed from: '.$original_template.' )' : ''));
 
 		return $template_include;
 	}
@@ -481,6 +487,7 @@ class DtbakerElementorManager {
 				return $dropdown_args;
 			} );
 			add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
+			add_action( 'admin_action_dtbaker_elementor_create', array( $this, 'dtbaker_elementor_create' ) );
 			add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
 			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 			add_action( 'admin_action_stylepress_clone', array( $this, 'stylepress_clone' ) );
@@ -509,7 +516,9 @@ class DtbakerElementorManager {
 				    $style_details = get_post( $used_style_id );
 				    $this->add_sub_menu( sprintf(__('Inner Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'inner'.$used_style_id, \Elementor\Utils::get_edit_link( $used_style_id ), $parent_menu );
                 }
-            }
+			}
+			$page_type = $this->get_current_page_type();
+			$this->add_sub_menu(sprintf(__('Page Type: %s'),$page_type), $parent_menu.'ni', admin_url('admin.php?page=dtbaker-stylepress-settings&highlight='.$page_type), $parent_menu);
 			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
 		}
     }
@@ -811,7 +820,7 @@ class DtbakerElementorManager {
 
 			add_meta_box(
 				'dtbaker_sub_style',
-				__( 'Styles', 'stylepress' ),
+				__( 'StylePress Settings', 'stylepress' ),
 				array( $this, 'meta_box_sub_styles' ),
 				'dtbaker_style',
 				'normal',
@@ -819,7 +828,7 @@ class DtbakerElementorManager {
 			);
 			add_meta_box(
 				'dtbaker_sub_style_advanced',
-				__( 'Advanced Configuration', 'stylepress' ),
+				__( 'StylePress Advanced', 'stylepress' ),
 				array( $this, 'meta_box_sub_advanced' ),
 				'dtbaker_style',
 				'normal',
@@ -845,14 +854,14 @@ class DtbakerElementorManager {
 		    if( $parent){
 		        ?>
                 <div id="dtbaker-return-to-style">
-                    <a href="<?php echo esc_url( get_edit_post_link($parent));?>" class="button"><?php echo esc_html__('&laquo; Return To Parent Style', 'stylepress');?></a>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $parent ) );?>" class="button"><?php echo esc_html__('&laquo; Return To Style Page', 'stylepress');?></a>
                 </div>
                 <?php
             }else{
 
 			    ?>
                 <div id="dtbaker-return-to-style">
-                    <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress') );?>" class="button"><?php echo esc_html__('&laquo; Return To All Styles', 'stylepress');?></a>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $post->ID ) );?>" class="button"><?php echo esc_html__('&laquo; Return To Style Page', 'stylepress');?></a>
                 </div>
                 <div id="stylepress-modify-font">
                     <?php
@@ -1122,6 +1131,25 @@ class DtbakerElementorManager {
 		return false;
 	}
 
+	/**
+	 * This lets us query what the currently selected page template is for a particular post ID
+	 * We use the other function to get the defaults for non-page-ID posts (like archive etc..)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $post_id Current post ID we're querying.
+	 *
+	 * @return bool
+	 */
+	public function get_page_inner_style( $post_id ) {
+		$current_option = get_post_meta( $post_id, 'dtbaker_style', true );
+		if ( $current_option && ! empty( $current_option['inner_style'] ) ) {
+			return $current_option['inner_style'];
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
@@ -1312,6 +1340,14 @@ class DtbakerElementorManager {
                 }
 			}
 		}
+
+		if(function_exists('WC')){
+		    // add our own woocommerce entries.
+            $defaults['products'] = 'Shop Page';
+            $defaults['product'] = 'Product Page';
+            $defaults['product_category'] = 'Product Category';
+        }
+
 		return $defaults;
     }
 
@@ -1415,6 +1451,46 @@ class DtbakerElementorManager {
 		}
 
 		wp_redirect( admin_url('admin.php?page=dtbaker-stylepress-settings&saved') );
+		exit;
+
+
+	}
+
+	/**
+	 * Handles creating a new style
+	 *
+	 * @since 1.0.15
+	 *
+	 */
+	public function dtbaker_elementor_create( ) {
+		// Check if our nonce is set.
+		if ( ! isset( $_POST['dtbaker_elementor_create_options'] ) ) { // WPCS: input var okay.
+			return;
+		}
+
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $_POST['dtbaker_elementor_create_options'], 'dtbaker_elementor_create_options' ) ) { // WPCS: sanitization ok. input var okay.
+			return;
+		}
+
+
+		if ( isset( $_POST['new_style_name'] ) && trim( $_POST['new_style_name'] ) ) { // WPCS: sanitization ok. input var okay.
+
+            $new_style_id = wp_insert_post(array(
+                'post_type' => 'dtbaker_style',
+                'post_name' => trim( $_POST['new_style_name'] ),
+                'post_title' => trim( $_POST['new_style_name'] ),
+                'post_content' => '', // todo: default style layout here maybe?
+                'post_status' => 'publish',
+            ));
+            if($new_style_id) {
+	            wp_redirect( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $new_style_id . '&saved' ) );
+	            exit;
+            }
+		}
+
+
+		wp_redirect( admin_url('admin.php?page=dtbaker-stylepress&style_id=new') );
 		exit;
 
 

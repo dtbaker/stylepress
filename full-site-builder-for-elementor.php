@@ -43,6 +43,9 @@ define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.15' );
 define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', false );
 
 /* Set constant path to the plugin directory. */
+define( 'DTBAKER_ELEMENTOR_SLUG', basename( plugin_dir_path( __FILE__ ) ) );
+
+/* Set constant path to the plugin directory. */
 define( 'DTBAKER_ELEMENTOR_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 
 /* Set the constant path to the plugin directory URI. */

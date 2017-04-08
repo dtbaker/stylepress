@@ -10,7 +10,11 @@ $styles          = $this->get_all_page_styles();
 $components = $this->get_all_page_components();
 $current_default = $this->get_current_style(true);
 
-$current_style = $this->get_page_template($post->ID);
+$current_outer_style = $this->get_page_template($post->ID);
+$current_inner_style = $this->get_page_inner_style($post->ID);
+
+$current_page_type = get_post_type($post); //$this->get_current_page_type();
+$style_settings = $this->get_settings();
 
 wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce' );
 ?>
@@ -23,10 +27,11 @@ wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce'
 <p>
     <small><?php
     // Translators: The %s is the current post type
-	    printf( esc_html__( 'This page type is: %s', 'stylepress' ), ucwords( str_replace('_',' ',$this->get_current_page_type()) )); ?>
+	    printf( esc_html__( 'This page type is: %s', 'stylepress' ), ucwords( str_replace('_',' ',$current_page_type) )); ?>
         </small>
 </p>
 
+<?php if($styles){ ?>
 <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="dtbaker_page_style"><?php _e('Outer Style');?></label></p>
 <select name="dtbaker_style[style]" id="dtbaker_page_style">
 	<option value="0"><?php
@@ -35,10 +40,42 @@ wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce'
     <option value="-1"><?php esc_html_e('Original Theme Output', 'stylepress')?></option>
 	<?php foreach ( $styles as $option_id => $option_val ) {
 		?>
-		<option value="<?php echo esc_attr( $option_id ); ?>"<?php echo $current_style && (int) $current_style === (int) $option_id ? ' selected' : ''; ?>><?php echo esc_attr( $option_val ); ?></option>
+		<option value="<?php echo esc_attr( $option_id ); ?>"<?php echo $current_outer_style && (int) $current_outer_style === (int) $option_id ? ' selected' : ''; ?>><?php echo esc_attr( $option_val ); ?></option>
+		<?php
+	}
+	?>
+</select>
+<?php }
+
+
+if($components){
+
+	$component_template = $current_page_type . '_inner';
+    // loading this component/
+    $default_inner_style = false;
+    if(!empty($style_settings['defaults'][$component_template])){
+	    $default_inner_style = (int) $style_settings['defaults'][$component_template];
+    }else {
+        // we use the global inner settings.
+        if ( ! empty( $style_settings['defaults']['_global_inner'] ) ) {
+	        $default_inner_style = (int) $style_settings['defaults']['_global_inner'];
+        }
+    }
+
+    ?>
+
+<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="dtbaker_page_inner_style"><?php _e('Inner Style');?></label></p>
+<select name="dtbaker_style[inner_style]" id="dtbaker_page_inner_style">
+	<option value="0"><?php
+		// Translators: %s contains the current default style.
+		printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr( $default_inner_style && isset($components[ $default_inner_style ]) ? '(' . $components[ $default_inner_style ] . ')' : '' ) ); ?></option>
+    <option value="-1"><?php esc_html_e('Plain Output', 'stylepress')?></option>
+	<?php foreach ( $components as $option_id => $option_val ) {
+		?>
+		<option value="<?php echo esc_attr( $option_id ); ?>"<?php echo $current_inner_style && (int) $current_inner_style === (int) $option_id ? ' selected' : ''; ?>><?php echo esc_attr( $option_val ); ?></option>
 		<?php
 	}
 	?>
 </select>
 
-
+<?php } ?>
