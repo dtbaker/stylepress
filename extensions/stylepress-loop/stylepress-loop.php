@@ -13,6 +13,16 @@
 defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 
+add_action( 'wp_enqueue_scripts', function(){
+
+
+	wp_register_style( 'stylepress-loop', DTBAKER_ELEMENTOR_URI . 'extensions/stylepress-loop/stylepress-loop.css' );
+
+	if( isset($_GET['elementor']) || isset($_GET['elementor-preview'])) { //\Elementor\Plugin::$instance->editor->is_edit_mode()){
+		wp_enqueue_style('stylepress-loop');
+	}
+
+} );
 
 $widget_file   = DTBAKER_ELEMENTOR_PATH . 'extensions/stylepress-loop/widget.stylepress-loop.php';
 //$template_file = locate_template( $widget_file );

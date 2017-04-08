@@ -28,7 +28,7 @@ add_filter( 'stylepress_modal_link', function($link, $popup_template, $options =
             <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo (int) $popup_template; ?>">
                 <div class="stylepress-modal-inner">
 					<?php
-					echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $popup_template );
+					echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
 					?>
                 </div>
             </div>
@@ -55,7 +55,7 @@ add_action( 'wp_ajax_stylepress_modal_pop', function(){
 			?>
             <div class="elementor-template">
 				<?php
-				echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $modal_id );
+				echo \Elementor\Plugin::instance()->frontend->get_builder_content( $modal_id, false );
 				?>
             </div>
 			<?php
@@ -92,7 +92,7 @@ function stylepress_modal_button_before_render( $widget ){
                 <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo $popup_template; ?>">
                     <div class="stylepress-modal-inner">
 					    <?php
-					    echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $popup_template );
+					    echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
 					    ?>
                     </div>
                 </div>
@@ -271,7 +271,7 @@ class Widget_Dtbaker_Modal_Button extends \Elementor\Widget_Button {
                 <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo $popup_template; ?>">
                     <div class="stylepress-modal-inner">
 						<?php
-						echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $popup_template );
+						echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
 						?>
                     </div>
                 </div>

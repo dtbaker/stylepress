@@ -116,7 +116,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: inside render() method.");
+		\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: inside render() method. ".get_the_ID());
 
 		if ( \DtbakerElementorManager::get_instance()->previewing_style ) {
 			$this->content_template();

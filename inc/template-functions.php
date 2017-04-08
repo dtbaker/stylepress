@@ -141,7 +141,7 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 			if($style_id) {
 				$GLOBALS['stylepress_template_turtles'][$style_id] = $style_id;
-				echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $style_id );
+				echo Elementor\Plugin::instance()->frontend->get_builder_content( $style_id, false );
 			}else{
 				the_content();
 			}

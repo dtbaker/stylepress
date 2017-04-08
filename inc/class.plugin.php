@@ -504,8 +504,8 @@ class DtbakerElementorManager {
 		if($this->show_full_ui() && $this->has_permission() && !is_admin()) {
 			$parent_menu = "stylepress_nav";
 			$this->add_root_menu(__( 'StylePress'), $parent_menu);
-			$current_page_style = $this->get_current_style();
-			if($current_page_style) {
+			$current_page_style = (int) $this->get_current_style();
+			if($current_page_style > 0) {
 				$style_details = get_post( $current_page_style );
 				$this->add_sub_menu( sprintf(__('Outer Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
 				// todo: link to parent style here:
@@ -703,7 +703,7 @@ class DtbakerElementorManager {
 				'nonce' => wp_create_nonce('stylepress_css'),
 				'ajaxurl' => admin_url('admin-ajax.php'),
                 'post_id' => get_queried_object_id(),
-                'style_id' => $this->get_current_style(),
+                'style_id' => (int) $this->get_current_style(),
 			) );
 			wp_enqueue_script( 'stylepress-css-editor' );
 
@@ -1331,6 +1331,14 @@ class DtbakerElementorManager {
 	        'front_page' => 'Front Page',
 	        'search' => 'Search Results',
         );
+
+		if(function_exists('WC')){
+			// add our own woocommerce entries.
+			$defaults['products'] = 'WooCommerce Shop';
+			$defaults['product'] = 'WooCommerce Product';
+			$defaults['product_category'] = 'WooCommerce Category';
+		}
+
 		$post_types = get_post_types( array( 'public' => true ));
 		foreach ( $post_types as $post_type ) {
 			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
@@ -1341,12 +1349,6 @@ class DtbakerElementorManager {
 			}
 		}
 
-		if(function_exists('WC')){
-		    // add our own woocommerce entries.
-            $defaults['products'] = 'Shop Page';
-            $defaults['product'] = 'Product Page';
-            $defaults['product_category'] = 'Product Category';
-        }
 
 		return $defaults;
     }
@@ -1572,8 +1574,8 @@ class DtbakerElementorManager {
 		$json = json_decode( $wp_filesystem->get_contents( trailingslashit( plugin_dir_path( __DIR__ ) ) . 'elementor.json' ), true );
 		$json = apply_filters( 'stylepress_elementor_json', $json );
 		$this->_apply_json_overrides( $json );
-		$current_style = $this->get_current_style();
-		if( $current_style ){
+		$current_style = (int) $this->get_current_style();
+		if( $current_style > 0 ){
 		    // check if this one has a json elementor override
             $json = $this->get_style_elementor_overrides( $current_style );
 			$json = apply_filters( 'dtbaker_elementor_style_json', $json, $current_style );
@@ -1677,7 +1679,7 @@ class DtbakerElementorManager {
 		$settings = $this->get_settings();
 		$current_page_type = $this->get_current_page_type();
 
-        if( !empty($settings['remove_css'][$current_page_type]) || !empty($settings['remove_css']['_global']) ) {
+        if( !empty($settings['remove_css'][$current_page_type]) ){ //} || !empty($settings['remove_css']['_global']) ) {
             $this->removing_theme_css = true;
 	        global $wp_styles;
 	        $current_theme = wp_get_theme();
@@ -1817,10 +1819,10 @@ class DtbakerElementorManager {
 	    $additional_css = '';
 		if ( class_exists( 'EGF_Register_Options' ) && is_callable( 'EGF_Register_Options::get_options' ) ) {
 			$font_options = EGF_Register_Options::get_options();
-			$style_id     = $this->get_current_style();
-			if ( $style_id ) {
+			$style_id     = (int) $this->get_current_style();
+			if ( $style_id > 0 ) {
 				$post = get_post( $style_id );
-				if ( ! $post->post_parent && $post->post_type === 'dtbaker_style' ) {
+				if ( $post && ! $post->post_parent && $post->post_type === 'dtbaker_style' ) {
 					$json = $this->get_page_style_font_json( $style_id );
 
 					if ( $json ) {

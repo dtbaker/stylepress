@@ -45,6 +45,11 @@ class DtbakerDynamicField {
 		$fields['post_title'] = 'Post Title';
 		$fields['page_title'] = 'Page Title';
 		// grab a list of all available custom keys.
+
+		if(function_exists('WC')){
+			$fields['woocommerce_price'] = 'Product Price';
+			$fields['woocommerce_addtocart'] = 'Add To Cart URL';
+		}
 		foreach($this->get_custom_keys() as $key => $description){
 
 		}
@@ -68,8 +73,17 @@ class DtbakerDynamicField {
 		if(is_callable( array($this,$field))){
 			return $this->$field();
 		}
-		// else, search for custom post type.
 		$current_page = $this->page_id();
+		if(strpos($field, 'woocommerce') !== false && function_exists('wc_get_product')){
+			$_product = wc_get_product( $current_page );
+			switch($field){
+				case 'woocommerce_price':
+					return wc_price($_product->get_price());
+				case 'woocommerce_addtocart':
+					return $_product->add_to_cart_url();
+			}
+		}
+		// else, search for custom post type.
 		if($current_page){
 			return get_post_meta($current_page, $field, true);
 		}

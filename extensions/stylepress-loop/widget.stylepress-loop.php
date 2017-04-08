@@ -230,10 +230,10 @@ class Stylepress_Loop extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio' => 'margin: 0 -{{SIZE}}px',
-					'(desktop){{WRAPPER}} .elementor-portfolio-item' => 'width: calc( 100% / {{columns.SIZE}} ); border: {{SIZE}}px solid transparent',
-					'(tablet){{WRAPPER}} .elementor-portfolio-item' => 'width: calc( 100% / {{columns_tablet.SIZE}} ); border: {{SIZE}}px solid transparent',
-					'(mobile){{WRAPPER}} .elementor-portfolio-item' => 'width: calc( 100% / {{columns_mobile.SIZE}} ); border: {{SIZE}}px solid transparent',
+					'{{WRAPPER}} .stylepress-loop' => 'margin: 0 -{{SIZE}}px',
+					'(desktop){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns.SIZE}} ); border: {{SIZE}}px solid transparent',
+					'(tablet){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns_tablet.SIZE}} ); border: {{SIZE}}px solid transparent',
+					'(mobile){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns_mobile.SIZE}} ); border: {{SIZE}}px solid transparent',
 				],
 			]
 		);
@@ -245,7 +245,7 @@ class Stylepress_Loop extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio-item__img, {{WRAPPER}} .elementor-portfolio-item__overlay' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .stylepress-loop-item__img, {{WRAPPER}} .stylepress-loop-item__overlay' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -270,7 +270,7 @@ class Stylepress_Loop extends Widget_Base {
 					'value' => Scheme_Color::COLOR_4,
 				],
 				'selectors' => [
-					'{{WRAPPER}} a .elementor-portfolio-item__overlay' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} a .stylepress-loop-item__overlay' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -299,7 +299,7 @@ class Stylepress_Loop extends Widget_Base {
 					'value' => Scheme_Color::COLOR_3,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio__filter' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .stylepress-loop__filter' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -314,7 +314,7 @@ class Stylepress_Loop extends Widget_Base {
 					'value' => Scheme_Color::COLOR_1,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio__filter.elementor-active' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-loop__filter.elementor-active' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -325,7 +325,7 @@ class Stylepress_Loop extends Widget_Base {
 				'name' => 'typography_filter',
 				'label' => __( 'Typography', 'stylepress' ),
 				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
-				'selector' => '{{WRAPPER}} .elementor-portfolio__filter',
+				'selector' => '{{WRAPPER}} .stylepress-loop__filter',
 			]
 		);
 
@@ -344,8 +344,8 @@ class Stylepress_Loop extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio__filter:not(:last-child)' => 'margin-right: calc({{SIZE}}{{UNIT}}/2)',
-					'{{WRAPPER}} .elementor-portfolio__filter:not(:first-child)' => 'margin-left: calc({{SIZE}}{{UNIT}}/2)',
+					'{{WRAPPER}} .stylepress-loop__filter:not(:last-child)' => 'margin-right: calc({{SIZE}}{{UNIT}}/2)',
+					'{{WRAPPER}} .stylepress-loop__filter:not(:first-child)' => 'margin-left: calc({{SIZE}}{{UNIT}}/2)',
 				],
 			]
 		);
@@ -365,7 +365,7 @@ class Stylepress_Loop extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-portfolio__filters' => 'margin-bottom: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .stylepress-loop__filters' => 'margin-bottom: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
@@ -426,6 +426,8 @@ class Stylepress_Loop extends Widget_Base {
 			return;
 		}
 
+		wp_enqueue_style('stylepress-loop');
+
 
 		$settings = $this->get_settings();
 		if(!empty($settings['stylepress_layout'])) {
@@ -457,7 +459,7 @@ class Stylepress_Loop extends Widget_Base {
 
 		$thumbnail_html = Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail_size' );
 		?>
-        <div class="elementor-portfolio-item__img elementor-post__thumbnail">
+        <div class="stylepress-loop-item__img elementor-post__thumbnail">
 			<?php echo $thumbnail_html ?>
         </div>
 		<?php
@@ -468,7 +470,6 @@ class Stylepress_Loop extends Widget_Base {
 
 		$options = [
 			'itemGap' => $settings['item_gap']['size'],
-			'itemRatio' => $settings['item_ratio']['size'],
 			'columns' => $settings['columns'],
 			'columns_tablet' => $settings['columns_tablet'],
 			'columns_mobile' => $settings['columns_mobile'],
@@ -494,10 +495,10 @@ class Stylepress_Loop extends Widget_Base {
 			return;
 		}
 		?>
-        <ul class="elementor-portfolio__filters">
-            <li class="elementor-portfolio__filter elementor-active" data-filter="__all"><?php echo __( 'All', 'stylepress' ); ?></li>
+        <ul class="stylepress-loop__filters">
+            <li class="stylepress-loop__filter elementor-active" data-filter="__all"><?php echo __( 'All', 'stylepress' ); ?></li>
 			<?php foreach ( $terms as $term ) { ?>
-                <li class="elementor-portfolio__filter" data-filter="<?php echo $term->term_id; ?>"><?php echo $term->name; ?></li>
+                <li class="stylepress-loop__filter" data-filter="<?php echo $term->term_id; ?>"><?php echo $term->name; ?></li>
 			<?php } ?>
         </ul>
 		<?php
@@ -507,7 +508,7 @@ class Stylepress_Loop extends Widget_Base {
 
 		$tag = $this->get_settings( 'title_tag' );
 		?>
-        <<?php echo $tag ?> class="elementor-portfolio-item__title">
+        <<?php echo $tag ?> class="stylepress-loop-item__title">
 		<?php the_title() ?>
         </<?php echo $tag ?>>
 		<?php
@@ -520,16 +521,16 @@ class Stylepress_Loop extends Widget_Base {
 			return;
 		}
 
-		$separator = '<span class="elementor-portfolio-item__tags__separator"></span>';
+		$separator = '<span class="stylepress-loop-item__tags__separator"></span>';
 
 		$tags_array = [];
 
 		foreach ( $post->tags as $tag ) {
-			$tags_array[] = '<span class="elementor-portfolio-item__tags__tag">' . $tag->name . '</span>';
+			$tags_array[] = '<span class="stylepress-loop-item__tags__tag">' . $tag->name . '</span>';
 		}
 
 		?>
-        <div class="elementor-portfolio-item__tags">
+        <div class="stylepress-loop-item__tags">
 			<?php echo implode( $separator, $tags_array ); ?>
         </div>
 		<?php
@@ -544,7 +545,7 @@ class Stylepress_Loop extends Widget_Base {
 			$classes[] = 'elementor-filter-' . $tag->term_id;
 		}
 		?>
-        <article class="elementor-portfolio-item <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+        <article class="stylepress-loop-item <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<?php
 	}
 
@@ -556,7 +557,7 @@ class Stylepress_Loop extends Widget_Base {
 
 	protected function render_overlay_header() {
 		?>
-        <div class="elementor-portfolio-item__overlay">
+        <div class="stylepress-loop-item__overlay">
 		<?php
 	}
 
@@ -571,7 +572,7 @@ class Stylepress_Loop extends Widget_Base {
 			$this->render_filter_menu();
 		}
 		?>
-        <div class="elementor-portfolio elementor-posts-container" data-portfolio-options="<?php echo esc_attr( wp_json_encode( $this->get_portfolio_js_options() ) ); ?>">
+        <div class="stylepress-loop elementor-posts-container" data-stylepress-options="<?php echo esc_attr( wp_json_encode( $this->get_portfolio_js_options() ) ); ?>">
 		<?php
 	}
 
@@ -585,17 +586,21 @@ class Stylepress_Loop extends Widget_Base {
 
 		$this->render_post_header();
 
+
 		// allow developers to overwrite the default output with their own
 		if($result = apply_filters('stylepress_loop_item','',$this)){
 		    echo $result;
         }else{
             // render with our builder:
-			global $post;
-			$debug_info = "Rendering Post ID <code>".$post->ID."</code> ";
 
-			$GLOBALS['stylepress_post_for_dynamic_fields'] = $post;
-			$GLOBALS['stylepress_template_turtles'][$this->layout_template] = $this->layout_template;
-			echo Plugin::instance()->frontend->get_builder_content_for_display( $this->layout_template );
+			    global $post;
+				$GLOBALS['stylepress_post_for_dynamic_fields']                    = $post;
+				$GLOBALS['stylepress_template_turtles'][ $this->layout_template ] = $this->layout_template;
+
+			    echo Plugin::instance()->frontend->get_builder_content( $this->layout_template, true );
+
+//				$content = Plugin::instance()->frontend->get_builder_content_for_display( $this->layout_template );
+
         }
 
 

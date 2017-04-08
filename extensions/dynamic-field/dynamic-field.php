@@ -116,15 +116,7 @@ function stylepress_dynamic_before_render( $widget ) {
 			$dyno_generator = \DtbakerDynamicField::get_instance();
 			$image_url = $dyno_generator->post_thumbnail();
 			if($image_url){
-				// we have to output custom CSS for this dynamic image for it to work correctly.
-				// todo: wp_add_inline_style()
-				?>
-				<style type="text/css">
-					.elementor-element-<?php echo $widget->get_id();?>{
-						background-image: url("<?php echo esc_url($image_url);?>") !important;
-					}
-				</style>
-				<?php
+				$widget->add_render_attribute( '_wrapper', 'style', 'background-image: url("' . esc_url($image_url) . '") !important;' );
 			}
 		}
 	}
@@ -233,7 +225,7 @@ function stylepress_dynamic_before_render( $widget ) {
 				<div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo $popup_template; ?>">
 					<div class="stylepress-modal-inner">
 						<?php
-						echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $popup_template );
+						echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
 						?>
 					</div>
 				</div>
