@@ -508,8 +508,6 @@ class DtbakerElementorManager {
 			if($current_page_style > 0) {
 				$style_details = get_post( $current_page_style );
 				$this->add_sub_menu( sprintf(__('Outer Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
-				// todo: link to parent style here:
-				$this->add_sub_menu( __('Edit Style CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
 			}
 			if(!empty($GLOBALS['stylepress_template_turtles'])){
 			    foreach($GLOBALS['stylepress_template_turtles'] as $used_style_id){
@@ -518,8 +516,11 @@ class DtbakerElementorManager {
                 }
 			}
 			$page_type = $this->get_current_page_type();
-			$this->add_sub_menu(sprintf(__('Page Type: %s'),$page_type), $parent_menu.'ni', admin_url('admin.php?page=dtbaker-stylepress-settings&highlight='.$page_type), $parent_menu);
-			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
+			if($current_page_style > 0) {
+				$this->add_sub_menu( __('Settings: CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
+			}
+			$this->add_sub_menu(sprintf(__('Settings: Style %s'), ucwords(str_replace('_',' ',$page_type))), $parent_menu.'ni', admin_url('admin.php?page=dtbaker-stylepress-settings&highlight='.$page_type), $parent_menu);
+//			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
 		}
     }
 

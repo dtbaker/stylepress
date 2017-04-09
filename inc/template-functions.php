@@ -110,8 +110,12 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 			$style_id = false;
 			if( $component_template ){
-				// loading this component/
-				if(!empty($style_settings['defaults'][$component_template])){
+				// check if this page has a custom inner content template chosen:
+				$current_inner_style = (int) DtbakerElementorManager::get_instance()->get_page_inner_style($post->ID);
+				$debug_info .= ' inner style '.$current_inner_style;
+				if($current_inner_style !== 0) {
+					$style_id = $current_inner_style;
+				}else if(!empty($style_settings['defaults'][$component_template])){
 					$style_id = (int) $style_settings['defaults'][$component_template];
 					$debug_info .= " with the $component_template style ";
 				}else{
@@ -139,7 +143,7 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			}
 			\DtbakerElementorManager::get_instance()->debug_message('template-functions.php: '.$debug_info);
 
-			if($style_id) {
+			if($style_id > 0) {
 				$GLOBALS['stylepress_template_turtles'][$style_id] = $style_id;
 				echo Elementor\Plugin::instance()->frontend->get_builder_content( $style_id, false );
 			}else{

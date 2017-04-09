@@ -1,24 +1,24 @@
-.stylepress-main-navigation {
+.stylepress-nav-menu .stylepress-main-navigation {
   clear: both;
   display: block;
   text-align: left;
   background-color: #f8f8f8;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul {
   list-style: none;
   margin: 0;
   padding-left: 0;
 }
 @media (max-width: 768px) {
-  .stylepress-main-navigation .stylepress-inside-navigation ul {
+  .stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul {
     display: none;
   }
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li {
   display: inline-block;
   position: relative;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li a {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li a {
   padding-left: 20px;
   padding-right: 20px;
   line-height: 60px;
@@ -28,34 +28,34 @@
   text-decoration: none;
   font-family: inherit;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li a:hover {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li a:hover {
   color: #000;
   background: #eaeaea;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children > a {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children > a {
   padding-right: 0;
   position: relative;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle {
   padding-right: 20px;
   display: inline-block;
   height: 100%;
   clear: both;
   padding-left: 10px;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle:before {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li.menu-item-has-children .dropdown-menu-toggle:before {
   content: "\f107";
   font-family: FontAwesome;
   line-height: 1em;
   speak: none;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li:hover > a {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li:hover > a {
   background: #eaeaea;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul li:hover > ul {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul li:hover > ul {
   display: block;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul {
   top: auto;
   background-color: #f8f8f8;
   display: none;
@@ -66,34 +66,34 @@
   width: 200px;
   text-align: left;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul li {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul li {
   width: 100%;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul li a {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul li a {
   font-size: 0.9em;
   padding: 10px 20px;
   line-height: normal;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle {
   padding-right: 15px;
   float: right;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: -10px;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle:before {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul li.menu-item-has-children .dropdown-menu-toggle:before {
   content: "\f105" !important;
 }
-.stylepress-main-navigation .stylepress-inside-navigation ul ul ul {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation ul ul ul {
   left: 100%;
   top: 0;
 }
-.stylepress-main-navigation .stylepress-inside-navigation:after {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation:after {
   clear: both;
   display: table;
   content: '';
 }
-.stylepress-main-navigation .stylepress-menu-toggle {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle {
   padding-left: 20px;
   padding-right: 20px;
   line-height: 60px;
@@ -103,40 +103,40 @@
   color: #000;
   cursor: pointer;
 }
-.stylepress-main-navigation .stylepress-menu-toggle:before {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle:before {
   content: "\f0c9";
   font-family: FontAwesome;
   line-height: 1em;
   speak: none;
 }
 @media (max-width: 768px) {
-  .stylepress-main-navigation .stylepress-menu-toggle {
+  .stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle {
     display: block;
   }
 }
-.stylepress-main-navigation .stylepress-menu-toggle .stylepress-mobile-menu {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle .stylepress-mobile-menu {
   margin-left: 10px;
 }
-.stylepress-main-navigation .stylepress-menu-toggle,
-.stylepress-main-navigation .stylepress-menu-toggle:active,
-.stylepress-main-navigation .stylepress-menu-toggle:focus,
-.stylepress-main-navigation .stylepress-menu-toggle:hover {
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle,
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle:active,
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle:focus,
+.stylepress-nav-menu .stylepress-main-navigation .stylepress-menu-toggle:hover {
   background-color: transparent;
   border: 0;
   outline: 0;
 }
 @media (max-width: 768px) {
-  .stylepress-main-navigation .stylepress-inside-navigation .main-nav > ul > li {
+  .stylepress-nav-menu .stylepress-main-navigation .stylepress-inside-navigation .main-nav > ul > li {
     float: none;
     clear: both;
     display: block !important;
     text-align: left !important;
   }
-  .stylepress-main-navigation.toggled .stylepress-menu-toggle:before {
+  .stylepress-nav-menu .stylepress-main-navigation.toggled .stylepress-menu-toggle:before {
     content: "\f00d";
     speak: none;
   }
-  .stylepress-main-navigation.toggled .main-nav > ul {
+  .stylepress-nav-menu .stylepress-main-navigation.toggled .main-nav > ul {
     display: block;
   }
 }

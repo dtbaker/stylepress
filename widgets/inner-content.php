@@ -127,7 +127,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 				// we have to display the_content() for elementor editor to work.
 				if(Plugin::$instance->editor->is_edit_mode()){
 				    // todo; show warning about a missing elementor template .
-                    the_content();
+//                    the_content();
 				}
 			} else {
 				the_content();
