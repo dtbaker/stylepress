@@ -202,6 +202,8 @@ function stylepress_dynamic_before_render( $widget ) {
 			}
 
 		}
+
+		/*
 //		print_r($settings);
 		//$widget->set_settings($key,$val);
 		if ( ! empty( $settings['dtbaker_modal_content'] ) ) {
@@ -235,7 +237,7 @@ function stylepress_dynamic_before_render( $widget ) {
 				wp_enqueue_script( 'stylepress-modal-popup' );
 				wp_enqueue_script( 'jquery-ui-dialog' );
 			}
-		}
+		}*/
 	}
 }
 

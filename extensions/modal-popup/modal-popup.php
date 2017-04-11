@@ -9,6 +9,18 @@
 defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 
+$control_id = \Elementor\Controls_Manager::URL;
+
+$control = $elementor->controls_manager->get_control($control_id);
+if($control){
+    //StylePress_Control_URL
+	require_once DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/elementor.url-control.php';
+
+	$class_name = 'Elementor\StylePress_Control_URL';
+
+	$elementor->controls_manager->register_control( $control_id, new $class_name() );
+}
+
 
 add_action( 'wp_enqueue_scripts', function(){
 	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array('jquery') );
@@ -19,32 +31,28 @@ add_action( 'wp_enqueue_scripts', function(){
 add_filter( 'stylepress_modal_link', function($link, $popup_template, $options = array() ){
 
 	if($popup_template) {
-		if ( empty( $GLOBALS['generated_modals'] ) ) {
-			$GLOBALS['generated_modals'] = array();
+
+		if(empty($GLOBALS['stylepress_slidein'])){
+			$GLOBALS['stylepress_slidein'] = array();
 		}
-		if ( ! isset( $GLOBALS['generated_modals'][ $popup_template ] ) ) {
-			$GLOBALS['generated_modals'][ $popup_template ] = true;
-			?>
-            <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo (int) $popup_template; ?>">
-                <div class="stylepress-modal-inner">
-					<?php
-					echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
-					?>
-                </div>
-            </div>
-			<?php
-			wp_enqueue_style( 'wp-jquery-ui-dialog' );
-			wp_enqueue_style( 'stylepress-modal-button' );
-			wp_enqueue_script( 'stylepress-modal-popup' );
-			wp_enqueue_script( 'jquery-ui-dialog' );
+		if(empty($GLOBALS['stylepress_modal_popups'])){
+			$GLOBALS['stylepress_modal_popups'] = array();
 		}
+
+		if(!empty($options['display']) && $options['display'] == 1){
+			$GLOBALS['stylepress_slidein'][$popup_template] = $options;
+		}else{
+			$GLOBALS['stylepress_modal_popups'][$popup_template] = $options;
+		}
+
 		$options['id'] = $popup_template;
-		$link .= ' data-stylepressmodal="' . htmlspecialchars(json_encode($options), ENT_QUOTES, 'UTF-8') .'"';
+		return array( 'key' => 'data-stylepressmodal', 'val' => htmlspecialchars(json_encode($options), ENT_QUOTES, 'UTF-8'));
 	}
 
 	return $link;
 }, 10, 3);
 
+/*
 add_action( 'wp_ajax_stylepress_modal_pop', function(){
 	// EDIT: ajax not used any more, we render template straight on page.
 	//
@@ -65,47 +73,37 @@ add_action( 'wp_ajax_stylepress_modal_pop', function(){
 	echo "Sorry something went wrong. Please refresh and try again";
 	exit;
 }
-);
+);*/
 
 //
-function stylepress_modal_button_before_render( $widget ){
-    if($widget->get_name() == 'button' || $widget->get_name() == 'icon-box') {
-	    $settings = $widget->get_active_settings();
-	    if ( ! empty( $settings['dtbaker_modal_content'] ) ) {
-
-		    $popup_template = (int)$settings['dtbaker_modal_content'];
-		    $width = '400px';
-		    if ( ! empty( $settings['modal_width'] ) ) {
-			    $width = $settings['modal_width']['size'] . $settings['modal_width']['unit'];
-		    }
-		    $widget->add_render_attribute( '_wrapper', 'data-stylepressmodal', json_encode( array(
-			    'id'            => $popup_template,
-			    'modal_content' => $popup_template,
-			    'modal_width'   => $width,
-		    ) ) );
-		    if ( empty( $GLOBALS['generated_modals'] ) ) {
-			    $GLOBALS['generated_modals'] = array();
-		    }
-		    if ( ! isset( $GLOBALS['generated_modals'][ $popup_template ] ) ) {
-			    $GLOBALS['generated_modals'][ $popup_template ] = true;
-			    ?>
-                <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo $popup_template; ?>">
-                    <div class="stylepress-modal-inner">
-					    <?php
-					    echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
-					    ?>
-                    </div>
-                </div>
-			    <?php
-			    wp_enqueue_style( 'wp-jquery-ui-dialog' );
-			    wp_enqueue_style( 'stylepress-modal-button' );
-			    wp_enqueue_script( 'stylepress-modal-popup' );
-			    wp_enqueue_script( 'jquery-ui-dialog' );
-		    }
-	    }
-    }
+function stylepress_modal_button_before_render( $widget ) {
+	$enabled = array( 'button', 'dtbaker_wp_menu' );
+	if ( in_array( $widget->get_name(), $enabled ) ) {
+		$settings = $widget->get_active_settings();
+		if ( ! empty( $settings['link']['stylepress_template'] ) ) {
+			if ( empty( $settings['link']['url'] ) ) {
+				$settings['link']['url'] = '#';
+				$widget->set_settings( 'link', $settings['link'] );
+			}
+			$options = array(
+				'template' => (int) $settings['link']['stylepress_template'],
+				'width'    => (int) $settings['link']['stylepress_width'],
+				'display'  => (int) $settings['link']['stylepress_display'],
+			);
+			$data_attr   = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
+			switch ( $widget->get_name() ) {
+				case 'button':
+					$widget->add_render_attribute( 'button', $data_attr['key'], $data_attr['val'] );
+					break;
+				case 'dtbaker_wp_menu':
+					$widget->add_render_attribute( 'link', $data_attr['key'], $data_attr['val'] );
+					break;
+			}
+		}
+	}
 }
 
+/*
 function stylepress_modal_button_hack( $widget, $args ){
 
 	$widget->start_controls_section(
@@ -139,9 +137,19 @@ function stylepress_modal_button_hack( $widget, $args ){
 			'options' => $options,
 			'types' => $types,
 			'label_block'  => 'true',
-			'selectors' => [
-				'{{WRAPPER}} .elementor-icon-list-item:not(:last-child):after' => 'border-right-style: {{VALUE}};',
-			],
+		]
+	);
+	$widget->add_control(
+		'dtbaker_modal_style',
+		[
+			'label' => __( 'Display Style', 'elementor-pro' ),
+			'type' => \Elementor\Controls_Manager::SELECT,
+			'default' => '0',
+			'options' => array(
+                '0' => 'Modal Popup',
+                '1' => 'Slide In',
+            ),
+			'label_block'  => 'true',
 		]
 	);
 
@@ -170,121 +178,20 @@ function stylepress_modal_button_hack( $widget, $args ){
 
 
 
+}*/
+
+function stylepres_modal_slideout_code(){
+    // if any code gets rendered on the page we load it here.
+    include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
+
 }
 
-add_action( 'elementor/element/stylepress_modal_button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
-
-add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
-add_action( 'elementor/element/icon-box/section_icon/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
+//add_action( 'elementor/element/stylepress_modal_button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
+//add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
+//add_action( 'elementor/element/icon-box/section_icon/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 
 add_action( 'elementor/frontend/widget/before_render', 'stylepress_modal_button_before_render' , 10 , 1);
 
+add_action( 'stylepress/after-render' , 'stylepres_modal_slideout_code' );
 
-
-/**
- * Creates our custom Elementor widget
- *
- * Class Widget_Dtbaker_WP_Menu
- *
- * @package Elementor
- */
-class Widget_Dtbaker_Modal_Button extends \Elementor\Widget_Button {
-
-
-
-	public function get_script_depends() {
-		return [
-			'stylepress-modal-popup',
-			'jquery-ui-dialog'
-		];
-	}
-
-	/**
-	 * Get Widgets name
-	 *
-	 * @return string
-	 */
-	public function get_name() {
-		return 'stylepress_modal_button';
-	}
-
-	/**
-	 * Get widgets title
-	 *
-	 * @return string
-	 */
-	public function get_title() {
-		return __( 'Modal Button', 'stylepress' );
-	}
-
-	/**
-	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
-	 *
-	 * @return string
-	 */
-	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
-	}
-
-	/**
-	 * Get available categories for this widget. Which is our own category for page builder options.
-	 *
-	 * @return array
-	 */
-	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
-	}
-
-
-	/**
-	 * We always show this item in the panel.
-	 *
-	 * @return bool
-	 */
-	public function show_in_panel() {
-		return true;
-	}
-
-	public function before_render() {
-
-		$settings = parent::get_active_settings();
-		if(!empty($settings['dtbaker_modal_content'])) {
-			$popup_template = $settings['dtbaker_modal_content'];
-
-			$width = '400px';
-			if ( ! empty( $settings['modal_width'] ) ) {
-				$width = $settings['modal_width']['size'] . $settings['modal_width']['unit'];
-			}
-			$this->add_render_attribute( '_wrapper', 'data-stylepressmodal', json_encode( array(
-				'id'            => $popup_template,
-				'modal_content' => $settings['dtbaker_modal_content'],
-				'modal_width'   => $width,
-			) ) );
-
-			if ( empty( $GLOBALS['generated_modals'] ) ) {
-				$GLOBALS['generated_modals'] = array();
-			}
-			if ( ! isset( $GLOBALS['generated_modals'][ $popup_template ] ) ) {
-				$GLOBALS['generated_modals'][ $popup_template ] = true;
-				?>
-                <div class="stylepress-modal-pop" id="stylepress-modal-pop-<?php echo $popup_template; ?>">
-                    <div class="stylepress-modal-inner">
-						<?php
-						echo \Elementor\Plugin::instance()->frontend->get_builder_content( $popup_template, false );
-						?>
-                    </div>
-                </div>
-				<?php
-				wp_enqueue_style( 'wp-jquery-ui-dialog' );
-				wp_enqueue_style( 'stylepress-modal-button' );
-			}
-		}
-		parent::before_render(); // TODO: Change the autogenerated stub
-	}
-
-
-}
-
-//\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Modal_Button() );
 

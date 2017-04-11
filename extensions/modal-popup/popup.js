@@ -10,8 +10,36 @@
     var $dialog = false;
     var current_modal = {};
 
+
+    function close_slideins(){
+        $('.stylepress_slide_in_menu').removeClass('shown');
+        $('body').removeClass('showing_side_menu');
+        $('#stylepressslideinstyles').remove();
+    }
+    function show_slidein(slideinid){
+        close_slideins();
+        $slidein = $('.stylepress_slide_in_menu[data-id="' + slideinid + '"]');
+        if($slidein.length) {
+            var size = parseInt($slidein.data('size'));
+            if(!size)size = 400;
+            // $('head').append('<style type="text/css" id="stylepressslideinstyles">body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){transform: translateX(-' + size + 'px); }</style>');
+            $('head').append('<style type="text/css" id="stylepressslideinstyles">body.showing_side_menu > div.elementor{transform: translateX(-' + size + 'px); }</style>');
+            $('.stylepress_slide_in_menu').addClass('shown');
+            $('body').addClass('showing_side_menu');
+        }else{
+            alert('Slide in failure');
+        }
+    }
+
+
     function open_popup(){
 
+        if(typeof current_modal.display != 'undefined' && current_modal.display == 1){
+            // we're showing a slide in
+            show_slidein(current_modal.id);
+            return;
+
+        }
         // todo: push/pop active dialogs to support multiple.
         if($dialog){
             $dialog.dialog('close');
@@ -84,36 +112,40 @@
     }
 
 
-    $(function() {
-        $('body').on('click','.elementor-widget-stylepress_modal_button, .elementor-widget-button, .elementor-widget-icon-box', function(e){
+    $('body').on('click','.elementor-widget-stylepress_modal_button, .elementor-widget-button, .elementor-widget-icon-box', function(e){
 
-            var data = $(this).data('stylepressmodal');
-            if(data) {
-                var postdata = {
-                    id: data.id, //$(this).data('id'),
-                    settings: data
-                };
-                e.preventDefault();
-                current_modal = postdata;
-                open_popup();
-                return false;
-            }
-        });
-        $('body').on('click','a[data-stylepressmodal]', function(e){
-            var postdata = $(this).data('stylepressmodal');
+        var data = $(this).data('stylepressmodal');
+        if(data) {
+            var postdata = {
+                id: data.id, //$(this).data('id'),
+                settings: data
+            };
             e.preventDefault();
             current_modal = postdata;
             open_popup();
             return false;
-        });
-
-        $('body').on('click','.ui-widget-overlay',function(){
-            if($dialog){
-                $dialog.dialog('close');
-            }
-        });
-
+        }
     });
+    $('body').on('click','a[data-stylepressmodal]', function(e){
+        var postdata = $(this).data('stylepressmodal');
+        e.preventDefault();
+        current_modal = postdata;
+        open_popup();
+        return false;
+    });
+
+    $('body').on('click','.ui-widget-overlay',function(){
+        if($dialog){
+            $dialog.dialog('close');
+        }
+    });
+
+    $('body').on('click','.close_sidebar',function(e){
+        e.preventDefault();
+        close_slideins();
+        return false;
+    });
+
 
 } )(jQuery);
 

@@ -1,3 +1,85 @@
+
+//body > *:not(.stylepress_slide_in_menu):not(#wpadminbar){
+body > div.elementor{
+  position: relative;
+  -webkit-transition: transform .5s ease;
+  -moz-transition: transform .5s ease;
+  -ms-transition: transform .5s ease;
+  -o-transition: transform .5s ease;
+  transition: transform .5s ease;
+}
+
+.stylepress_slide_in_menu{
+  background-color: #1b1b1b;
+  color:#FFF;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  padding: 30px;
+  position: fixed;
+  transform: translateX(100%);
+  -webkit-transition: transform .5s ease;
+  -moz-transition: transform .5s ease;
+  -ms-transition: transform .5s ease;
+  -o-transition: transform .5s ease;
+  transition: transform .5s ease;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  .admin-bar & {
+    top: 32px;
+  }
+  a{
+    color: #818181;
+    font-weight: 400;
+    -webkit-transition: color .3s ease-in-out;
+    -moz-transition: color .3s ease-in-out;
+    -ms-transition: color .3s ease-in-out;
+    -o-transition: color .3s ease-in-out;
+    transition: color .3s ease-in-out;
+  }
+  a.close_sidebar{
+    display: inline-block;
+    position: absolute;
+    top: 29px;
+    right: 25px;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    background-image: url(images/close.png);
+    background-repeat: no-repeat;
+    z-index: 1000;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+    &:hover{
+      transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+    }
+  }
+}
+
+body.showing_side_menu .stylepress_slide_in_menu.shown{
+  overflow-y: hidden;
+  outline: none;
+  //right: 0px;
+  transform: translateX(0);
+}
+// sidebar sizes have moved into javascript for dynamic size:
+/*
+body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){
+  transform: translateX(-600px);
+}
+.stylepress_slide_in_menu{
+  width: 600px;
+}*/
+
+
 .stylepress-modal-pop{
   display:none;
 }

@@ -285,6 +285,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 						'label' => __( 'Link', 'elementor' ),
 						'type' => Controls_Manager::URL,
 						'label_block' => true,
+						'stylepress_modal' => true,
 						'placeholder' => __( 'http://your-link.com', 'elementor' ),
 					],
 				],
@@ -688,10 +689,24 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 					<?php foreach ( $settings['icon_list'] as $item ) : ?>
                         <li class="stylepress-menu-icons-item" >
 							<?php
+						    if(!empty($item['link']['stylepress_template']) && empty( $item['link']['url'] )){
+							    $item['link']['url'] = '#';
+						    }
 							if ( ! empty( $item['link']['url'] ) ) {
 								$target = $item['link']['is_external'] ? ' target="_blank"' : '';
+								$modal = '';
+								if(!empty($item['link']['stylepress_template'])){
 
-								echo '<a href="' . $item['link']['url'] . '"' . $target . '>';
+									$options = array(
+										'template' => (int)$item['link']['stylepress_template'],
+										'width' => (int)$item['link']['stylepress_width'],
+										'display' => (int)$item['link']['stylepress_display'],
+									);
+								    $data_attr = apply_filters( 'stylepress_modal_link', '',$options['template'], $options );
+								    $modal = ' '.$data_attr['key'].'="' . $data_attr['val'] . '" ';
+                                }
+
+								echo '<a href="' . $item['link']['url'] . '"' . $target . $modal . '>';
 							}
 
 							if ( $item['icon'] ) : ?>
@@ -723,7 +738,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	}
 
 	private function get_link_url( $instance ) {
-		if ( 'none' === $instance['link_to'] ) {
+		if ( !empty($instance['link_to']) &&  'none' === $instance['link_to'] ) {
 			return false;
 		}
 

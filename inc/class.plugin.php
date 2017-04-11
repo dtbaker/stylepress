@@ -763,6 +763,7 @@ class DtbakerElementorManager {
 	public function editor_scripts() {
 		if(!$this->show_full_ui())return;
 		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+		wp_enqueue_style( 'stylepress-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/css/editor.css', false, DTBAKER_ELEMENTOR_VERSION);
 	}
 
 	public function elementor_ref(){
