@@ -9,22 +9,42 @@
 
     var $dialog = false;
     var current_modal = {};
+    var $current_slidein;
 
 
     function close_slideins(){
-        $('.stylepress_slide_in_menu').removeClass('shown');
+        $(document).off('keyup.stylepressmodal');
         $('body').removeClass('showing_side_menu');
         $('#stylepressslideinstyles').remove();
+        $current_slidein = null;
     }
     function show_slidein(slideinid){
-        close_slideins();
         $slidein = $('.stylepress_slide_in_menu[data-id="' + slideinid + '"]');
         if($slidein.length) {
+
+            console.log($current_slidein);
+            console.log($slidein);
+            console.log($current_slidein == $slidein);
+            if($current_slidein && $current_slidein[0] == $slidein[0]){
+                close_slideins();
+                return;
+            }
+            close_slideins();
+            $current_slidein = $slidein;
+
+            $(document).on('keyup.stylepressmodal',function(e) {
+                if (e.keyCode == 27) { // escape key maps to keycode `27`
+                    close_slideins();
+                }
+            });
             var size = parseInt($slidein.data('size'));
             if(!size)size = 400;
             // $('head').append('<style type="text/css" id="stylepressslideinstyles">body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){transform: translateX(-' + size + 'px); }</style>');
-            $('head').append('<style type="text/css" id="stylepressslideinstyles">body.showing_side_menu > div.elementor{transform: translateX(-' + size + 'px); }</style>');
-            $('.stylepress_slide_in_menu').addClass('shown');
+            // account for sidebar padding
+            size += 60;
+            $('head').append('<style type="text/css" id="stylepressslideinstyles">body > #site-offcanvas-wrap{left: -' + size + 'px; }</style>');
+            $('.stylepress_slide_in_menu').removeClass('shown');
+            $slidein.addClass('shown');
             $('body').addClass('showing_side_menu');
         }else{
             alert('Slide in failure');

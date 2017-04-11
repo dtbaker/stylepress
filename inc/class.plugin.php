@@ -299,6 +299,15 @@ class DtbakerElementorManager {
 		if(!$this->show_full_ui())return $template_include;
 		global $post;
 
+		// whitelist certain templates:
+        $whitelist = array(
+          'plugins/elementor',
+        );
+        foreach($whitelist as $w){
+            if(strpos($template_include, $w)){
+                return $template_include;
+            }
+        }
 		$original_template = $template_include;
 
 		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type  ) {
@@ -515,9 +524,37 @@ class DtbakerElementorManager {
 				    $this->add_sub_menu( sprintf(__('Inner Style: %s'), esc_html($style_details->post_title)) , $parent_menu . 'inner'.$used_style_id, \Elementor\Utils::get_edit_link( $used_style_id ), $parent_menu );
                 }
 			}
+
+
+			if(!empty($GLOBALS['stylepress_slidein']) || !empty($GLOBALS['stylepress_modal_popups']) || !empty($GLOBALS['stylepress_nav_slideouts'])) {
+
+			    $modal_menu = $parent_menu.'mod';
+
+				$this->add_sub_menu( __('Modals') , $modal_menu, '#', $parent_menu );
+
+				if(!empty($GLOBALS['stylepress_slidein'])) {
+					foreach ( $GLOBALS['stylepress_slidein'] as $template_id => $options ) {
+					    $post = get_post($template_id);
+						$this->add_sub_menu( esc_html($post->post_title) , $modal_menu.$template_id, \Elementor\Utils::get_edit_link($template_id), $modal_menu );
+					}
+				}
+				if(!empty($GLOBALS['stylepress_modal_popups'])) {
+					foreach ( $GLOBALS['stylepress_modal_popups'] as $template_id => $options ) {
+						$post = get_post($template_id);
+						$this->add_sub_menu( esc_html($post->post_title) , $modal_menu.$template_id, \Elementor\Utils::get_edit_link($template_id), $modal_menu );
+					}
+				}
+				if($GLOBALS['stylepress_nav_slideouts']){
+					foreach ( $GLOBALS['stylepress_nav_slideouts'] as $template_id => $options ) {
+						$post = get_post($template_id);
+						$this->add_sub_menu( esc_html($post->post_title) , $modal_menu.$template_id, \Elementor\Utils::get_edit_link($template_id), $modal_menu );
+					}
+				}
+			}
+
 			$page_type = $this->get_current_page_type();
 			if($current_page_style > 0) {
-				$this->add_sub_menu( __('Settings: CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
+				//$this->add_sub_menu( __('Settings: CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
 			}
 			$this->add_sub_menu(sprintf(__('Settings: Style %s'), ucwords(str_replace('_',' ',$page_type))), $parent_menu.'ni', admin_url('admin.php?page=dtbaker-stylepress-settings&highlight='.$page_type), $parent_menu);
 //			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
@@ -1706,9 +1743,9 @@ class DtbakerElementorManager {
         }
 
 		$theme    = get_option( 'template' );
-		$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.php';
+		$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.css';
 		if ( file_exists( $filename ) ) {
-			include_once $filename;
+			wp_enqueue_style( 'stylepress-theme-addons', DTBAKER_ELEMENTOR_URI . 'themes/' . basename( $theme ) . '.css', false, DTBAKER_ELEMENTOR_VERSION );
 		}
 	}
 

@@ -1,0 +1,29 @@
+.search-form label {
+    display:none;
+}
+.search-form .search-submit {
+    bottom: 3px;
+    padding: 0.5em 1em;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+.search-form .search-submit .icon{
+    height: 24px;
+    top: -2px;
+    width: 24px;
+}
+.search-form .search-field {
+     color: #666;
+     background: #fff;
+     background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+     border: 1px solid #bbb;
+     -webkit-border-radius: 3px;
+    border-radius: 0;
+    display: block;
+    padding: 0.7em;
+    font-size: 18px;
+     width: 100%;
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}

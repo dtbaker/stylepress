@@ -1,12 +1,10 @@
 
-//body > *:not(.stylepress_slide_in_menu):not(#wpadminbar){
-body > div.elementor{
+#site-offcanvas-wrap{
   position: relative;
-  -webkit-transition: transform .5s ease;
-  -moz-transition: transform .5s ease;
-  -ms-transition: transform .5s ease;
-  -o-transition: transform .5s ease;
-  transition: transform .5s ease;
+  min-height: 100vh;
+  transition: left .5s ease;
+  left:0;
+  z-index:3;
 }
 
 .stylepress_slide_in_menu{
@@ -16,26 +14,21 @@ body > div.elementor{
   min-height: 100%;
   overflow: hidden;
   padding: 30px;
+  display: none;
+  outline: none;
   position: fixed;
-  transform: translateX(100%);
-  -webkit-transition: transform .5s ease;
-  -moz-transition: transform .5s ease;
-  -ms-transition: transform .5s ease;
-  -o-transition: transform .5s ease;
-  transition: transform .5s ease;
   top: 0;
   right: 0;
-  z-index: 9;
+  z-index: 1;
   .admin-bar & {
     top: 32px;
+  }
+  &.shown{
+     display:block;
   }
   a{
     color: #818181;
     font-weight: 400;
-    -webkit-transition: color .3s ease-in-out;
-    -moz-transition: color .3s ease-in-out;
-    -ms-transition: color .3s ease-in-out;
-    -o-transition: color .3s ease-in-out;
     transition: color .3s ease-in-out;
   }
   a.close_sidebar{
@@ -49,27 +42,13 @@ body > div.elementor{
     background-image: url(images/close.png);
     background-repeat: no-repeat;
     z-index: 1000;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -ms-transition: all .5s ease;
-    -o-transition: all .5s ease;
     transition: all .5s ease;
     &:hover{
       transform: rotate(180deg);
-      -ms-transform: rotate(180deg);
-      -webkit-transform: rotate(180deg);
-      -o-transform: rotate(180deg);
-      -moz-transform: rotate(180deg);
     }
   }
 }
 
-body.showing_side_menu .stylepress_slide_in_menu.shown{
-  overflow-y: hidden;
-  outline: none;
-  //right: 0px;
-  transform: translateX(0);
-}
 // sidebar sizes have moved into javascript for dynamic size:
 /*
 body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){

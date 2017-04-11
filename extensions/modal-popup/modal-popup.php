@@ -180,11 +180,14 @@ function stylepress_modal_button_hack( $widget, $args ){
 
 }*/
 
-function stylepres_modal_slideout_code(){
-    // if any code gets rendered on the page we load it here.
-    include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
 
-}
+add_action( 'stylepress/before-render' , function(){
+	echo '<div id="site-offcanvas-wrap">';
+} );
+add_action( 'stylepress/after-render' , function(){
+	echo '</div>';
+	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
+} );
 
 //add_action( 'elementor/element/stylepress_modal_button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 //add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
@@ -192,6 +195,5 @@ function stylepres_modal_slideout_code(){
 
 add_action( 'elementor/frontend/widget/before_render', 'stylepress_modal_button_before_render' , 10 , 1);
 
-add_action( 'stylepress/after-render' , 'stylepres_modal_slideout_code' );
 
 

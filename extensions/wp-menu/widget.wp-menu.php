@@ -11,6 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 }
 
 
+//
+//
+//add_action( 'elementor/element/dtbaker_wp_menu/_section_background/before_section_end', function($widget, $args){
+//    print_r($args);
+//    exit;
+//}, 10, 2);
+
 
 /**
  * Creates our custom Elementor widget
@@ -296,10 +303,97 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 		$this->end_controls_section();
 
+
+		$this->start_controls_section(
+			'section_bar',
+			[
+				'label' => __( 'Nav Bar', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+
+
+		$this->add_control(
+			'inner_width',
+			[
+				'label' => __( 'Inner Width', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 400,
+						'max' => 3000,
+					],
+				],
+				'default' => [
+					'size' => 1140,
+					'unit' => 'px',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-nav-wrapper' => 'max-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'fixed_scroll',
+			[
+				'label' => __( 'Fixed on Scroll', 'elementor' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => '',
+				'options' => [
+					'' => __( 'No', 'elementor' ),
+					'fixed' => __( 'Yes, Fixed', 'elementor' ),
+				],
+			]
+		);
+
+		$this->add_control(
+			'fixed_threshold',
+			[
+				'label' => __( 'Fixed Threshold', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => '0',
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => '_background2',
+				'selector' => '{{WRAPPER}} .stylepress-nav-menu',
+			]
+		);
+
+		$this->add_control(
+			'fixed_colors',
+			[
+				'label' => __( 'Different Colors When Fixed?', 'elementor-pro' ),
+				'type' =>  \Elementor\Controls_Manager::SWITCHER,
+				'default' => '',
+				'label_on' => __( 'Yes', 'elementor' ),
+				'label_off' => __( 'No', 'elementor' ),
+			]
+		);
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'fixed_bg',
+				'selector' => '{{WRAPPER}} .stylepress-nav-menu.is-fixed',
+				'condition' => [
+					'fixed_colors!' => '',
+				],
+			]
+		);
+
+
+		$this->end_controls_section();
+
 		$this->start_controls_section(
 			'section_icon_list',
 			[
-				'label' => __( 'List', 'elementor' ),
+				'label' => __( 'Icon List (not working)', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -451,7 +545,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->start_controls_section(
 			'section_icon_style',
 			[
-				'label' => __( 'Icon', 'elementor' ),
+				'label' => __( 'Icon Size/Color', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -495,14 +589,14 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'section_stylepress_menu_style',
+			'section_menu_style',
 			[
-				'label' => __( 'Menu Style', 'elementor' ),
+				'label' => __( 'Menu Links', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		$this->add_responsive_control(
+		/*$this->add_responsive_control(
 			'menu_align',
 			[
 				'label' => __( 'Alignment', 'elementor' ),
@@ -526,7 +620,8 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 					'{{WRAPPER}} .stylepress-main-navigation' => 'text-align: {{VALUE}};',
 				],
 			]
-		);
+		);*/
+
 
 		$this->add_control(
 			'menu_background',
@@ -535,7 +630,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#f8f8f8',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation, {{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-main-navigation' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -546,7 +641,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#eaeaea',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li:hover a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a, {{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -558,7 +653,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-menu-toggle, {{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress_menu > ul > li > a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -570,22 +665,110 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul li a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a,{{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'color: {{VALUE}};',
 				],
 			]
 		);
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'typography',
+				'name' => 'link_typography',
 				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+                'selector' => '{{WRAPPER}} .stylepress_menu > ul > li > a',
 			]
 		);
 
 		$this->end_controls_section();
 
+		$this->start_controls_section(
+			'section_dropdown_style',
+			[
+				'label' => __( 'Dropdowns', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'dropdown_width',
+			[
+				'label' => __( 'Dropdown Width', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 150,
+						'max' => 500,
+					],
+				],
+				'default' => [
+					'size' => 250,
+					'unit' => 'px',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'menu_background_dropdown',
+				'selector' => '{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul, {{WRAPPER}} .stylepress-nav-slideout',
+			]
+		);
+
+		$this->add_control(
+			'dropdown_background_hover',
+			[
+				'label' => __( 'Background (hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#eaeaea',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul li:hover > a' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'dropdown_font_color',
+			[
+				'label' => __( 'Font Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul > li > a, {{WRAPPER}} .stylepress-nav-slideout' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'dropdown_font_color_hover',
+			[
+				'label' => __( 'Font Color (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul > li:hover > a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'drop_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'selector' => '{{WRAPPER}} .stylepress_menu > ul ul li a',
+			]
+		);
+
+		$this->end_controls_section();
 
 		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
+
+
 
 	}
 
@@ -594,38 +777,41 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings();
+        ?>
+        <div class="stylepress-nav-menu-placeholder"></div>
+        <div class="stylepress-nav-menu<?php echo !empty($settings['fixed_scroll']) && $settings['fixed_scroll'] == 'fixed' ? ' fixed' : '';?>">
+        <?php
+        /*
+        if(function_exists('max_mega_menu_is_enabled') && !empty($settings['menu_style'])) {
 
-		if ( ! empty( $settings['menu_location'] ) ) {
+            // $menu_styles
+            add_filter('option_megamenu_settings', function ($value, $option) use ($settings) {
 
-		    ?> 
-            <div class="stylepress-nav-menu">
-            <?php
-			/*
-            if(function_exists('max_mega_menu_is_enabled') && !empty($settings['menu_style'])) {
+                if($value && !empty($value[$settings['menu_location']])){
+                    $value[$settings['menu_location']]['theme'] = $settings['menu_style'];
+                }
 
-                // $menu_styles
-                add_filter('option_megamenu_settings', function ($value, $option) use ($settings) {
+                return $value;
+            }, 10, 2);
+        }*/
 
-                    if($value && !empty($value[$settings['menu_location']])){
-                        $value[$settings['menu_location']]['theme'] = $settings['menu_style'];
-                    }
+        // if the menu is a "location" then we
 
-                    return $value;
-                }, 10, 2);
-            }*/
+        if ( false && function_exists('max_mega_menu_is_enabled') && ! empty( $settings['menu_location'] ) && max_mega_menu_is_enabled($settings['menu_location']) ){
+            wp_nav_menu( array( 'theme_location' => $settings['menu_location'] ) );
+        }else{
+            ob_start();
 
-			// if the menu is a "location" then we
+            $GLOBALS['stylepress_nav_slideouts'] = array();
+            ?>
+            <div class="stylepress-nav-wrapper">
+                <?php
 
-			if ( false && function_exists('max_mega_menu_is_enabled') && max_mega_menu_is_enabled($settings['menu_location']) ){
-				wp_nav_menu( array( 'theme_location' => $settings['menu_location'] ) );
-            }else{
-			    ob_start();
-
-			    if ( ! empty( $settings['image']['url'] ) ) {
-			        ?>
+                if ( ! empty( $settings['image']['url'] ) && ! strpos( $settings['image']['url'], 'assets/images/placeholder.png') ) {
+                    ?>
                     <div class="stylepress-nav-logo">
                     <?php
-		            $link = $this->get_link_url( $settings );
+                    $link = $this->get_link_url( $settings );
 
                     if ( $link ) {
                         $this->add_render_attribute( 'link', 'href', $link['url'] );
@@ -637,103 +823,135 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
                     if ( $link ) : ?>
                             <a <?php echo $this->get_render_attribute_string( 'link' ); ?>>
                     <?php endif;
-		            echo Group_Control_Image_Size::get_attachment_image_html( $settings );
+                    echo Group_Control_Image_Size::get_attachment_image_html( $settings );
 
-		            if ( $link ) : ?>
+                    if ( $link ) : ?>
                         </a>
                     <?php endif;
                     ?>
                     </div>
-                <?php } ?>
-                <nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" class="stylepress-main-navigation">
-                    <button class="stylepress-menu-toggle" aria-controls="<?php echo $this->get_id();?>-menu" aria-expanded="false">
-                        <span class="stylepress-mobile-menu"><?php esc_html_e('Menu','stylepress');?></span>
-                    </button>
-                    <div id="<?php echo $this->get_id();?>-menu" class="stylepress-inside-navigation">
-						<?php
+                <?php }
 
-                        if(is_numeric($settings['menu_location'])){
-	                        $nav_menu = wp_get_nav_menu_object( $settings['menu_location'] );
-	                        if ( $nav_menu ){
-		                        wp_nav_menu( array(
-			                        'menu'        => $nav_menu,
-			                        'fallback_cb' => '',
-			                        'container'       => 'div',
-			                        'container_class' => 'main-nav stylepress_menu',
-			                        'container_id'    => 'primary-menu',
-			                        'menu_class'      => '',
-			                        'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-			                        'walker' => new \stylepress_walker_nav_menu()
-		                        ) );
-                            }else{
-	                            echo "Menu Configuration Issue";
-                            }
-                        }else {
-	                        wp_nav_menu(
-		                        array(
-			                        'theme_location'  => $settings['menu_location'],
-			                        'container'       => 'div',
-			                        'container_class' => 'main-nav stylepress_menu',
-			                        'container_id'    => 'primary-menu',
-			                        'menu_class'      => '',
-			                        'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-			                        'walker' => new \stylepress_walker_nav_menu(),
-		                        )
-	                        );
-                        }
-						?>
-                    </div><!-- .inside-navigation -->
-                </nav><!-- #site-navigation -->
+                if(! empty( $settings['menu_location'] )){
+                    ?>
+                    <div class="stylepress-nav-menuitems">
+                        <nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" class="stylepress-main-navigation">
+                            <button class="stylepress-menu-toggle" aria-controls="<?php echo $this->get_id();?>-menu" aria-expanded="false">
+                                <span class="stylepress-mobile-menu"><?php esc_html_e('Menu','stylepress');?></span>
+                            </button>
+                            <div id="<?php echo $this->get_id();?>-menu" class="stylepress-inside-navigation">
+                                <?php
 
-                <ul class="stylepress-menu-icons-items">
-					<?php foreach ( $settings['icon_list'] as $item ) : ?>
-                        <li class="stylepress-menu-icons-item" >
-							<?php
-						    if(!empty($item['link']['stylepress_template']) && empty( $item['link']['url'] )){
-							    $item['link']['url'] = '#';
-						    }
-							if ( ! empty( $item['link']['url'] ) ) {
-								$target = $item['link']['is_external'] ? ' target="_blank"' : '';
-								$modal = '';
-								if(!empty($item['link']['stylepress_template'])){
-
-									$options = array(
-										'template' => (int)$item['link']['stylepress_template'],
-										'width' => (int)$item['link']['stylepress_width'],
-										'display' => (int)$item['link']['stylepress_display'],
-									);
-								    $data_attr = apply_filters( 'stylepress_modal_link', '',$options['template'], $options );
-								    $modal = ' '.$data_attr['key'].'="' . $data_attr['val'] . '" ';
+                                // this is used in the walker area.
+                                if(is_numeric($settings['menu_location'])){
+                                    $nav_menu = wp_get_nav_menu_object( $settings['menu_location'] );
+                                    if ( $nav_menu ){
+                                        wp_nav_menu( array(
+                                            'menu'        => $nav_menu,
+                                            'fallback_cb' => '',
+                                            'container'       => 'div',
+                                            'container_class' => 'main-nav stylepress_menu',
+                                            'container_id'    => 'primary-menu',
+                                            'menu_class'      => '',
+                                            'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
+                                            'walker' => new \stylepress_walker_nav_menu()
+                                        ) );
+                                    }else{
+                                        echo "Menu Configuration Issue";
+                                    }
+                                }else {
+                                    wp_nav_menu(
+                                        array(
+                                            'theme_location'  => $settings['menu_location'],
+                                            'container'       => 'div',
+                                            'container_class' => 'main-nav stylepress_menu',
+                                            'container_id'    => 'primary-menu',
+                                            'menu_class'      => '',
+                                            'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
+                                            'walker' => new \stylepress_walker_nav_menu(),
+                                        )
+                                    );
                                 }
+                                ?>
+                            </div><!-- .inside-navigation -->
+                        </nav><!-- #site-navigation -->
+                        <?php
+                        if($GLOBALS['stylepress_nav_slideouts']){
+                            ?>
+                            <div class="stylepress-nav-slideouts">
+                                <?php
+                                foreach($GLOBALS['stylepress_nav_slideouts'] as $template_id => $tf){
+                                    ?>
+                                    <div class="stylepress-nav-slideout" data-id="<?php echo $template_id;?>">
+                                        <?php
+                                        echo \Elementor\Plugin::instance()->frontend->get_builder_content( $template_id, false );
+                                        ?>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                            <?php
+                        } ?>
+                    </div>
+                <?php }
+                if(!empty($settings['icon_list'])) {
+	                ?>
+                    <div class="stylepress-nav-icon-wrap">
 
-								echo '<a href="' . $item['link']['url'] . '"' . $target . $modal . '>';
-							}
+                        <ul class="stylepress-menu-icons-items">
+			                <?php foreach ( $settings['icon_list'] as $item ) : ?>
+                                <li class="stylepress-menu-icons-item">
+					                <?php
+					                if ( ! empty( $item['link']['stylepress_template'] ) && empty( $item['link']['url'] ) ) {
+						                $item['link']['url'] = '#';
+					                }
+					                if ( ! empty( $item['link']['url'] ) ) {
+						                $target = $item['link']['is_external'] ? ' target="_blank"' : '';
+						                $modal  = '';
+						                if ( ! empty( $item['link']['stylepress_template'] ) ) {
 
-							if ( $item['icon'] ) : ?>
-                                <span class="stylepress-menu-icons-icon">
-							<i class="<?php echo esc_attr( $item['icon'] ); ?>"></i>
-						</span>
-							<?php endif; ?>
-                            <span class="stylepress-menu-icons-text"><?php echo $item['text']; ?></span>
-							<?php
-							if ( ! empty( $item['link']['url'] ) ) {
-								echo '</a>';
-							}
-							?>
-                        </li>
-						<?php
-					endforeach; ?>
-                </ul>
-                <?php
-                echo apply_filters('stylepress_menu_output', ob_get_clean(), $settings['menu_location'], $settings );
-            }
+							                $options   = array(
+								                'template' => (int) $item['link']['stylepress_template'],
+								                'width'    => (int) $item['link']['stylepress_width'],
+								                'display'  => (int) $item['link']['stylepress_display'],
+							                );
+							                $data_attr = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
+							                $modal     = ' ' . $data_attr['key'] . '="' . $data_attr['val'] . '" ';
+						                }
+
+						                echo '<a href="' . $item['link']['url'] . '"' . $target . $modal . '>';
+					                }
+
+					                if ( $item['icon'] ) : ?>
+                                        <span class="stylepress-menu-icons-icon">
+                                            <i class="<?php echo esc_attr( $item['icon'] ); ?>"></i>
+                                        </span>
+					                <?php endif; ?>
+                                    <span class="stylepress-menu-icons-text"><?php echo $item['text']; ?></span>
+					                <?php
+					                if ( ! empty( $item['link']['url'] ) ) {
+						                echo '</a>';
+					                }
+					                ?>
+                                </li>
+				                <?php
+			                endforeach; ?>
+                        </ul>
+                    </div>
+	                <?php
+                }
+            echo apply_filters('stylepress_menu_output', ob_get_clean(), $settings['menu_location'], $settings );
             ?>
             </div>
             <?php
 
-		} else {
-			$this->content_template();
-		}
+        }
+        ?>
+        </div>
+        <?php
+
+
 
 	}
 

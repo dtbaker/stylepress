@@ -168,29 +168,39 @@ class Walker_Nav_Menu_Edit_StylePress extends Walker_Nav_Menu {
                 </label>
             </p>
             <!-- start stylepress -->
-            <p class="description description-wide">
+            <p class="description description-thin">
                 <label for="edit-menu-item-slideout-<?php echo $item_id; ?>">
-					<?php _e( 'StylePress Dropdown (optional)' ); ?><br />
+		            <?php _e( 'Slideout (optional)' ); ?><br />
 
-                    <?php
-                    $source = \Elementor\Plugin::instance()->templates_manager->get_source( 'local' );
-                    $templates = $source->get_items();
+		            <?php
+		            $source = \Elementor\Plugin::instance()->templates_manager->get_source( 'local' );
+		            $templates = $source->get_items();
 
-                    $options = [];
+		            $options = [];
 
-                    foreach ( $templates as $template ) {
-	                    $options[ $template['template_id'] ] = $template['title']; // . ' (' . $template['type'] . ')';
-                    }
-                    ?>
+		            foreach ( $templates as $template ) {
+			            $options[ $template['template_id'] ] = $template['title']; // . ' (' . $template['type'] . ')';
+		            }
+		            ?>
 
                     <select id="edit-menu-item-slideout-<?php echo $item_id; ?>" class="widefat edit-menu-item-slideout" name="menu-item-slideout[<?php echo $item_id; ?>]">
                         <option value="">None</option>
-                        <?php foreach($options as $template_id => $template_name){ ?>
+			            <?php foreach($options as $template_id => $template_name){ ?>
                             <option value="<?php echo (int)$template_id;?>" <?php selected($template_id, $item->slideout);?>><?php echo esc_attr($template_name);?></option>
-                        <?php } ?>
+			            <?php } ?>
                     </select>
-                    <span class="description">Choose a slide out to appear instead of a normal drop down. You can create templates from the <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=elementor_library' ) );?>" target="_blank">Elementor Library area</a>.</span>
+
                 </label>
+            </p>
+            <p class="description description-thin">
+                <label for="edit-menu-item-slideout-<?php echo $item_id; ?>">
+		            <?php _e( 'Edit Slideout' ); ?><br />
+                    <a href="<?php echo esc_url( !empty($item->slideout) ? \Elementor\Utils::get_edit_link( $item->slideout ) : admin_url( 'edit.php?post_type=elementor_library' ));?>" target="_blank">Launch Elementor</a>
+                </label>
+            </p>
+            <br style="clear:both">
+            <p class="description description-wide">
+                <span class="description">Choose a slide out to appear instead of a normal drop down. You can create templates from the <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=elementor_library' ) );?>" target="_blank">Elementor Library area</a>. This will display for desktop users, mobile users will see a normal sub menu items as displayed below.</span>
             </p>
             <!-- end stylepress -->
             <p class="field-title-attribute field-attr-title description description-wide">

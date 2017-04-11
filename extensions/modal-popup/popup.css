@@ -1,10 +1,10 @@
-body > div.elementor {
+#site-offcanvas-wrap {
   position: relative;
-  -webkit-transition: transform .5s ease;
-  -moz-transition: transform .5s ease;
-  -ms-transition: transform .5s ease;
-  -o-transition: transform .5s ease;
-  transition: transform .5s ease;
+  min-height: 100vh;
+  -webkit-transition: left .5s ease;
+  transition: left .5s ease;
+  left: 0;
+  z-index: 3;
 }
 .stylepress_slide_in_menu {
   background-color: #1b1b1b;
@@ -13,27 +13,23 @@ body > div.elementor {
   min-height: 100%;
   overflow: hidden;
   padding: 30px;
+  display: none;
+  outline: none;
   position: fixed;
-  transform: translateX(100%);
-  -webkit-transition: transform .5s ease;
-  -moz-transition: transform .5s ease;
-  -ms-transition: transform .5s ease;
-  -o-transition: transform .5s ease;
-  transition: transform .5s ease;
   top: 0;
   right: 0;
-  z-index: 9;
+  z-index: 1;
 }
 .admin-bar .stylepress_slide_in_menu {
   top: 32px;
+}
+.stylepress_slide_in_menu.shown {
+  display: block;
 }
 .stylepress_slide_in_menu a {
   color: #818181;
   font-weight: 400;
   -webkit-transition: color 0.3s ease-in-out;
-  -moz-transition: color 0.3s ease-in-out;
-  -ms-transition: color 0.3s ease-in-out;
-  -o-transition: color 0.3s ease-in-out;
   transition: color 0.3s ease-in-out;
 }
 .stylepress_slide_in_menu a.close_sidebar {
@@ -48,22 +44,11 @@ body > div.elementor {
   background-repeat: no-repeat;
   z-index: 1000;
   -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -ms-transition: all .5s ease;
-  -o-transition: all .5s ease;
   transition: all .5s ease;
 }
 .stylepress_slide_in_menu a.close_sidebar:hover {
-  transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-}
-body.showing_side_menu .stylepress_slide_in_menu.shown {
-  overflow-y: hidden;
-  outline: none;
-  transform: translateX(0);
+          transform: rotate(180deg);
 }
 /*
 body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){

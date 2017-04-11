@@ -6,25 +6,25 @@
   background: -webkit-repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
   background: repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
   position: relative;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(1) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(1) {
   z-index: 7;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(2) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(2) {
   z-index: 6;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(3) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(3) {
   z-index: 5;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(4) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(4) {
   z-index: 4;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(5) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(5) {
   z-index: 3;
 }
-body.dtbaker-elementor-template > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(6) {
+#site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(6) {
   z-index: 2;
 }
 body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
@@ -33,7 +33,6 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 .stylepress-debug {
   background: #fff;
   border-left: 4px solid #fff;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   margin: 10px 15px;
   padding: 5px 12px;
@@ -49,8 +48,10 @@ body.dtbaker-elementor-template.elementor-editor-active > .elementor > .elemento
 StylePress Custom Addons:
  */
 .elementor-widget-icon-list.stylepress-icon-inline ul.elementor-icon-list-items {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 .elementor-widget-icon-list.stylepress-icon-inline ul.elementor-icon-list-items > li.elementor-icon-list-item {
   padding: 6px 10px;
@@ -67,8 +68,10 @@ StylePress Custom Addons:
   width: auto;
 }
 .elementor-widget-icon-list.stylepress-icon-inline.elementor-align-left ul.elementor-icon-list-items {
-  justify-content: flex-start;
+  -webkit-box-pack: start;
+          justify-content: flex-start;
 }
 .elementor-widget-icon-list.stylepress-icon-inline.elementor-align-right ul.elementor-icon-list-items {
-  justify-content: flex-end;
+  -webkit-box-pack: end;
+          justify-content: flex-end;
 }

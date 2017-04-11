@@ -1,7 +1,7 @@
 {
   "body": {
     "title": "Body",
-    "selector": "body",
+    "selector": "body, #site-offcanvas-wrap",
     "defaults": {
       "font_family": "Open Sans",
       "font_weight": 400,

@@ -8,6 +8,7 @@ if(!empty($GLOBALS['stylepress_slidein'])) {
 	wp_enqueue_script( 'stylepress-modal-popup' );
 	wp_enqueue_script( 'jquery-ui-dialog' );
 
+	echo '<div class="offcanvas-slideins">';
 
 	foreach ( $GLOBALS['stylepress_slidein'] as $template_id => $options ) {
         $width = ! empty( $options['width'] ) ? (int) $options['width'] : 400;
@@ -24,6 +25,7 @@ if(!empty($GLOBALS['stylepress_slidein'])) {
         </section>
         <?php
 	}
+	echo '</div>';
 }
 
 if(!empty($GLOBALS['stylepress_modal_popups'])) {
