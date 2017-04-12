@@ -44,6 +44,7 @@ class DtbakerDynamicField {
 		$fields['permalink'] = 'Post Permalink';
 		$fields['post_title'] = 'Post Title';
 		$fields['page_title'] = 'Page Title';
+		$fields['excerpt'] = 'Post Excerpt';
 		// grab a list of all available custom keys.
 
 		if(function_exists('WC')){
@@ -90,6 +91,9 @@ class DtbakerDynamicField {
 	}
 	public function page_title(){
 		return get_the_title( $this->page_id() );
+	}
+	public function excerpt(){
+		return get_the_excerpt( $this->page_id() );
 	}
 	public function post_title(){
 		return get_the_title( $this->page_id() );
