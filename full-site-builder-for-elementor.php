@@ -59,6 +59,11 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 } else {
 
 
+	define('STYLEPRESS_OUTER_USE_THEME', -1);
+	define('STYLEPRESS_INNER_USE_PLAIN', -1);
+	define('STYLEPRESS_INNER_USE_THEME', -2);
+
+
 	/* DtbakerElementorManager Class */
 	require_once( DTBAKER_ELEMENTOR_PATH . 'inc/class.plugin.php' );
 

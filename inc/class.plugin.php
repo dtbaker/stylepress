@@ -93,11 +93,13 @@ class DtbakerElementorManager {
 //        add_action( 'elementor/frontend/element/before_render', array( $this, 'section_before_render' ), 10 );
 
         add_filter( 'template_include', array( $this, 'template_include' ), 999 );
-        add_action( 'get_header', array( $this, 'get_header' ), 999 );
-        add_action( 'get_footer', array( $this, 'get_footer' ), 999 );
-        add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
-        add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
-        add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
+
+        // nasty old hacks to get inner content working nicely, don't do it like this:
+//        add_action( 'get_header', array( $this, 'get_header' ), 999 );
+//        add_action( 'get_footer', array( $this, 'get_footer' ), 999 );
+//        add_filter( 'stylepress_rendered_header', array( $this, 'theme_header_filter' ), 999 );
+//        add_filter( 'stylepress_rendered_footer', array( $this, 'theme_header_filter' ), 999 );
+//        add_filter( 'elementor/frontend/the_content', array( $this, 'elementor_footer_hack' ), 999 );
 
 
 
@@ -299,7 +301,7 @@ class DtbakerElementorManager {
 		if(!$this->show_full_ui())return $template_include;
 		global $post;
 
-		// whitelist certain templates:
+		// whitelist certain templates that don't get overwitten:
         $whitelist = array(
           'plugins/elementor',
         );
@@ -308,9 +310,17 @@ class DtbakerElementorManager {
                 return $template_include;
             }
         }
+        $whitelist_post_types = array(
+        );
+        if( $post && !empty($post->ID) && in_array( $post->post_type, $whitelist_post_types)){
+            return $template_include;
+        }
+
 		$original_template = $template_include;
 
-		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type  ) {
+		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type  ) {
+		    return ELEMENTOR_PATH . '/includes/page-templates/canvas.php';
+		}else if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type  ) {
             $this->previewing_style = true;
             $template_include       = DTBAKER_ELEMENTOR_PATH . 'templates/editor.php';
             add_filter( 'body_class', function ( $classes ) use ( $post )  {
@@ -330,13 +340,38 @@ class DtbakerElementorManager {
             } );
         } else {
             // check if this particular page has a template set.
+            // we work out the outer and inner template and decide how we should render the page based on that info.
+
+            // outer template. This checks the current page manual overrides, along with the default for the page type.
             $GLOBALS['our_elementor_template'] = (int) $this->get_current_style();
+            $GLOBALS['our_elementor_inner_template'] = (int) $this->get_current_inner_style();
+
             if ( $GLOBALS['our_elementor_template'] > 0 ) {
                 $template = get_post( $GLOBALS['our_elementor_template'] );
                 if ( 'dtbaker_style' === $template->post_type ) {
-                    // do we overwrite the entire page, or just the header/footer components.
 
-                    if( $this->overwrite_theme_output ){
+                    // success, we've got an outer template to display.
+                    // there's two options now:
+                    // 1) continue with normal rendered content from stylepress
+                    // 2) revert back to theme output for the inner sections ( tricky! )
+
+                    if( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_THEME ){
+                        //tricky time! stylepress outer + normal theme inner.
+                        // will only work for some themes.
+
+                        // we need to render our outer template, then pass the current template into that.
+                        $GLOBALS['stylepress_render_this_template_inside'] = $original_template;
+	                    $template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render-outer.php';
+
+
+                    }else if( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_PLAIN ){
+                        // plain old output, no stylepress wizardty
+	                    $template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
+                    }else if( $GLOBALS['our_elementor_inner_template'] > 0 ){
+                        // using a stylepress inner layout. and outer layout. easy!
+	                    $template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
+                    }else{
+                        // using "default" layout which means we pass into render to figure out.
 	                    $template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
                     }
                     add_filter( 'body_class', function ( $classes ) use ($template) {
@@ -350,6 +385,48 @@ class DtbakerElementorManager {
                         return $classes;
                     } );
                 }
+            }else if($GLOBALS['our_elementor_template'] == STYLEPRESS_OUTER_USE_THEME){
+
+	            add_filter( 'body_class', function ( $classes ) {
+		            $classes[] = 'stylepress-outer-inner';
+		            return $classes;
+	            } );
+
+	            if( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_THEME ){
+		            // that's fine! go ahead and use defualt inner content.
+
+	            }else if( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_PLAIN ){
+
+	                // fine as well, use elementor output.
+
+	            }else if( $GLOBALS['our_elementor_inner_template'] > 0 ){
+		            // using a stylepress inner layout. with a default theme outer layout. a bit tricky! hooks!
+
+                    /* theme outer + stylepress inner
+  = tricky as well!
+  we get two hooks (e.g. ocean_before_main & ocean_after_main )
+  on the first hook we render our stylepress output
+  then start output buffering and remove everything we capture until the ocean_after_main hook runs.
+                    $theme    = get_option( 'template' );
+	            $filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.css';
+	            if ( file_exists( $filename ) ) {
+		            wp_enqueue_style( 'stylepress-theme-addons', DTBAKER_ELEMENTOR_URI . 'themes/' . basename( $theme ) . '.css', false, DTBAKER_ELEMENTOR_VERSION );
+	            }
+                    */
+
+                    add_action('ocean_before_main', function(){
+                        // render our content here.
+	                    do_action('stylepress/render-inner');
+                        ob_start();
+                        // capture all output and discard at end below:
+                    });
+                    add_action('ocean_after_main', function(){
+                        ob_end_clean();
+                    });
+	            }else{
+
+	            }
+
             }
         }
 
@@ -657,10 +734,8 @@ class DtbakerElementorManager {
 	 * @since 1.0.9
 	 */
 	public function admin_page_assets() {
-		wp_enqueue_style(
-			'fontawesome',
-			'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
-		);
+
+		wp_enqueue_style('font-awesome', DTBAKER_ELEMENTOR_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
 
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
@@ -718,7 +793,7 @@ class DtbakerElementorManager {
 	 * @return bool
 	 */
 	public function supports( $feature ){
-	    return false;
+	    return true;
 	    return (bool) get_theme_support('stylepress-elementor');
     }
 
@@ -732,6 +807,9 @@ class DtbakerElementorManager {
 		wp_enqueue_script( 'dtbaker-elementor-js', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, DTBAKER_ELEMENTOR_VERSION, true );
 		// inject adds inline style against 'dtbaker-elementor'
 		$this->inject_additional_font_css();
+
+        wp_enqueue_style('font-awesome');//, DTBAKER_ELEMENTOR_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
+
 
 		if($this->show_full_ui() && $this->has_permission()){
 			wp_enqueue_style( 'stylepress-css-editor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend-css-editor.css', false, DTBAKER_ELEMENTOR_VERSION );
@@ -1215,9 +1293,9 @@ class DtbakerElementorManager {
 	public function get_current_style( $ignore_override = false ) {
 
 		$style_settings = $this->get_settings();
-		if(!empty($style_settings['defaults']['coming_soon']) && !is_user_logged_in()){
-            return $style_settings['defaults']['coming_soon'];
-        }
+//		if(!empty($style_settings['defaults']['coming_soon']) && !is_user_logged_in()){
+//            return $style_settings['defaults']['coming_soon'];
+//        }
 
         global $post;
         if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type){
@@ -1226,6 +1304,7 @@ class DtbakerElementorManager {
         }
 
 	    if( !$ignore_override ) {
+
 		    if ( is_home() || is_front_page() ) {
 			    if ( 'page' == get_option( 'show_on_front' ) ) {
 				    $home_page_id = false;
@@ -1236,11 +1315,8 @@ class DtbakerElementorManager {
 				    }
 				    if ( $home_page_id ) {
 					    $style = (int)$this->get_page_template( $home_page_id );
-//					    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite( $home_page_id ) ){
-//					        $this->overwrite_theme_output = false;
-//                        }
-					    if( -1 === $style ){
-					        return false; // Use theme by default.
+					    if( STYLEPRESS_OUTER_USE_THEME === $style ){
+					        return $style; // Use theme by default.
                         }else if( $style > 0 ){
 						    return apply_filters( 'dtbaker_elementor_current_style', $style );
 					    }
@@ -1249,14 +1325,10 @@ class DtbakerElementorManager {
 		    }
 		    if ( is_single() || is_page() || is_attachment() ) {
 			    // see if we have a custom style applied
-			    global $post;
 			    if ( $post && $post->ID ) {
                     $style = (int)$this->get_page_template( $post->ID );
-//				    if( $this->supports( 'theme-inner' ) && ! $this->get_page_current_overwrite($post->ID ) ){
-//					    $this->overwrite_theme_output = false;
-//				    }
-                    if( -1 === $style ){
-                        return false; // Use theme by default.
+                    if( STYLEPRESS_OUTER_USE_THEME === $style ){
+                        return $style; // Use theme by default.
                     }else if( $style > 0 ) {
 	                    return apply_filters( 'dtbaker_elementor_current_style', $style );
                     }
@@ -1264,35 +1336,97 @@ class DtbakerElementorManager {
 		    }
 	    }
 
-
         // check for defaults for this page type
-
         $page_type = $this->get_current_page_type();
-        $has_page_type_overwrite_setting_already = false;
-        if($page_type){
-	        if( $this->supports( 'theme-inner' ) ){
-
-	            // see if this inner page has the header/footer option selected.
-                if(!empty($style_settings['defaults'][$page_type.'_inner']) && $style_settings['defaults'][$page_type.'_inner'] == -2 ){
-	                $this->overwrite_theme_output = false;
-	                $has_page_type_overwrite_setting_already = true;
-                }
-
-	        }
-        }
 		if( $page_type && !empty($style_settings['defaults'][$page_type])){
 			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults'][$page_type] );
 		}
-
 		// otherwise check for site wide default:
 		if( !empty($style_settings['defaults']['_global'])){
-            if( ! $has_page_type_overwrite_setting_already && $this->supports( 'theme-inner' ) ){
-                // see if this inner page has the header/footer option selected.
-	            if(!empty($style_settings['defaults']['_global_inner']) && $style_settings['defaults']['_global_inner'] == -2 ){
-		            $this->overwrite_theme_output = false;
-	            }
-            }
 			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults']['_global'] );
+		}
+
+        // otherwise return nothing, so we fallback to default standard theme
+        return false;
+
+	}
+
+
+	/**
+	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
+     * Copied from my Widget Area Manager plugin
+	 *
+	 * @since 1.0.2
+     *
+     * @param bool $ignore_override Ignore manually set post overrides.
+	 *
+	 * @return int
+	 */
+	public function get_current_inner_style( $ignore_override = false ) {
+
+		$style_settings = $this->get_settings();
+
+        global $post;
+        if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type){
+            // we're previewing a style.
+            return false;
+        }
+
+	    if( !$ignore_override ) {
+
+		    if ( is_home() || is_front_page() ) {
+			    if ( 'page' == get_option( 'show_on_front' ) ) {
+				    $home_page_id = false;
+				    if ( is_front_page() ) {
+					    $home_page_id = get_option( 'page_on_front' );
+				    } else {
+					    $home_page_id = get_option( 'page_for_posts' );
+				    }
+				    if ( $home_page_id ) {
+					    $style = (int)$this->get_page_inner_style( $home_page_id );
+					    if( STYLEPRESS_INNER_USE_PLAIN === $style ||  STYLEPRESS_INNER_USE_THEME === $style){
+					        return $style;
+                        }else if( $style > 0 ){
+						    return apply_filters( 'dtbaker_elementor_current_inner_style', $style );
+					    }
+				    }
+			    }
+		    }
+		    if ( is_single() || is_page() || is_attachment() ) {
+			    // see if we have a custom style applied
+			    if ( $post && $post->ID ) {
+                    $style = (int)$this->get_page_inner_style( $post->ID );
+				    if( STYLEPRESS_INNER_USE_PLAIN === $style ||  STYLEPRESS_INNER_USE_THEME === $style){
+                        return $style; // Use theme by default.
+                    }else if( $style > 0 ) {
+	                    return apply_filters( 'dtbaker_elementor_current_inner_style', $style );
+                    }
+			    }
+		    }
+	    }
+
+        // check for defaults for this page type
+        $page_type = $this->get_current_page_type();
+
+        if($page_type) {
+	        $settings_key_to_check = $page_type . '_inner';
+	        if ( is_home() || is_front_page() ) {
+		        // home page or blog output page.
+		        if ( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_option( 'page_on_front' ) ) {
+			        //
+		        } else if ( $settings_key_to_check != 'archive_inner' ) {
+			        $settings_key_to_check = 'archive_inner';
+			        \DtbakerElementorManager::get_instance()->debug_message( "get_current_inner_style(): We're showing blog post output on home page, using inner style $settings_key_to_check instead" );
+		        }
+	        }
+
+	        if ( $page_type && ! empty( $style_settings['defaults'][ $settings_key_to_check ] ) ) {
+		        return apply_filters( 'dtbaker_elementor_current_inner_style', $style_settings['defaults'][ $settings_key_to_check ] );
+	        }
+        }
+		// otherwise check for site wide default:
+		if( !empty($style_settings['defaults']['_global_inner'])){
+			return apply_filters( 'dtbaker_elementor_current_inner_style', $style_settings['defaults']['_global_inner'] );
 		}
 
         // otherwise return nothing, so we fallback to default standard theme
@@ -1717,8 +1851,16 @@ class DtbakerElementorManager {
 		// get all styles data
 		$settings = $this->get_settings();
 		$current_page_type = $this->get_current_page_type();
+		/*global $post;
+		if($post->ID && $post->ID) {
+			$current_outer_style = $this->get_page_template( $post->ID );
+		}else{
+			$current_outer_style = !empty($settings['defaults'][$current_page_type]) ? $settings['defaults'][$current_page_type] : false;
+        }*/
+		$current_outer_style = $this->get_current_style();
+		$current_inner_style = $this->get_current_inner_style();
 
-        if( !empty($settings['remove_css'][$current_page_type]) ){ //} || !empty($settings['remove_css']['_global']) ) {
+        if( $current_outer_style != STYLEPRESS_OUTER_USE_THEME && $current_inner_style != STYLEPRESS_INNER_USE_THEME && !empty($settings['remove_css'][$current_page_type]) ){
             $this->removing_theme_css = true;
 	        global $wp_styles;
 	        $current_theme = wp_get_theme();
@@ -1726,11 +1868,15 @@ class DtbakerElementorManager {
 	        $remove_slugs[$current_theme->get_stylesheet()] = true;
 	        $remove_slugs[$current_theme->get_template()] = true;
 
+            // don't remove these ones:
+            $style_whitelist = apply_filters( 'stylepress-css-whitelist', array(
+                'font-awesome',
+            ) );
 
 	        // loop over all of the registered scripts
 	        foreach ( $wp_styles->registered as $handle => $data ) {
 		        // remove it
-                if($data && !empty($data->src)) {
+                if($data && !empty($data->src) && !in_array( $handle, $style_whitelist ) ) {
 	                foreach ( $remove_slugs as $remove_slug => $tf ) {
 		                if ( strpos( $data->src, '/' . $remove_slug . '/' ) !== false ) {
 			                wp_deregister_style( $handle );

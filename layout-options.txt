@@ -1,0 +1,21 @@
+Layout options to test:
+
+ stylepress outer + stylepress inner
+  = good, we nuke all theme styles and replace template_redirect with our own, working fine.
+ stylepress outer + theme inner
+  = tricky! we hook into compatible themes (e.g. oceanwp)
+  we get a start/end hook (e.g. ocean_before_main & ocean_after_main )
+  we capture all output between these two hooks using ob
+  on the last hook (ocean_after_main) we call our outer stylepress rendering and wrap the already rendered inner content into the outer bit. phew!
+ theme outer + stylepress inner
+  = tricky as well!
+  we get two hooks (e.g. ocean_before_main & ocean_after_main )
+  on the first hook we render our stylepress output
+  then start output buffering and remove everything we capture until the ocean_after_main hook runs.
+
+ theme outer + theme inner + stylepress elements (modal) added to page
+  = we just have to make sure things like modal get rendered without our usualy header/footer hooks.
+
+
+
+Themes to test:

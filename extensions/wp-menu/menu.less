@@ -245,6 +245,9 @@
 @media (min-width: 768px) {
   .stylepress-nav-menu-placeholder {
     display:block;
+    body.dtbaker-elementor-template.elementor-editor-active & {
+      display:none;
+    }
   }
   .stylepress-nav-menu {
     &.stylepress-navigation-loaded.fixed{
@@ -253,6 +256,10 @@
       top:0;
       .admin-bar & {
         top: 32px;
+      }
+      body.dtbaker-elementor-template.elementor-editor-active & {
+        top: auto !important;
+        position: relative;
       }
     }
     .stylepress-nav-wrapper {

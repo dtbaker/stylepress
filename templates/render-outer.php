@@ -40,6 +40,11 @@ if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_te
 } else {
 	echo 'Please select a global site style';
 }
+//if ( ! empty( $GLOBALS['stylepress_manual_inner_content'] ) ) {
+//    echo $GLOBALS['stylepress_manual_inner_content'];
+//}else{
+//	echo 'Failed to render content.';
+//}
 ?>
 <!-- stylepress render template end -->
 <?php

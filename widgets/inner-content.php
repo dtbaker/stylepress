@@ -136,7 +136,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 		} else {
 
 
-			if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
+			/*if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
 
 				\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
 
@@ -148,10 +148,10 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	                $GLOBALS['stylepress_footer'] = "(stylepress footer)";
                     ob_start();
                 }
-            }else {
+            }else {*/
 
 				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
-			}
+			/*}*/
 		}
 
 	}

@@ -21,12 +21,12 @@ class stylepress_walker_nav_menu extends Walker_Nav_Menu {
 			// our first drop down after the parent <a>
 			// we save our opening <ul> for the child entry.
 			if ( self::$current_element ) {
-				$slideout = get_post_meta( self::$current_element, '_menu_item_slideout', true );
-				if ( (int) $slideout > 0 ) {
+//				$slideout = get_post_meta( self::$current_element, '_menu_item_slideout', true );
+//				if ( (int) $slideout > 0 ) {
 //					$output .= '<div class="stylepress-second-level"><div class="inner">';
 //					$output .= \Elementor\Plugin::instance()->frontend->get_builder_content( $slideout, false );
 //					$output .= '</div></div>';
-				}
+//				}
 			}
 		}
 		// then start normal non-mobile menu:

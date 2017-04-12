@@ -30,6 +30,24 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering from stylepress/render-inner action hook ");
 
+		if(!empty($GLOBALS['stylepress_render_this_template_inside'])){
+			// hook here on our header/footer callbacks to strip double rendered content.
+			ob_start(); // catches the content from our template below
+			add_action('ocean_before_main', function(){
+				ob_end_clean();
+				ob_start();
+				// capture all inner theme output and render it here.
+			});
+			add_action('ocean_after_main', function(){
+				echo ob_get_clean();
+				ob_start(); // kill the footer.
+			});
+			require $GLOBALS['stylepress_render_this_template_inside'];
+			ob_end_clean(); // kill the footer.
+
+			return;
+		}
+
 		if(count($GLOBALS['stylepress_template_turtles'])){
 			\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Nested inner content for ". $current_page_type .".");
 
@@ -88,19 +106,6 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Current page type for inner content style lookup is: $current_page_type ");
 
-		$style_settings = DtbakerElementorManager::get_instance()->get_settings();
-
-		$component_template = $current_page_type . '_inner';
-		if( is_home() || is_front_page() ){
-			// home page or blog output page.
-			if ( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_option( 'page_on_front' ) ) {
-				//
-			}else if($component_template != 'archive_inner'){
-				$component_template = 'archive_inner';
-				\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: We're showing blog post output on home page, using inner style $component_template instead");
-			}
-		}
-
 		while ( have_posts() ) : the_post();
 
 			global $post;
@@ -108,45 +113,21 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 			$GLOBALS['stylepress_post_for_dynamic_fields'] = $post;
 
-			$style_id = false;
-			if( $component_template ){
-				// check if this page has a custom inner content template chosen:
-				$current_inner_style = (int) DtbakerElementorManager::get_instance()->get_page_inner_style($post->ID);
-				$debug_info .= ' inner style '.$current_inner_style;
-				if($current_inner_style !== 0) {
-					$style_id = $current_inner_style;
-				}else if(!empty($style_settings['defaults'][$component_template])){
-					$style_id = (int) $style_settings['defaults'][$component_template];
-					$debug_info .= " with the $component_template style ";
-				}else{
-					// we use the global inner settings.
-					$debug_info .= " using the Global Inner style ";
-					if(!empty($style_settings['defaults']['_global_inner'])){
-						$style_id = (int) $style_settings['defaults']['_global_inner'];
-					}else{
-
-					}
-
-				}
-
+			$style_id = $GLOBALS['our_elementor_inner_template'];
+			$current_inner_style = (int) DtbakerElementorManager::get_instance()->get_page_inner_style($post->ID);
+			if($current_inner_style){
+				// override default in loop.
+				// hmm this might not work well in output of a blog.
+//				$style_id = $current_inner_style;
 			}
-			if(!$style_id){
-				$debug_info .= " with a call to the_content() because no custom inner style was defined ";
-			}else{
-				if($style_id == -1){
-					$debug_info .= " plain the_content() ";
-				}else if($style_id == -2){
-					$debug_info .= " theme default inner content. ";
-				}else{
-					$debug_info .= '<a href="'.get_permalink($style_id).'">' . esc_html(get_the_title($style_id)) .'</a>';
-				}
-			}
-			\DtbakerElementorManager::get_instance()->debug_message('template-functions.php: '.$debug_info);
 
 			if($style_id > 0) {
 				$GLOBALS['stylepress_template_turtles'][$style_id] = $style_id;
+				\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering style: $style_id ");
 				echo Elementor\Plugin::instance()->frontend->get_builder_content( $style_id, false );
 			}else{
+				\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering plain content: $style_id ");
+				// todo: handle inner theme output from here.
 				the_content();
 			}
 

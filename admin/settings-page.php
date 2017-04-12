@@ -70,10 +70,10 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 								<td>
 									<select name="stylepress_styles[<?php echo esc_attr($post_type);?>]">
                                         <?php if('_global' === $post_type){ ?>
-                                            <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
+                                            <option value="<?php echo STYLEPRESS_OUTER_USE_THEME;?>"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, STYLEPRESS_OUTER_USE_THEME );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
                                         <?php }else { ?>
                                             <option value="0"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, 0 );?>><?php _e( '&nbsp; (default) ' ); ?></option>
-                                            <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, -1 );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
+                                            <option value="<?php echo STYLEPRESS_OUTER_USE_THEME;?>"<?php selected( $settings && isset( $settings['defaults'][$post_type] ) ? (int) $settings['defaults'][$post_type] : 0, STYLEPRESS_OUTER_USE_THEME );?>><?php _e( 'None (Original Theme Output)' ); ?></option>
 	                                        <?php
                                         }
                                         foreach ( $styles as $style_id => $style ) { ?>
@@ -88,12 +88,12 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
                                             <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; (default)' ); // just show the_content() ?></option>
                                         <?php }else { ?>
                                             <option value="0"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, 0 );?>><?php _e( '&nbsp; (default) ' ); ?></option>
-                                            <option value="-1"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, -1 );?>><?php _e( 'None - just show the_content()' ); ?></option>
+                                            <option value="<?php echo STYLEPRESS_INNER_USE_PLAIN;?>"<?php selected( $settings && isset( $settings['defaults'][$inner_post_type] ) ? (int) $settings['defaults'][$inner_post_type] : 0, STYLEPRESS_INNER_USE_PLAIN );?>><?php _e( 'None - just show the_content()' ); ?></option>
 	                                        <?php
                                         }
                                         if($this->supports( 'theme-inner' )) {
 	                                        ?>
-                                            <option value="-2"<?php selected( $settings && isset( $settings['defaults'][ $inner_post_type ] ) ? (int) $settings['defaults'][ $inner_post_type ] : 0, - 2 ); ?>><?php _e( 'Use Theme Default Inner Output' ); ?></option>
+                                            <option value="<?php echo STYLEPRESS_INNER_USE_THEME;?>"<?php selected( $settings && isset( $settings['defaults'][ $inner_post_type ] ) ? (int) $settings['defaults'][ $inner_post_type ] : 0, STYLEPRESS_INNER_USE_THEME ); ?>><?php _e( 'Use Theme Default Inner Output' ); ?></option>
 	                                        <?php
                                         }
                                         foreach ( $components as $style_id => $style ) { ?>

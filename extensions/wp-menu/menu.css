@@ -248,6 +248,9 @@
   .stylepress-nav-menu-placeholder {
     display: block;
   }
+  body.dtbaker-elementor-template.elementor-editor-active .stylepress-nav-menu-placeholder {
+    display: none;
+  }
   .stylepress-nav-menu.stylepress-navigation-loaded.fixed {
     position: fixed;
     width: 100%;
@@ -255,6 +258,10 @@
   }
   .admin-bar .stylepress-nav-menu.stylepress-navigation-loaded.fixed {
     top: 32px;
+  }
+  body.dtbaker-elementor-template.elementor-editor-active .stylepress-nav-menu.stylepress-navigation-loaded.fixed {
+    top: auto !important;
+    position: relative;
   }
   .stylepress-nav-menu .stylepress-nav-wrapper {
     width: 100%;

@@ -69,8 +69,12 @@ if($components){
 	<option value="0"><?php
 		// Translators: %s contains the current default style.
 		printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr( $default_inner_style && isset($components[ $default_inner_style ]) ? '(' . $components[ $default_inner_style ] . ')' : '' ) ); ?></option>
-    <option value="-1"<?php echo $current_inner_style && (int) $current_inner_style === (int) -1 ? ' selected' : ''; ?>><?php esc_html_e('Plain Output', 'stylepress')?></option>
-	<?php foreach ( $components as $option_id => $option_val ) {
+    <option value="<?php echo STYLEPRESS_INNER_USE_PLAIN;?>"<?php echo $current_inner_style && (int) $current_inner_style === (int) STYLEPRESS_INNER_USE_PLAIN ? ' selected' : ''; ?>><?php esc_html_e('Plain Output', 'stylepress')?></option>
+    <?php  if($this->supports( 'theme-inner' )) { ?>
+        <option value="<?php echo STYLEPRESS_INNER_USE_THEME; ?>"<?php echo $current_inner_style && (int) $current_inner_style === (int) STYLEPRESS_INNER_USE_THEME ? ' selected' : ''; ?>><?php esc_html_e( 'Use Theme Default Inner Output', 'stylepress' ) ?></option>
+
+	    <?php
+    }foreach ( $components as $option_id => $option_val ) {
 		?>
 		<option value="<?php echo esc_attr( $option_id ); ?>"<?php echo $current_inner_style && (int) $current_inner_style === (int) $option_id ? ' selected' : ''; ?>><?php echo esc_attr( $option_val ); ?></option>
 		<?php

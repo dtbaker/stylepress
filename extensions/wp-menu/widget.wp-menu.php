@@ -305,6 +305,207 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 
 		$this->start_controls_section(
+			'section_menu_style',
+			[
+				'label' => __( 'Menu Links', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		/*$this->add_responsive_control(
+			'menu_align',
+			[
+				'label' => __( 'Alignment', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'prefix_class' => 'elementor-align-',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation' => 'text-align: {{VALUE}};',
+				],
+			]
+		);*/
+
+
+		$this->add_control(
+			'menu_background',
+			[
+				'label' => __( 'Background', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#f8f8f8',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_control(
+			'menu_background_hover',
+			[
+				'label' => __( 'Background (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#eaeaea',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a, {{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'background-color: {{VALUE}} !important;',
+				],
+			]
+		);
+		$this->add_control(
+			'menu_background_active',
+			[
+				'label' => __( 'Background (Active)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#eaeaea',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul > li.current-menu-item > a, {{WRAPPER}} .stylepress_menu > ul > li.current-menu-parent > a' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'font_color',
+			[
+				'label' => __( 'Font Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul > li > a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'font_color_hover',
+			[
+				'label' => __( 'Font Color (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a,{{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'color: {{VALUE}} !important;',
+				],
+			]
+		);
+
+		$this->add_control(
+			'font_color_active',
+			[
+				'label' => __( 'Font Color (Active)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul > li.current-menu-item > a, {{WRAPPER}} .stylepress_menu > ul > li.current-menu-parent > a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'link_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'selector' => '{{WRAPPER}} .stylepress_menu > ul > li > a',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_dropdown_style',
+			[
+				'label' => __( 'Dropdowns', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'dropdown_width',
+			[
+				'label' => __( 'Dropdown Width', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'min' => 150,
+						'max' => 500,
+					],
+				],
+				'default' => [
+					'size' => 250,
+					'unit' => 'px',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'menu_background_dropdown',
+				'selector' => '{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul, {{WRAPPER}} .stylepress-nav-slideout',
+			]
+		);
+
+		$this->add_control(
+			'dropdown_background_hover',
+			[
+				'label' => __( 'Background (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#eaeaea',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul li:hover > a' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'dropdown_font_color',
+			[
+				'label' => __( 'Font Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul > li > a, {{WRAPPER}} .stylepress-nav-slideout' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'dropdown_font_color_hover',
+			[
+				'label' => __( 'Font Color (Hover)', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#000',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress_menu > ul ul > li:hover > a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'drop_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'selector' => '{{WRAPPER}} .stylepress_menu > ul ul li a',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
 			'section_bar',
 			[
 				'label' => __( 'Nav Bar', 'elementor' ),
@@ -588,183 +789,6 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 		$this->end_controls_section();
 
-		$this->start_controls_section(
-			'section_menu_style',
-			[
-				'label' => __( 'Menu Links', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		/*$this->add_responsive_control(
-			'menu_align',
-			[
-				'label' => __( 'Alignment', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'fa fa-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'fa fa-align-right',
-					],
-				],
-				'prefix_class' => 'elementor-align-',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation' => 'text-align: {{VALUE}};',
-				],
-			]
-		);*/
-
-
-		$this->add_control(
-			'menu_background',
-			[
-				'label' => __( 'Background', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#f8f8f8',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-		$this->add_control(
-			'menu_background_hover',
-			[
-				'label' => __( 'Background (hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#eaeaea',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a, {{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'font_color',
-			[
-				'label' => __( 'Font Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul > li > a' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'font_color_hover',
-			[
-				'label' => __( 'Font Color (Hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul > li:hover > a,{{WRAPPER}} .stylepress_menu > ul > li.currently-active > a' => 'color: {{VALUE}};',
-				],
-			]
-		);
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'link_typography',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
-                'selector' => '{{WRAPPER}} .stylepress_menu > ul > li > a',
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_dropdown_style',
-			[
-				'label' => __( 'Dropdowns', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'dropdown_width',
-			[
-				'label' => __( 'Dropdown Width', 'elementor' ),
-				'type' => \Elementor\Controls_Manager::SLIDER,
-				'range' => [
-					'px' => [
-						'min' => 150,
-						'max' => 500,
-					],
-				],
-				'default' => [
-					'size' => 250,
-					'unit' => 'px',
-				],
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'width: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-
-		$this->add_group_control(
-			Group_Control_Background::get_type(),
-			[
-				'name' => 'menu_background_dropdown',
-				'selector' => '{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul, {{WRAPPER}} .stylepress-nav-slideout',
-			]
-		);
-
-		$this->add_control(
-			'dropdown_background_hover',
-			[
-				'label' => __( 'Background (hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#eaeaea',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul ul li:hover > a' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'dropdown_font_color',
-			[
-				'label' => __( 'Font Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul ul > li > a, {{WRAPPER}} .stylepress-nav-slideout' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'dropdown_font_color_hover',
-			[
-				'label' => __( 'Font Color (Hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress_menu > ul ul > li:hover > a' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'drop_typography',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
-				'selector' => '{{WRAPPER}} .stylepress_menu > ul ul li a',
-			]
-		);
-
-		$this->end_controls_section();
 
 		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
 
