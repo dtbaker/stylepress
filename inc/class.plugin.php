@@ -193,7 +193,10 @@ class DtbakerElementorManager {
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/google-maps/google-maps.php';
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/page-slider/dtbaker-page-slider.php';
 							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/woocommerce/woocommerce.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
+							// only works with pro:
+							if(defined('ELEMENTOR_PRO_VERSION')) {
+								require_once DTBAKER_ELEMENTOR_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
+							}
 
 							do_action( 'stylepress_init_extensions' );
 						}
