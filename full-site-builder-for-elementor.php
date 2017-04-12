@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.15' );
 
 /* Debug output control. */
-define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', false );
+define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', 0 );
 
 /* Set constant path to the plugin directory. */
 define( 'DTBAKER_ELEMENTOR_SLUG', basename( plugin_dir_path( __FILE__ ) ) );

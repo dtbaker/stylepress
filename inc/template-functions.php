@@ -30,25 +30,10 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 
 		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering from stylepress/render-inner action hook ");
 
-		if(!empty($GLOBALS['stylepress_render_this_template_inside'])){
-			// hook here on our header/footer callbacks to strip double rendered content.
-			ob_start(); // catches the content from our template below
-			add_action('ocean_before_main', function(){
-				ob_end_clean();
-				ob_start();
-				// capture all inner theme output and render it here.
-			});
-			add_action('ocean_after_main', function(){
-				echo ob_get_clean();
-				ob_start(); // kill the footer.
-			});
-			require $GLOBALS['stylepress_render_this_template_inside'];
-			ob_end_clean(); // kill the footer.
-
-			return;
-		}
 
 		if(count($GLOBALS['stylepress_template_turtles'])){
+
+
 			\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Nested inner content for ". $current_page_type .".");
 
 			// save and restore global post entry while we do this.
@@ -101,10 +86,68 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			echo '<!-- End Inner Render Content --> ';
 			return;
 		}
-		echo '<!-- Start StylePress Render --> ';
 
 
 		\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Current page type for inner content style lookup is: $current_page_type ");
+
+		if(!empty($GLOBALS['stylepress_render_this_template_inside'])){
+			// hook here on our header/footer callbacks to strip double rendered content.
+
+			ob_start();
+
+			?><!DOCTYPE html>
+			<html <?php language_attributes(); ?> class="no-js">
+			<head>
+				<meta charset="<?php bloginfo( 'charset' ); ?>">
+				<meta name="viewport" content="width=device-width, initial-scale=1">
+				<link rel="profile" href="http://gmpg.org/xfn/11">
+				<?php wp_head(); ?>
+			</head>
+
+			<body <?php body_class('stylepress-render'); ?>>
+			<?php
+
+			$page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
+			DtbakerElementorManager::get_instance()->debug_message("render.php: Rendering full page output for page type '$page_type' in render.php using the style: ". (
+				!empty($GLOBALS['our_elementor_template']) ? '<a href="'.get_permalink($GLOBALS['our_elementor_template']).'">' . esc_html(get_the_title($GLOBALS['our_elementor_template'])) .'</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
+				).'');
+
+			if(DtbakerElementorManager::get_instance()->removing_theme_css) {
+				DtbakerElementorManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
+			}
+
+			do_action( 'stylepress/before-render' );
+			$GLOBALS['stylepressheader'] = ob_get_clean();
+			ob_start(); // kill the theme header from the below include.
+			add_action('ocean_before_main', function(){
+				$old_header = ob_get_clean(); // kill the header
+				ob_start(); // capture all inner theme output and render it here.
+			});
+			add_action('ocean_after_main', function(){
+				// we have to break out of the template rendering and continue to render the stylepress footer from here on in.
+				$inner = ob_get_clean(); // capture all inner
+				echo $inner;
+				// render out stylepress footer
+				ob_start();
+				do_action( 'stylepress/after-render' );
+				wp_footer();
+				?>
+				</body>
+				</html>
+				<?php
+				$GLOBALS['stylepressfooter'] = ob_get_clean();
+				ob_start(); // kill the rest of the theme geneated footer.
+			});
+
+			$template = $GLOBALS['stylepress_render_this_template_inside'];
+			unset($GLOBALS['stylepress_render_this_template_inside']);
+
+			require $template;
+			ob_end_clean(); // kill the footer.
+			return;
+		}
+
+		echo '<!-- Start StylePress Render --> ';
 
 		while ( have_posts() ) : the_post();
 
@@ -128,7 +171,10 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 			}else{
 				\DtbakerElementorManager::get_instance()->debug_message("template-functions.php: Rendering plain content: $style_id ");
 				// todo: handle inner theme output from here.
+
 				the_content();
+
+
 			}
 
 		endwhile;
