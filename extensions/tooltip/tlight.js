@@ -7,6 +7,9 @@ function tlite(getTooltipOpts) {
             el = el.parentElement;
             opts = el && getTooltipOpts(el);
         }
+        if(opts){
+            console.log(opts);
+        }
 
         opts && tlite.show(el, opts, true);
     });
@@ -132,3 +135,37 @@ tlite.hide = function (el, isAuto) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = tlite;
 }
+
+
+(function($) {
+
+    // jquery not needed here. oh well.
+
+    if(typeof tlite === 'function') {
+
+        console.log('asdf');
+        tlite(function (el) {
+            var when = classWhen(el);
+            return when('tooltip', { grav: 's' }) ||
+                when('tooltip-n', { grav: 'n' }) ||
+                when('tooltip-s', { grav: 's' }) ||
+                when('tooltip-w', { grav: 'w' }) ||
+                when('tooltip-e', { grav: 'e' }) ||
+                when('tooltip-se', { grav: 'se' }) ||
+                when('tooltip-ne', { grav: 'ne' }) ||
+                when('tooltip-sw', { grav: 'sw' }) ||
+                when('tooltip-nw', { grav: 'nw' })
+        });
+
+        // Helper method for handling classes
+        function classWhen(el) {
+            var classes = (el.className && typeof el.className === 'string' ? el.className : '').split(' ');
+            return function (cssClass, opts) {
+                return ~classes.indexOf(cssClass) && opts;
+            }
+        }
+
+    }
+
+
+})(jQuery);

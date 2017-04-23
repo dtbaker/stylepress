@@ -33,13 +33,22 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
     <div class="notice notice-error"><p>TODO: Create a toggle button to enable/disable these. </p></div>
     <div class="notice notice-error"><p>TODO: Include the rest of these missing plugins into this package. </p></div>
 
-
-    <p>Choose which add-ons to enable for this website:</p>
+    <h3>Current add-ons:</h3>
     <ul>
-        <li>Styled Google Maps</li>
+        <li>Dynamic Field: enable dynamic fields on text boxes, headings, buttons, images etc..</li>
+        <li>Modal Popup/Slide In: turn any link into a modal popup</li>
+        <li>Menu / Navbar: insert a fixed navbar, create a megamenu layout</li>
+        <li>Page Slider: design each slide in its own Elementor page</li>
+        <li>Styled Google Maps: change the colors of embedded Google Maps</li>
+        <li>Mailchimp Email Subscribe Box</li>
+        <li>Form Fields: Text Description, Date Picker, Toggle Block</li>
+        <li>StylePress Loop: Design your grid layout (currently Elementor Pro only)</li>
+        <li>Tooltip: add a hover tooltip to buttons and links</li>
+    </ul>
+
+    <h3>Pending add-ons:</h3>
+    <ul>
         <li>Insert Page</li>
-        <li>Page Slider</li>
-        <li>Mailchimp Signup</li>
         <li>Post Slider</li>
         <li>WooCommerce Product Slider</li>
         <li>Blog Post Output</li>

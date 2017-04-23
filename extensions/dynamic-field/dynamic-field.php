@@ -32,6 +32,7 @@ function stylepress_register_dynamic_background( $widget, $args ){
 		]
 	);
 }
+
 function stylepress_register_dynamics( $widget, $args ){
 	$widget->start_controls_section(
 		'section_stylepress_dynamic',
