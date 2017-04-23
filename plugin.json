@@ -4,12 +4,18 @@
   "name": "StylePress for Elementor",
   "description": "Easy Full Site Builder for the powerful Elementor plugin. Apply styles to your entire website - no coding required.",
   "url": "https://stylepress.org",
-  "version": "1.0.16",
+  "version": "1.0.17",
      "author": {
        "name": "dtbaker",
        "url": "https://dtbaker.net"
      },
   "history": {
+    "1.0.17": {
+      "date": "2017-04-24",
+      "changes": [
+        "Fix for nav menu icons"
+      ]
+    },
     "1.0.16": {
       "date": "2017-04-23",
       "changes": [

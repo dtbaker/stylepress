@@ -83,6 +83,9 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 
 == Changelog ==
 
+= 1.0.17 =
+* Toggle switch for nav menu icons
+
 = 1.0.16 =
 * Added Tooltip widget
 * Added Dynamic Field widget

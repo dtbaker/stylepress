@@ -253,10 +253,27 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		);
 
 		$this->add_control(
+			'icon_list_enabled',
+			[
+				'label' => __( 'Enable Icon List?', 'elementor-pro' ),
+				'type' =>  \Elementor\Controls_Manager::SWITCHER,
+				'default' => '',
+				'label_on' => __( 'Yes', 'elementor' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'return_value' => 'yes',
+				'separator' => 'before',
+			]
+		);
+
+
+		$this->add_control(
 			'icon_list',
 			[
 				'label' => '',
 				'type' => Controls_Manager::REPEATER,
+				'condition' => [
+					'icon_list_enabled!' => '',
+				],
 				'default' => [
 					[
 						'text' => __( 'List Item #1', 'elementor' ),
@@ -900,7 +917,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
                         </nav><!-- #site-navigation -->
                     </div>
                 <?php }
-                if(!empty($settings['icon_list'])) {
+                if(!empty($settings['icon_list_enabled'])) {
 	                ?>
                     <div class="stylepress-nav-icon-wrap">
 
