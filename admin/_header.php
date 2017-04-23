@@ -7,7 +7,8 @@
 		<a href="https://twitter.com/WPStylePress" target="_blank"><i class="fa fa-twitter"></i></a>
 		<a href="https://github.com/dtbaker/stylepress" target="_blank"><i class="fa fa-github"></i></a>
         <br/><br/>
-        <em>StylePress is BETA - there are bugs!</em>
+        <em>StylePress is BETA - there are bugs!</em><br/>
+        <em><a href="https://github.com/dtbaker/stylepress/issues" target="_blank">Report issues and feedback on github</a></em>
 	</div>
 	<?php /*switch($_GET['page']) {
 		case 'dtbaker-stylepress': ?>

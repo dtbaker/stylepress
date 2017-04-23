@@ -537,6 +537,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 				if ( Plugin::instance()->editor->is_edit_mode() ) {
 					$page_html = $inserted_post->post_title;
+					$slides[]  = '<div>' . $page_html . '</div>';
 				} else {
 
 					$old_global_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : false;
@@ -572,8 +573,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 					setup_postdata( $GLOBALS['post'] =& $old_global_post );
 					$page_html = apply_filters( 'elementor/widgets/page_carousel/slide', $page_html, $instance );
+					$slides[]  = '<div data-slide-id="'.(int)$page_list_id.'" data-post-id="'.(int)$post_id.'" data-icon="'. esc_attr(get_post_meta($post_id,'icon',true)) .'" data-link="'. esc_attr($page['link']['url']) .'"><div class="slick-slide-inner">' . $page_html . '</div></div>';
 				}
-				$slides[]  = '<div data-slide-id="'.(int)$page_list_id.'" data-post-id="'.(int)$post_id.'" data-icon="'. esc_attr(get_post_meta($post_id,'icon',true)) .'" data-link="'. esc_attr($page['link']['url']) .'"><div class="slick-slide-inner">' . $page_html . '</div></div>';
 			}
 		}
 
@@ -619,48 +620,51 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$slick_options = apply_filters( 'elementor/widgets/page_carousel/slick_options', $slick_options, $instance );
 		if ( Plugin::instance()->editor->is_edit_mode() ) {
 			esc_html_e( 'Page Slider Here:' );
-		}
-        if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
-		    $carousel_classes [] = 'inner-content-width';
-        }
+			echo implode( '', $slides );
+		}else {
+			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
+				$carousel_classes [] = 'inner-content-width';
+			}
 
-		?>
-		<div class="elementor-page-carousel-wrapper elementor-slick-slider" dir="<?php echo esc_attr( $direction ); ?>">
-			<div class="<?php echo esc_attr( implode( ' ', $carousel_classes ) ); ?>"
-			     data-slider_options='<?php echo wp_json_encode( $slick_options ); ?>'>
-				<?php echo implode( '', $slides ); ?>
-			</div>
-		</div>
-		<?php
-        if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
-            $icons = array();
-            foreach ( $instance['page_list'] as $page_list_id => $page ) {
-                $post_id = (int)str_replace('p.', '', $page['page']);
-                if (!$post_id) {
-                    continue;
-                }
-                $inserted_post = get_post($post_id);
-                if ($inserted_post) {
-                    // create an icon. with the title.
-                    $icons[] = '<div data-slide-id="'.(int)$page_list_id.'" data-post-id="'.(int)$post_id.'" data-icon="'. esc_attr(get_post_meta($post_id,'icon',true)) .'" data-link="'. esc_attr($page['link']['url']) .'"> <div class="slider-icon"> </div> <h4>' . esc_html($page['title']). '</h4> </div>';
-
-                }
-            }
-            ?>
-            <div class="elementor-page-carousel-icons" dir="<?php echo esc_attr( $direction ); ?>">
-                <div class="page-carousel-icon-wrapper inner-content-width">
-                    <div class="elementor-dtbaker-page-slider-icons">
-                        <?php echo implode( '', $icons ); ?>
-                    </div>
+			?>
+            <div class="elementor-page-carousel-wrapper elementor-slick-slider"
+                 dir="<?php echo esc_attr( $direction ); ?>">
+                <div class="<?php echo esc_attr( implode( ' ', $carousel_classes ) ); ?>"
+                     data-slider_options='<?php echo wp_json_encode( $slick_options ); ?>'>
+					<?php echo implode( '', $slides ); ?>
                 </div>
             </div>
-            <?php
-        }
+			<?php
+			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
+				$icons = array();
+				foreach ( $instance['page_list'] as $page_list_id => $page ) {
+					$post_id = (int) str_replace( 'p.', '', $page['page'] );
+					if ( ! $post_id ) {
+						continue;
+					}
+					$inserted_post = get_post( $post_id );
+					if ( $inserted_post ) {
+						// create an icon. with the title.
+						$icons[] = '<div data-slide-id="' . (int) $page_list_id . '" data-post-id="' . (int) $post_id . '" data-icon="' . esc_attr( get_post_meta( $post_id, 'icon', true ) ) . '" data-link="' . esc_attr( $page['link']['url'] ) . '"> <div class="slider-icon"> </div> <h4>' . esc_html( $page['title'] ) . '</h4> </div>';
+
+					}
+				}
+				?>
+                <div class="elementor-page-carousel-icons" dir="<?php echo esc_attr( $direction ); ?>">
+                    <div class="page-carousel-icon-wrapper inner-content-width">
+                        <div class="elementor-dtbaker-page-slider-icons">
+							<?php echo implode( '', $icons ); ?>
+                        </div>
+                    </div>
+                </div>
+				<?php
+			}
+		}
 	}
 
 	protected function content_template() {
 		?>
-		<div class="elementor-page-carousel-wrapper elementor-slick-slider">
+		<div class="elementor-dtbaker-page-slider">
 			The Page Slider Will Appear Here
 		</div>
 		<?php

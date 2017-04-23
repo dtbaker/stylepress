@@ -808,8 +808,8 @@ class DtbakerElementorManager {
 	 * @return bool
 	 */
 	public function supports( $feature ){
-	    // for now we base this off our whitelist support for theme hooks
-	    return (bool) get_theme_support('stylepress-elementor');
+		return count(apply_filters('stylepress_theme_hooks',array()));
+//	    return (bool) get_theme_support('stylepress-elementor');
     }
 
 	/**
