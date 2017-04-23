@@ -565,10 +565,10 @@ class DtbakerElementorManager {
 		}else if($this->show_full_ui()){
 
 
-			if ( ! get_option( 'elementor_pro_license_key', '' ) || get_option( 'elementor_pro_license_key', '' ) == 'local' ) {
-				set_transient( 'elementor_pro_license_data', 'test', HOUR_IN_SECONDS );
-				update_option( 'elementor_pro_license_key', 'local' );
-			}
+//			if ( ! get_option( 'elementor_pro_license_key', '' ) || get_option( 'elementor_pro_license_key', '' ) == 'local' ) {
+//				set_transient( 'elementor_pro_license_data', 'test', HOUR_IN_SECONDS );
+//				update_option( 'elementor_pro_license_key', 'local' );
+//			}
 
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_meta_box' ) );

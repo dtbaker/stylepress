@@ -12,7 +12,12 @@ Use Elementor to design your complete website. Reuse header/footer on all pages.
 
 == Description ==
 
-This is a free Pro plugin to turn the **[Elementor Page Builder](https://elementor.com/pro/?ref=1164&campaign=readme)** into a Full Site Builder.
+This is a free plugin for **[Elementor Page Builder](https://elementor.com/pro/?ref=1164&campaign=readme)**.
+
+It provides two things:
+
+- A full site builder using Elementor (design your entire website without a Theme)
+- Adds extra widgets to Elementor (e.g. Tooltip, Navbar, Mailchimp, Modal Popups, Page Slider, etc..)
 
 Watch this introduction video that covers some of the basics:
 
@@ -38,9 +43,13 @@ Design your entire website without a theme. Easily apply a Style to every page o
 
 Head over to github: https://github.com/dtbaker/stylepress
 
-Created by @dtbaker - check out our other stuff: https://dtbaker.net
+Please leave
+
+Copyright @dtbaker
 
 More details on our dedicated website: https://stylepress.org
+
+Check out other work by dtbaker here: https://dtbaker.net
 
 == Installation ==
 
@@ -74,8 +83,19 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 
 == Changelog ==
 
-= 1.0.13 =
-* Beta Release
+= 1.0.16 =
+* Added Tooltip widget
+* Added Dynamic Field widget
+* Added Styled Google Maps widget
+* Added Form Fields: Date Picker, Description and Toggle Section
+* Added Page Slider widget
+* Added StylePress Loop widget
+* Fixed MegaMenu style layout
+* Fixed modal popup width
+
+= 1.0.15 =
+* Added support for GeneratePress
+* Added support for OceanWP
 
 == Upgrade Notice ==
 
