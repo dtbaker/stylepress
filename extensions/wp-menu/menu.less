@@ -33,118 +33,7 @@
       display: block;
       text-align: left;
 
-      .stylepress-inside-navigation {
 
-        ul {
-          list-style: none;
-          margin: 0;
-          padding-left: 0;
-          @media (max-width: 768px) {
-            display: none;
-          }
-          li {
-            display: inline-block;
-            position: relative;
-            a {
-              padding-left: 20px;
-              padding-right: 20px;
-              line-height: 60px;
-              display: block;
-              box-shadow: none;
-              text-decoration: none;
-              font-family: inherit;
-              &:hover {
-              }
-            }
-            &.menu-item-has-children {
-              > a {
-                padding-right: 0;
-                position: relative;
-              }
-              .dropdown-menu-toggle {
-                padding-right: 20px;
-                display: inline-block;
-                height: 100%;
-                clear: both;
-                padding-left: 10px;
-                &:before {
-                  content: "\f107";
-                  font-family: FontAwesome;
-                  line-height: 1em;
-                  speak: none;
-                }
-              }
-            }
-            &:hover {
-              > a {
-              }
-              > ul {
-
-                // animation start
-                animation-name: dropdownanimate;
-                animation-duration: .4s;
-                opacity:1;
-                max-height:2000px;
-                // animation end
-              }
-            }
-
-          }
-          ul {
-            top: auto;
-            display: none;
-            float: left;
-            position: absolute;
-            left: 0;
-            z-index: 99999;
-            width: 200px;
-            text-align: left;
-
-            visibility: hidden;
-
-
-            // animation start
-            display: block;
-            overflow:hidden;
-            box-shadow: 0 5px 5px 0 rgba(0,0,0,.03);
-            animation-name: dropdownanimaterev;
-            animation-duration: .4s;
-            max-height:0;
-            // animation end
-
-
-            li {
-              width: 100%;
-              a {
-                font-size: 0.9em;
-                padding: 10px 20px;
-                line-height: normal;
-              }
-              &.menu-item-has-children {
-                .dropdown-menu-toggle {
-                  padding-right: 15px;
-                  float: right;
-                  padding-top: 10px;
-                  padding-bottom: 10px;
-                  margin-top: -10px;
-                  &:before {
-                    content: "\f105" !important;
-                  }
-                }
-              }
-            }
-            ul {
-              left: 100%;
-              top: 0;
-            }
-          }
-        }
-        &:after {
-          clear: both;
-          display: table;
-          content: '';
-        }
-      }
       .stylepress-menu-toggle {
         &:before {
           content: "\f0c9";
@@ -214,34 +103,183 @@
       }
     }
   }
-  .stylepress-nav-slideouts{
-    position: absolute;
-    visibility: hidden;
-    left:0;
-    right:0;
-    z-index:499;
-    top: 78px;
-    @media (max-width: 768px) {
-      display:none;
-    }
+}
 
-    .stylepress-nav-slideout{
+.stylepress_menu {
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    @media (max-width: 768px) {
+      display: none;
+    }
+    li {
+      display: inline-block;
+      position: relative;
+      a {
+        padding-left: 20px;
+        padding-right: 20px;
+        line-height: 60px;
+        display: block;
+        box-shadow: none;
+        text-decoration: none;
+        font-family: inherit;
+        &:hover {
+        }
+      }
+      &.menu-item-has-children {
+        > a {
+          padding-right: 0;
+          position: relative;
+        }
+        .dropdown-menu-toggle {
+          padding-right: 20px;
+          display: inline-block;
+          height: 100%;
+          clear: both;
+          padding-left: 10px;
+          &:before {
+            content: "\f107";
+            font-family: FontAwesome;
+            line-height: 1em;
+            speak: none;
+          }
+        }
+      }
+      &:hover {
+        > a {
+        }
+        > ul {
+
+          // animation start
+          display:block;
+          animation-name: dropdownanimate;
+          animation-duration: .4s;
+          opacity:1;
+          max-height:2000px;
+          // animation end
+        }
+      }
+
+    }
+    ul {
+      top: auto;
+      display: none;
+      float: left;
       position: absolute;
-      top:0;
-      left:0;
-      right:0;
-      overflow:hidden;
-      z-index: 1;
+      left: 0;
+      z-index: 99999;
+      width: 200px;
+      text-align: left;
+
+      visibility: hidden;
+
+
+      // animation start
       box-shadow: 0 5px 5px 0 rgba(0,0,0,.03);
       animation-name: dropdownanimaterev;
       animation-duration: .4s;
       max-height:0;
-      &.visible{
-        animation-name: dropdownanimate;
-        animation-duration: .4s;
-        opacity:1;
-        max-height:2000px;
+      // animation end
+
+
+      li {
+        width: 100%;
+        a {
+          font-size: 0.9em;
+          padding: 10px 20px;
+          line-height: normal;
+        }
+        &.menu-item-has-children {
+          .dropdown-menu-toggle {
+            padding-right: 15px;
+            float: right;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-top: -10px;
+            &:before {
+              content: "\f105" !important;
+            }
+          }
+        }
       }
+      ul {
+        left: 100%;
+        top: 0;
+      }
+    }
+    li.stylepress_megamenu{
+      position:initial !important;
+      > ul{
+        width:100% !important;
+        background:#333333;
+        color:#FFF;
+        a{
+          color:#FFF;
+        }
+        > li{
+          flex:1;
+          width:33%;
+          padding:10px;
+          border-right:1px solid rgba(255, 255, 255, 0.08);
+          > a{
+            font-size:1.3em;
+          }
+          > ul{
+            animation-name: none;
+            display:block !important;
+            max-height: none;
+            position:relative;
+            width: auto;
+            left: auto;
+            top: auto;
+            padding:10px 0;
+            box-shadow: none;
+          }
+        }
+      }
+      &:hover{
+        > ul{
+          display:flex !important;
+        }
+      }
+    }
+  }
+  &:after {
+    clear: both;
+    display: table;
+    content: '';
+  }
+}
+
+.stylepress-nav-slideouts{
+  position: absolute;
+  visibility: hidden;
+  left:0;
+  right:0;
+  z-index:499;
+  top: 78px;
+  @media (max-width: 768px) {
+    display:none;
+  }
+
+  .stylepress-nav-slideout{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    overflow:hidden;
+    z-index: 1;
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,.03);
+    animation-name: dropdownanimaterev;
+    animation-duration: .4s;
+    max-height:0;
+    &.visible{
+      animation-name: dropdownanimate;
+      animation-duration: .4s;
+      opacity:1;
+      max-height:2000px;
     }
   }
 }
@@ -255,18 +293,6 @@
     }
   }
   .stylepress-nav-menu {
-    &.stylepress-navigation-loaded.fixed{
-      position:fixed;
-      width:100%;
-      top:0;
-      .admin-bar & {
-        top: 32px;
-      }
-      body.dtbaker-elementor-template.elementor-editor-active & {
-        top: auto !important;
-        position: relative;
-      }
-    }
     .stylepress-nav-wrapper {
       width: 100%;
       display: flex;
@@ -277,15 +303,15 @@
         display: flex;
         align-items: center;
       }
-      .stylepress-main-navigation{
-        ul{
-          li{
-            &.stylepress_has_navslide{
-              ul{
-                // don't display drop downs on desktop, show the navslider instead.
-                display: none !important;
-              }
-            }
+    }
+  }
+  .stylepress_menu{
+    ul{
+      li{
+        &.stylepress_has_navslide{
+          > ul{
+            // don't display drop downs on desktop, show the navslider instead.
+            display: none !important;
           }
         }
       }
@@ -295,7 +321,19 @@
 
 .stylepress-navigation-loaded {
   .stylepress-nav-slideouts,
-  .stylepress-inside-navigation ul ul{
+  .stylepress_menu ul ul {
     visibility: visible !important;
+  }
+  .stylepress-nav-menu.fixed {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    body.dtbaker-elementor-template.elementor-editor-active & {
+      top: auto !important;
+      position: relative;
+    }
+  }
+  &.admin-bar .stylepress-nav-menu.fixed {
+    top: 32px;
   }
 }

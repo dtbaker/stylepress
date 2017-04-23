@@ -443,7 +443,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 					'unit' => 'px',
 				],
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -453,7 +453,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 			Group_Control_Background::get_type(),
 			[
 				'name' => 'menu_background_dropdown',
-				'selector' => '{{WRAPPER}} .stylepress-main-navigation .stylepress-inside-navigation ul ul, {{WRAPPER}} .stylepress-nav-slideout',
+				'selector' => '{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul, {{WRAPPER}} .stylepress-nav-slideout',
 			]
 		);
 
@@ -826,7 +826,6 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
         }else{
             ob_start();
 
-            $GLOBALS['stylepress_nav_slideouts'] = array();
             ?>
             <div class="stylepress-nav-wrapper">
                 <?php
@@ -899,24 +898,6 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
                                 ?>
                             </div><!-- .inside-navigation -->
                         </nav><!-- #site-navigation -->
-                        <?php
-                        if($GLOBALS['stylepress_nav_slideouts']){
-                            ?>
-                            <div class="stylepress-nav-slideouts">
-                                <?php
-                                foreach($GLOBALS['stylepress_nav_slideouts'] as $template_id => $tf){
-                                    ?>
-                                    <div class="stylepress-nav-slideout" data-id="<?php echo $template_id;?>">
-                                        <?php
-                                        echo \Elementor\Plugin::instance()->frontend->get_builder_content( $template_id, false );
-                                        ?>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
-                            </div>
-                            <?php
-                        } ?>
                     </div>
                 <?php }
                 if(!empty($settings['icon_list'])) {

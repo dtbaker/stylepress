@@ -27,6 +27,14 @@ if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_te
 <?php
 $inner_content = ob_get_clean();
 
-echo $GLOBALS['stylepressheader'];
-echo $inner_content;
-echo $GLOBALS['stylepressfooter'];
+if(empty($GLOBALS['stylepressheader']) || empty($GLOBALS['stylepressfooter'])){
+    echo "Sorry this theme is not supported by StylePress. Please see here for details: <a href='https://stylepress.org/elementor/compatible-wordpress-themes/'>https://stylepress.org/elementor/compatible-wordpress-themes/</a>";
+
+	echo $inner_content;
+
+}else{
+
+	echo $GLOBALS['stylepressheader'];
+	echo $inner_content;
+	echo $GLOBALS['stylepressfooter'];
+}

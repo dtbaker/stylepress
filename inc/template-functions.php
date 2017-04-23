@@ -93,58 +93,63 @@ if ( ! function_exists( 'dtbaker_elementor_page_content' ) ) {
 		if(!empty($GLOBALS['stylepress_render_this_template_inside'])){
 			// hook here on our header/footer callbacks to strip double rendered content.
 
-			ob_start();
+            $theme_hooks = apply_filters('stylepress_theme_hooks',array());
 
-			?><!DOCTYPE html>
-			<html <?php language_attributes(); ?> class="no-js">
-			<head>
-				<meta charset="<?php bloginfo( 'charset' ); ?>">
-				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<link rel="profile" href="http://gmpg.org/xfn/11">
-				<?php wp_head(); ?>
-			</head>
+            if(!empty($theme_hooks['before']) && !empty($theme_hooks['after'])){
 
-			<body <?php body_class('stylepress-render'); ?>>
-			<?php
+                ob_start();
 
-			$page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
-			DtbakerElementorManager::get_instance()->debug_message("render.php: Rendering full page output for page type '$page_type' in render.php using the style: ". (
-				!empty($GLOBALS['our_elementor_template']) ? '<a href="'.get_permalink($GLOBALS['our_elementor_template']).'">' . esc_html(get_the_title($GLOBALS['our_elementor_template'])) .'</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
-				).'');
+                ?><!DOCTYPE html>
+                <html <?php language_attributes(); ?> class="no-js">
+                <head>
+                    <meta charset="<?php bloginfo( 'charset' ); ?>">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="profile" href="http://gmpg.org/xfn/11">
+                    <?php wp_head(); ?>
+                </head>
 
-			if(DtbakerElementorManager::get_instance()->removing_theme_css) {
-				DtbakerElementorManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
-			}
+                <body <?php body_class('stylepress-render'); ?>>
+                <?php
 
-			do_action( 'stylepress/before-render' );
-			$GLOBALS['stylepressheader'] = ob_get_clean();
-			ob_start(); // kill the theme header from the below include.
-			add_action('ocean_before_main', function(){
-				$old_header = ob_get_clean(); // kill the header
-				ob_start(); // capture all inner theme output and render it here.
-			});
-			add_action('ocean_after_main', function(){
-				// we have to break out of the template rendering and continue to render the stylepress footer from here on in.
-				$inner = ob_get_clean(); // capture all inner
-				echo $inner;
-				// render out stylepress footer
-				ob_start();
-				do_action( 'stylepress/after-render' );
-				wp_footer();
-				?>
-				</body>
-				</html>
-				<?php
-				$GLOBALS['stylepressfooter'] = ob_get_clean();
-				ob_start(); // kill the rest of the theme geneated footer.
-			});
+                $page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
+                DtbakerElementorManager::get_instance()->debug_message("render.php: Rendering full page output for page type '$page_type' in render.php using the style: ". (
+                    !empty($GLOBALS['our_elementor_template']) ? '<a href="'.get_permalink($GLOBALS['our_elementor_template']).'">' . esc_html(get_the_title($GLOBALS['our_elementor_template'])) .'</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
+                    ).'');
 
-			$template = $GLOBALS['stylepress_render_this_template_inside'];
-			unset($GLOBALS['stylepress_render_this_template_inside']);
+                if(DtbakerElementorManager::get_instance()->removing_theme_css) {
+                    DtbakerElementorManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
+                }
 
-			require $template;
-			ob_end_clean(); // kill the footer.
-			return;
+                do_action( 'stylepress/before-render' );
+                $GLOBALS['stylepressheader'] = ob_get_clean();
+                ob_start(); // kill the theme header from the below include.
+                add_action($theme_hooks['before'], function(){
+                    $old_header = ob_get_clean(); // kill the header
+                    ob_start(); // capture all inner theme output and render it here.
+                });
+                add_action($theme_hooks['after'], function(){
+                    // we have to break out of the template rendering and continue to render the stylepress footer from here on in.
+                    $inner = ob_get_clean(); // capture all inner
+                    echo $inner;
+                    // render out stylepress footer
+                    ob_start();
+                    do_action( 'stylepress/after-render' );
+                    wp_footer();
+                    ?>
+                    </body>
+                    </html>
+                    <?php
+                    $GLOBALS['stylepressfooter'] = ob_get_clean();
+                    ob_start(); // kill the rest of the theme geneated footer.
+                });
+
+                $template = $GLOBALS['stylepress_render_this_template_inside'];
+                unset($GLOBALS['stylepress_render_this_template_inside']);
+
+                require $template;
+                ob_end_clean(); // kill the footer.
+                return;
+            }
 		}
 
 		echo '<!-- Start StylePress Render --> ';

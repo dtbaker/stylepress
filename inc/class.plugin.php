@@ -82,6 +82,7 @@ class DtbakerElementorManager {
         add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
         add_action( 'admin_menu', array( $this, 'admin_menu' ) );
         add_action( 'init', array( $this, 'register_custom_post_type' ) );
+        add_action( 'init', array( $this, 'theme_compatibility' ) );
         add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
         add_action( 'wp_ajax_stylepress_get_css', array( $this, 'editor_get_css' ) );
         add_action( 'wp_ajax_stylepress_save_css', array( $this, 'editor_save_css' ) );
@@ -417,15 +418,20 @@ class DtbakerElementorManager {
 	            }
                     */
 
-                    add_action('ocean_before_main', function(){
-                        // render our content here.
-	                    do_action('stylepress/render-inner');
-                        ob_start();
-                        // capture all output and discard at end below:
-                    });
-                    add_action('ocean_after_main', function(){
-                        ob_end_clean();
-                    });
+                    $theme_hooks = apply_filters('stylepress_theme_hooks',array());
+
+                    if(!empty($theme_hooks['before']) && !empty($theme_hooks['after'])){
+	                    add_action($theme_hooks['before'], function(){ // ocean_before_main
+		                    // render our content here.
+		                    do_action('stylepress/render-inner');
+		                    ob_start();
+		                    // capture all output and discard at end below:
+	                    });
+	                    add_action($theme_hooks['after'], function(){ // ocean_after_main
+		                    ob_end_clean();
+	                    });
+                    }
+
 	            }else{
 
 	            }
@@ -550,10 +556,12 @@ class DtbakerElementorManager {
 		    // we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
 
 			add_action( 'admin_notices', 	function() {
-				$message      = esc_html__( 'Please install Elementor before attempting to use the StylePress plugin..', 'stylepress' );
+				$message      = esc_html__( 'Please install and activate Elementor before attempting to use the StylePress plugin.', 'stylepress' );
 				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 				echo wp_kses_post( $html_message );
 			} );
+
+
 		}else if($this->show_full_ui()){
 
 
@@ -704,6 +712,10 @@ class DtbakerElementorManager {
 	 */
 	public function admin_menu() {
 
+
+		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
+		    return;
+		}
 	    if($this->show_full_ui()) {
 		    add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'dtbaker-stylepress', array(
 			    $this,
@@ -796,7 +808,7 @@ class DtbakerElementorManager {
 	 * @return bool
 	 */
 	public function supports( $feature ){
-	    return true;
+	    // for now we base this off our whitelist support for theme hooks
 	    return (bool) get_theme_support('stylepress-elementor');
     }
 
@@ -1891,11 +1903,24 @@ class DtbakerElementorManager {
 	        wp_enqueue_style( 'stylepress-theme-overwrites', DTBAKER_ELEMENTOR_URI . 'assets/css/theme-overwrites.css', false, DTBAKER_ELEMENTOR_VERSION );
         }
 
+	}
+
+	/**
+	 * Loads the compatibility with various popular themes.
+	 *
+	 * @since 1.0.16
+	 */
+	public function theme_compatibility() {
+
+		if(!$this->show_full_ui())return;
+
 		$theme    = get_option( 'template' );
-		$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.css';
-		if ( file_exists( $filename ) ) {
-			wp_enqueue_style( 'stylepress-theme-addons', DTBAKER_ELEMENTOR_URI . 'themes/' . basename( $theme ) . '.css', false, DTBAKER_ELEMENTOR_VERSION );
-		}
+        if($theme_name = strtolower(basename( $theme ))) {
+	        $filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . $theme_name . '/' . $theme_name . '.php';
+	        if ( is_readable( $filename ) ) {
+                require_once $filename;
+	        }
+        }
 	}
 
 	/**

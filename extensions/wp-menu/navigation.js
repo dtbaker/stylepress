@@ -76,11 +76,11 @@
                     $(this).find('.stylepress-nav-slideouts').css('top',$(this).find('.stylepress-main-navigation').height() + 'px');
                 });
                 var bar_height = $(this).height();
-                $(this).addClass('stylepress-navigation-loaded');
                 if($(this).hasClass('fixed')){
                     $(this).parent().find('.stylepress-nav-menu-placeholder').first().css('height', bar_height + 'px');
                 }
             });
+            $('body').addClass('stylepress-navigation-loaded');
         }, 500 );
         // Initiate the desktop hover element
         $('.stylepress-nav-menu').on('mouseenter',function(){

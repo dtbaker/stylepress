@@ -63,11 +63,21 @@ class stylepress_walker_nav_menu extends Walker_Nav_Menu {
 
 		$data_attr = '';
 		if($item->ID){
-			$slideout = get_post_meta( $item->ID, '_menu_item_slideout', true );
-			if ( (int) $slideout > 0 ) {
-				$data_attr .= ' data-stylepressslideout="' . (int)$slideout . '"';
-				$GLOBALS['stylepress_nav_slideouts'][(int)$slideout] = true;
-				$classes[] = 'stylepress_has_navslide';
+			$display_type = get_post_meta( $item->ID, '_menu_item_displaytype', true );
+			if($display_type){
+				switch($display_type){
+					case STYLEPRESS_MENU_DISPLAY_MEGA:
+						$classes[] = 'stylepress_megamenu';
+						break;
+					case STYLEPRESS_MENU_DISPLAY_SLIDEOUT:
+						$slideout = get_post_meta( $item->ID, '_menu_item_slideout', true );
+						if ( (int) $slideout > 0 ) {
+							$data_attr .= ' data-stylepressslideout="' . (int)$slideout . '"';
+							$GLOBALS['stylepress_nav_slideouts'][(int)$slideout] = true;
+							$classes[] = 'stylepress_has_navslide';
+						}
+						break;
+				}
 			}
 		}
 

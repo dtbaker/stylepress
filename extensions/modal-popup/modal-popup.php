@@ -189,6 +189,11 @@ add_action( 'stylepress/after-render' , function(){
 	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
 } );
 
+add_action( 'stylepress/modal-popups' , function(){
+	// if there is no before/after render
+	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
+} );
+
 //add_action( 'elementor/element/stylepress_modal_button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 //add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 //add_action( 'elementor/element/icon-box/section_icon/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);

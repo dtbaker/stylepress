@@ -22,9 +22,9 @@
         $slidein = $('.stylepress_slide_in_menu[data-id="' + slideinid + '"]');
         if($slidein.length) {
 
-            console.log($current_slidein);
-            console.log($slidein);
-            console.log($current_slidein == $slidein);
+            // console.log($current_slidein);
+            // console.log($slidein);
+            // console.log($current_slidein == $slidein);
             if($current_slidein && $current_slidein[0] == $slidein[0]){
                 close_slideins();
                 return;
@@ -37,11 +37,12 @@
                     close_slideins();
                 }
             });
-            var size = parseInt($slidein.data('size'));
-            if(!size)size = 400;
+            var size = $slidein.outerWidth();
+            // var size = parseInt($slidein.data('size'));
+            // if(!size)size = 400;
             // $('head').append('<style type="text/css" id="stylepressslideinstyles">body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){transform: translateX(-' + size + 'px); }</style>');
             // account for sidebar padding
-            size += 60;
+            // size += 60;
             $('head').append('<style type="text/css" id="stylepressslideinstyles">body > #site-offcanvas-wrap{left: -' + size + 'px; }</style>');
             $('.stylepress_slide_in_menu').removeClass('shown');
             $slidein.addClass('shown');
