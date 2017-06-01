@@ -83,6 +83,9 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 
 == Changelog ==
 
+= 1.0.18 =
+* No new features, just a little fix, don't get excited.
+
 = 1.0.17 =
 * Toggle switch for nav menu icons
 
