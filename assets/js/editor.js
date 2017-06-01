@@ -46,7 +46,7 @@
 
 
 
-        elementor.config.pro_library_url = 'https://elementor.com/pro/?ref=1164&campaign=prolib';
+        //elementor.config.pro_library_url = 'https://elementor.com/pro/?ref=1164&campaign=prolib';
         console.log && console.log('Welcome to StylePress');
     } );
 
@@ -58,7 +58,7 @@
     if( $templatewrap.length ) {
         var $template = $('<div>' + $templatewrap.html() + '</div>');
         $template.find('a[href^="https://go.elementor.com"]').each(function(){
-            $(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslink');
+            //$(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslink');
         });
         $templatewrap.html($template.html());
     }
@@ -67,7 +67,7 @@
     if( $templatewrap.length ) {
         var $template = $('<div>' + $templatewrap.html() + '</div>');
         $template.find('a[href^="https://go.elementor.com"]').each(function(){
-            $(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslinkglobal');
+            //$(this).attr('href', 'https://elementor.com/pro/?ref=1164&campaign=jslinkglobal');
         });
         $templatewrap.html($template.html());
     }

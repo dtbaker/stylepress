@@ -106,10 +106,10 @@ class DtbakerElementorManager {
 
 		add_action( 'init', array( $this, 'register_new_nav_menu' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
-		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ) );
+		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ), 40 );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
 		add_action( 'wp', array( $this, 'add_elementor_overrides' ) );
-		add_action( 'init', array( $this, 'elementor_ref' ) );
+//		add_action( 'init', array( $this, 'elementor_ref' ) );
 
 		// stylepress plugin hooks
         add_action( 'init', array( $this, 'load_extensions') );
