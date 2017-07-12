@@ -143,7 +143,6 @@ if (typeof module !== 'undefined' && module.exports) {
 
     if(typeof tlite === 'function') {
 
-        console.log('asdf');
         tlite(function (el) {
             var when = classWhen(el);
             return when('tooltip', { grav: 's' }) ||
