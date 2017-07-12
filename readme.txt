@@ -2,8 +2,8 @@
 Contributors: dtbaker
 Donate link: https://dtbaker.net
 Tags: page builder, editor, elementor, builder, visual editor, front-end editor, design, drag and drop builder, front-end builder, landing page, page builder plugin, site builder, template builder, visual builder, website builder, wysiwyg
-Requires at least: 4.4
-Tested up to: 4.7.3
+Requires at least: 4.6
+Tested up to: 4.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -82,6 +82,9 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 3. Overview of the settings page. You can set various default styles for various page types.
 
 == Changelog ==
+
+= 1.0.19 =
+* A few small fixes and tweaks
 
 = 1.0.18 =
 * No new features, just a little fix, don't get excited.

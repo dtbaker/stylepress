@@ -1893,7 +1893,8 @@ class DtbakerElementorManager {
 		        // remove it
                 if($data && !empty($data->src) && !in_array( $handle, $style_whitelist ) ) {
 	                foreach ( $remove_slugs as $remove_slug => $tf ) {
-		                if ( strpos( $data->src, '/' . $remove_slug . '/' ) !== false ) {
+		                // todo: check for custom themes/ folder name here:
+		                if ( strpos( $data->src, 'themes/' . $remove_slug . '/' ) !== false ) {
 			                wp_deregister_style( $handle );
 			                wp_dequeue_style( $handle );
 		                }
