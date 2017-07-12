@@ -77,7 +77,7 @@ add_action( 'wp_ajax_stylepress_modal_pop', function(){
 
 //
 function stylepress_modal_button_before_render( $widget ) {
-	$enabled = array( 'button', 'dtbaker_wp_menu' );
+	$enabled = array( 'button', 'dtbaker_wp_menu', );
 	if ( in_array( $widget->get_name(), $enabled ) ) {
 		$settings = $widget->get_active_settings();
 		if ( ! empty( $settings['link']['stylepress_template'] ) ) {
@@ -98,6 +98,35 @@ function stylepress_modal_button_before_render( $widget ) {
 				case 'dtbaker_wp_menu':
 					$widget->add_render_attribute( 'link', $data_attr['key'], $data_attr['val'] );
 					break;
+			}
+		}
+	}
+	// icon lists work a bit differently. repeating types.
+	$enabled = array(  'icon-list' );
+	if ( in_array( $widget->get_name(), $enabled ) ) {
+		$settings = $widget->get_active_settings();
+		if(!empty($settings['icon_list'])) {
+			foreach($settings['icon_list'] as $icon_id => $icon_settings) {
+				if ( ! empty( $icon_settings['link']['stylepress_template'] ) ) {
+					if ( empty( $icon_settings['link']['url'] ) ) {
+						$settings['icon_list'][$icon_id]['link']['url'] = '#';
+						$widget->set_settings( 'icon_list', $settings['icon_list'] );
+					}
+					$options   = array(
+						'template' => (int) $icon_settings['link']['stylepress_template'],
+						'width'    => (int) $icon_settings['link']['stylepress_width'],
+						'display'  => (int) $icon_settings['link']['stylepress_display'],
+					);
+					$data_attr = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
+					switch ( $widget->get_name() ) {
+						case 'button':
+							$widget->add_render_attribute( 'button', $data_attr['key'], $data_attr['val'] );
+							break;
+						case 'dtbaker_wp_menu':
+							$widget->add_render_attribute( 'link', $data_attr['key'], $data_attr['val'] );
+							break;
+					}
+				}
 			}
 		}
 	}
