@@ -18,9 +18,9 @@ add_action( 'wp_enqueue_scripts', function(){
 
 	wp_register_style( 'stylepress-loop', DTBAKER_ELEMENTOR_URI . 'extensions/stylepress-loop/stylepress-loop.css' );
 
-	if( isset($_GET['elementor']) || isset($_GET['elementor-preview'])) { //\Elementor\Plugin::$instance->editor->is_edit_mode()){
+	//if( isset($_GET['elementor']) || isset($_GET['elementor-preview'])) { //\Elementor\Plugin::$instance->editor->is_edit_mode()){
 		wp_enqueue_style('stylepress-loop');
-	}
+	//}
 
 } );
 
