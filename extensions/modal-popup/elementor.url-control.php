@@ -27,6 +27,7 @@ class StylePress_Control_URL extends Control_Base_Multiple {
 		return [
 			'is_external' => '',
 			'url' => '',
+			'nofollow' => '',
 			'stylepress_template' => '',
 			'stylepress_display' => '',
 			'stylepress_width' => '500',

@@ -4,7 +4,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 
 add_action( 'wp_enqueue_scripts', function(){
-	wp_enqueue_script( 'stylepress-formmods', DTBAKER_ELEMENTOR_URI . 'extensions/form/frontend.js' );
+	wp_enqueue_script( 'stylepress-formmods', DTBAKER_ELEMENTOR_URI . 'extensions/form/frontend.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
 	wp_enqueue_style( 'stylepress-formstyles', DTBAKER_ELEMENTOR_URI . 'extensions/form/form.css' );
 } );
 

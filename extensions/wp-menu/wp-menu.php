@@ -7,7 +7,7 @@ define('STYLEPRESS_MENU_DISPLAY_SLIDEOUT',2);
 
 add_action( 'wp_enqueue_scripts', function(){
 	wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/menu.css', false );
-	wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/navigation.js', array('jquery') );
+	wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/navigation.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
 } );
 
 

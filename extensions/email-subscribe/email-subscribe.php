@@ -6,7 +6,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 add_action( 'wp_enqueue_scripts', function(){
 
 	wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'extensions/email-subscribe/subscribe.css', false );
-	wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'extensions/email-subscribe/subscribe.js', array('jquery') );
+	wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'extensions/email-subscribe/subscribe.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
 	wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_enqueue_script( 'stylepress-email-script' );
 } );

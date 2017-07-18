@@ -23,7 +23,7 @@ if($control){
 
 
 add_action( 'wp_enqueue_scripts', function(){
-	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array('jquery') );
+	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
 	wp_localize_script( 'stylepress-modal-popup', 'stylepress_modal', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_register_style( 'stylepress-modal-button', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.css' );
 } );
@@ -119,11 +119,9 @@ function stylepress_modal_button_before_render( $widget ) {
 					);
 					$data_attr = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
 					switch ( $widget->get_name() ) {
-						case 'button':
-							$widget->add_render_attribute( 'button', $data_attr['key'], $data_attr['val'] );
-							break;
-						case 'dtbaker_wp_menu':
-							$widget->add_render_attribute( 'link', $data_attr['key'], $data_attr['val'] );
+						case 'icon-list':
+							$link_key = 'link_' . $icon_id;
+							$widget->add_render_attribute( $link_key, $data_attr['key'], $data_attr['val'] );
 							break;
 					}
 				}

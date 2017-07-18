@@ -8,6 +8,22 @@
 defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 // we render our content first because this will register our styles for the wp_head() call.
+// hmm but this messes with some wp_footer scripts. eg popup.js isn't loading in the footer any more.
+
+// alright lets call wp_head() once, then render our inner content, then try to catch any missed wp_head scripts/styles and manually inject them into the header.
+
+
+ob_start();
+
+?><!DOCTYPE html>
+<html <?php language_attributes(); ?> class="no-js">
+<head>
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+	<?php wp_head();
+$initial_head = ob_get_clean();
+
 
 ob_start();
 
@@ -40,13 +56,18 @@ do_action( 'stylepress/after-render' );
 
 $inner_content = ob_get_clean();
 
-?><!DOCTYPE html>
-<html <?php language_attributes(); ?> class="no-js">
-<head>
-    <meta charset="<?php bloginfo( 'charset' ); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="profile" href="http://gmpg.org/xfn/11">
-	<?php wp_head(); ?>
+
+echo $initial_head;
+
+
+global $wp_scripts;
+$wp_scripts->do_head_items();
+
+// same for styles somehow?
+//global $wp_styles;
+//print_r($wp_styles);exit;
+
+?>
 </head>
 
 <body <?php body_class('stylepress-render'); ?>>

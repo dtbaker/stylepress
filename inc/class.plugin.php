@@ -108,7 +108,7 @@ class DtbakerElementorManager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ), 40 );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
-		add_action( 'wp', array( $this, 'add_elementor_overrides' ) );
+		add_action( 'elementor/init', array( $this, 'add_elementor_overrides' ) );
 //		add_action( 'init', array( $this, 'elementor_ref' ) );
 
 		// stylepress plugin hooks
@@ -1901,6 +1901,7 @@ class DtbakerElementorManager {
 	                }
                 }
 	        }
+
 	        wp_enqueue_style( 'stylepress-theme-overwrites', DTBAKER_ELEMENTOR_URI . 'assets/css/theme-overwrites.css', false, DTBAKER_ELEMENTOR_VERSION );
         }
 
