@@ -44,6 +44,19 @@ class StylePress_Control_URL extends Control_Base_Multiple {
 
 	public function content_template() {
 
+		$control_uid = $this->get_control_uid();
+
+		$more_input_control_uid = $this->get_control_uid( 'more-input' );
+
+		$is_external_control_uid = $this->get_control_uid( 'is_external' );
+
+		$nofollow_control_uid = $this->get_control_uid( 'nofollow' );
+
+		$popup_modal_control_uid = $this->get_control_uid( 'stylepress_template' );
+		$popup_modal_width_control_uid = $this->get_control_uid( 'stylepress_width' );
+		$popup_modal_display_control_uid = $this->get_control_uid( 'stylepress_display' );
+
+
 		$options = [
 			'0' => '- ' . __( 'None', 'elementor' ) . ' -',
 		];
@@ -59,46 +72,54 @@ class StylePress_Control_URL extends Control_Base_Multiple {
 		}
 
 		?>
-		<div class="elementor-control-field elementor-control-url-external-{{{ data.show_external ? 'show' : 'hide' }}}">
-			<label class="elementor-control-title">{{{ data.label }}}</label>
-			<div class="elementor-control-input-wrapper">
-				<input type="url" data-setting="url" placeholder="{{ data.placeholder }}" />
-				<!-- <button class="elementor-control-stylepress-modal tooltip-target" data-tooltip="<?php _e( 'Create a Modal Popup/Slide-in', 'elementor' ); ?>" title="<?php esc_attr_e( 'Create a Modal Popup/Slide-in', 'elementor' ); ?>">
-					<span class="elementor-control-stylepress-modal-button" title="<?php esc_attr_e( 'Create a Modal Popup/Slide-in', 'elementor' ); ?>"><i class="fa fa-window-restore"></i></span>
-				</button> -->
-				<button class="elementor-control-url-target tooltip-target" data-tooltip="<?php _e( 'Open Link in new Tab', 'elementor' ); ?>" title="<?php esc_attr_e( 'Open Link in new Tab', 'elementor' ); ?>">
-					<span class="elementor-control-url-external" title="<?php esc_attr_e( 'New Window', 'elementor' ); ?>"><i class="fa fa-external-link"></i></span>
-				</button>
-			</div>
-		</div>
-		<div class="elementor-control-field elementor-stylepress-url-modal-block">
-			<label class="elementor-control-stylepress-modal-title"> ... or show a modal window:</label>
-			<div class="elementor-control-input-wrapper">
-				<select name="stylepress_template" data-setting="stylepress_template">
-					<?php foreach($options as $option_id => $option){ ?>
-					<option value="<?php echo (int)$option_id;?>"><?php echo esc_html($option);?></option>
-					<?php } ?>
-				</select>
-			</div>
-		</div>
-		<div class="elementor-control-field elementor-stylepress-url-modal-block">
-			<label class="elementor-control-stylepress-modal-title">modal style:</label>
-			<div class="elementor-control-input-wrapper">
-				<select name="stylepress_display" data-setting="stylepress_display">
-					<option value="0">Modal</option>
-					<option value="1">Slide In</option>
-				</select>
-			</div>
-		</div>
-		<div class="elementor-control-field elementor-stylepress-url-modal-block">
-			<label class="elementor-control-stylepress-modal-title">modal width:</label>
-			<div class="elementor-control-input-wrapper">
-				<input type="number" data-setting="stylepress_width" />
-			</div>
-		</div>
-		<# if ( data.description ) { #>
-			<div class="elementor-control-field-description">{{{ data.description }}}</div>
-			<# } #>
+
+
+        <div class="elementor-control-field elementor-control-url-external-{{{ data.show_external ? 'show' : 'hide' }}}">
+            <label for="<?php echo $control_uid; ?>" class="elementor-control-title">{{{ data.label }}}</label>
+            <div class="elementor-control-input-wrapper">
+                <input id="<?php echo $control_uid; ?>" type="url" class="elementor-input" data-setting="url" placeholder="{{ data.placeholder }}" />
+                <label for="<?php echo $more_input_control_uid; ?>" class="elementor-control-url-more tooltip-target" data-tooltip="<?php _e( 'Link Options', 'elementor' ); ?>">
+                    <i class="fa fa-cog"></i>
+                </label>
+                <input id="<?php echo $more_input_control_uid; ?>" type="checkbox" class="elementor-control-url-more-input">
+                <div class="elementor-control-url-more-options">
+                    <div class="elementor-control-url-option">
+                        <input id="<?php echo $is_external_control_uid; ?>" type="checkbox" class="elementor-control-url-option-input" data-setting="is_external">
+                        <label for="<?php echo $is_external_control_uid; ?>"><?php echo __( 'Open in new window', 'elementor' ); ?></label>
+                    </div>
+                    <div class="elementor-control-url-option">
+                        <input id="<?php echo $nofollow_control_uid; ?>" type="checkbox" class="elementor-control-url-option-input" data-setting="nofollow">
+                        <label for="<?php echo $nofollow_control_uid; ?>"><?php echo __( 'Add nofollow', 'elementor' ); ?></label>
+                    </div>
+                    <div class="elementor-control-url-option">
+                        <label for="<?php echo $popup_modal_control_uid; ?>"><?php echo __( 'Show a modal window:', 'elementor' ); ?></label>
+                        <select name="stylepress_template" id="<?php echo $popup_modal_control_uid; ?>" data-setting="stylepress_template">
+		                    <?php foreach($options as $option_id => $option){ ?>
+                                <option value="<?php echo (int)$option_id;?>"><?php echo esc_html($option);?></option>
+		                    <?php } ?>
+                        </select>
+                    </div>
+                    <div class="elementor-control-url-option">
+                        <label for="<?php echo $popup_modal_display_control_uid; ?>"><?php echo __( 'Modal Style:', 'elementor' ); ?></label>
+                        <select name="stylepress_display" id="<?php echo $popup_modal_display_control_uid;?>" data-setting="stylepress_display">
+                            <option value="0">Modal</option>
+                            <option value="1">Slide In</option>
+                        </select>
+                    </div>
+                    <div class="elementor-control-url-option">
+                        <label for="<?php echo $popup_modal_width_control_uid; ?>"><?php echo __( 'Modal Width:', 'elementor' ); ?></label>
+                        <input type="number" data-setting="stylepress_width" id="<?php echo $popup_modal_width_control_uid;?>" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <# if ( data.description ) { #>
+            <div class="elementor-control-field-description">{{{ data.description }}}</div>
+        <# } #>
+
 		<?php
 	}
 }

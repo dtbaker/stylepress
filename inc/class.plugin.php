@@ -632,7 +632,7 @@ class DtbakerElementorManager {
 						$this->add_sub_menu( esc_html($post->post_title) , $modal_menu.$template_id, \Elementor\Utils::get_edit_link($template_id), $modal_menu );
 					}
 				}
-				if($GLOBALS['stylepress_nav_slideouts']){
+				if(!empty($GLOBALS['stylepress_nav_slideouts'])){
 					foreach ( $GLOBALS['stylepress_nav_slideouts'] as $template_id => $options ) {
 						$post = get_post($template_id);
 						$this->add_sub_menu( esc_html($post->post_title) , $modal_menu.$template_id, \Elementor\Utils::get_edit_link($template_id), $modal_menu );
