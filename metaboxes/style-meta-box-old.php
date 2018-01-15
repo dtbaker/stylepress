@@ -19,7 +19,7 @@ if( $post->post_parent ){
 
     ?>
     <input type="hidden" name="dtbaker_is_component_check" value="1">
-    <input type="checkbox" name="dtbaker_is_component" value="1" <?php echo isset($_GET['dtbaker_component']) || get_post_meta( $post->ID, 'dtbaker_is_component', true ) ? ' checked' : '';?>> Make this a component.
+    <input type="checkbox" name="dtbaker_is_component" value="1" <?php echo isset($_GET['dtbaker_component']) || get_post_meta( $post->ID, 'dtbaker_is_component', true ) ? ' checked' : '';?>> <?php _e('Make this a component.', 'stylepress'); ?>
 
     <style type="text/css">
         /* todo: move this into a body class and put the style in admin.less */
@@ -64,8 +64,8 @@ if( $post->post_parent ){
         <h3>
             <a class="button button-primary"
                href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style&post_parent=' . (int) $post->ID ) ); ?>"><?php esc_html_e( 'New', 'stylepress' ); ?></a>
-            <span>Outer Styles:</span>
-            <small>These styles can surround your existing website content.</small>
+            <span><?php _e('Outer Styles:', 'stylepress'); ?></span>
+            <small><?php _e('These styles can surround your existing website content.', 'stylepress'); ?></small>
         </h3>
         <div class="inner-wrap">
             <ul>
@@ -98,9 +98,9 @@ if( $post->post_parent ){
                             <div class="theme-usage">
                                 <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">
 	                                <?php if ( $used ){ ?>
-                                        <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
+                                        <i class="fa fa-check"></i> <?php _e('Style Applied To:', 'stylepress'); ?> <?php echo implode(', ',$used); ?>.
 	                                <?php }else{ ?>
-                                        <i class="fa fa-times"></i> Style Not Used.
+                                        <i class="fa fa-times"></i> <?php _e('Style Not Used.', 'stylepress'); ?>
                                     <?php } ?>
                                 </a>
                             </div>
@@ -127,8 +127,8 @@ if( $post->post_parent ){
         <h3>
             <a class="button button-primary"
                href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style&dtbaker_component=1&post_parent=' . (int) $post->ID ) ); ?>"><?php esc_html_e( 'New', 'stylepress' ); ?></a>
-            <span>Inner Components:</span>
-            <small>These styles can be used for your inner components (blog summary, comments, etc...)</small>
+            <span><?php _e('Inner Components:', 'stylepress'); ?></span>
+            <small><?php _e('These styles can be used for your inner components (blog summary, comments, etc...)', 'stylepress'); ?></small>
         </h3>
         <div class="inner-wrap">
             <ul>
@@ -161,9 +161,9 @@ if( $post->post_parent ){
                             <div class="theme-usage">
                                 <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">
 			                        <?php if ( $used ){ ?>
-                                        <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
+                                        <i class="fa fa-check"></i> <?php _e('Style Applied To:', 'stylepress'); ?> <?php echo implode(', ',$used); ?>.
 			                        <?php }else{ ?>
-                                        <i class="fa fa-times"></i> Style Not Used.
+                                        <i class="fa fa-times"></i> <?php _e('Style Not Used.', 'stylepress'); ?>
 			                        <?php } ?>
                                 </a>
                             </div>

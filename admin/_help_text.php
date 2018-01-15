@@ -10,14 +10,14 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 ob_start();
 ?>
-<h3>Getting Started</h3>
+<h3><?php _e('Getting Started', 'stylepress'); ?></h3>
 <ol>
-	<li>Create your "Site Style" in Elementor from the <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress'));?>">Styles</a> page.</li>
-	<li>Choose which Outer Styles to apply to your site using the options below. The Outer Style is the header/sidebar/footer that wraps around your page content.</li>
-	<li>Choose which Inner Styles to apply to your site components. The Inner Styles are dynamic layouts that replace the default <code>the_content()</code> output.</li>
-	<li>When editing individual pages you can apply a different style to the default, look in the page metabox area.</li>
-	<li>Disable Theme CSS if the page layout looks funky (recommended).</li>
-	<li>View more help and videos at <a href="https://stylepress.org/help/" target="_blank">https://stylepress.org/help/</a> </li>
+	<li><?php _e('Create your "Site Style" in Elementor from the ', 'stylepress'); ?><a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress'));?>"><?php _e('Styles', 'stylepress'); ?></a> <?php _e('page.', 'stylepress'); ?></li>
+	<li><?php _e('Choose which Outer Styles to apply to your site using the options below. The Outer Style is the header/sidebar/footer that wraps around your page content.', 'sylepress'); ?></li>
+	<li><?php _e('Choose which Inner Styles to apply to your site components. The Inner Styles are dynamic layouts that replace the default <code>the_content()</code> output.', 'stylepress'); ?></li>
+	<li><?php _e('When editing individual pages you can apply a different style to the default, look in the page metabox area.', 'stylepress'); ?></li>
+	<li><?php _e('Disable Theme CSS if the page layout looks funky (recommended).', 'stylepress'); ?></li>
+	<li><?php _e('View more help and videos at', 'stylepress'); ?> <a href="https://stylepress.org/help/" target="_blank">https://stylepress.org/help/</a> </li>
 </ol>
 <?php
 
@@ -33,12 +33,12 @@ get_current_screen()->add_help_tab( array(
 
 ob_start();
 ?>
-	<h3>Recommended Plugins:</h3>
-	<p>It is recommended to install these plugins to get best results:</p>
+	<h3><?php _e('Recommended Plugins:', 'stylepress'); ?></h3>
+	<p><?php _e('It is recommended to install these plugins to get best results:', 'stylepress'); ?></p>
 	<ol>
-		<li><a href="https://elementor.com/pro/?ref=1164&campaign=pluginget" target="_blank">Elementor Pro</a></li>
-		<li><a href="https://wordpress.org/plugins/megamenu/" target="_blank">Max Mega Menu</a></li>
-		<li><a href="https://wordpress.org/plugins/easy-google-fonts/" target="_blank">Easy Google Fonts</a></li>
+		<li><a href="https://elementor.com/pro/?ref=1164&campaign=pluginget" target="_blank"><?php _e('Elementor Pro', 'stylepress'); ?></a></li>
+		<li><a href="https://wordpress.org/plugins/megamenu/" target="_blank"><?php _e('Max Mega Menu', 'stylepress'); ?></a></li>
+		<li><a href="https://wordpress.org/plugins/easy-google-fonts/" target="_blank"><?php _e('Easy Google Fonts', 'stylepress'); ?></a></li>
 	</ol>
 <?php
 

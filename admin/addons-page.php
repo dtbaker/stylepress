@@ -27,33 +27,33 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
     <?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
 
     <?php if(isset($_GET['saved'])){ ?>
-        <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
+        <div id="message" class="updated notice notice-success is-dismissible"><p><?php _e('Settings updated.', 'stylepress'); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php _e('Dismiss this notice.', 'stylepress'); ?></span></button></div>
     <?php } ?>
 
-    <div class="notice notice-error"><p>TODO: Create a toggle button to enable/disable these. </p></div>
-    <div class="notice notice-error"><p>TODO: Include the rest of these missing plugins into this package. </p></div>
+    <div class="notice notice-error"><p><?php _e('TODO: Create a toggle button to enable/disable these.', 'stylepress'); ?> </p></div>
+    <div class="notice notice-error"><p><?php _e('TODO: Include the rest of these missing plugins into this package.', 'stylepress'); ?> </p></div>
 
-    <h3>Current add-ons:</h3>
+    <h3><?php _e('Current add-ons:', 'stylepress'); ?></h3>
     <ul>
-        <li>Dynamic Field: enable dynamic fields on text boxes, headings, buttons, images etc..</li>
-        <li>Modal Popup/Slide In: turn any link into a modal popup</li>
-        <li>Menu / Navbar: insert a fixed navbar, create a megamenu layout</li>
-        <li>Page Slider: design each slide in its own Elementor page</li>
-        <li>Styled Google Maps: change the colors of embedded Google Maps</li>
-        <li>Mailchimp Email Subscribe Box</li>
-        <li>Form Fields: Text Description, Date Picker, Toggle Block</li>
-        <li>StylePress Loop: Design your grid layout (currently Elementor Pro only)</li>
-        <li>Tooltip: add a hover tooltip to buttons and links</li>
+        <li><?php _e('Dynamic Field: enable dynamic fields on text boxes, headings, buttons, images etc..', 'stylepress'); ?></li>
+        <li><?php _e('Modal Popup/Slide In: turn any link into a modal popup', 'stylepress'); ?></li>
+        <li><?php _e('Menu / Navbar: insert a fixed navbar, create a megamenu layout', 'stylepress'); ?></li>
+        <li><?php _e('Page Slider: design each slide in its own Elementor page', 'stylepress'); ?></li>
+        <li><?php _e('Styled Google Maps: change the colors of embedded Google Maps', 'stylepress'); ?></li>
+        <li><?php _e('Mailchimp Email Subscribe Box', 'stylepress'); ?></li>
+        <li><?php _e('Form Fields: Text Description, Date Picker, Toggle Block', 'stylepress'); ?></li>
+        <li><?php _e('StylePress Loop: Design your grid layout (currently Elementor Pro only)', 'stylepress'); ?></li>
+        <li><?php _e('Tooltip: add a hover tooltip to buttons and links', 'stylepress'); ?></li>
     </ul>
 
-    <h3>Pending add-ons:</h3>
+    <h3><?php _e('Pending add-ons:', 'stylepress'); ?></h3>
     <ul>
-        <li>Insert Page</li>
-        <li>Post Slider</li>
-        <li>WooCommerce Product Slider</li>
-        <li>Blog Post Output</li>
-        <li>Single Image Lightbox</li>
-        <li>Individual Links for Slider Images</li>
+        <li><?php _e('Insert Page', 'stylepress'); ?></li>
+        <li><?php _e('Post Slider', 'stylepress'); ?></li>
+        <li><?php _e('WooCommerce Product Slider', 'stylepress'); ?></li>
+        <li><?php _e('Blog Post Output', 'stylepress'); ?></li>
+        <li><?php _e('Single Image Lightbox', 'stylepress'); ?></li>
+        <li><?php _e('Individual Links for Slider Images', 'stylepress'); ?></li>
     </ul>
 
 

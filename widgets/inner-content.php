@@ -162,7 +162,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function content_template() {
 		?>
 		<div class="inner-page-content-area">
-		Inner Website Content <br/>Will Display Here
+		<?php _e('Inner Website Content <br/>Will Display Here', 'stylepress'); ?>
 		</div>
 		<?php
 	}

@@ -85,7 +85,7 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'desc',
 			[
-				'label' => __( 'Create an API Key from <a href="https://admin.mailchimp.com/account/api/" target="_blank">https://admin.mailchimp.com/account/api/</a> and find your List ID from the "Lists" page..', 'stylepress' ),
+				'label' => __( 'Create an API Key from <a href="https://admin.mailchimp.com/account/api/" target="_blank">https://admin.mailchimp.com/account/api/</a> and find your List ID from the "Lists" page.', 'stylepress' ),
 				'type' => Controls_Manager::RAW_HTML,
 			]
 		);

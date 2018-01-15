@@ -58,7 +58,7 @@ function stylepress_register_dynamics( $widget, $args ){
 	ob_start();
 	?>
 	<br><br>
-	<p><strong>Example Dynamic Fields:</strong></p>
+	<p><strong><?php _e('Example Dynamic Fields:', 'stylepress'); ?></strong></p>
 	<br><br>
 	<ul>
 		<?php
@@ -68,7 +68,7 @@ function stylepress_register_dynamics( $widget, $args ){
 		foreach($available_callbacks as $key => $title){ ?>
 		<li>{{<?php echo $key;?>}} <span><?php echo $title;?></span></li>
 		<?php } ?>
-		<li>{{your-custom-field}} <span>Any Custom Field</span></li>
+		<li>{{your-custom-field}} <span><?php _e('Any Custom Field', 'stylepress'); ?></span></li>
 	</ul>
 	<?php
 	$eg = ob_get_clean();

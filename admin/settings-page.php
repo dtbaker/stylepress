@@ -29,11 +29,11 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 
 
     <?php if(isset($_GET['saved'])){ ?>
-        <div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
+        <div id="message" class="updated notice notice-success is-dismissible"><p><?php _e('Settings updated.', 'stylepress'); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php _e('Dismiss this notice.', 'stylepress'); ?></span></button></div>
     <?php } ?>
 
     <?php if(isset($_GET['imported'])){ ?>
-        <div id="message" class="updated notice notice-success is-dismissible"><p><strong>Style Imported!</strong> Your new style has been imported. Please assign it to your site below (hint: Start with "Global" and test from there).</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>
+        <div id="message" class="updated notice notice-success is-dismissible"><p><?php _e('<strong>Style Imported!</strong> Your new style has been imported. Please assign it to your site below (hint: Start with "Global" and test from there).', 'stylepress'); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php _e('Dismiss this notice.', 'stylepress'); ?>.</span></button></div>
     <?php } ?>
 
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
@@ -42,8 +42,8 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 
 
         <h3 class="stylepress-header">
-            <span>Configure Website Styles</span>
-            <small>Choose which styles to apply on various parts of your website. See the help menu above for more details.</small>
+            <span><?php _e('Configure Website Styles', 'stylepress'); ?></span>
+            <small><?php _e('Choose which styles to apply on various parts of your website. See the help menu above for more details.', 'stylepress'); ?></small>
         </h3>
 
 
@@ -55,10 +55,10 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 					<table class="widefat striped">
 						<thead>
 						<tr>
-							<th>Page Type</th>
-                            <th>Outer Style <small>(Header/Footer)</small></th>
-                            <th>Inner Style <small>(Page + CPT Layouts)</small></th>
-							<th>Remove Theme CSS?</th>
+							<th><?php _e('Page Type', 'stylepress'); ?></th>
+                            <th><?php _e('Outer Style <small>(Header/Footer)</small>', 'stylepress'); ?></th>
+                            <th><?php _e('Inner Style <small>(Page + CPT Layouts)</small>', 'stylepress'); ?></th>
+							<th><?php _e('Remove Theme CSS?', 'stylepress'); ?></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -118,13 +118,13 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 
                 <div>
                     <div style="text-align: center">
-                    <p><strong>Need help?</strong>
+                    <p><strong><?php _e('Need help?', 'stylepress'); ?></strong>
                         <small>
                     <br/>
-                        The "Outer" style is generally the same on every page of the site. <br/>
-                        It contains your logo, header, footer and sidebars. <br/>
-                        The "Inner" style is can be different for posts, pages and CPT's. <br/>
-                        It contains a page title area and other dynamic fields.
+                        <?php _e('The "Outer" style is generally the same on every page of the site. ', 'stylepress'); ?><br/>
+                        <?php _e('It contains your logo, header, footer and sidebars.', 'stylepress'); ?> <br/>
+                        <?php _e('The "Inner" style is can be different for posts, pages and CPT\'s.', 'stylepress'); ?> <br/>
+                        <?php _e('It contains a page title area and other dynamic fields.', 'stylepress'); ?>
                         </small>
                     </p>
                         <p>&nbsp;</p>

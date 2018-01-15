@@ -46,7 +46,7 @@ if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_te
 	$GLOBALS['stylepress_only_render'] = 'all';
 	echo Elementor\Plugin::instance()->frontend->get_builder_content( $GLOBALS['our_elementor_template'], false );
 } else {
-	echo 'Please select a global site style';
+	echo __('Please select a global site style', 'stylepress');
 }
 ?>
 <!-- stylepress render template end -->

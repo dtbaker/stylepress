@@ -40,10 +40,10 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                     <div class="buttons">
     <!--                    <a href="--><?php //echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style' ) ); ?><!--" class="button">Import</a>-->
                         <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress&style_id=new') ); ?>"
-                           class="button button-primary">Create New Style</a>
+                           class="button button-primary"><?php _e('Create New Style', 'stylepress'); ?></a>
                     </div>
-                    <span>Your Styles</span>
-                    <small>These are your website styles. A style can be applied to your website from the <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">Settings</a> page.</small>
+                    <span><?php _e('Your Styles', 'stylepress'); ?></span>
+                    <small><?php _e('These are your website styles. A style can be applied to your website from the ', 'stylepress'); ?><a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>"><?php _e('Settings', 'stylepress'); ?></a> <?php _e('page.', 'stylepress'); ?></small>
                 </h3>
 
                 <div class="stylepress-item-wrapper">
@@ -51,7 +51,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 
                     if(!$designs){
                         ?>
-                        <p>None yet! Create your own or install from the list below.</p>
+                        <p><?php _e('None yet! Create your own or install from the list below.', 'stylepress'); ?></p>
                         <p>&nbsp;</p>
                         <?php
                     }
@@ -100,9 +100,9 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
                             <div class="theme-usage">
                                 <a href="<?php echo esc_url( admin_url('admin.php?page=dtbaker-stylepress-settings'));?>">
                                     <?php if ( $used ){ ?>
-                                        <i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ',$used); ?>.
+                                        <i class="fa fa-check"></i> <?php _e('Style Applied To:', 'stylepress'); ?> <?php echo implode(', ',$used); ?>.
                                     <?php }else{ ?>
-                                        <i class="fa fa-times"></i> Style Not Used.
+                                        <i class="fa fa-times"></i> <?php _e('Style Not Used.', 'stylepress'); ?>
                                     <?php } ?>
                                 </a>
                             </div>
@@ -122,8 +122,8 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 
             <div class="wp-clearfix">
                 <h3 class="stylepress-header">
-                    <span>Available Styles</span>
-                    <small>These site styles can be installed and then edited with Elementor.</small>
+                    <span><?php _e('Available Styles', 'stylepress'); ?></span>
+                    <small><?php _e('These site styles can be installed and then edited with Elementor.', 'stylepress'); ?></small>
                 </h3>
 
                 <div class="stylepress-item-wrapper">

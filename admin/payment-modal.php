@@ -18,26 +18,26 @@ if(!$name)$name = $current_user->display_name;
         <div class="loadingbar"></div>
 		<div class="form-row">
 			<label for="card-name">
-				Your Name
+				<?php _e('Your Name', 'stylepress'); ?>
 			</label>
-			<input type="text" size="50" class="name text-field" name="name" placeholder="Your Name" value="<?php echo esc_attr($name);?>">
+			<input type="text" size="50" class="name text-field" name="name" placeholder="<?php _e('Your Name', 'stylepress'); ?>" value="<?php echo esc_attr($name);?>">
 		</div>
 		<div class="form-row">
 			<label for="card-email">
-				Your Email
+				<?php _e('Your Email', 'stylepress'); ?>
 			</label>
-			<input type="email" size="50" class="email text-field" name="email" placeholder="Your Email" value="<?php echo esc_attr($current_user->user_email);?>">
+			<input type="email" size="50" class="email text-field" name="email" placeholder="<?php _e('Your Email', 'stylepress'); ?>" value="<?php echo esc_attr($current_user->user_email);?>">
 		</div>
 		<div class="form-row">
 			<label for="stylepress-card-amount">
-				Payment Amount = <span id="stylepress-amount-update"></span> USD
+				<?php _e('Payment Amount', 'stylepress'); ?> = <span id="stylepress-amount-update"></span> USD
 			</label>
             <div id="stylepress-card-amount" class="wrap"></div>
             <input type="hidden" name="amount" class="stylepress-card-amount-value" value="1">
 		</div>
 		<div class="form-row">
 			<label for="card-element">
-				Credit or Debit Card
+				<?php _e('Credit or Debit Card', 'stylepress'); ?>
 			</label>
 			<div class="stripe-card-element">
 			</div>
@@ -45,7 +45,7 @@ if(!$name)$name = $current_user->display_name;
 			<div id="card-errors"></div>
 		</div>
 
-		<button class="button button-primary stylepress-final-purchase-button">Purchase Style</button>
+		<button class="button button-primary stylepress-final-purchase-button"><?php _e('Purchase Style', 'stylepress'); ?></button>
 	</div>
 </div>
 
