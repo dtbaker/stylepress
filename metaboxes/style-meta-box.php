@@ -19,7 +19,7 @@ if( $post->post_parent ){
 
     ?>
     <input type="hidden" name="dtbaker_is_component_check" value="1">
-    <input type="checkbox" name="dtbaker_is_component" value="1" <?php echo isset($_GET['dtbaker_component']) || get_post_meta( $post->ID, 'dtbaker_is_component', true ) ? ' checked' : '';?>> Make this a component.
+    <input type="checkbox" name="dtbaker_is_component" value="1" <?php echo isset($_GET['dtbaker_component']) || get_post_meta( $post->ID, 'dtbaker_is_component', true ) ? ' checked' : '';?>> <?php _e('Make this a component.', 'stylepress'); ?>
 
     <style type="text/css">
         /* todo: move this into a body class and put the style in admin.less */

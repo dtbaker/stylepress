@@ -19,7 +19,7 @@ if( $post->post_parent ){
     // we already editing a child style. Show configuration options instead of sub list.
 
     ?>
-    (nothing here yet)
+    <?php _e('(nothing here yet)', 'stylepress'); ?>
     <?php
 
 }else {
@@ -32,21 +32,21 @@ if( $post->post_parent ){
 	?>
     <div id="stylepress-advanced-metabox" class="stylepress-metabox dtbaker-elementor-browser">
 
-        <h3>Font Rules: </h3>
+        <h3><?php _e('Font Rules:', 'stylepress'); ?> </h3>
         <div class="inner-wrap">
-        <p>This is a font configuration file for the Easy Google Fonts plugin. This lets you configure site wide styles from the Apperance > Customize > Typography window.</p>
+        <p><?php _e('This is a font configuration file for the Easy Google Fonts plugin. This lets you configure site wide styles from the Apperance > Customize > Typography window.', 'stylepress'); ?></p>
         <textarea class="advanced-settings" name="stylepress_advanced[font]"><?php echo esc_textarea(!empty($advanced['font']) ? $advanced['font'] : '');?></textarea>
         </div>
 
-        <h3>Elementor Overrides: </h3>
+        <h3><?php _e('Elementor Overrides:', 'stylepress'); ?> </h3>
         <div class="inner-wrap">
-        <p>This is a json Elementor configuration file for advanced Elementor tweaks. Adding things like new drop downs to existing widgets etc...</p>
+        <p><?php _e('This is a json Elementor configuration file for advanced Elementor tweaks. Adding things like new drop downs to existing widgets etc...', 'stylepress'); ?></p>
         <textarea class="advanced-settings" name="stylepress_advanced[elementor]"><?php echo esc_textarea(!empty($advanced['elementor']) ? $advanced['elementor'] : '');?></textarea>
         </div>
 
-        <h3>Style CSS: </h3>
+        <h3><?php _e('Style CSS:', 'stylepress'); ?> </h3>
             <div class="inner-wrap">
-        <p>We try to avoid writing manual CSS, but sometimes it is needed. These CSS rules will be applied to any page that uses one of these styles.</p>
+        <p><?php _e('We try to avoid writing manual CSS, but sometimes it is needed. These CSS rules will be applied to any page that uses one of these styles.', 'stylepress'); ?></p>
         <textarea class="advanced-settings" name="stylepress_advanced[css]"><?php echo esc_textarea(!empty($advanced['css']) ? $advanced['css'] : '');?></textarea>
             </div>
 

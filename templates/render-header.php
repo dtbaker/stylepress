@@ -26,5 +26,5 @@ if ( ! empty( $GLOBALS['our_elementor_template'] ) ) {
 	$GLOBALS['stylepress_only_render'] = 'header';
 	echo Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $GLOBALS['our_elementor_template'] );
 } else {
-	echo 'Please select a site style';
+	echo __('Please select a site style', 'stylepress');
 }
