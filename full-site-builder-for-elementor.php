@@ -103,3 +103,7 @@ if( ! function_exists( 'dtbaker_elementor_fail_php_version' ) ) {
 		echo wp_kses_post( $html_message );
 	}
 }
+
+if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
+	define( 'ELEMENTOR_PARTNER_ID', 2114 );
+}
