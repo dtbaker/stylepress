@@ -9,7 +9,9 @@
 }
 .stylepress-form-togglescontrol .stylepress-form-togglecheck:checked ~ .stylepress-form-toggleinner {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin: 14px -13px;
 }
@@ -26,7 +28,7 @@
   z-index: 999999 !important;
   width: 295px;
   font-size: 16px !important;
-} 
+}
 .ui-datepicker .ui-datepicker-title {
   font-weight: normal;
 }
