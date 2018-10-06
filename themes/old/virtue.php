@@ -21,4 +21,4 @@ $virtue = '
             padding-top: 0;
         }
 	';
-	wp_add_inline_style( 'kadence_theme', $virtue );
+wp_add_inline_style( 'kadence_theme', $virtue );

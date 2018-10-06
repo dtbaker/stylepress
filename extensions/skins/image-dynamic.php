@@ -1,4 +1,5 @@
 <?php
+
 namespace StylePress\Elementor\Skins;
 
 use Elementor\Controls_Manager;
@@ -7,12 +8,13 @@ use Elementor\Widget_Base;
 use Elementor\Group_Control_Image_Size;
 use Elementor\Scheme_Color;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
 
 /**
  * Class Skin_Dtbaker
  */
-
 class Skin_StylePressDynamic_Image extends Skin_Base {
 
 	public function get_id() {
@@ -27,7 +29,7 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 		add_action( 'elementor/element/image/section_image/after_section_start', [ $this, 'register_controls' ] );
 	}
 
-	public function get_replace_fields(){
+	public function get_replace_fields() {
 
 		$fields = array(
 			'post_thumbnail' => 'Post Thumbnail',
@@ -46,8 +48,8 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 		$this->add_control(
 			'stylepress_dynamic_fields',
 			[
-				'raw' => $available_fields,
-				'type' => \Elementor\Controls_Manager::RAW_HTML,
+				'raw'             => $available_fields,
+				'type'            => \Elementor\Controls_Manager::RAW_HTML,
 				'content_classes' => 'stylepress-elementor-description',
 				/*'condition' => [
 					'stylepress_dynamic_field' => 'yes',
@@ -58,10 +60,10 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 		$this->add_control(
 			'stylepress_dynamic_image',
 			[
-				'label' => __( 'Choose Image', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
+				'label'   => __( 'Choose Image', 'elementor' ),
+				'type'    => Controls_Manager::SELECT,
 				'options' => [
-					'default' => __( 'Default As Per Below', 'elementor' ),
+					'default'        => __( 'Default As Per Below', 'elementor' ),
 					'post_thumbnail' => __( 'Post Thumbnail', 'elementor' ),
 				],
 				'default' => 'post_thumbnail',
@@ -75,16 +77,16 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 
 		$settings = $this->parent->get_settings();
 
-		if($this->get_instance_value('stylepress_dynamic_image') == 'post_thumbnail'){
+		if ( $this->get_instance_value( 'stylepress_dynamic_image' ) == 'post_thumbnail' ) {
 			require_once DTBAKER_ELEMENTOR_PATH . 'widgets/class.dynamic-field.php';
-			$dyno_generator = \DtbakerDynamicField::get_instance();
+			$dyno_generator           = \DtbakerDynamicField::get_instance();
 			$settings['image']['url'] = $dyno_generator->post_thumbnail();
-			$link = array(
-                'url' => $dyno_generator->permalink()
-            );
-        }else{
+			$link                     = array(
+				'url' => $dyno_generator->permalink()
+			);
+		} else {
 			$link = $this->get_link_url( $settings );
-        }
+		}
 
 		if ( empty( $settings['image']['url'] ) ) {
 			return;
@@ -105,30 +107,30 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 				$this->parent->add_render_attribute( 'link', 'target', '_blank' );
 			}
 		} ?>
-        <div <?php echo $this->parent->get_render_attribute_string( 'wrapper' ); ?>>
+		<div <?php echo $this->parent->get_render_attribute_string( 'wrapper' ); ?>>
 			<?php
 			if ( $has_caption ) : ?>
-            <figure class="wp-caption">
+			<figure class="wp-caption">
 				<?php endif;
 
 				if ( $link ) : ?>
-                <a <?php echo $this->parent->get_render_attribute_string( 'link' ); ?>>
+				<a <?php echo $this->parent->get_render_attribute_string( 'link' ); ?>>
 					<?php endif;
 
 					echo Group_Control_Image_Size::get_attachment_image_html( $settings );
 
 					if ( $link ) : ?>
-                </a>
+				</a>
 			<?php endif;
 
 			if ( $has_caption ) : ?>
-                <figcaption class="widget-image-caption wp-caption-text"><?php echo $settings['caption']; ?></figcaption>
+				<figcaption class="widget-image-caption wp-caption-text"><?php echo $settings['caption']; ?></figcaption>
 			<?php endif;
 
 			if ( $has_caption ) : ?>
-            </figure>
+			</figure>
 		<?php endif; ?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -141,6 +143,7 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 			if ( empty( $instance['link']['url'] ) ) {
 				return false;
 			}
+
 			return $instance['link'];
 		}
 

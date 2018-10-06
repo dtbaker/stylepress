@@ -23,4 +23,4 @@ $sydney = '
            display: none;
         }
 	';
-	wp_add_inline_style( 'sydney-style', $sydney );
+wp_add_inline_style( 'sydney-style', $sydney );

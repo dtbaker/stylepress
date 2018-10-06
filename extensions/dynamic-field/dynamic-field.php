@@ -6,26 +6,26 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/widget.dynamic-field.php';
 
 // add dynamic filters onto pre-built elements.
-function stylepress_register_dynamic_background( $widget, $args ){
+function stylepress_register_dynamic_background( $widget, $args ) {
 	$widget->add_control(
 		'stylepress_enable_dynamic_bg',
 		[
-			'label' => __( 'Dynamic Image?', 'elementor-pro' ),
-			'type' =>  \Elementor\Controls_Manager::SWITCHER,
-			'default' => '',
-			'label_on' => __( 'Yes', 'elementor' ),
+			'label'     => __( 'Dynamic Image?', 'elementor-pro' ),
+			'type'      => \Elementor\Controls_Manager::SWITCHER,
+			'default'   => '',
+			'label_on'  => __( 'Yes', 'elementor' ),
 			'label_off' => __( 'No', 'elementor' ),
 			'condition' => [
-//				'background' => [ 'classic' ],
-//				'image[url]!' => '',
+				//				'background' => [ 'classic' ],
+				//				'image[url]!' => '',
 			],
 		]
 	);
 	$widget->add_control(
 		'stylepress_enable_dynamic_bg_info',
 		[
-			'label' => __( 'Dynamic background image is now enabled for this widget. See the documentation for more details: <a href="https://stylepress.org/elementor/dynamic-background-image/" target="_blank">stylepress.org/elementor/dynamic-background-image/</a> ' ),
-			'type' => \Elementor\Controls_Manager::RAW_HTML,
+			'label'     => __( 'Dynamic background image is now enabled for this widget. See the documentation for more details: <a href="https://stylepress.org/elementor/dynamic-background-image/" target="_blank">stylepress.org/elementor/dynamic-background-image/</a> ' ),
+			'type'      => \Elementor\Controls_Manager::RAW_HTML,
 			'condition' => [
 				'stylepress_enable_dynamic_bg!' => '',
 			],
@@ -33,7 +33,7 @@ function stylepress_register_dynamic_background( $widget, $args ){
 	);
 }
 
-function stylepress_register_dynamics( $widget, $args ){
+function stylepress_register_dynamics( $widget, $args ) {
 	$widget->start_controls_section(
 		'section_stylepress_dynamic',
 		[
@@ -45,13 +45,13 @@ function stylepress_register_dynamics( $widget, $args ){
 	$widget->add_control(
 		'stylepress_enable_dynamic',
 		[
-			'label' => __( 'Enable Dynamic Content?', 'elementor-pro' ),
-			'type' =>  \Elementor\Controls_Manager::SWITCHER,
-			'default' => '',
-			'label_on' => __( 'Yes', 'elementor' ),
-			'label_off' => __( 'No', 'elementor' ),
+			'label'        => __( 'Enable Dynamic Content?', 'elementor-pro' ),
+			'type'         => \Elementor\Controls_Manager::SWITCHER,
+			'default'      => '',
+			'label_on'     => __( 'Yes', 'elementor' ),
+			'label_off'    => __( 'No', 'elementor' ),
 			'return_value' => 'yes',
-			'separator' => 'before',
+			'separator'    => 'before',
 		]
 	);
 
@@ -63,10 +63,10 @@ function stylepress_register_dynamics( $widget, $args ){
 	<ul>
 		<?php
 		require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-		$dyno_generator = \DtbakerDynamicField::get_instance();
+		$dyno_generator      = \DtbakerDynamicField::get_instance();
 		$available_callbacks = $dyno_generator->get_replace_fields();
-		foreach($available_callbacks as $key => $title){ ?>
-		<li>{{<?php echo $key;?>}} <span><?php echo $title;?></span></li>
+		foreach ( $available_callbacks as $key => $title ) { ?>
+			<li>{{<?php echo $key; ?>}} <span><?php echo $title; ?></span></li>
 		<?php } ?>
 		<li>{{your-custom-field}} <span>Any Custom Field</span></li>
 	</ul>
@@ -75,8 +75,8 @@ function stylepress_register_dynamics( $widget, $args ){
 	$widget->add_control(
 		'stylepress_enable_dynamic_information',
 		[
-			'label' => __( 'Dynamic content is now enabled for this widget. See the documentation for more details: <a href="https://stylepress.org/elementor/dynamic-fields/" target="_blank">stylepress.org/elementor/dynamic-fields/</a> '. $eg ),
-			'type' => \Elementor\Controls_Manager::RAW_HTML,
+			'label'     => __( 'Dynamic content is now enabled for this widget. See the documentation for more details: <a href="https://stylepress.org/elementor/dynamic-fields/" target="_blank">stylepress.org/elementor/dynamic-fields/</a> ' . $eg ),
+			'type'      => \Elementor\Controls_Manager::RAW_HTML,
 			'condition' => [
 				'stylepress_enable_dynamic!' => '',
 			],
@@ -89,16 +89,16 @@ function stylepress_register_dynamics( $widget, $args ){
 
 global $supported_widgets;
 $supported_widgets = array(
-	'image' => array(
+	'image'       => array(
 		'section' => 'section_image',
 	),
-	'heading' => array(
+	'heading'     => array(
 		'section' => 'section_title',
 	),
-	'button' => array(
+	'button'      => array(
 		'section' => 'section_button',
 	),
-	'icon-box' => array(
+	'icon-box'    => array(
 		'section' => 'section_icon',
 	),
 	'text-editor' => array(
@@ -110,49 +110,48 @@ function stylepress_dynamic_before_render( $widget ) {
 	global $supported_widgets;
 
 	// check for background image support.
-	if( $widget->get_name() === 'section' || $widget->get_name() === 'column' ) {
+	if ( $widget->get_name() === 'section' || $widget->get_name() === 'column' ) {
 		$settings = $widget->get_active_settings();
 		if ( ! empty( $settings['stylepress_enable_dynamic_bg'] ) && $settings['stylepress_enable_dynamic_bg'] === 'yes' ) {
 			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
 			$dyno_generator = \DtbakerDynamicField::get_instance();
-			$image_url = $dyno_generator->post_thumbnail();
-			if($image_url){
-				$widget->add_render_attribute( '_wrapper', 'style', 'background-image: url("' . esc_url($image_url) . '") !important;' );
+			$image_url      = $dyno_generator->post_thumbnail();
+			if ( $image_url ) {
+				$widget->add_render_attribute( '_wrapper', 'style', 'background-image: url("' . esc_url( $image_url ) . '") !important;' );
 			}
 		}
 	}
-	if( isset($supported_widgets[ $widget->get_name() ]) ) {
+	if ( isset( $supported_widgets[ $widget->get_name() ] ) ) {
 		$settings = $widget->get_active_settings();
-		if(!empty($settings['stylepress_enable_dynamic']) && $settings['stylepress_enable_dynamic'] === 'yes'){
+		if ( ! empty( $settings['stylepress_enable_dynamic'] ) && $settings['stylepress_enable_dynamic'] === 'yes' ) {
 			// do a find/replace on the settings
-			$fields = array();
+			$fields  = array();
 			$do_link = false;
-			switch($widget->get_name()){
+			switch ( $widget->get_name() ) {
 				case 'heading':
-					$fields = array(
+					$fields  = array(
 						'title',
 					);
 					$do_link = true;
 					break;
 				case 'text-editor':
-					$fields = array(
+					$fields  = array(
 						'editor',
 					);
 					$do_link = true;
 					break;
 				case 'image':
-					$fields = array(
-					);
+					$fields  = array();
 					$do_link = true;
 					break;
 				case 'button':
-					$fields = array(
+					$fields  = array(
 						'text',
 					);
 					$do_link = true;
 					break;
 				case 'icon-box':
-					$fields = array(
+					$fields  = array(
 						'editor',
 					);
 					$do_link = true;
@@ -160,44 +159,44 @@ function stylepress_dynamic_before_render( $widget ) {
 			}
 			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
 			$dyno_generator = \DtbakerDynamicField::get_instance();
-//			$available_callbacks = $dyno_generator->get_replace_fields();
+			//			$available_callbacks = $dyno_generator->get_replace_fields();
 
-			foreach($fields as $field){
-				if(!empty($settings[$field])){
+			foreach ( $fields as $field ) {
+				if ( ! empty( $settings[ $field ] ) ) {
 					// find/replace time.
-					if( preg_match_all('#\{\{([a-z_-]+)\}\}#imsU', $settings[$field], $matches)){
-						foreach($matches[1] as $key=>$replace_field){
-//							if( isset($available_callbacks[$replace_field])){
-								$replace = $dyno_generator->get_field($replace_field);
-								$settings[$field] = str_replace('{{' . $replace_field . '}}', $replace, $settings[$field]);
-//							}
+					if ( preg_match_all( '#\{\{([a-z_-]+)\}\}#imsU', $settings[ $field ], $matches ) ) {
+						foreach ( $matches[1] as $key => $replace_field ) {
+							//							if( isset($available_callbacks[$replace_field])){
+							$replace            = $dyno_generator->get_field( $replace_field );
+							$settings[ $field ] = str_replace( '{{' . $replace_field . '}}', $replace, $settings[ $field ] );
+							//							}
 						}
 					}
-					$widget->set_settings($field, $settings[$field]);
+					$widget->set_settings( $field, $settings[ $field ] );
 
 				}
 			}
 			// replace the [link][url] link, usually this is just {{permalink}}
-			if($do_link && !empty($settings['link']['url'])){
-				if( preg_match_all('#\{\{([a-z_-]+)\}\}#imsU', $settings['link']['url'], $matches)){
-					foreach($matches[1] as $key=>$replace_field){
-						$replace = $dyno_generator->get_field($replace_field);
-						$settings['link']['url'] = str_replace('{{' . $replace_field . '}}', $replace, $settings['link']['url']);
+			if ( $do_link && ! empty( $settings['link']['url'] ) ) {
+				if ( preg_match_all( '#\{\{([a-z_-]+)\}\}#imsU', $settings['link']['url'], $matches ) ) {
+					foreach ( $matches[1] as $key => $replace_field ) {
+						$replace                 = $dyno_generator->get_field( $replace_field );
+						$settings['link']['url'] = str_replace( '{{' . $replace_field . '}}', $replace, $settings['link']['url'] );
 					}
 				}
-				$widget->set_settings('link', $settings['link']);
+				$widget->set_settings( 'link', $settings['link'] );
 			}
 
 
 			// dynamic image support?
-			switch($widget->get_name()) {
+			switch ( $widget->get_name() ) {
 				case 'image':
 					$image_url = $dyno_generator->post_thumbnail();
-					$image_id = $dyno_generator->post_thumbnail_id();
-					if($image_url && $image_id) {
-						$settings['image']['id'] = $image_id;
+					$image_id  = $dyno_generator->post_thumbnail_id();
+					if ( $image_url && $image_id ) {
+						$settings['image']['id']  = $image_id;
 						$settings['image']['url'] = $image_url;
-						$widget->set_settings('image', $settings['image']);
+						$widget->set_settings( 'image', $settings['image'] );
 					}
 					break;
 			}
@@ -242,11 +241,11 @@ function stylepress_dynamic_before_render( $widget ) {
 	}
 }
 
-foreach($supported_widgets as $widget_name => $widget_options) {
-	add_action( 'elementor/element/'.$widget_name.'/'.$widget_options['section'].'/after_section_end', 'stylepress_register_dynamics', 10, 2 );
+foreach ( $supported_widgets as $widget_name => $widget_options ) {
+	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'stylepress_register_dynamics', 10, 2 );
 }
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_dynamic_before_render' , 10 , 1);
-add_action( 'elementor/frontend/element/before_render', 'stylepress_dynamic_before_render' , 10 , 1);
+add_action( 'elementor/frontend/widget/before_render', 'stylepress_dynamic_before_render', 10, 1 );
+add_action( 'elementor/frontend/element/before_render', 'stylepress_dynamic_before_render', 10, 1 );
 
 // dynamic background image on certain elements.
 add_action( 'elementor/element/section/section_background/before_section_end', 'stylepress_register_dynamic_background', 10, 2 );

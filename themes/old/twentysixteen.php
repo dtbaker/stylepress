@@ -64,4 +64,4 @@ $style = '
 	        }
         }
 	';
-	wp_add_inline_style( 'twentysixteen-style', $style );
+wp_add_inline_style( 'twentysixteen-style', $style );

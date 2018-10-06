@@ -39,7 +39,7 @@ class DtbakerElementorShortcode {
 	}
 
 	private function add_actions() {
-		if(!defined('ELEMENTOR_PRO_VERSION')) {
+		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) ) {
 			if ( is_admin() ) {
 				add_action( 'manage_elementor_library_posts_columns', [ $this, 'admin_columns_headers' ] );
 				add_action( 'manage_elementor_library_posts_custom_column', [ $this, 'admin_columns_content' ], 10, 2 );

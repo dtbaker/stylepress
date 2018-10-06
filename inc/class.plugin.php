@@ -104,7 +104,7 @@ class DtbakerElementorManager {
 		add_action( 'init', array( $this, 'load_extensions' ) );
 		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon' ), 10, 4 );
 
-		add_action( 'widgets_init', [ $this, 'load_widgets'] );
+		add_action( 'widgets_init', [ $this, 'load_widgets' ] );
 
 		add_action( 'wp_before_admin_bar_render', array( $this, 'wp_admin_bar' ) );
 
@@ -199,7 +199,8 @@ class DtbakerElementorManager {
 		}
 
 	}
-	public function load_widgets(){
+
+	public function load_widgets() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 			if ( class_exists( 'Elementor\Plugin' ) ) {
 				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
@@ -327,8 +328,8 @@ class DtbakerElementorManager {
 
 		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type ) {
 			$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
-			$path = $page_templates_module->get_template_path( 'elementor_canvas' );
-			if(is_file($path)){
+			$path                  = $page_templates_module->get_template_path( 'elementor_canvas' );
+			if ( is_file( $path ) ) {
 				return $path;
 			}
 		} else if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type ) {

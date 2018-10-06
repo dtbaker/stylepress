@@ -1,4 +1,5 @@
 <?php
+
 namespace StylePress\Elementor\Skins;
 
 use Elementor\Controls_Manager;
@@ -6,12 +7,13 @@ use Elementor\Skin_Base;
 use Elementor\Widget_Base;
 use Elementor\Scheme_Color;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
 
 /**
  * Class Skin_Dtbaker
  */
-
 class Skin_Icon_List_Dtbaker extends Skin_Base {
 
 	public function get_id() {
@@ -32,10 +34,10 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		$this->add_control(
 			'vertical_divider',
 			[
-				'label' => __( 'Vertical Divider', 'elementor' ),
-				'type' => Controls_Manager::SWITCHER,
+				'label'     => __( 'Vertical Divider', 'elementor' ),
+				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'Off', 'elementor' ),
-				'label_on' => __( 'On', 'elementor' ),
+				'label_on'  => __( 'On', 'elementor' ),
 				'selectors' => [
 					'{{WRAPPER}} .elementor-icon-list-item:not(:last-child):after' => 'content: ""',
 				],
@@ -47,15 +49,15 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		$this->add_control(
 			'vertical_divider_style',
 			[
-				'label' => __( 'Style', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'solid' => __( 'Solid', 'elementor' ),
+				'label'     => __( 'Style', 'elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => [
+					'solid'  => __( 'Solid', 'elementor' ),
 					'double' => __( 'Double', 'elementor' ),
 					'dotted' => __( 'Dotted', 'elementor' ),
 					'dashed' => __( 'Dashed', 'elementor' ),
 				],
-				'default' => 'solid',
+				'default'   => 'solid',
 				/*'condition' => [
 					'vertical_divider' => 'yes',
 				],*/
@@ -68,12 +70,12 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		$this->add_control(
 			'vertical_divider_weight',
 			[
-				'label' => __( 'Weight', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'     => __( 'Weight', 'elementor' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'size' => 1,
 				],
-				'range' => [
+				'range'     => [
 					'px' => [
 						'min' => 1,
 						'max' => 10,
@@ -91,11 +93,11 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		$this->add_control(
 			'vertical_divider_color',
 			[
-				'label' => __( 'Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#ddd',
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
+				'label'     => __( 'Color', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ddd',
+				'scheme'    => [
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_3,
 				],
 				/*'condition' => [
@@ -110,10 +112,10 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		$this->add_control(
 			'vertical_divider_width',
 			[
-				'label' => __( 'Height', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'units' => [ '%' ],
-				'default' => [
+				'label'     => __( 'Height', 'elementor' ),
+				'type'      => Controls_Manager::SLIDER,
+				'units'     => [ '%' ],
+				'default'   => [
 					'unit' => '%',
 				],
 				/*'condition' => [
@@ -132,7 +134,7 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 		?>
 		<ul class="elementor-icon-list-items">
 			<?php foreach ( $settings['icon_list'] as $item ) : ?>
-				<li class="elementor-icon-list-item" >
+				<li class="elementor-icon-list-item">
 					<?php
 					if ( ! empty( $item['link']['url'] ) ) {
 						$target = $item['link']['is_external'] ? ' target="_blank"' : '';
@@ -152,7 +154,7 @@ class Skin_Icon_List_Dtbaker extends Skin_Base {
 					}
 					?>
 				</li>
-				<?php
+			<?php
 			endforeach; ?>
 		</ul>
 		<?php

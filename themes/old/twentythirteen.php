@@ -22,4 +22,4 @@ $thirteen = '
             width: 100%;
         }
 	';
-	wp_add_inline_style( 'twentythirteen-style', $thirteen );
+wp_add_inline_style( 'twentythirteen-style', $thirteen );

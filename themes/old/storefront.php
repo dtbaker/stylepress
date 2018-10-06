@@ -19,4 +19,4 @@ $css = '
            margin-bottom: 0;
         }
 	';
-	wp_add_inline_style( 'storefront-style', $css );
+wp_add_inline_style( 'storefront-style', $css );

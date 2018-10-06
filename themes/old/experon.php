@@ -19,4 +19,4 @@ $experon = '
 			display: none;
 		}
 	';
-	wp_add_inline_style( 'thinkup-style', $experon );
+wp_add_inline_style( 'thinkup-style', $experon );

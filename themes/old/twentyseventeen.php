@@ -35,4 +35,4 @@ form.search-form .search-field {
 	flex:1;
 }
 ';
-	wp_add_inline_style( 'dtbaker-elementor-css', $style );
+wp_add_inline_style( 'dtbaker-elementor-css', $style );

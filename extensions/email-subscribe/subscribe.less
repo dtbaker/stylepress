@@ -1,5 +1,7 @@
 @-webkit-keyframes sk-scaleout {
-  0% { -webkit-transform: scale(0) }
+  0% {
+    -webkit-transform: scale(0)
+  }
   100% {
     -webkit-transform: scale(1.0);
     opacity: 0;
@@ -10,36 +12,37 @@
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
-  } 100% {
-      -webkit-transform: scale(1.0);
-      transform: scale(1.0);
-      opacity: 0;
-    }
+  }
+  100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
 }
 
-.stylepress-email-subscribe{
+.stylepress-email-subscribe {
 
   min-height: 55px;
-  position:relative;
-  display:inline-block;
+  position: relative;
+  display: inline-block;
 
-  .stylepress-email-status{
-    font-size:14px;
+  .stylepress-email-status {
+    font-size: 14px;
   }
-  &.submitting{
-    .loading{
-      position:absolute;
-      left:0;
-      right:0;
-      top:0;
-      bottom:0;
-      z-index:4;
-      &:before{
+  &.submitting {
+    .loading {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 4;
+      &:before {
         top: 9px;
         left: 41%;
-        z-index:5;
-        content:'';
-        position:absolute;
+        z-index: 5;
+        content: '';
+        position: absolute;
         width: 40px;
         height: 40px;
         background-color: #333;
@@ -48,19 +51,19 @@
         animation: sk-scaleout 1.0s infinite ease-in-out;
       }
     }
-    input{
+    input {
       opacity: 0.4;
     }
   }
-  &.error{
-    .stylepress-email-status{
-      color:#FF0000;
+  &.error {
+    .stylepress-email-status {
+      color: #FF0000;
     }
   }
-  &.success{
-    input{
+  &.success {
+    input {
       // todo: animate nicely
-      display:none;
+      display: none;
     }
   }
   input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], textarea {

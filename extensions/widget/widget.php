@@ -55,7 +55,7 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 	 */
 	public function filter_content_data( $data ) {
 		if ( ! empty( $data ) ) {
-			$data = Plugin::elementor()->db->iterate_data( $data, function( $element ) {
+			$data = Plugin::elementor()->db->iterate_data( $data, function ( $element ) {
 				if ( 'widget' === $element['elType'] && 'sidebar' === $element['widgetType'] && $this->sidebar_id === $element['settings']['sidebar'] ) {
 					$element['settings']['sidebar'] = null;
 				}
@@ -74,13 +74,13 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$default = [
-			'title' => '',
+			'title'       => '',
 			'template_id' => '',
 		];
 
 		$instance = array_merge( $default, $instance );
 
-		$source = \Elementor\Plugin::$instance->templates_manager->get_source( 'local' );
+		$source    = \Elementor\Plugin::$instance->templates_manager->get_source( 'local' );
 		$templates = $source->get_items();
 
 		if ( ! $templates ) {
@@ -88,19 +88,28 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 		}
 		?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title', 'elementor-pro' ); ?>:</label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+			<label
+				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title', 'elementor-pro' ); ?>
+				:</label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text"
+			       value="<?php echo esc_attr( $instance['title'] ); ?>">
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'template_id' ) ); ?>"><?php esc_attr_e( 'Choose Template', 'elementor-pro' ); ?>:</label>
-			<select class="widefat elementor-widget-template-select" id="<?php echo esc_attr( $this->get_field_id( 'template_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'template_id' ) ); ?>">
+			<label
+				for="<?php echo esc_attr( $this->get_field_id( 'template_id' ) ); ?>"><?php esc_attr_e( 'Choose Template', 'elementor-pro' ); ?>
+				:</label>
+			<select class="widefat elementor-widget-template-select"
+			        id="<?php echo esc_attr( $this->get_field_id( 'template_id' ) ); ?>"
+			        name="<?php echo esc_attr( $this->get_field_name( 'template_id' ) ); ?>">
 				<option value="">— <?php _e( 'Select', 'elementor-pro' ); ?> —</option>
 				<?php
 				foreach ( $templates as $template ) :
 					$selected = selected( $template['template_id'], $instance['template_id'] );
 					?>
-					<option value="<?php echo $template['template_id']; ?>" <?php echo $selected; ?> data-type="<?php echo esc_attr( $template['type'] ); ?>">
+					<option value="<?php echo $template['template_id']; ?>" <?php echo $selected; ?>
+					        data-type="<?php echo esc_attr( $template['type'] ); ?>">
 						<?php echo $template['title']; ?> (<?php echo $template['type']; ?>)
 					</option>
 				<?php endforeach; ?>
@@ -115,7 +124,8 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 				$style = '';
 			}
 			?>
-			<a target="_blank" class="elementor-edit-template"<?php echo $style; ?> href="<?php echo esc_url( add_query_arg( 'elementor', '', get_permalink( $instance['template_id'] ) ) ); ?>">
+			<a target="_blank" class="elementor-edit-template"<?php echo $style; ?>
+			   href="<?php echo esc_url( add_query_arg( 'elementor', '', get_permalink( $instance['template_id'] ) ) ); ?>">
 				<i class="fa fa-pencil"></i> <?php echo __( 'Edit Template', 'elementor-pro' ); ?>
 			</a>
 		</p>
@@ -130,8 +140,8 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 	 * @return array
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = [];
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance                = [];
+		$instance['title']       = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 		$instance['template_id'] = $new_instance['template_id'];
 
 		return $instance;

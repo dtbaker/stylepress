@@ -16,7 +16,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class('stylepress-editor'); ?>>
+<body <?php body_class( 'stylepress-editor' ); ?>>
 <?php
 
 do_action( 'stylepress/before-render' );

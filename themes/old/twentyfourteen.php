@@ -20,4 +20,4 @@ $style = '
             max-width: 100%;
         }
 	';
-	wp_add_inline_style( 'twentyfourteen-style', $style );
+wp_add_inline_style( 'twentyfourteen-style', $style );

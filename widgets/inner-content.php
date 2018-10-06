@@ -49,8 +49,8 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	}
 
 	/**
-     * Get available categories for this widget. Which is our own category for page builder options.
-     *
+	 * Get available categories for this widget. Which is our own category for page builder options.
+	 *
 	 * @return array
 	 */
 	public function get_categories() {
@@ -64,8 +64,9 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	 * @return bool
 	 */
 	public function show_in_panel() {
-	    global $post;
-	    return 'dtbaker_style' === $post->post_type;
+		global $post;
+
+		return 'dtbaker_style' === $post->post_type;
 	}
 
 	/**
@@ -84,12 +85,12 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 		$this->add_control(
 			'output_type',
 			[
-				'label' => __( 'Output Type', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
+				'label'   => __( 'Output Type', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
 				'default' => 'full',
 				'options' => [
-					'full' => __( 'Full Output - the_content()', 'stylepress' ),
-					'raw' => __( 'Raw Output - the_content() without hooks', 'stylepress' ),
+					'full'    => __( 'Full Output - the_content()', 'stylepress' ),
+					'raw'     => __( 'Raw Output - the_content() without hooks', 'stylepress' ),
 					'excerpt' => __( 'Summary Output - the_excerpt()', 'stylepress' ),
 				],
 			]
@@ -99,7 +100,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 			'description',
 			[
 				'label' => __( 'This will display the inside website content. <br/><br/>i.e. the output from <code>the_content();</code>', 'stylepress' ),
-				'type' => Controls_Manager::RAW_HTML,
+				'type'  => Controls_Manager::RAW_HTML,
 			]
 		);
 
@@ -116,7 +117,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: inside render() method. ".get_the_ID());
+		\DtbakerElementorManager::get_instance()->debug_message( "inner-content.php: inside render() method. " . get_the_ID() );
 
 		if ( \DtbakerElementorManager::get_instance()->previewing_style ) {
 			$this->content_template();
@@ -125,13 +126,13 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 			if ( empty( $GLOBALS['our_elementor_template'] ) ) {
 				$this->content_template();
 				// we have to display the_content() for elementor editor to work.
-				if(Plugin::$instance->editor->is_edit_mode()){
-				    // todo; show warning about a missing elementor template .
-//                    the_content();
+				if ( Plugin::$instance->editor->is_edit_mode() ) {
+					// todo; show warning about a missing elementor template .
+					//                    the_content();
 				}
 			} else {
 				the_content();
-//				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
+				//				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			}
 		} else {
 
@@ -150,7 +151,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
                 }
             }else {*/
 
-				do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
+			do_action( 'stylepress/render-inner', $settings ); // Priority 20 is the_content().
 			/*}*/
 		}
 
@@ -162,7 +163,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function content_template() {
 		?>
 		<div class="inner-page-content-area">
-		Inner Website Content <br/>Will Display Here
+			Inner Website Content <br/>Will Display Here
 		</div>
 		<?php
 	}

@@ -16,4 +16,4 @@ $style = '
 			z-index: 1;
 		}
 	';
-	wp_add_inline_style( 'elementor-frontend', $style );
+wp_add_inline_style( 'elementor-frontend', $style );

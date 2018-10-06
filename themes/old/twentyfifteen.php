@@ -28,4 +28,4 @@ $style = '
 			margin-left: 29%;
         }
 	';
-	wp_add_inline_style( 'twentyfifteen-style', $style );
+wp_add_inline_style( 'twentyfifteen-style', $style );
