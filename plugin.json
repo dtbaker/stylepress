@@ -10,6 +10,12 @@
     "url": "https://dtbaker.net"
   },
   "history": {
+    "1.2.1": {
+      "date": "2018-10-07",
+      "changes": [
+        "Fix Elementor Compatibility"
+      ]
+    },
     "1.2.0": {
       "date": "2018-10-06",
       "changes": [

@@ -35,7 +35,7 @@ class DtbakerElementorShortcode {
 			$include_css = (bool) $attributes['css'];
 		}
 
-		return \Elementor\Plugin::elementor()->frontend->get_builder_content_for_display( $attributes['id'], $include_css );
+		return \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $attributes['id'], $include_css );
 	}
 
 	private function add_actions() {

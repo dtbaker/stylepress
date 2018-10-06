@@ -83,6 +83,9 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 
 == Changelog ==
 
+= 1.2.1 =
+* Fix widget and shortcode compatibility.
+
 = 1.2.0 =
 * Compatibility fixes
 * Widget area
