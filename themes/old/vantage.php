@@ -20,4 +20,4 @@ $vantage = '
             margin-right: auto;
         }
 	';
-	wp_add_inline_style( 'vantage-style', $vantage );
+wp_add_inline_style( 'vantage-style', $vantage );

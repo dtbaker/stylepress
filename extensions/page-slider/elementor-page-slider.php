@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -119,11 +120,11 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 						'name'        => 'link',
 						'label'       => esc_html__( 'Slide Link (optional)', 'elementor' ),
 						'type'        => Controls_Manager::URL,
-                        'placeholder' => 'http://your-link.com',
+						'placeholder' => 'http://your-link.com',
 						'label_block' => true,
-                        'default' => [
-                            'url' => '',
-                        ],
+						'default'     => [
+							'url' => '',
+						],
 					],
 				],
 				'title_field' => false,
@@ -183,8 +184,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 				'default' => 'normal',
 				//'section' => 'section_page_carousel',
 				'options' => [
-					'normal'   => esc_html__( 'Normal', 'elementor' ),
-					'icons' => esc_html__( 'With Icons', 'elementor' ),
+					'normal' => esc_html__( 'Normal', 'elementor' ),
+					'icons'  => esc_html__( 'With Icons', 'elementor' ),
 				],
 			]
 		);
@@ -306,8 +307,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_navigation',
 			[
-				'label' => __( 'Navigation', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'label'     => __( 'Navigation', 'elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'navigation' => [ 'arrows', 'dots', 'both' ],
 				],
@@ -317,8 +318,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'heading_style_arrows',
 			[
-				'label' => __( 'Arrows', 'elementor' ),
-				'type' => Controls_Manager::HEADING,
+				'label'     => __( 'Arrows', 'elementor' ),
+				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
 					'navigation' => [ 'arrows', 'both' ],
@@ -329,11 +330,11 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'arrows_position',
 			[
-				'label' => __( 'Arrows Position', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'inside',
-				'options' => [
-					'inside' => __( 'Inside', 'elementor' ),
+				'label'     => __( 'Arrows Position', 'elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'inside',
+				'options'   => [
+					'inside'  => __( 'Inside', 'elementor' ),
 					'outside' => __( 'Outside', 'elementor' ),
 				],
 				'condition' => [
@@ -345,9 +346,9 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'arrows_size',
 			[
-				'label' => __( 'Arrows Size', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Arrows Size', 'elementor' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'min' => 20,
 						'max' => 60,
@@ -365,8 +366,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'arrows_color',
 			[
-				'label' => __( 'Arrows Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Arrows Color', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-page-carousel-wrapper .slick-slider .slick-prev:before, {{WRAPPER}} .elementor-page-carousel-wrapper .slick-slider .slick-next:before' => 'color: {{VALUE}};',
 				],
@@ -379,8 +380,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'heading_style_dots',
 			[
-				'label' => __( 'Dots', 'elementor' ),
-				'type' => Controls_Manager::HEADING,
+				'label'     => __( 'Dots', 'elementor' ),
+				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
 					'navigation' => [ 'dots', 'both' ],
@@ -391,12 +392,12 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'dots_position',
 			[
-				'label' => __( 'Dots Position', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'outside',
-				'options' => [
+				'label'     => __( 'Dots Position', 'elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'outside',
+				'options'   => [
 					'outside' => __( 'Outside', 'elementor' ),
-					'inside' => __( 'Inside', 'elementor' ),
+					'inside'  => __( 'Inside', 'elementor' ),
 				],
 				'condition' => [
 					'navigation' => [ 'dots', 'both' ],
@@ -407,9 +408,9 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'dots_size',
 			[
-				'label' => __( 'Dots Size', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Dots Size', 'elementor' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'min' => 5,
 						'max' => 10,
@@ -427,8 +428,8 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'dots_color',
 			[
-				'label' => __( 'Dots Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Dots Color', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-page-carousel-wrapper .elementor-page-carousel .slick-dots li button:before' => 'color: {{VALUE}};',
 				],
@@ -444,20 +445,20 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 			'section_style_page',
 			[
 				'label' => __( 'Page', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'page_spacing',
 			[
-				'label' => __( 'Spacing', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'' => __( 'Default', 'elementor' ),
+				'label'     => __( 'Spacing', 'elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => [
+					''       => __( 'Default', 'elementor' ),
 					'custom' => __( 'Custom', 'elementor' ),
 				],
-				'default' => '',
+				'default'   => '',
 				'condition' => [
 					'slides_to_show!' => '1',
 				],
@@ -467,23 +468,23 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'page_spacing_custom',
 			[
-				'label' => __( 'Page Spacing', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'      => __( 'Page Spacing', 'elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'range'      => [
 					'px' => [
 						'max' => 100,
 					],
 				],
-				'default' => [
+				'default'    => [
 					'size' => 20,
 				],
 				'show_label' => false,
-				'selectors' => [
-					'{{WRAPPER}} .slick-list' => 'margin-left: -{{SIZE}}{{UNIT}};',
+				'selectors'  => [
+					'{{WRAPPER}} .slick-list'                     => 'margin-left: -{{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .slick-slide .slick-slide-inner' => 'padding-left: {{SIZE}}{{UNIT}};',
 				],
-				'condition' => [
-					'page_spacing' => 'custom',
+				'condition'  => [
+					'page_spacing'    => 'custom',
 					'slides_to_show!' => '1',
 				],
 			]
@@ -492,7 +493,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'page_border',
+				'name'     => 'page_border',
 				'selector' => '{{WRAPPER}} .elementor-page-carousel-wrapper .elementor-page-carousel .slick-slide-page',
 			]
 		);
@@ -500,10 +501,10 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		$this->add_control(
 			'page_border_radius',
 			[
-				'label' => __( 'Border Radius', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Border Radius', 'elementor' ),
+				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .elementor-page-carousel-wrapper .elementor-page-carousel .slick-slide-page' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -529,7 +530,6 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 			}
 
 
-
 			$page_html = '';
 
 			$inserted_post = get_post( $post_id );
@@ -545,7 +545,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 					$inserted_post->post_content = apply_filters( 'the_content', $inserted_post->post_content );
 					$page_html                   = do_shortcode( $inserted_post->post_content );
-					$block_id = substr(md5(serialize($instance).$page_list_id.$page_html . $post_id),0,6);
+					$block_id                    = substr( md5( serialize( $instance ) . $page_list_id . $page_html . $post_id ), 0, 6 );
 
 					$elementor = Plugin::instance();
 
@@ -554,16 +554,16 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 					// maybe do a set_option get_option hack to prevent fatal errors on elementor attempts?
 
-                    ob_start();
-                    if ( class_exists( 'Post_CSS_File' ) ) {
-                        $css_file = new Post_CSS_File( $post_id );
-                        echo '<style type="text/css">' . $css_file->get_css() . '</style>';
-                    }
-                    $elementor_css = ob_get_clean();
-                    if ( ! isset( $GLOBALS['insert_page_extra_footer_css'] ) ) {
-                        $GLOBALS['insert_page_extra_footer_css'] = array();
-                    }
-                    $GLOBALS['insert_page_extra_footer_css'][] = str_replace( 'elementor-frontend-stylesheet', 'elementor-frontend-stylesheet-' . $block_id, $elementor_css );
+					ob_start();
+					if ( class_exists( 'Post_CSS_File' ) ) {
+						$css_file = new Post_CSS_File( $post_id );
+						echo '<style type="text/css">' . $css_file->get_css() . '</style>';
+					}
+					$elementor_css = ob_get_clean();
+					if ( ! isset( $GLOBALS['insert_page_extra_footer_css'] ) ) {
+						$GLOBALS['insert_page_extra_footer_css'] = array();
+					}
+					$GLOBALS['insert_page_extra_footer_css'][] = str_replace( 'elementor-frontend-stylesheet', 'elementor-frontend-stylesheet-' . $block_id, $elementor_css );
 					// stop duplicate ID w3c warnings.
 					foreach ( array( 'elementor', 'elementor-inner', 'elementor-section-wrap' ) as $id_to_replace ) {
 						$page_html = str_replace( 'id="' . $id_to_replace . '"', 'id="' . esc_attr( $block_id ) . '-' . $id_to_replace . '"', $page_html );
@@ -573,7 +573,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 					setup_postdata( $GLOBALS['post'] =& $old_global_post );
 					$page_html = apply_filters( 'elementor/widgets/page_carousel/slide', $page_html, $instance );
-					$slides[]  = '<div data-slide-id="'.(int)$page_list_id.'" data-post-id="'.(int)$post_id.'" data-icon="'. esc_attr(get_post_meta($post_id,'icon',true)) .'" data-link="'. esc_attr($page['link']['url']) .'"><div class="slick-slide-inner">' . $page_html . '</div></div>';
+					$slides[]  = '<div data-slide-id="' . (int) $page_list_id . '" data-post-id="' . (int) $post_id . '" data-icon="' . esc_attr( get_post_meta( $post_id, 'icon', true ) ) . '" data-link="' . esc_attr( $page['link']['url'] ) . '"><div class="slick-slide-inner">' . $page_html . '</div></div>';
 				}
 			}
 		}
@@ -598,7 +598,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 			'arrows'        => $show_arrows,
 			'dots'          => $show_dots,
 			'rtl'           => $is_rtl,
-            'dtbaker_type'  => ! empty( $instance['dtbaker_slider_type'] ) ? $instance['dtbaker_slider_type'] : '',
+			'dtbaker_type'  => ! empty( $instance['dtbaker_slider_type'] ) ? $instance['dtbaker_slider_type'] : '',
 		];
 
 		$carousel_classes = [ 'elementor-page-carousel' ];
@@ -621,19 +621,19 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 		if ( Plugin::instance()->editor->is_edit_mode() ) {
 			esc_html_e( 'Page Slider Here:' );
 			echo implode( '', $slides );
-		}else {
+		} else {
 			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
 				$carousel_classes [] = 'inner-content-width';
 			}
 
 			?>
-            <div class="elementor-page-carousel-wrapper elementor-slick-slider"
-                 dir="<?php echo esc_attr( $direction ); ?>">
-                <div class="<?php echo esc_attr( implode( ' ', $carousel_classes ) ); ?>"
-                     data-slider_options='<?php echo wp_json_encode( $slick_options ); ?>'>
+			<div class="elementor-page-carousel-wrapper elementor-slick-slider"
+			     dir="<?php echo esc_attr( $direction ); ?>">
+				<div class="<?php echo esc_attr( implode( ' ', $carousel_classes ) ); ?>"
+				     data-slider_options='<?php echo wp_json_encode( $slick_options ); ?>'>
 					<?php echo implode( '', $slides ); ?>
-                </div>
-            </div>
+				</div>
+			</div>
 			<?php
 			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
 				$icons = array();
@@ -650,13 +650,13 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 					}
 				}
 				?>
-                <div class="elementor-page-carousel-icons" dir="<?php echo esc_attr( $direction ); ?>">
-                    <div class="page-carousel-icon-wrapper inner-content-width">
-                        <div class="elementor-dtbaker-page-slider-icons">
+				<div class="elementor-page-carousel-icons" dir="<?php echo esc_attr( $direction ); ?>">
+					<div class="page-carousel-icon-wrapper inner-content-width">
+						<div class="elementor-dtbaker-page-slider-icons">
 							<?php echo implode( '', $icons ); ?>
-                        </div>
-                    </div>
-                </div>
+						</div>
+					</div>
+				</div>
 				<?php
 			}
 		}

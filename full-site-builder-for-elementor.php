@@ -4,11 +4,11 @@
  * Description: Allows you to apply full site layout templates to pages on your website using Elementor.
  * Plugin URI: https://stylepress.org/
  * Author: dtbaker
- * Version: 1.0.20
+ * Version: 1.2.0
  * Author URI: https://dtbaker.net/
  * GitHub Plugin URI: https://github.com/dtbaker/stylepress
- * Requires at least:   4.6
- * Tested up to:        4.8
+ * Requires at least:   4.9
+ * Tested up to:        4.9.8
  *
  * Text Domain: dtbaker-elementor
  *
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 //set_time_limit(2);
 
 /* Set plugin version constant. */
-define( 'DTBAKER_ELEMENTOR_VERSION', '1.0.19' );
+define( 'DTBAKER_ELEMENTOR_VERSION', '1.2.0' );
 
 /* Debug output control. */
 define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', 0 );
@@ -59,9 +59,9 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 } else {
 
 
-	define('STYLEPRESS_OUTER_USE_THEME', -1);
-	define('STYLEPRESS_INNER_USE_PLAIN', -1);
-	define('STYLEPRESS_INNER_USE_THEME', -2);
+	define( 'STYLEPRESS_OUTER_USE_THEME', - 1 );
+	define( 'STYLEPRESS_INNER_USE_PLAIN', - 1 );
+	define( 'STYLEPRESS_INNER_USE_THEME', - 2 );
 
 
 	/* DtbakerElementorManager Class */
@@ -72,8 +72,6 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 
 	/* Start up our magic */
 	DtbakerElementorManager::get_instance()->init();
-
-
 
 
 }
@@ -96,10 +94,14 @@ function dtbaker_elementor_load_plugin_textdomain() {
  *
  * @return void
  */
-if( ! function_exists( 'dtbaker_elementor_fail_php_version' ) ) {
+if ( ! function_exists( 'dtbaker_elementor_fail_php_version' ) ) {
 	function dtbaker_elementor_fail_php_version() {
 		$message      = esc_html__( 'The StylePress for Elementor plugin requires PHP version 5.4+, plugin is currently NOT ACTIVE.', 'stylepress' );
 		$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 		echo wp_kses_post( $html_message );
 	}
+}
+
+if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
+	define( 'ELEMENTOR_PARTNER_ID', 2114 );
 }

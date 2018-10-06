@@ -8,7 +8,8 @@
 namespace Elementor;
 
 
-if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
 }
 
 /**
@@ -19,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
  * @package Elementor
  */
 class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
-
 
 
 	/**
@@ -81,12 +81,11 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		);
 
 
-
 		$this->add_control(
 			'desc',
 			[
 				'label' => __( 'Create an API Key from <a href="https://admin.mailchimp.com/account/api/" target="_blank">https://admin.mailchimp.com/account/api/</a> and find your List ID from the "Lists" page..', 'stylepress' ),
-				'type' => Controls_Manager::RAW_HTML,
+				'type'  => Controls_Manager::RAW_HTML,
 			]
 		);
 
@@ -94,9 +93,9 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'mailchimp_api_key',
 			[
-				'label'   => esc_html__( 'MailChimp API Key', 'stylepress' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
+				'label'       => esc_html__( 'MailChimp API Key', 'stylepress' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
 				'placeholder' => __( 'Enter your API Key.', 'stylepress' ),
 			]
 		);
@@ -104,9 +103,9 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'mailchimp_list_id',
 			[
-				'label'   => esc_html__( 'MailChimp List ID', 'stylepress' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
+				'label'       => esc_html__( 'MailChimp List ID', 'stylepress' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
 				'placeholder' => __( 'Enter your List ID.', 'stylepress' ),
 			]
 		);
@@ -115,9 +114,9 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'thank_you',
 			[
-				'label'   => esc_html__( 'Thank You Message', 'stylepress' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => 'Subscribed. Please check your email.',
+				'label'       => esc_html__( 'Thank You Message', 'stylepress' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => 'Subscribed. Please check your email.',
 				'placeholder' => __( 'Thank You.', 'stylepress' ),
 			]
 		);
@@ -130,7 +129,7 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 			'section_stylepress_menu_style',
 			[
 				'label' => __( 'Input Styles', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -138,9 +137,9 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'input_bg',
 			[
-				'label' => __( 'Email Background', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fafafa',
+				'label'     => __( 'Email Background', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#fafafa',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-subscribe-email' => 'background-color: {{VALUE}};',
 				],
@@ -149,20 +148,20 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'input_fg',
 			[
-				'label' => __( 'Email Forground', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#666666',
+				'label'     => __( 'Email Forground', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#666666',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-subscribe-email' => 'color: {{VALUE}};',
 				],
 			]
-        );
+		);
 		$this->add_control(
 			'input_b',
 			[
-				'label' => __( 'Email Border', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#cccccc',
+				'label'     => __( 'Email Border', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#cccccc',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-subscribe-email' => 'border-color: {{VALUE}};',
 				],
@@ -170,13 +169,12 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		);
 
 
-
 		$this->add_control(
 			'submit_bg',
 			[
-				'label' => __( 'Submit Background', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#666666',
+				'label'     => __( 'Submit Background', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#666666',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-subscribe-send' => 'background-color: {{VALUE}};',
 				],
@@ -185,16 +183,14 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$this->add_control(
 			'submit_fg',
 			[
-				'label' => __( 'Submit Forground', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#ffffff',
+				'label'     => __( 'Submit Forground', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-subscribe-send' => 'color: {{VALUE}};',
 				],
 			]
-        );
-
-
+		);
 
 
 		$this->end_controls_section();
@@ -212,14 +208,15 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 		$settings = $this->get_settings();
 		ob_start();
 		?>
-        <div class="stylepress-email-subscribe" data-elm="<?php echo $this->get_id();?>" data-post="<?php echo get_the_ID();?>">
-            <div class="loading"></div>
-            <div class="stylepress-email-status"></div>
-            <input type="email" name="email" value="" placeholder="Your Email" class="stylepress-subscribe-email">
-            <input type="button" name="subscribe" value="Subscribe" class="stylepress-subscribe-send">
-        </div>
-        <?php
-        echo apply_filters('stylepress_email_form',ob_get_clean());
+		<div class="stylepress-email-subscribe" data-elm="<?php echo $this->get_id(); ?>"
+		     data-post="<?php echo get_the_ID(); ?>">
+			<div class="loading"></div>
+			<div class="stylepress-email-status"></div>
+			<input type="email" name="email" value="" placeholder="Your Email" class="stylepress-subscribe-email">
+			<input type="button" name="subscribe" value="Subscribe" class="stylepress-subscribe-send">
+		</div>
+		<?php
+		echo apply_filters( 'stylepress_email_form', ob_get_clean() );
 
 	}
 
@@ -229,7 +226,7 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 	protected function content_template() {
 		?>
 		<div class="stylepress-email-subscribe">
-		Email Subscribe Form Here
+			Email Subscribe Form Here
 		</div>
 		<?php
 	}

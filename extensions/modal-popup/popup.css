@@ -1,7 +1,6 @@
 #site-offcanvas-wrap {
   position: relative;
   min-height: 100vh;
-  -webkit-transition: left .5s ease;
   transition: left .5s ease;
   left: 0;
   z-index: 3;
@@ -29,7 +28,6 @@
 .stylepress_slide_in_menu a {
   color: #818181;
   font-weight: 400;
-  -webkit-transition: color 0.3s ease-in-out;
   transition: color 0.3s ease-in-out;
 }
 .stylepress_slide_in_menu a.close_sidebar {
@@ -43,12 +41,10 @@
   background-image: url(images/close.png);
   background-repeat: no-repeat;
   z-index: 1000;
-  -webkit-transition: all .5s ease;
   transition: all .5s ease;
 }
 .stylepress_slide_in_menu a.close_sidebar:hover {
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 /*
 body.showing_side_menu > *:not(.stylepress_slide_in_menu):not(#wpadminbar){

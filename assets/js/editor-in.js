@@ -4,10 +4,10 @@
  * @package dtbaker-elementor
  */
 
-( function($) {
+(function ($) {
 
-	window.parent.elementor.on( 'elementor:init', function(){
-		console.log('loaded');
-	} );
+  window.parent.elementor.on('elementor:init', function () {
+    console.log('loaded');
+  });
 
-} )(jQuery);
+})(jQuery);

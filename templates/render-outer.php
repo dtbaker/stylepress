@@ -9,7 +9,7 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 ob_start();
 ?>
-<!-- stylepress render outer template begin -->
+	<!-- stylepress render outer template begin -->
 <?php
 if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_template'] > 0 ) {
 	$GLOBALS['stylepress_only_render'] = 'all';
@@ -23,16 +23,16 @@ if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_te
 //	echo 'Failed to render content.';
 //}
 ?>
-<!-- stylepress render outer template end -->
+	<!-- stylepress render outer template end -->
 <?php
 $inner_content = ob_get_clean();
 
-if(empty($GLOBALS['stylepressheader']) || empty($GLOBALS['stylepressfooter'])){
-    echo "Sorry this theme is not supported by StylePress. Please see here for details: <a href='https://stylepress.org/elementor/compatible-wordpress-themes/'>https://stylepress.org/elementor/compatible-wordpress-themes/</a>";
+if ( empty( $GLOBALS['stylepressheader'] ) || empty( $GLOBALS['stylepressfooter'] ) ) {
+	echo "Sorry this theme is not supported by StylePress. Please see here for details: <a href='https://stylepress.org/elementor/compatible-wordpress-themes/'>https://stylepress.org/elementor/compatible-wordpress-themes/</a>";
 
 	echo $inner_content;
 
-}else{
+} else {
 
 	echo $GLOBALS['stylepressheader'];
 	echo $inner_content;

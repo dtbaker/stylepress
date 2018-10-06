@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,9 +16,10 @@ class StylePress_Google_Map extends Widget_Base {
 		return esc_html__( 'Styled Google Map', 'elementor' );
 	}
 
-	public function get_script_depends(){
-	    return ['googlemaps'];
-    }
+	public function get_script_depends() {
+		return [ 'googlemaps' ];
+	}
+
 	/**
 	 * Get the current icon for display on frontend.
 	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
@@ -50,7 +52,6 @@ class StylePress_Google_Map extends Widget_Base {
 	protected function _register_controls() {
 
 
-
 		$this->start_controls_section(
 			'section_stylepress_map',
 			[
@@ -61,18 +62,17 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'desc',
 			[
-				'label' => __( 'Enter your Google Map settings below.'  ),
-				'type' => Controls_Manager::RAW_HTML,
+				'label' => __( 'Enter your Google Map settings below.' ),
+				'type'  => Controls_Manager::RAW_HTML,
 			]
 		);
-
 
 
 		$this->add_control(
 			'address',
 			[
-				'label' => __( 'Address', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
+				'label'   => __( 'Address', 'elementor' ),
+				'type'    => Controls_Manager::TEXT,
 				'default' => 'Sydney, Australia',
 			]
 		);
@@ -80,17 +80,17 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'height',
 			[
-				'label' => __( 'Map Height', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
+				'label'   => __( 'Map Height', 'elementor' ),
+				'type'    => Controls_Manager::TEXT,
 				'default' => '400',
 			]
 		);
 
 
-		$zooms =array();
-		for($x=1;$x<=20;$x++){
-		    $zooms[$x] = $x;
-        }
+		$zooms = array();
+		for ( $x = 1; $x <= 20; $x ++ ) {
+			$zooms[ $x ] = $x;
+		}
 		$this->add_control(
 			'zoom',
 			[
@@ -106,12 +106,12 @@ class StylePress_Google_Map extends Widget_Base {
 			'enlarge_button',
 			[
 				'label'   => esc_html__( 'Show Buttons', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
-                'default' => 1,
-                'options' => array(
-                    1 => 'Yes',
-                    0 => 'No',
-                )
+				'type'    => Controls_Manager::SELECT,
+				'default' => 1,
+				'options' => array(
+					1 => 'Yes',
+					0 => 'No',
+				)
 			]
 		);
 
@@ -126,12 +126,11 @@ class StylePress_Google_Map extends Widget_Base {
 		);
 
 
-
 		$this->add_control(
 			'style',
 			[
 				'label' => sprintf( __( 'Choose a style from <a href="%s" target="_blank">https://snazzymaps.com</a> and paste the "JavaScript Style Array" below..', 'stylepress' ), 'https://snazzymaps.com/' ),
-				'type' => Controls_Manager::RAW_HTML,
+				'type'  => Controls_Manager::RAW_HTML,
 			]
 		);
 
@@ -146,14 +145,13 @@ class StylePress_Google_Map extends Widget_Base {
 		);
 
 
-
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_stylepress_google_map_buttons',
 			[
 				'label' => __( 'Button Style', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -161,20 +159,20 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_responsive_control(
 			'menu_align',
 			[
-				'label' => __( 'Alignment', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
+				'label'     => __( 'Alignment', 'elementor' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'   => [
 						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'fa fa-align-left',
+						'icon'  => 'fa fa-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'fa fa-align-center',
+						'icon'  => 'fa fa-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'fa fa-align-right',
+						'icon'  => 'fa fa-align-right',
 					],
 				],
 				'selectors' => [
@@ -186,9 +184,9 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'menu_background',
 			[
-				'label' => __( 'Background', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#f8f8f8',
+				'label'     => __( 'Background', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#f8f8f8',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress_map_buttons a' => 'background-color: {{VALUE}};',
 				],
@@ -197,9 +195,9 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'menu_background_hover',
 			[
-				'label' => __( 'Background (hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#eaeaea',
+				'label'     => __( 'Background (hover)', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#eaeaea',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress_map_buttons a:hover' => 'background-color: {{VALUE}};',
 				],
@@ -209,9 +207,9 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'font_color',
 			[
-				'label' => __( 'Font Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
+				'label'     => __( 'Font Color', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#000',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress_map_buttons a' => 'color: {{VALUE}};',
 				],
@@ -221,9 +219,9 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_control(
 			'font_color_hover',
 			[
-				'label' => __( 'Font Color (Hover)', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
+				'label'     => __( 'Font Color (Hover)', 'elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#000',
 				'selectors' => [
 					'{{WRAPPER}} .stylepress_map_buttons a:hover' => 'color: {{VALUE}};',
 				],
@@ -232,8 +230,8 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'typography',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'name'     => 'typography',
+				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
 				'selector' => '{{WRAPPER}} .stylepress_map_buttons a',
 			]
 		);
@@ -248,24 +246,24 @@ class StylePress_Google_Map extends Widget_Base {
 
 		$instance = $this->get_settings();
 
-        $shortcode = '[stylepress_google_map ';
-        foreach(\stylepress_dtbaker_Shortcode_Google_Map::get_instance()->fields as $field){
-            $value = isset($instance[$field['name']]) ? $instance[$field['name']] : $field['default'];
-            if($field['name'] == 'mapstyle'){
-                $value = str_replace('[','&#91;',$value);
-                $value = str_replace(']','&#93;',$value);
-	            $value = preg_replace('#\s+#',' ', $value );
-            }else if($field['name'] == 'innercontent'){
+		$shortcode = '[stylepress_google_map ';
+		foreach ( \stylepress_dtbaker_Shortcode_Google_Map::get_instance()->fields as $field ) {
+			$value = isset( $instance[ $field['name'] ] ) ? $instance[ $field['name'] ] : $field['default'];
+			if ( $field['name'] == 'mapstyle' ) {
+				$value = str_replace( '[', '&#91;', $value );
+				$value = str_replace( ']', '&#93;', $value );
+				$value = preg_replace( '#\s+#', ' ', $value );
+			} else if ( $field['name'] == 'innercontent' ) {
 
-            }
-	        $shortcode .= ' '.$field['name'].'="' . esc_attr( $value ) . '" ';
+			}
+			$shortcode .= ' ' . $field['name'] . '="' . esc_attr( $value ) . '" ';
 
-        }
-        $shortcode .= ']';
-//        echo str_replace('[sty','',$shortcode);
-        $html = do_shortcode($shortcode);
+		}
+		$shortcode .= ']';
+		//        echo str_replace('[sty','',$shortcode);
+		$html = do_shortcode( $shortcode );
 
-        echo apply_filters('stylepress_google_map_elementor_render', $html, $instance);
+		echo apply_filters( 'stylepress_google_map_elementor_render', $html, $instance );
 
 	}
 

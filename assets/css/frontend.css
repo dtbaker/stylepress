@@ -33,6 +33,7 @@ body.dtbaker-elementor-template.elementor-editor-active #site-offcanvas-wrap > .
 .stylepress-debug {
   background: #fff;
   border-left: 4px solid #fff;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   margin: 10px 15px;
   padding: 5px 12px;
@@ -48,7 +49,6 @@ body.dtbaker-elementor-template.elementor-editor-active #site-offcanvas-wrap > .
 StylePress Custom Addons:
  */
 .elementor-widget-icon-list[data-element_type="icon-list.stylepress-icons-inline"] ul.elementor-icon-list-items {
-  display: -webkit-box;
   display: flex;
 }
 .elementor-widget-icon-list[data-element_type="icon-list.stylepress-icons-inline"] ul.elementor-icon-list-items > li.elementor-icon-list-item {

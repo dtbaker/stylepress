@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 use Elementor\Group_Control_Image_Size;
@@ -56,7 +57,7 @@ class Stylepress_Loop extends Widget_Base {
 			'section_layout',
 			[
 				'label' => __( 'Layout', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
@@ -66,8 +67,8 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'stylepress_layout',
 			[
-				'label' => __( 'Choose Layout', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
+				'label'   => __( 'Choose Layout', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => $components,
 			]
@@ -77,12 +78,12 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_responsive_control(
 			'columns',
 			[
-				'label' => __( 'Columns', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
+				'label'           => __( 'Columns', 'stylepress' ),
+				'type'            => Controls_Manager::SELECT,
 				'desktop_default' => '3',
-				'tablet_default' => '2',
-				'mobile_default' => '1',
-				'options' => [
+				'tablet_default'  => '2',
+				'mobile_default'  => '1',
+				'options'         => [
 					'1' => '1',
 					'2' => '2',
 					'3' => '3',
@@ -96,12 +97,11 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label' => __( 'Posts Per Page', 'stylepress' ),
-				'type' => Controls_Manager::NUMBER,
+				'label'   => __( 'Posts Per Page', 'stylepress' ),
+				'type'    => Controls_Manager::NUMBER,
 				'default' => 3,
 			]
 		);
-
 
 
 		$this->end_controls_section();
@@ -110,14 +110,14 @@ class Stylepress_Loop extends Widget_Base {
 			'section_query',
 			[
 				'label' => __( 'Query', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Posts::get_type(),
 			[
-				'name' => 'posts',
+				'name'  => 'posts',
 				'label' => __( 'Posts', 'stylepress' ),
 			]
 		);
@@ -126,21 +126,21 @@ class Stylepress_Loop extends Widget_Base {
 			'advanced',
 			[
 				'label' => __( 'Advanced', 'stylepress' ),
-				'type' => Controls_Manager::HEADING,
+				'type'  => Controls_Manager::HEADING,
 			]
 		);
 
 		$this->add_control(
 			'orderby',
 			[
-				'label' => __( 'Order By', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
+				'label'   => __( 'Order By', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
 				'default' => 'post_date',
 				'options' => [
-					'post_date' => __( 'Date', 'stylepress' ),
+					'post_date'  => __( 'Date', 'stylepress' ),
 					'post_title' => __( 'Title', 'stylepress' ),
 					'menu_order' => __( 'Menu Order', 'stylepress' ),
-					'rand' => __( 'Random', 'stylepress' ),
+					'rand'       => __( 'Random', 'stylepress' ),
 				],
 			]
 		);
@@ -148,11 +148,11 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'order',
 			[
-				'label' => __( 'Order', 'stylepress' ),
-				'type' => Controls_Manager::SELECT,
+				'label'   => __( 'Order', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
 				'default' => 'desc',
 				'options' => [
-					'asc' => __( 'ASC', 'stylepress' ),
+					'asc'  => __( 'ASC', 'stylepress' ),
 					'desc' => __( 'DESC', 'stylepress' ),
 				],
 			]
@@ -161,9 +161,9 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'offset',
 			[
-				'label' => __( 'Offset', 'stylepress' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => 0,
+				'label'     => __( 'Offset', 'stylepress' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 0,
 				'condition' => [
 					'posts_post_type!' => 'by_id',
 				],
@@ -176,30 +176,30 @@ class Stylepress_Loop extends Widget_Base {
 			'filter_bar',
 			[
 				'label' => __( 'Filter Bar', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
 			'show_filter_bar',
 			[
-				'label' => __( 'Show', 'stylepress' ),
-				'type' => Controls_Manager::SWITCHER,
+				'label'     => __( 'Show', 'stylepress' ),
+				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'Off', 'stylepress' ),
-				'label_on' => __( 'On', 'stylepress' ),
+				'label_on'  => __( 'On', 'stylepress' ),
 			]
 		);
 
 		$this->add_control(
 			'taxonomy',
 			[
-				'label' => __( 'Taxonomy', 'stylepress' ),
-				'type' => Controls_Manager::SELECT2,
+				'label'       => __( 'Taxonomy', 'stylepress' ),
+				'type'        => Controls_Manager::SELECT2,
 				'label_block' => true,
-				'default' => [],
-				'options' => $this->get_taxonomies(),
-				'condition' => [
-					'show_filter_bar' => 'yes',
+				'default'     => [],
+				'options'     => $this->get_taxonomies(),
+				'condition'   => [
+					'show_filter_bar'  => 'yes',
 					'posts_post_type!' => 'by_id',
 				],
 			]
@@ -211,29 +211,29 @@ class Stylepress_Loop extends Widget_Base {
 			'section_design_layout',
 			[
 				'label' => __( 'Items', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'item_gap',
 			[
-				'label' => __( 'Item Gap', 'stylepress' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'     => __( 'Item Gap', 'stylepress' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'size' => 10,
 				],
-				'range' => [
+				'range'     => [
 					'px' => [
 						'min' => 0,
 						'max' => 100,
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-loop' => 'margin: 0 -{{SIZE}}px',
+					'{{WRAPPER}} .stylepress-loop'               => 'margin: 0 -{{SIZE}}px',
 					'(desktop){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns.SIZE}} ); border: {{SIZE}}px solid transparent',
-					'(tablet){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns_tablet.SIZE}} ); border: {{SIZE}}px solid transparent',
-					'(mobile){{WRAPPER}} .stylepress-loop-item' => 'width: calc( 100% / {{columns_mobile.SIZE}} ); border: {{SIZE}}px solid transparent',
+					'(tablet){{WRAPPER}} .stylepress-loop-item'  => 'width: calc( 100% / {{columns_tablet.SIZE}} ); border: {{SIZE}}px solid transparent',
+					'(mobile){{WRAPPER}} .stylepress-loop-item'  => 'width: calc( 100% / {{columns_mobile.SIZE}} ); border: {{SIZE}}px solid transparent',
 				],
 			]
 		);
@@ -241,10 +241,10 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'border_radius',
 			[
-				'label' => __( 'Border Radius', 'stylepress' ),
-				'type' => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Border Radius', 'stylepress' ),
+				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .stylepress-loop-item__img, {{WRAPPER}} .stylepress-loop-item__overlay' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -256,17 +256,17 @@ class Stylepress_Loop extends Widget_Base {
 			'section_design_overlay',
 			[
 				'label' => __( 'Item Overlay', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'color_background',
 			[
-				'label' => __( 'Background Color', 'stylepress' ),
-				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
+				'label'     => __( 'Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'scheme'    => [
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_4,
 				],
 				'selectors' => [
@@ -281,8 +281,8 @@ class Stylepress_Loop extends Widget_Base {
 		$this->start_controls_section(
 			'section_design_filter',
 			[
-				'label' => __( 'Filter Bar', 'stylepress' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'label'     => __( 'Filter Bar', 'stylepress' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_filter_bar' => 'yes',
 				],
@@ -292,10 +292,10 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'color_filter',
 			[
-				'label' => __( 'Color', 'stylepress' ),
-				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
+				'label'     => __( 'Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'scheme'    => [
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_3,
 				],
 				'selectors' => [
@@ -307,10 +307,10 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'color_filter_active',
 			[
-				'label' => __( 'Active Color', 'stylepress' ),
-				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
+				'label'     => __( 'Active Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'scheme'    => [
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_1,
 				],
 				'selectors' => [
@@ -322,9 +322,9 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'typography_filter',
-				'label' => __( 'Typography', 'stylepress' ),
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'name'     => 'typography_filter',
+				'label'    => __( 'Typography', 'stylepress' ),
+				'scheme'   => Scheme_Typography::TYPOGRAPHY_1,
 				'selector' => '{{WRAPPER}} .stylepress-loop__filter',
 			]
 		);
@@ -332,19 +332,19 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'filter_item_spacing',
 			[
-				'label' => __( 'Space Between', 'stylepress' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'     => __( 'Space Between', 'stylepress' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'size' => 10,
 				],
-				'range' => [
+				'range'     => [
 					'px' => [
 						'min' => 0,
 						'max' => 100,
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-loop__filter:not(:last-child)' => 'margin-right: calc({{SIZE}}{{UNIT}}/2)',
+					'{{WRAPPER}} .stylepress-loop__filter:not(:last-child)'  => 'margin-right: calc({{SIZE}}{{UNIT}}/2)',
 					'{{WRAPPER}} .stylepress-loop__filter:not(:first-child)' => 'margin-left: calc({{SIZE}}{{UNIT}}/2)',
 				],
 			]
@@ -353,12 +353,12 @@ class Stylepress_Loop extends Widget_Base {
 		$this->add_control(
 			'filter_spacing',
 			[
-				'label' => __( 'Spacing', 'stylepress' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'     => __( 'Spacing', 'stylepress' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'size' => 10,
 				],
-				'range' => [
+				'range'     => [
 					'px' => [
 						'min' => 0,
 						'max' => 100,
@@ -426,13 +426,13 @@ class Stylepress_Loop extends Widget_Base {
 			return;
 		}
 
-		wp_enqueue_style('stylepress-loop');
+		wp_enqueue_style( 'stylepress-loop' );
 
 
 		$settings = $this->get_settings();
-		if(!empty($settings['stylepress_layout'])) {
+		if ( ! empty( $settings['stylepress_layout'] ) ) {
 
-		    $this->layout_template = $settings['stylepress_layout'];
+			$this->layout_template = $settings['stylepress_layout'];
 
 			$this->get_posts_tags();
 
@@ -459,9 +459,9 @@ class Stylepress_Loop extends Widget_Base {
 
 		$thumbnail_html = Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail_size' );
 		?>
-        <div class="stylepress-loop-item__img elementor-post__thumbnail">
+		<div class="stylepress-loop-item__img elementor-post__thumbnail">
 			<?php echo $thumbnail_html ?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -469,8 +469,8 @@ class Stylepress_Loop extends Widget_Base {
 		$settings = $this->get_settings();
 
 		$options = [
-			'itemGap' => $settings['item_gap']['size'],
-			'columns' => $settings['columns'],
+			'itemGap'        => $settings['item_gap']['size'],
+			'columns'        => $settings['columns'],
 			'columns_tablet' => $settings['columns_tablet'],
 			'columns_mobile' => $settings['columns_mobile'],
 		];
@@ -495,12 +495,13 @@ class Stylepress_Loop extends Widget_Base {
 			return;
 		}
 		?>
-        <ul class="stylepress-loop__filters">
-            <li class="stylepress-loop__filter elementor-active" data-filter="__all"><?php echo __( 'All', 'stylepress' ); ?></li>
+		<ul class="stylepress-loop__filters">
+			<li class="stylepress-loop__filter elementor-active"
+			    data-filter="__all"><?php echo __( 'All', 'stylepress' ); ?></li>
 			<?php foreach ( $terms as $term ) { ?>
-                <li class="stylepress-loop__filter" data-filter="<?php echo $term->term_id; ?>"><?php echo $term->name; ?></li>
+				<li class="stylepress-loop__filter" data-filter="<?php echo $term->term_id; ?>"><?php echo $term->name; ?></li>
 			<?php } ?>
-        </ul>
+		</ul>
 		<?php
 	}
 
@@ -508,9 +509,9 @@ class Stylepress_Loop extends Widget_Base {
 
 		$tag = $this->get_settings( 'title_tag' );
 		?>
-        <<?php echo $tag ?> class="stylepress-loop-item__title">
+		<<?php echo $tag ?> class="stylepress-loop-item__title">
 		<?php the_title() ?>
-        </<?php echo $tag ?>>
+		</<?php echo $tag ?>>
 		<?php
 	}
 
@@ -530,9 +531,9 @@ class Stylepress_Loop extends Widget_Base {
 		}
 
 		?>
-        <div class="stylepress-loop-item__tags">
+		<div class="stylepress-loop-item__tags">
 			<?php echo implode( $separator, $tags_array ); ?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -545,25 +546,25 @@ class Stylepress_Loop extends Widget_Base {
 			$classes[] = 'elementor-filter-' . $tag->term_id;
 		}
 		?>
-        <article class="stylepress-loop-item <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<article class="stylepress-loop-item <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<?php
 	}
 
 	protected function render_post_footer() {
 		?>
-        </article>
+		</article>
 		<?php
 	}
 
 	protected function render_overlay_header() {
 		?>
-        <div class="stylepress-loop-item__overlay">
+		<div class="stylepress-loop-item__overlay">
 		<?php
 	}
 
 	protected function render_overlay_footer() {
 		?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -572,13 +573,13 @@ class Stylepress_Loop extends Widget_Base {
 			$this->render_filter_menu();
 		}
 		?>
-        <div class="stylepress-loop elementor-posts-container" data-stylepress-options="<?php echo esc_attr( wp_json_encode( $this->get_portfolio_js_options() ) ); ?>">
+		<div class="stylepress-loop elementor-posts-container" data-stylepress-options="<?php echo esc_attr( wp_json_encode( $this->get_portfolio_js_options() ) ); ?>">
 		<?php
 	}
 
 	protected function render_loop_footer() {
 		?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -588,20 +589,20 @@ class Stylepress_Loop extends Widget_Base {
 
 
 		// allow developers to overwrite the default output with their own
-		if($result = apply_filters('stylepress_loop_item','',$this)){
-		    echo $result;
-        }else{
-            // render with our builder:
+		if ( $result = apply_filters( 'stylepress_loop_item', '', $this ) ) {
+			echo $result;
+		} else {
+			// render with our builder:
 
-			    global $post;
-				$GLOBALS['stylepress_post_for_dynamic_fields']                    = $post;
-				$GLOBALS['stylepress_template_turtles'][ $this->layout_template ] = $this->layout_template;
+			global $post;
+			$GLOBALS['stylepress_post_for_dynamic_fields']                    = $post;
+			$GLOBALS['stylepress_template_turtles'][ $this->layout_template ] = $this->layout_template;
 
-			    echo Plugin::instance()->frontend->get_builder_content( $this->layout_template, true );
+			echo Plugin::instance()->frontend->get_builder_content( $this->layout_template, true );
 
-//				$content = Plugin::instance()->frontend->get_builder_content_for_display( $this->layout_template );
+			//				$content = Plugin::instance()->frontend->get_builder_content_for_display( $this->layout_template );
 
-        }
+		}
 
 
 		$this->render_post_footer();

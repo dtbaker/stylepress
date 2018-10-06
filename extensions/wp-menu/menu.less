@@ -1,28 +1,45 @@
-
 @keyframes dropdownanimate {
-  0%   {max-height: 0; opacity: 0;}
-  98%   {max-height: 600px; opacity: 1;}
-  100%   {max-height: 2000px; opacity: 1;}
-}
-@keyframes dropdownanimaterev {
-  0%   {max-height: 1200px; opacity: 1;}
-  100%   {max-height: 0px; opacity: 0;}
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  98% {
+    max-height: 600px;
+    opacity: 1;
+  }
+  100% {
+    max-height: 2000px;
+    opacity: 1;
+  }
 }
 
-.elementor-widget-dtbaker_wp_menu{
-  .elementor-editor-element-settings{
+@keyframes dropdownanimaterev {
+  0% {
+    max-height: 1200px;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0px;
+    opacity: 0;
+  }
+}
+
+.elementor-widget-dtbaker_wp_menu {
+  .elementor-editor-element-settings {
     z-index: 600 !important;
   }
 }
+
 .stylepress-nav-menu-placeholder {
-  display:none;
+  display: none;
 }
+
 .stylepress-nav-menu {
 
   .stylepress-nav-wrapper {
 
     position: relative;
-    z-index:500;
+    z-index: 500;
 
     .stylepress-nav-logo {
 
@@ -32,7 +49,6 @@
       clear: both;
       display: block;
       text-align: left;
-
 
       .stylepress-menu-toggle {
         &:before {
@@ -91,14 +107,14 @@
     }
 
     .stylepress-nav-icon-wrap {
-      ul{
-        margin:0;
-        padding:0;
-        list-style:none;
-        li{
-          display:inline-block;
-          padding:5px;
-          margin:0;
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li {
+          display: inline-block;
+          padding: 5px;
+          margin: 0;
         }
       }
     }
@@ -153,11 +169,11 @@
         > ul {
 
           // animation start
-          display:block;
+          display: block;
           animation-name: dropdownanimate;
           animation-duration: .4s;
-          opacity:1;
-          max-height:2000px;
+          opacity: 1;
+          max-height: 2000px;
           // animation end
         }
       }
@@ -175,14 +191,12 @@
 
       visibility: hidden;
 
-
       // animation start
-      box-shadow: 0 5px 5px 0 rgba(0,0,0,.03);
+      box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .03);
       animation-name: dropdownanimaterev;
       animation-duration: .4s;
-      max-height:0;
+      max-height: 0;
       // animation end
-
 
       li {
         width: 100%;
@@ -209,39 +223,39 @@
         top: 0;
       }
     }
-    li.stylepress_megamenu{
-      position:initial !important;
-      > ul{
-        width:100% !important;
-        background:#333333;
-        color:#FFF;
-        a{
-          color:#FFF;
+    li.stylepress_megamenu {
+      position: initial !important;
+      > ul {
+        width: 100% !important;
+        background: #333333;
+        color: #FFF;
+        a {
+          color: #FFF;
         }
-        > li{
-          flex:1;
-          width:33%;
-          padding:10px;
-          border-right:1px solid rgba(255, 255, 255, 0.08);
-          > a{
-            font-size:1.3em;
+        > li {
+          flex: 1;
+          width: 33%;
+          padding: 10px;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          > a {
+            font-size: 1.3em;
           }
-          > ul{
+          > ul {
             animation-name: none;
-            display:block !important;
+            display: block !important;
             max-height: none;
-            position:relative;
+            position: relative;
             width: auto;
             left: auto;
             top: auto;
-            padding:10px 0;
+            padding: 10px 0;
             box-shadow: none;
           }
         }
       }
-      &:hover{
-        > ul{
-          display:flex !important;
+      &:hover {
+        > ul {
+          display: flex !important;
         }
       }
     }
@@ -253,64 +267,65 @@
   }
 }
 
-.stylepress-nav-slideouts{
+.stylepress-nav-slideouts {
   position: absolute;
   visibility: hidden;
-  left:0;
-  right:0;
-  z-index:499;
+  left: 0;
+  right: 0;
+  z-index: 499;
   top: 78px;
   @media (max-width: 768px) {
-    display:none;
+    display: none;
   }
 
-  .stylepress-nav-slideout{
+  .stylepress-nav-slideout {
     position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    overflow:hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
     z-index: 1;
-    box-shadow: 0 5px 5px 0 rgba(0,0,0,.03);
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .03);
     animation-name: dropdownanimaterev;
     animation-duration: .4s;
-    max-height:0;
-    &.visible{
+    max-height: 0;
+    &.visible {
       animation-name: dropdownanimate;
       animation-duration: .4s;
-      opacity:1;
-      max-height:2000px;
+      opacity: 1;
+      max-height: 2000px;
     }
   }
 }
 
-
 @media (min-width: 768px) {
   .stylepress-nav-menu-placeholder {
-    display:block;
+    display: block;
     body.dtbaker-elementor-template.elementor-editor-active & {
-      display:none;
+      display: none;
     }
   }
+
   .stylepress-nav-menu {
     .stylepress-nav-wrapper {
       width: 100%;
       display: flex;
       justify-content: space-between;
-      max-width:1140px;
-      margin:0 auto;
-      > div{
+      max-width: 1140px;
+      margin: 0 auto;
+      > div {
         display: flex;
         align-items: center;
-        margin:0 auto;
+        margin: 0 auto;
       }
     }
   }
-  .stylepress_menu{
-    ul{
-      li{
-        &.stylepress_has_navslide{
-          > ul{
+
+  .stylepress_menu {
+    ul {
+      li {
+        &.stylepress_has_navslide {
+          > ul {
             // don't display drop downs on desktop, show the navslider instead.
             display: none !important;
           }

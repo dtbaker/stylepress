@@ -29,4 +29,4 @@ $genesis = '
 			}
 		}
 	';
-	wp_add_inline_style( 'elementor-frontend', $genesis );
+wp_add_inline_style( 'elementor-frontend', $genesis );

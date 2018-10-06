@@ -11,9 +11,9 @@ defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
 
 $control_id = \Elementor\Controls_Manager::URL;
 
-$control = $elementor->controls_manager->get_control($control_id);
-if($control){
-    //StylePress_Control_URL
+$control = $elementor->controls_manager->get_control( $control_id );
+if ( $control ) {
+	//StylePress_Control_URL
 	require_once DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/elementor.url-control.php';
 
 	$class_name = 'Elementor\StylePress_Control_URL';
@@ -22,35 +22,39 @@ if($control){
 }
 
 
-add_action( 'wp_enqueue_scripts', function(){
-	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array('jquery'), DTBAKER_ELEMENTOR_VERSION, true );
+add_action( 'wp_enqueue_scripts', function () {
+	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
 	wp_localize_script( 'stylepress-modal-popup', 'stylepress_modal', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_register_style( 'stylepress-modal-button', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.css' );
 } );
 
-add_filter( 'stylepress_modal_link', function($link, $popup_template, $options = array() ){
+add_filter( 'stylepress_modal_link', function ( $link, $popup_template, $options = array() ) {
 
-	if($popup_template) {
+	if ( $popup_template ) {
 
-		if(empty($GLOBALS['stylepress_slidein'])){
+		if ( empty( $GLOBALS['stylepress_slidein'] ) ) {
 			$GLOBALS['stylepress_slidein'] = array();
 		}
-		if(empty($GLOBALS['stylepress_modal_popups'])){
+		if ( empty( $GLOBALS['stylepress_modal_popups'] ) ) {
 			$GLOBALS['stylepress_modal_popups'] = array();
 		}
 
-		if(!empty($options['display']) && $options['display'] == 1){
-			$GLOBALS['stylepress_slidein'][$popup_template] = $options;
-		}else{
-			$GLOBALS['stylepress_modal_popups'][$popup_template] = $options;
+		if ( ! empty( $options['display'] ) && $options['display'] == 1 ) {
+			$GLOBALS['stylepress_slidein'][ $popup_template ] = $options;
+		} else {
+			$GLOBALS['stylepress_modal_popups'][ $popup_template ] = $options;
 		}
 
 		$options['id'] = $popup_template;
-		return array( 'key' => 'data-stylepressmodal', 'val' => htmlspecialchars(json_encode($options), ENT_QUOTES, 'UTF-8'));
+
+		return array(
+			'key' => 'data-stylepressmodal',
+			'val' => htmlspecialchars( json_encode( $options ), ENT_QUOTES, 'UTF-8' )
+		);
 	}
 
 	return $link;
-}, 10, 3);
+}, 10, 3 );
 
 /*
 add_action( 'wp_ajax_stylepress_modal_pop', function(){
@@ -85,12 +89,12 @@ function stylepress_modal_button_before_render( $widget ) {
 				$settings['link']['url'] = '#';
 				$widget->set_settings( 'link', $settings['link'] );
 			}
-			$options = array(
+			$options   = array(
 				'template' => (int) $settings['link']['stylepress_template'],
 				'width'    => (int) $settings['link']['stylepress_width'],
 				'display'  => (int) $settings['link']['stylepress_display'],
 			);
-			$data_attr   = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
+			$data_attr = apply_filters( 'stylepress_modal_link', '', $options['template'], $options );
 			switch ( $widget->get_name() ) {
 				case 'button':
 					$widget->add_render_attribute( 'button', $data_attr['key'], $data_attr['val'] );
@@ -102,14 +106,14 @@ function stylepress_modal_button_before_render( $widget ) {
 		}
 	}
 	// icon lists work a bit differently. repeating types.
-	$enabled = array(  'icon-list' );
+	$enabled = array( 'icon-list' );
 	if ( in_array( $widget->get_name(), $enabled ) ) {
 		$settings = $widget->get_active_settings();
-		if(!empty($settings['icon_list'])) {
-			foreach($settings['icon_list'] as $icon_id => $icon_settings) {
+		if ( ! empty( $settings['icon_list'] ) ) {
+			foreach ( $settings['icon_list'] as $icon_id => $icon_settings ) {
 				if ( ! empty( $icon_settings['link']['stylepress_template'] ) ) {
 					if ( empty( $icon_settings['link']['url'] ) ) {
-						$settings['icon_list'][$icon_id]['link']['url'] = '#';
+						$settings['icon_list'][ $icon_id ]['link']['url'] = '#';
 						$widget->set_settings( 'icon_list', $settings['icon_list'] );
 					}
 					$options   = array(
@@ -208,15 +212,15 @@ function stylepress_modal_button_hack( $widget, $args ){
 }*/
 
 
-add_action( 'stylepress/before-render' , function(){
+add_action( 'stylepress/before-render', function () {
 	echo '<div id="site-offcanvas-wrap">';
 } );
-add_action( 'stylepress/after-render' , function(){
+add_action( 'stylepress/after-render', function () {
 	echo '</div>';
 	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
 } );
 
-add_action( 'stylepress/modal-popups' , function(){
+add_action( 'stylepress/modal-popups', function () {
 	// if there is no before/after render
 	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
 } );
@@ -225,7 +229,7 @@ add_action( 'stylepress/modal-popups' , function(){
 //add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 //add_action( 'elementor/element/icon-box/section_icon/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_modal_button_before_render' , 10 , 1);
+add_action( 'elementor/frontend/widget/before_render', 'stylepress_modal_button_before_render', 10, 1 );
 
 
 

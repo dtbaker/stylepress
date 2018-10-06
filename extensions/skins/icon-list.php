@@ -2,7 +2,9 @@
 
 namespace StylePress\Elementor\Skins;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
 
 use Elementor\Controls_Manager;
 use Elementor\Skin_Base;
@@ -13,7 +15,6 @@ use Elementor\Scheme_Color;
 /**
  * Class Skin_Dtbaker
  */
-
 class Skin_StylePressIconList extends Skin_Base {
 
 	public function get_id() {
@@ -33,35 +34,34 @@ class Skin_StylePressIconList extends Skin_Base {
 		$this->parent = $widget;
 
 
-
 		$this->parent->update_responsive_control(
 			'icon_align',
 			[
-				'label' => __( 'Alignment', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
+				'label'                => __( 'Alignment', 'elementor' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'options'              => [
+					'left'   => [
 						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'fa fa-align-left',
+						'icon'  => 'fa fa-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'fa fa-align-center',
+						'icon'  => 'fa fa-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'fa fa-align-right',
+						'icon'  => 'fa fa-align-right',
 					],
 				],
-				'prefix_class' => 'elementor-align-',
-				'selectors' => [
-				    // existing rules:
-					'{{WRAPPER}} .elementor-icon-list-item, {{WRAPPER}} .elementor-icon-list-item a' => 'justify-content: {{VALUE}};',
-                    // new rules for inline skin:
+				'prefix_class'         => 'elementor-align-',
+				'selectors'            => [
+					// existing rules:
+					'{{WRAPPER}} .elementor-icon-list-item, {{WRAPPER}} .elementor-icon-list-item a'                  => 'justify-content: {{VALUE}};',
+					// new rules for inline skin:
 					'{{WRAPPER}}[data-element_type="icon-list.' . $this->get_id() . '"] ul.elementor-icon-list-items' => 'justify-content: {{VALUE}};',
 				],
 				'selectors_dictionary' => [
-					'left' => 'flex-start',
+					'left'  => 'flex-start',
 					'right' => 'flex-end',
 				],
 			]
@@ -75,9 +75,9 @@ class Skin_StylePressIconList extends Skin_Base {
 
 		// copied from elementor icon list output:
 		?>
-        <ul class="elementor-icon-list-items">
+		<ul class="elementor-icon-list-items">
 			<?php foreach ( $settings['icon_list'] as $index => $item ) : ?>
-                <li class="elementor-icon-list-item" >
+				<li class="elementor-icon-list-item">
 					<?php
 					if ( ! empty( $item['link']['url'] ) ) {
 						$link_key = 'link_' . $index;
@@ -92,24 +92,24 @@ class Skin_StylePressIconList extends Skin_Base {
 							$this->parent->add_render_attribute( $link_key, 'rel', 'nofollow' );
 						}
 
-						echo '<a ' . $this->parent->get_render_attribute_string( $link_key ) .  '>';
+						echo '<a ' . $this->parent->get_render_attribute_string( $link_key ) . '>';
 					}
 
 					if ( $item['icon'] ) : ?>
-                        <span class="elementor-icon-list-icon">
+						<span class="elementor-icon-list-icon">
 							<i class="<?php echo esc_attr( $item['icon'] ); ?>"></i>
 						</span>
 					<?php endif; ?>
-                    <span class="elementor-icon-list-text"><?php echo $item['text']; ?></span>
+					<span class="elementor-icon-list-text"><?php echo $item['text']; ?></span>
 					<?php
 					if ( ! empty( $item['link']['url'] ) ) {
 						echo '</a>';
 					}
 					?>
-                </li>
-				<?php
+				</li>
+			<?php
 			endforeach; ?>
-        </ul>
+		</ul>
 		<?php
 	}
 

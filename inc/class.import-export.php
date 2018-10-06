@@ -40,42 +40,44 @@ class DtbakerElementorImportExport {
 	}
 
 
-	public function export_data($post_id){
+	public function export_data( $post_id ) {
 
-		if(!$post_id)return false;
-		$post_data = get_post($post_id);
+		if ( ! $post_id ) {
+			return false;
+		}
+		$post_data         = get_post( $post_id );
 		$final_export_data = array(
-			'slug' => $post_data->post_name,
-			'version' => '',
-			'cost' => '',
-			'styles' => array(),
+			'slug'             => $post_data->post_name,
+			'version'          => '',
+			'cost'             => '',
+			'styles'           => array(),
 			'easy_google_font' => array(),
-			'options' => array(),
+			'options'          => array(),
 		);
 
 		// Export code copied from dtbaker's theme setup wizard shindig.
-		if($post_data && $post_data->post_type == 'dtbaker_style' && !$post_data->post_parent) {
+		if ( $post_data && $post_data->post_type == 'dtbaker_style' && ! $post_data->post_parent ) {
 
 			// cool, we have out post parent ready to export.
 			$post_type       = 'dtbaker_style';
 			$media_to_export = array();
 			// export child style data.
-			$args        = array(
+			$args           = array(
 				'post_type'      => $post_type,
 				'posts_per_page' => - 1,
 				'post_parent'    => $post_data->ID,
 				'post_status'    => 'publish'
 			);
-			$export_posts = array();
-			$export_posts[] = get_post($post_id);
-			$children = get_posts( $args );
-			if($children) {
+			$export_posts   = array();
+			$export_posts[] = get_post( $post_id );
+			$children       = get_posts( $args );
+			if ( $children ) {
 				$export_posts = array_merge( $export_posts, $children );
 			}
 
-			foreach ( $export_posts as $export_post) {
+			foreach ( $export_posts as $export_post ) {
 
-				$post_data = get_post($export_post->ID);
+				$post_data = get_post( $export_post->ID );
 
 				$meta = get_post_meta( $post_data->ID, '', true );
 				foreach ( $meta as $meta_key => $meta_val ) {
@@ -102,16 +104,16 @@ class DtbakerElementorImportExport {
 				}
 
 				// we have to strip some values from meta export.
-				$strip_keys = array('mailchimp_api_key','mailchimp_list_id');
-				if(!empty($meta['_elementor_data'])){
-					$elementor_meta = @json_decode($meta['_elementor_data'],true);
-					if($elementor_meta){
-						array_walk_recursive( $elementor_meta, function( &$val, $key ) use ($strip_keys){
-							if( in_array($key, $strip_keys)){
+				$strip_keys = array( 'mailchimp_api_key', 'mailchimp_list_id' );
+				if ( ! empty( $meta['_elementor_data'] ) ) {
+					$elementor_meta = @json_decode( $meta['_elementor_data'], true );
+					if ( $elementor_meta ) {
+						array_walk_recursive( $elementor_meta, function ( &$val, $key ) use ( $strip_keys ) {
+							if ( in_array( $key, $strip_keys ) ) {
 								$val = '';
 							}
-						});
-						$meta['_elementor_data'] = wp_json_encode($elementor_meta);
+						} );
+						$meta['_elementor_data'] = wp_json_encode( $elementor_meta );
 					}
 				}
 
@@ -128,7 +130,7 @@ class DtbakerElementorImportExport {
 				$final_export_data['styles'][ $post_type ][] = array(
 					'post_id'        => $post_data->ID,
 					'post_title'     => $post_data->post_title,
-					'post_type'     => $post_data->post_type,
+					'post_type'      => $post_data->post_type,
 					'post_status'    => $post_data->post_status,
 					'post_name'      => $post_data->post_name,
 					'post_content'   => $post_data->post_content,
@@ -147,9 +149,9 @@ class DtbakerElementorImportExport {
 			}
 
 			$post_type = 'attachment';
-			foreach($media_to_export as $media_id => $tf){
+			foreach ( $media_to_export as $media_id => $tf ) {
 
-				$post_data = get_post($media_id);
+				$post_data = get_post( $media_id );
 
 				$meta = get_post_meta( $post_data->ID, '', true );
 				foreach ( $meta as $meta_key => $meta_val ) {
@@ -178,7 +180,7 @@ class DtbakerElementorImportExport {
 				$final_export_data['styles'][ $post_type ][] = array(
 					'post_id'        => $post_data->ID,
 					'post_title'     => $post_data->post_title,
-					'post_type'     => $post_data->post_type,
+					'post_type'      => $post_data->post_type,
 					'post_status'    => $post_data->post_status,
 					'post_name'      => $post_data->post_name,
 					'post_content'   => $post_data->post_content,
@@ -194,11 +196,11 @@ class DtbakerElementorImportExport {
 			}
 
 			// also need to export the Google Font settings for this style.
-			$all_options     = get_option( 'tt_font_theme_options', array() );
-			foreach($all_options as $key=>$val){
-				if(preg_match('#^'. (int)$post_id .'[a-z]#', $key )){
-					$new_key = str_replace( (int)$post_id, '', $key );
-					$final_export_data['easy_google_font'][$new_key] = $val;
+			$all_options = get_option( 'tt_font_theme_options', array() );
+			foreach ( $all_options as $key => $val ) {
+				if ( preg_match( '#^' . (int) $post_id . '[a-z]#', $key ) ) {
+					$new_key                                           = str_replace( (int) $post_id, '', $key );
+					$final_export_data['easy_google_font'][ $new_key ] = $val;
 				}
 			}
 
@@ -208,36 +210,36 @@ class DtbakerElementorImportExport {
 	}
 
 
-	public function import_data($style){
+	public function import_data( $style ) {
 
-		if( $style && !empty($style['slug'])){
-			if(get_transient('import_style_'.$style['slug'])){
+		if ( $style && ! empty( $style['slug'] ) ) {
+			if ( get_transient( 'import_style_' . $style['slug'] ) ) {
 				//return false; // doing duplicates.
 			}
 			// hacky way to stop people clicking twice.
-			set_transient('import_style_'.$style['slug'], time(), 60 );
+			set_transient( 'import_style_' . $style['slug'], time(), 60 );
 
 
-			if(!empty($style['styles'])){
-				if(!empty($style['styles']['attachment'])){
+			if ( ! empty( $style['styles'] ) ) {
+				if ( ! empty( $style['styles']['attachment'] ) ) {
 
 					// import attachments first before the actual content that will use them.
-					foreach($style['styles']['attachment'] as $data) {
+					foreach ( $style['styles']['attachment'] as $data ) {
 						$this->_process_post_data( 'attachment', $data );
 					}
-					unset($style['styles']['attachment']);
+					unset( $style['styles']['attachment'] );
 				}
 
-				foreach($style['styles'] as $post_type => $post_data){
-					foreach($post_data as $data) {
+				foreach ( $style['styles'] as $post_type => $post_data ) {
+					foreach ( $post_data as $data ) {
 						$this->_process_post_data( $post_type, $data );
 					}
 
 				}
 			}
-			if(!empty($style['easy_google_font'])){
+			if ( ! empty( $style['easy_google_font'] ) ) {
 			}
-			if(!empty($style['options'])){
+			if ( ! empty( $style['options'] ) ) {
 			}
 
 			$this->_handle_post_orphans();
@@ -273,9 +275,9 @@ class DtbakerElementorImportExport {
 		}
 		if ( $new_id ) {
 			if ( ! isset( $post_ids[ $original_id ] ) ) {
-//				$this->log( 'Insert old ID ' . $original_id . ' as new ID: ' . $new_id );
+				//				$this->log( 'Insert old ID ' . $original_id . ' as new ID: ' . $new_id );
 			} else if ( $post_ids[ $original_id ] != $new_id ) {
-//				$this->error( 'Replacement OLD ID ' . $original_id . ' overwritten by new ID: ' . $new_id );
+				//				$this->error( 'Replacement OLD ID ' . $original_id . ' overwritten by new ID: ' . $new_id );
 			}
 			$post_ids[ $original_id ] = $new_id;
 			set_transient( 'stylepressimportpostids', $post_ids, 60 * 60 );
@@ -352,7 +354,7 @@ class DtbakerElementorImportExport {
 			if ( $this->_imported_post_id( $post_parent ) ) {
 				$post_data['post_parent'] = $this->_imported_post_id( $post_parent );
 				// otherwise record the parent for later
-			}else{
+			} else {
 				$this->_post_orphans( intval( $post_data['post_id'] ), $post_parent );
 				$post_data['post_parent'] = 0;//
 			}
@@ -508,7 +510,7 @@ class DtbakerElementorImportExport {
 						}
 					}
 
-					if ( !empty($post_data['meta']['_elementor_data']) || !!empty($post_data['meta']['_elementor_css']) ) {
+					if ( ! empty( $post_data['meta']['_elementor_data'] ) || ! ! empty( $post_data['meta']['_elementor_css'] ) ) {
 						$this->elementor_post( $post_id );
 					}
 				}
@@ -600,13 +602,12 @@ class DtbakerElementorImportExport {
 	public function elementor_post( $post_id = false ) {
 
 		// regenrate the CSS for this Elementor post
-		if( class_exists( 'Elementor\Post_CSS_File' ) ) {
-			$post_css = new Elementor\Post_CSS_File($post_id);
+		if ( class_exists( 'Elementor\Post_CSS_File' ) ) {
+			$post_css = new Elementor\Post_CSS_File( $post_id );
 			$post_css->update();
 		}
 
 	}
-
 
 
 	// return the difference in length between two strings
@@ -642,7 +643,7 @@ class DtbakerElementorImportExport {
 							$ids[ $key ] = $new_id;
 						}
 					}
-					$new_ids                   = implode( ',', $ids );
+					$new_ids = implode( ',', $ids );
 					$content = str_replace( $ids_matches[0], 'ids="' . $new_ids . '"', $content );
 				}
 			}
@@ -661,6 +662,7 @@ class DtbakerElementorImportExport {
 				}
 			}
 		}
+
 		return $content;
 	}
 
@@ -696,14 +698,14 @@ class DtbakerElementorImportExport {
 				$item = $new_meta_val;
 			}
 		}
-		if ( $key == 'url' && ! empty( $item ) && (strstr( $item, 'ocalhost' ) || strstr( $item, 'dev.dtbaker' )) ) {
+		if ( $key == 'url' && ! empty( $item ) && ( strstr( $item, 'ocalhost' ) || strstr( $item, 'dev.dtbaker' ) ) ) {
 			// check if this has been imported before
 			$new_meta_val = $this->_imported_post_id( $item );
 			if ( $new_meta_val ) {
 				$item = $new_meta_val;
 			}
 		}
-		if ( ($key == 'shortcode' || $key == 'editor') && ! empty( $item ) ) {
+		if ( ( $key == 'shortcode' || $key == 'editor' ) && ! empty( $item ) ) {
 			// we have to fix the [contact-form-7 id=133] shortcode issue.
 			$item = $this->_parse_gallery_shortcode_content( $item );
 

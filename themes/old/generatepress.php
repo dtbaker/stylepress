@@ -16,4 +16,4 @@ $style = '
 			padding: 10px 10px;
 		}
 	';
-	wp_add_inline_style( 'generate-style', $style );
+wp_add_inline_style( 'generate-style', $style );
