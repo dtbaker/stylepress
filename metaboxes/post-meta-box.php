@@ -2,7 +2,7 @@
 /**
  * Metabox showing on all pages and posts.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 // grab a list of all page templates.
@@ -16,13 +16,13 @@ $current_inner_style = $this->get_page_inner_style( $post->ID );
 $current_page_type = get_post_type( $post ); //$this->get_current_page_type();
 $style_settings    = $this->get_settings();
 
-wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce' );
+wp_nonce_field( 'stylepress_style_nonce', 'stylepress_style_nonce' );
 ?>
-	<label class="screen-reader-text" for="dtbaker_page_style"><?php esc_html_e( 'Page Style', 'stylepress' ); ?></label>
+	<label class="screen-reader-text" for="stylepress_page_style"><?php esc_html_e( 'Page Style', 'stylepress' ); ?></label>
 	<p>
 		<small><?php
 			// Translators: The first %s is a link <a href=""> and the second %s is a closing link </a>.
-			printf( esc_html__( 'You can override the default style here. Choose the style to apply to this particular page. Edit these styles from the %1$sStylePress%2$s page.', 'stylepress' ), '<a href="' . esc_url( admin_url( 'admin.php?page=dtbaker-stylepress' ) ) . '">', '</a>' ); ?></small>
+			printf( esc_html__( 'You can override the default style here. Choose the style to apply to this particular page. Edit these styles from the %1$sStylePress%2$s page.', 'stylepress' ), '<a href="' . esc_url( admin_url( 'admin.php?page=stylepress' ) ) . '">', '</a>' ); ?></small>
 	</p>
 	<p>
 		<small><?php
@@ -33,8 +33,8 @@ wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce'
 
 <?php if ( $styles ) { ?>
 	<p class="post-attributes-label-wrapper"><label class="post-attributes-label"
-	                                                for="dtbaker_page_style"><?php _e( 'Outer Style' ); ?></label></p>
-	<select name="dtbaker_style[style]" id="dtbaker_page_style">
+	                                                for="stylepress_page_style"><?php _e( 'Outer Style' ); ?></label></p>
+	<select name="stylepress_style[style]" id="stylepress_page_style">
 		<option value="0"><?php
 			// Translators: %s contains the current default style.
 			printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr( isset( $styles[ $current_default ] ) ? '(' . $styles[ $current_default ] . ')' : '' ) ); ?></option>
@@ -68,9 +68,9 @@ if ( $components ) {
 	?>
 
 	<p class="post-attributes-label-wrapper"><label class="post-attributes-label"
-	                                                for="dtbaker_page_inner_style"><?php _e( 'Inner Style' ); ?></label>
+	                                                for="stylepress_page_inner_style"><?php _e( 'Inner Style' ); ?></label>
 	</p>
-	<select name="dtbaker_style[inner_style]" id="dtbaker_page_inner_style">
+	<select name="stylepress_style[inner_style]" id="stylepress_page_inner_style">
 		<option value="0"><?php
 			// Translators: %s contains the current default style.
 			printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr( $default_inner_style && isset( $components[ $default_inner_style ] ) ? '(' . $components[ $default_inner_style ] . ')' : '' ) ); ?></option>

@@ -2,10 +2,10 @@
 /**
  * Layout for previewing our site wide styles
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">

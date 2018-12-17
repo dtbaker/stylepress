@@ -2,45 +2,45 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '	    
-		body.dtbaker-elementor-template.elementor-page,
-		body.dtbaker-elementor-template-std.elementor-page {
+		body.stylepress-template.elementor-page,
+		body.stylepress-template-std.elementor-page {
 			background: transparent;
 		}
-		.dtbaker-elementor-template-std .site {
+		.stylepress-template-std .site {
 			margin: 0;
 		}
-		.dtbaker-elementor-template .elementor-page,
-        .dtbaker-elementor-template-std .elementor-page {
+		.stylepress-template .elementor-page,
+        .stylepress-template-std .elementor-page {
 	        overflow: hidden;
         }
-		.dtbaker-elementor-template .full-width,
-        .dtbaker-elementor-template-std .full-width {
+		.stylepress-template .full-width,
+        .stylepress-template-std .full-width {
 	        width: 100%;
         }
-        .dtbaker-elementor-template .site-inner,
-        .dtbaker-elementor-template-std .site-inner {
+        .stylepress-template .site-inner,
+        .stylepress-template-std .site-inner {
             max-width: 100%;
         }
-        .dtbaker-elementor-template .site-content,
-        .dtbaker-elementor-template-std .site-content {
+        .stylepress-template .site-content,
+        .stylepress-template-std .site-content {
             padding: 0;
         }
-        .dtbaker-elementor-template header#masthead,
-        .dtbaker-elementor-template footer#colophon,
-        .dtbaker-elementor-template-std header#masthead,
-        .dtbaker-elementor-template-std footer#colophon {
+        .stylepress-template header#masthead,
+        .stylepress-template footer#colophon,
+        .stylepress-template-std header#masthead,
+        .stylepress-template-std footer#colophon {
 	        margin: 0 auto;
 	        max-width: 1320px;
         } 
-        .dtbaker-elementor-template .entry-content,
-        .dtbaker-elementor-template-std .entry-content {
+        .stylepress-template .entry-content,
+        .stylepress-template-std .entry-content {
 	        margin-right: auto;
 	        margin-left: auto;
         }
@@ -51,15 +51,15 @@ $style = '
 			.admin-bar .anchor-menu-fixed.anchor-menu, .admin-bar .anchor-menu-fixed.elementor-widget-wp-widget-nav_menu {
 				top: 54px !important;
 			}			
-			.dtbaker-elementor-template .entry-content,
-            .dtbaker-elementor-template-std .entry-content	{
+			.stylepress-template .entry-content,
+            .stylepress-template-std .entry-content	{
 	            margin-right: auto;
 	            margin-left: auto;
 	        }
         }
         @media screen and (min-width: 44.375em) {	        
-			.dtbaker-elementor-template .entry-content,
-            .dtbaker-elementor-template-std .entry-content {
+			.stylepress-template .entry-content,
+            .stylepress-template-std .entry-content {
 	            margin-right: auto;;
 	        }
         }

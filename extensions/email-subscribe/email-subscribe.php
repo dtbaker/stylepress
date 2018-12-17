@@ -1,19 +1,19 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 add_action( 'wp_enqueue_scripts', function () {
 
-	wp_enqueue_style( 'stylepress-email', DTBAKER_ELEMENTOR_URI . 'extensions/email-subscribe/subscribe.css', false );
-	wp_register_script( 'stylepress-email-script', DTBAKER_ELEMENTOR_URI . 'extensions/email-subscribe/subscribe.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+	wp_enqueue_style( 'stylepress-email', STYLEPRESS_URI . 'extensions/email-subscribe/subscribe.css', false );
+	wp_register_script( 'stylepress-email-script', STYLEPRESS_URI . 'extensions/email-subscribe/subscribe.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 	wp_localize_script( 'stylepress-email-script', 'stylepress_email', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_enqueue_script( 'stylepress-email-script' );
 } );
 
 
 // todo: option these out in 'Add-Ons' section
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/email-subscribe/widget.email-subscribe.php';
+require_once STYLEPRESS_PATH . 'extensions/email-subscribe/widget.email-subscribe.php';
 
 add_action( 'wp_ajax_stylepress_email_sub', function () {
 

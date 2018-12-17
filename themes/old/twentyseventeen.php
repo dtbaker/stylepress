@@ -2,10 +2,10 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '	    
@@ -35,4 +35,4 @@ form.search-form .search-field {
 	flex:1;
 }
 ';
-wp_add_inline_style( 'dtbaker-elementor-css', $style );
+wp_add_inline_style( 'stylepress-css', $style );

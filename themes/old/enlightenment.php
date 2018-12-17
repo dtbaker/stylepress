@@ -2,10 +2,10 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '

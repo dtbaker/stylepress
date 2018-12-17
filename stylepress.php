@@ -3,14 +3,14 @@
  * Plugin Name: StylePress for Elementor
  * Description: Allows you to apply full site layout templates to pages on your website using Elementor.
  * Plugin URI: https://stylepress.org/
- * Author: dtbaker
- * Version: 1.2.2
- * Author URI: https://dtbaker.net/
- * GitHub Plugin URI: https://github.com/dtbaker/stylepress
+ * Author: stylepress
+ * Version: 2.0.0
+ * Author URI: https://stylepress.net/
+ * GitHub Plugin URI: https://github.com/stylepress/stylepress
  * Requires at least:   4.9
- * Tested up to:        4.9.8
+ * Tested up to:        5.0.1
  *
- * Text Domain: dtbaker-elementor
+ * Text Domain: stylepress
  *
  * Full Site Editor for Elementor is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,29 +33,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  Constants:
 */
 
-// dev stuff by dtbaker:
+// dev stuff by stylepress:
 //set_time_limit(2);
 
 /* Set plugin version constant. */
-define( 'DTBAKER_ELEMENTOR_VERSION', '1.2.2' );
+define( 'STYLEPRESS_VERSION', '2.0.0' );
 
 /* Debug output control. */
-define( 'DTBAKER_ELEMENTOR_DEBUG_OUTPUT', 0 );
+define( 'STYLEPRESS_DEBUG_OUTPUT', 0 );
 
 /* Set constant path to the plugin directory. */
-define( 'DTBAKER_ELEMENTOR_SLUG', basename( plugin_dir_path( __FILE__ ) ) );
+define( 'STYLEPRESS_SLUG', basename( plugin_dir_path( __FILE__ ) ) );
 
 /* Set constant path to the plugin directory. */
-define( 'DTBAKER_ELEMENTOR_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'STYLEPRESS_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 
 /* Set the constant path to the plugin directory URI. */
-define( 'DTBAKER_ELEMENTOR_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'STYLEPRESS_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 
-add_action( 'plugins_loaded', 'dtbaker_elementor_load_plugin_textdomain' );
+add_action( 'plugins_loaded', 'stylepress_load_plugin_textdomain' );
 
 if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
-	add_action( 'admin_notices', 'dtbaker_elementor_fail_php_version' );
+	add_action( 'admin_notices', 'stylepress_fail_php_version' );
 } else {
 
 
@@ -64,14 +64,14 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 	define( 'STYLEPRESS_INNER_USE_THEME', - 2 );
 
 
-	/* DtbakerElementorManager Class */
-	require_once( DTBAKER_ELEMENTOR_PATH . 'inc/class.plugin.php' );
+	/* StylepressManager Class */
+	require_once( STYLEPRESS_PATH . 'inc/class.plugin.php' );
 
 	/* Template Functions */
-	require_once( DTBAKER_ELEMENTOR_PATH . 'inc/template-functions.php' );
+	require_once( STYLEPRESS_PATH . 'inc/template-functions.php' );
 
 	/* Start up our magic */
-	DtbakerElementorManager::get_instance()->init();
+	StylepressManager::get_instance()->init();
 
 
 }
@@ -83,8 +83,8 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
  *
  * @return void
  */
-function dtbaker_elementor_load_plugin_textdomain() {
-	load_plugin_textdomain( 'dtbaker-elementor' );
+function stylepress_load_plugin_textdomain() {
+	load_plugin_textdomain( 'stylepress' );
 }
 
 /**
@@ -94,8 +94,8 @@ function dtbaker_elementor_load_plugin_textdomain() {
  *
  * @return void
  */
-if ( ! function_exists( 'dtbaker_elementor_fail_php_version' ) ) {
-	function dtbaker_elementor_fail_php_version() {
+if ( ! function_exists( 'stylepress_fail_php_version' ) ) {
+	function stylepress_fail_php_version() {
 		$message      = esc_html__( 'The StylePress for Elementor plugin requires PHP version 5.4+, plugin is currently NOT ACTIVE.', 'stylepress' );
 		$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 		echo wp_kses_post( $html_message );

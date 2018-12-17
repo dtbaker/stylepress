@@ -1,24 +1,24 @@
 <?php
 /**
- * Our DtbakerElementorManager class.
+ * Our StylepressManager class.
  * This handles all our hooks and stuff.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 /**
  * All the magic happens here.
  *
- * Class DtbakerElementorManager
+ * Class StylepressManager
  */
-class DtbakerDynamicField {
+class stylepressDynamicField {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.
 	 *
-	 * @var DtbakerElementorManager null
+	 * @var StylepressManager null
 	 *
 	 * @since 1.0.0
 	 */
@@ -29,7 +29,7 @@ class DtbakerDynamicField {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return DtbakerElementorManager
+	 * @return StylepressManager
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {

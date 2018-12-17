@@ -1,7 +1,7 @@
 /**
  * Frontend CSS Editor
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 

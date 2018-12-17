@@ -2,10 +2,10 @@
 /**
  * Template for purchase popup
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 $current_user = wp_get_current_user();
 $name         = trim( $current_user->user_firstname . ' ' . $current_user->user_lastname );

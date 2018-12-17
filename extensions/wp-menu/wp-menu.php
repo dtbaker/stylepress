@@ -1,28 +1,28 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 define( 'STYLEPRESS_MENU_DISPLAY_MEGA', 1 );
 define( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT', 2 );
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/menu.css', false );
-	wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/navigation.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+	wp_enqueue_style( 'stylepress-nav-menu', STYLEPRESS_URI . 'extensions/wp-menu/menu.css', false );
+	wp_enqueue_script( 'stylepress-nav-menu', STYLEPRESS_URI . 'extensions/wp-menu/navigation.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 } );
 
 
 add_action( 'admin_enqueue_scripts', function ( $hook ) {
 	if ( $hook == 'nav-menus.php' ) {
-		wp_enqueue_script( 'stylepress-nav-menu-edit', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/admin-nav-menu.js' );
-		wp_enqueue_style( 'stylepress-nav-menu-edit', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/admin-nav-menu.css' );
+		wp_enqueue_script( 'stylepress-nav-menu-edit', STYLEPRESS_URI . 'extensions/wp-menu/admin-nav-menu.js' );
+		wp_enqueue_style( 'stylepress-nav-menu-edit', STYLEPRESS_URI . 'extensions/wp-menu/admin-nav-menu.css' );
 	}
 } );
 
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/widget.wp-menu.php';
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/widget.wp-menu.php';
 
 
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/walker-edit-page.php';
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/walker-display.php';
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/walker-edit-page.php';
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/walker-display.php';
 function stylepress_edit_walker( $walker, $menu_id ) {
 	return 'Walker_Nav_Menu_Edit_StylePress';
 }

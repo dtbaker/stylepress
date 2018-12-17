@@ -2,19 +2,19 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $vantage = '
-		.dtbaker-elementor-template-std #main {
+		.stylepress-template-std #main {
             padding: 0;
 	        max-width: 100%;
         }
 
-        .dtbaker-elementor-template-std.responsive.layout-full #main .full-container {
+        .stylepress-template-std.responsive.layout-full #main .full-container {
             max-width: 100%;
             margin-left: auto;
             margin-right: auto;

@@ -2,10 +2,10 @@
 /**
  * Full page template used for rending our custom layouts
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">

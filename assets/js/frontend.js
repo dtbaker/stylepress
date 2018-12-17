@@ -1,7 +1,7 @@
 /**
  * Frontend Elementor Tweaks
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 

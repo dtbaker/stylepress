@@ -18,12 +18,12 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 
@@ -33,7 +33,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 	/**
@@ -549,7 +549,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 					$elementor = Plugin::instance();
 
-					// copy this from dtbaker-insert-page:
+					// copy this from stylepress-insert-page:
 					$page_html = $elementor->frontend->apply_builder_in_content( $page_html );
 
 					// maybe do a set_option get_option hack to prevent fatal errors on elementor attempts?
@@ -598,7 +598,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 			'arrows'        => $show_arrows,
 			'dots'          => $show_dots,
 			'rtl'           => $is_rtl,
-			'dtbaker_type'  => ! empty( $instance['dtbaker_slider_type'] ) ? $instance['dtbaker_slider_type'] : '',
+			'stylepress_type'  => ! empty( $instance['stylepress_slider_type'] ) ? $instance['stylepress_slider_type'] : '',
 		];
 
 		$carousel_classes = [ 'elementor-page-carousel' ];
@@ -622,7 +622,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 			esc_html_e( 'Page Slider Here:' );
 			echo implode( '', $slides );
 		} else {
-			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
+			if ( ! empty( $instance['stylepress_slider_type'] ) && 'icons' === $instance['stylepress_slider_type'] ) {
 				$carousel_classes [] = 'inner-content-width';
 			}
 
@@ -635,7 +635,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 				</div>
 			</div>
 			<?php
-			if ( ! empty( $instance['dtbaker_slider_type'] ) && 'icons' === $instance['dtbaker_slider_type'] ) {
+			if ( ! empty( $instance['stylepress_slider_type'] ) && 'icons' === $instance['stylepress_slider_type'] ) {
 				$icons = array();
 				foreach ( $instance['page_list'] as $page_list_id => $page ) {
 					$post_id = (int) str_replace( 'p.', '', $page['page'] );
@@ -652,7 +652,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 				?>
 				<div class="elementor-page-carousel-icons" dir="<?php echo esc_attr( $direction ); ?>">
 					<div class="page-carousel-icon-wrapper inner-content-width">
-						<div class="elementor-dtbaker-page-slider-icons">
+						<div class="elementor-stylepress-page-slider-icons">
 							<?php echo implode( '', $icons ); ?>
 						</div>
 					</div>
@@ -664,7 +664,7 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 
 	protected function content_template() {
 		?>
-		<div class="elementor-dtbaker-page-slider">
+		<div class="elementor-stylepress-page-slider">
 			The Page Slider Will Appear Here
 		</div>
 		<?php

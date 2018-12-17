@@ -2,10 +2,10 @@
 /**
  * Admin page showing all available Elementor Styles
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 $title = __( 'Full Site Editor', 'stylepress' );
 
@@ -16,16 +16,16 @@ if ( ! $this->has_permission() ) {
 
 add_thickbox();
 
-$styles = DtbakerElementorManager::get_instance()->get_all_page_styles();
-$components = DtbakerElementorManager::get_instance()->get_all_page_components();
-$settings = DtbakerElementorManager::get_instance()->get_settings();
-$page_types = DtbakerElementorManager::get_instance()->get_possible_page_types();
+$styles = StylepressManager::get_instance()->get_all_page_styles();
+$components = StylepressManager::get_instance()->get_all_page_components();
+$settings = StylepressManager::get_instance()->get_settings();
+$page_types = StylepressManager::get_instance()->get_possible_page_types();
 
 ?>
 
 <div class="wrap">
 
-	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
+	<?php require_once STYLEPRESS_PATH . 'admin/_header.php'; ?>
 
 
 	<?php if ( isset( $_GET['saved'] ) ) { ?>
@@ -43,8 +43,8 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 	<?php } ?>
 
 	<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
-		<input type="hidden" name="action" value="dtbaker_elementor_save"/>
-		<?php wp_nonce_field( 'dtbaker_elementor_save_options', 'dtbaker_elementor_save_options' ); ?>
+		<input type="hidden" name="action" value="stylepress_save"/>
+		<?php wp_nonce_field( 'stylepress_save_options', 'stylepress_save_options' ); ?>
 
 
 		<h3 class="stylepress-header">
@@ -54,7 +54,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 		</h3>
 
 
-		<div class="dtbaker-elementor-instructions">
+		<div class="stylepress-instructions">
 			<div>
 				<div>
 
@@ -151,7 +151,7 @@ $page_types = DtbakerElementorManager::get_instance()->get_possible_page_types()
 						</p>
 						<p>&nbsp;</p>
 						<div>
-							<img src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/inner-outer-graphic-light.png' ); ?>">
+							<img src="<?php echo esc_url( STYLEPRESS_URI . 'assets/img/inner-outer-graphic-light.png' ); ?>">
 						</div>
 					</div>
 				</div>

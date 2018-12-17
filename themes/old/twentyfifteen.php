@@ -2,28 +2,28 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '
-	    body.dtbaker-elementor-template:before {
+	    body.stylepress-template:before {
 		    display: none;
 	    }
-		.dtbaker-elementor-template .site,
-		.dtbaker-elementor-template-std .site	{
+		.stylepress-template .site,
+		.stylepress-template-std .site	{
             max-width: 100%;
 			margin: 0;
         }
-        .dtbaker-elementor-template .elementor-page	{
+        .stylepress-template .elementor-page	{
             overflow: hidden;
         }
-        body.dtbaker-elementor-template-std:before {
+        body.stylepress-template-std:before {
 		    width: 29.4118%;
 	    }		
-		.dtbaker-elementor-template-std .site-footer {
+		.stylepress-template-std .site-footer {
             width: 71%;
 			margin-left: 29%;
         }

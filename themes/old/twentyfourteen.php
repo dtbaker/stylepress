@@ -2,21 +2,21 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '
-	    .dtbaker-elementor-template-std .elementor-page .site {
+	    .stylepress-template-std .elementor-page .site {
             max-width: 100%;
 			overflow: hidden;
         }
-        .dtbaker-elementor-template-std .site::before {
+        .stylepress-template-std .site::before {
             display: none;
         }
-        .dtbaker-elementor-template-std .site-header {
+        .stylepress-template-std .site-header {
             max-width: 100%;
         }
 	';

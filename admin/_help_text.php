@@ -2,10 +2,10 @@
 /**
  * Our help text for admin pages
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 ob_start();
@@ -13,7 +13,7 @@ ob_start();
 	<h3>Getting Started</h3>
 	<ol>
 		<li>Create your "Site Style" in Elementor from the <a
-				href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress' ) ); ?>">Styles</a> page.
+				href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress' ) ); ?>">Styles</a> page.
 		</li>
 		<li>Choose which Outer Styles to apply to your site using the options below. The Outer Style is the
 			header/sidebar/footer that wraps around your page content.

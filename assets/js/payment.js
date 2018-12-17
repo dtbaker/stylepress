@@ -1,7 +1,7 @@
 /**
  * Payment pay
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 
@@ -140,13 +140,13 @@
                     }, function (response) {
 
                       if (!response.success) {
-                        alert("failed to record local payment. Please contact dtbaker.");
+                        alert("failed to record local payment. Please contact stylepress.");
                       }
 
                       window.location.href = purchasing_style.redirect;
 
                     }, 'json').fail(function () {
-                      alert("Error saving local payment. Contact dtbaker.");
+                      alert("Error saving local payment. Contact stylepress.");
                     });
 
                   } else {

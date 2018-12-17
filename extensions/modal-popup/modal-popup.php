@@ -2,11 +2,11 @@
 /**
  * WordPress Nav Menu Widget
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $control_id = \Elementor\Controls_Manager::URL;
@@ -14,7 +14,7 @@ $control_id = \Elementor\Controls_Manager::URL;
 $control = $elementor->controls_manager->get_control( $control_id );
 if ( $control ) {
 	//StylePress_Control_URL
-	require_once DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/elementor.url-control.php';
+	require_once STYLEPRESS_PATH . 'extensions/modal-popup/elementor.url-control.php';
 
 	$class_name = 'Elementor\StylePress_Control_URL';
 
@@ -23,9 +23,9 @@ if ( $control ) {
 
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_register_script( 'stylepress-modal-popup', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+	wp_register_script( 'stylepress-modal-popup', STYLEPRESS_URI . 'extensions/modal-popup/popup.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 	wp_localize_script( 'stylepress-modal-popup', 'stylepress_modal', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-	wp_register_style( 'stylepress-modal-button', DTBAKER_ELEMENTOR_URI . 'extensions/modal-popup/popup.css' );
+	wp_register_style( 'stylepress-modal-button', STYLEPRESS_URI . 'extensions/modal-popup/popup.css' );
 } );
 
 add_filter( 'stylepress_modal_link', function ( $link, $popup_template, $options = array() ) {
@@ -61,7 +61,7 @@ add_action( 'wp_ajax_stylepress_modal_pop', function(){
 	// EDIT: ajax not used any more, we render template straight on page.
 	//
 	if(!empty($_POST['modal']['id']) && !empty($_POST['modal']['settings'])){
-		$modal_id = !empty($_POST['modal']['settings']['dtbaker_modal_content']) ? (int)$_POST['modal']['settings']['dtbaker_modal_content'] : 0;
+		$modal_id = !empty($_POST['modal']['settings']['stylepress_modal_content']) ? (int)$_POST['modal']['settings']['stylepress_modal_content'] : 0;
 		$modal_hash = !empty($_POST['modal']['settings']['stylepress_modal_hash']) ? $_POST['modal']['settings']['stylepress_modal_hash'] : 0;
 		if($modal_id && $modal_hash && wp_verify_nonce($modal_hash, 'open_modal_' . $modal_id)){
 			?>
@@ -81,7 +81,7 @@ add_action( 'wp_ajax_stylepress_modal_pop', function(){
 
 //
 function stylepress_modal_button_before_render( $widget ) {
-	$enabled = array( 'button', 'dtbaker_wp_menu', );
+	$enabled = array( 'button', 'stylepress_wp_menu', );
 	if ( in_array( $widget->get_name(), $enabled ) ) {
 		$settings = $widget->get_active_settings();
 		if ( ! empty( $settings['link']['stylepress_template'] ) ) {
@@ -99,7 +99,7 @@ function stylepress_modal_button_before_render( $widget ) {
 				case 'button':
 					$widget->add_render_attribute( 'button', $data_attr['key'], $data_attr['val'] );
 					break;
-				case 'dtbaker_wp_menu':
+				case 'stylepress_wp_menu':
 					$widget->add_render_attribute( 'link', $data_attr['key'], $data_attr['val'] );
 					break;
 			}
@@ -160,7 +160,7 @@ function stylepress_modal_button_hack( $widget, $args ){
 	}
 
 	$widget->add_control(
-		'dtbaker_modal_content',
+		'stylepress_modal_content',
 		[
 			'label' => __( 'Choose Modal Content', 'elementor-pro' ),
 			'type' => \Elementor\Controls_Manager::SELECT,
@@ -171,7 +171,7 @@ function stylepress_modal_button_hack( $widget, $args ){
 		]
 	);
 	$widget->add_control(
-		'dtbaker_modal_style',
+		'stylepress_modal_style',
 		[
 			'label' => __( 'Display Style', 'elementor-pro' ),
 			'type' => \Elementor\Controls_Manager::SELECT,
@@ -217,12 +217,12 @@ add_action( 'stylepress/before-render', function () {
 } );
 add_action( 'stylepress/after-render', function () {
 	echo '</div>';
-	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
+	include STYLEPRESS_PATH . 'extensions/modal-popup/slide-in.php';
 } );
 
 add_action( 'stylepress/modal-popups', function () {
 	// if there is no before/after render
-	include DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/slide-in.php';
+	include STYLEPRESS_PATH . 'extensions/modal-popup/slide-in.php';
 } );
 
 //add_action( 'elementor/element/stylepress_modal_button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);

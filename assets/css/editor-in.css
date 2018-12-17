@@ -1,4 +1,4 @@
-.elementor-editor-active.dtbaker-elementor-template-component .elementor-edit-mode:before {
+.elementor-editor-active.stylepress-template-component .elementor-edit-mode:before {
   content: 'Design Your Inner Style Below';
   position: absolute;
   display: block;
@@ -7,12 +7,12 @@
   margin-left: -265px;
   font-size: 25px;
 }
-.elementor-editor-active.dtbaker-elementor-template-component .elementor-inner {
+.elementor-editor-active.stylepress-template-component .elementor-inner {
   margin-top: 0 !important;
   padding: 120px 50px;
   background: #f5f5f5;
 }
-.elementor-editor-active.dtbaker-elementor-template-component .elementor-inner > .elementor-section-wrap {
+.elementor-editor-active.stylepress-template-component .elementor-inner > .elementor-section-wrap {
   background: #FFF;
   padding: 50px 0;
 }

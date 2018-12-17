@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /**
- * Class Skin_Dtbaker
+ * Class Skin_stylepress
  */
-class Skin_Icon_List_Dtbaker extends Skin_Base {
+class Skin_Icon_List_stylepress extends Skin_Base {
 
 	public function get_id() {
 		return 'elementor-test-icon-list';

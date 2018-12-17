@@ -2,7 +2,7 @@
 /**
  * Inner Content Elementor Widget
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 namespace Elementor;
@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Creates our custom Elementor widget
  *
- * Class Widget_Dtbaker_Inner_Content
+ * Class Widget_stylepress_Inner_Content
  *
  * @package Elementor
  */
-class Widget_Dtbaker_Inner_Content extends Widget_Base {
+class Widget_stylepress_Inner_Content extends Widget_Base {
 
 	/**
 	 * Get Widgets name
@@ -26,7 +26,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'dtbaker_inner_content';
+		return 'stylepress_inner_content';
 	}
 
 	/**
@@ -40,12 +40,12 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 	/**
@@ -54,19 +54,19 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 
 	/**
-	 * We only show this item when we're editing a 'dtbaker_style' post type.
+	 * We only show this item when we're editing a 'stylepress_style' post type.
 	 *
 	 * @return bool
 	 */
 	public function show_in_panel() {
 		global $post;
 
-		return 'dtbaker_style' === $post->post_type;
+		return 'stylepress_style' === $post->post_type;
 	}
 
 	/**
@@ -75,7 +75,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_dtbaker_inner_content',
+			'section_stylepress_inner_content',
 			[
 				'label' => __( 'Inner Website Content', 'stylepress' ),
 			]
@@ -106,7 +106,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 
 		$this->end_controls_section();
 
-		do_action( 'dtbaker_inner_content_elementor_controls', $this );
+		do_action( 'stylepress_inner_content_elementor_controls', $this );
 
 	}
 
@@ -117,9 +117,9 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		\DtbakerElementorManager::get_instance()->debug_message( "inner-content.php: inside render() method. " . get_the_ID() );
+		\StylepressManager::get_instance()->debug_message( "inner-content.php: inside render() method. " . get_the_ID() );
 
-		if ( \DtbakerElementorManager::get_instance()->previewing_style ) {
+		if ( \StylepressManager::get_instance()->previewing_style ) {
 			$this->content_template();
 		} elseif ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
 
@@ -139,7 +139,7 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 
 			/*if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
 
-				\DtbakerElementorManager::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
+				\StylepressManager::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
 
 			    // we are splitting header/footer up into multiple renders.
                 // haha. Hows your brain going now trying to follow this code???
@@ -171,4 +171,4 @@ class Widget_Dtbaker_Inner_Content extends Widget_Base {
 }
 
 
-Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Inner_Content() );
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_stylepress_Inner_Content() );

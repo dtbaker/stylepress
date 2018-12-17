@@ -2,15 +2,15 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $style = '
-    .dtbaker-elementor-template .main-content-area .main,
-    .dtbaker-elementor-template-std .main-content-area .main  {
+    .stylepress-template .main-content-area .main,
+    .stylepress-template-std .main-content-area .main  {
         margin: 0 auto;
         width: 100%;
         max-width: 100%;

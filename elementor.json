@@ -18,7 +18,7 @@
     {
       "element": "heading",
       "appendto": "stylepress_title_style",
-      "name": "dtbaker_title_under",
+      "name": "stylepress_title_under",
       "title": "Title Underline",
       "type": "select",
       "default": "underline",

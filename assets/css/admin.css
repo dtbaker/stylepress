@@ -1,18 +1,18 @@
-.dtbaker-elementor-browser {
+.stylepress-browser {
   margin-top: 40px;
 }
-.dtbaker-elementor-browser .design {
+.stylepress-browser .design {
   float: left;
   margin: 0 4% 4% 0;
   width: 21.6%;
 }
-.dtbaker-elementor-browser .design:nth-child(4n+4) {
+.stylepress-browser .design:nth-child(4n+4) {
   margin-right: 0;
 }
-.dtbaker-elementor-browser .design:nth-child(4n+5) {
+.stylepress-browser .design:nth-child(4n+5) {
   clear: left;
 }
-.dtbaker-elementor-browser .stylebox {
+.stylepress-browser .stylebox {
   cursor: pointer;
   position: relative;
   border: 1px solid #ddd;
@@ -22,7 +22,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.dtbaker-elementor-browser .stylebox .thumb {
+.stylepress-browser .stylebox .thumb {
   display: block;
   overflow: hidden;
   position: relative;
@@ -30,25 +30,25 @@
   -webkit-transition: opacity 0.2s ease-in-out;
   transition: opacity 0.2s ease-in-out;
 }
-.dtbaker-elementor-browser .stylebox .thumb img {
+.stylepress-browser .stylebox .thumb img {
   max-width: 100%;
   height: auto;
 }
-.dtbaker-elementor-browser .stylebox .theme-usage {
+.stylepress-browser .stylebox .theme-usage {
   padding: 6px 0 6px 12px;
   font-size: 12px;
   background-color: #fafafa;
   text-overflow: ellipsis;
   min-height: 18px;
 }
-.dtbaker-elementor-browser .stylebox .theme-usage.style-description {
+.stylepress-browser .stylebox .theme-usage.style-description {
   height: auto;
 }
-.dtbaker-elementor-browser .stylebox .theme-usage a {
+.stylepress-browser .stylebox .theme-usage a {
   text-decoration: none;
   color: #444;
 }
-.dtbaker-elementor-browser .stylebox h3.design-name {
+.stylepress-browser .stylebox h3.design-name {
   font-size: 15px;
   font-weight: 600;
   height: 18px;
@@ -62,16 +62,16 @@
   background-color: #fafafa;
   color: #23282d;
 }
-.dtbaker-elementor-browser .stylebox h3.design-name small {
+.stylepress-browser .stylebox h3.design-name small {
   font-weight: normal;
   font-size: 12px;
   color: #CCC;
 }
-.dtbaker-elementor-browser .stylebox h3.design-name a {
+.stylepress-browser .stylebox h3.design-name a {
   color: #23282d;
   text-decoration: none;
 }
-.dtbaker-elementor-browser .stylebox .theme-actions {
+.stylepress-browser .stylebox .theme-actions {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -80,58 +80,58 @@
   background: rgba(244, 244, 244, 0.7);
   border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
-.dtbaker-elementor-browser .stylebox.add-new a {
+.stylepress-browser .stylebox.add-new a {
   text-decoration: none;
   display: block;
   position: relative;
   z-index: 1;
 }
-.dtbaker-elementor-instructions {
+.stylepress-instructions {
   margin: 40px 0 0;
 }
-.dtbaker-elementor-instructions > div {
+.stylepress-instructions > div {
   display: table;
   table-layout: fixed;
 }
-.dtbaker-elementor-instructions > div > div {
+.stylepress-instructions > div > div {
   display: table-cell;
   width: 25%;
 }
-.dtbaker-elementor-instructions > div > div h3 {
+.stylepress-instructions > div > div h3 {
   color: #000;
   font-size: 16px;
   font-weight: 400;
   margin: 0 0 .2em;
   padding: 0;
 }
-.dtbaker-elementor-instructions tr.highlightstyle {
+.stylepress-instructions tr.highlightstyle {
   background: rgba(61, 153, 212, 0.5) !important;
 }
-.dtbaker-elementor-instructions:after {
+.stylepress-instructions:after {
   clear: both;
   display: table;
   content: '';
 }
-.wp-admin.post-type-dtbaker_style #elementor-switch-mode,
-.wp-admin.post-type-dtbaker_style #elementor-editor {
+.wp-admin.post-type-stylepress_style #elementor-switch-mode,
+.wp-admin.post-type-stylepress_style #elementor-editor {
   display: none;
 }
-.wp-admin.post-type-dtbaker_style #titlediv {
+.wp-admin.post-type-stylepress_style #titlediv {
   margin-bottom: 20px;
 }
-.wp-admin.post-type-dtbaker_style #edit-slug-box {
+.wp-admin.post-type-stylepress_style #edit-slug-box {
   display: none;
 }
-.wp-admin.post-type-dtbaker_style #dtbaker-return-to-style {
+.wp-admin.post-type-stylepress_style #stylepress-return-to-style {
   padding: 0 0 20px;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox > h3 {
+.wp-admin.post-type-stylepress_style .stylepress-metabox > h3 {
   background: #f5f5f5;
   padding: 15px 20px;
   position: relative;
   margin: 0 0 30px;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox > h3:before {
+.wp-admin.post-type-stylepress_style .stylepress-metabox > h3:before {
   position: absolute;
   left: 0;
   content: '';
@@ -141,46 +141,46 @@
   width: 4px;
   background: #e6e6e6;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox > h3 span {
+.wp-admin.post-type-stylepress_style .stylepress-metabox > h3 span {
   font-weight: bold;
   display: block;
   padding: 0 0 5px;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox > h3 small {
+.wp-admin.post-type-stylepress_style .stylepress-metabox > h3 small {
   font-weight: normal;
   display: block;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox > h3 a {
+.wp-admin.post-type-stylepress_style .stylepress-metabox > h3 a {
   float: right;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap {
   margin: 0 0 40px;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul {
   display: block;
   padding: 0;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul > li {
   display: inline-block;
   padding: 5px;
   margin: 0 1% 3% 0;
   width: 23%;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+4) {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+4) {
   margin-right: 0;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+5) {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul > li:nth-child(4n+5) {
   clear: left;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .design-name {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul > li .design-name {
   text-align: center;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .inner-wrap > ul > li .theme-actions {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .inner-wrap > ul > li .theme-actions {
   position: relative;
   display: block;
   text-align: center;
 }
-.wp-admin.post-type-dtbaker_style .stylepress-metabox .advanced-settings {
+.wp-admin.post-type-stylepress_style .stylepress-metabox .advanced-settings {
   width: 70%;
   min-height: 150px;
 }
@@ -271,10 +271,10 @@
   font-weight: normal;
   float: right;
 }
-.wp-admin.post-type-dtbaker_style.post-new-php #elementor-editor {
+.wp-admin.post-type-stylepress_style.post-new-php #elementor-editor {
   display: none !important;
 }
-.sub2-dtbaker-stylepress a {
+.sub2-stylepress a {
   color: #8bcc3c;
 }
 #stylepress-header {

@@ -2,22 +2,22 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $virtue = '
-		.dtbaker-elementor-template .headerclass,
-        .dtbaker-elementor-template .footerclass {
+		.stylepress-template .headerclass,
+        .stylepress-template .footerclass {
             display: none;
         }
-        .dtbaker-elementor-template .contentclass,
-        .dtbaker-elementor-template-std .contentclass {
+        .stylepress-template .contentclass,
+        .stylepress-template-std .contentclass {
             padding-bottom: 0;
         }
-		.dtbaker-elementor-template .contentclass {
+		.stylepress-template .contentclass {
             padding-top: 0;
         }
 	';

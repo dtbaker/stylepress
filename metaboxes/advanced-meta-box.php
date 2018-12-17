@@ -2,16 +2,16 @@
 /**
  * Meta box under styles.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 // main style first. followed by others.
 // component styles next.
 
-wp_nonce_field( 'dtbaker_elementor_style_nonce', 'dtbaker_elementor_style_nonce' );
+wp_nonce_field( 'stylepress_style_nonce', 'stylepress_style_nonce' );
 
 
 if ( $post->post_parent ) {
@@ -29,7 +29,7 @@ if ( $post->post_parent ) {
 
 
 	?>
-	<div id="stylepress-advanced-metabox" class="stylepress-metabox dtbaker-elementor-browser">
+	<div id="stylepress-advanced-metabox" class="stylepress-metabox stylepress-browser">
 
 		<h3>Font Rules: </h3>
 		<div class="inner-wrap">

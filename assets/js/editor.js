@@ -1,7 +1,7 @@
 /**
  * Frontend Elementor Tweaks
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 (function ($) {
@@ -12,12 +12,12 @@
 
             var regions = elementor.getRegions();
 
-            regionViews.dtbakerpage = {
+            regionViews.stylepresspage = {
                 region: regionViews.global.region,
                 view: Marionette.ItemView.extend({
-                        template: '#tmpl-elementor-panel-dtbakerpage',
+                        template: '#tmpl-elementor-panel-stylepresspage',
 
-                        id: 'elementor-panel-dtbakerpage',
+                        id: 'elementor-panel-stylepresspage',
 
                         initialize: function () {
                             setTimeout(function () {
@@ -38,7 +38,7 @@
 
      var $templatewrap = $( '#tmpl-elementor-panel-elements' );
      var $template = $( '<div>' + $templatewrap.html() + '</div>' );
-     $template.find( '.elementor-panel-navigation' ).append( '<div id="elementor-panel-elements-navigation-dtbakerpage" class="elementor-panel-navigation-tab" data-view="dtbakerpage">Style</div>' );
+     $template.find( '.elementor-panel-navigation' ).append( '<div id="elementor-panel-elements-navigation-stylepresspage" class="elementor-panel-navigation-tab" data-view="stylepresspage">Style</div>' );
      $templatewrap.html( $template.html() );
      elementor.on( 'elementor:init', function(){
      var $tabs = $( '#elementor-panel-elements-navigation' );
@@ -50,7 +50,7 @@
   });
 
   $('body').on('change', 'select[data-setting="dynamic_field_value"]', function () {
-    $('#dtbaker-dynamic-code').text($(this).val() ? '{{' + $(this).val() + '}}' : '');
+    $('#stylepress-dynamic-code').text($(this).val() ? '{{' + $(this).val() + '}}' : '');
   });
 
   var $templatewrap = $('#tmpl-elementor-panel-categories');

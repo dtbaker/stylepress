@@ -1,19 +1,19 @@
 <?php
 
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
-class dtbaker_elementor_template_widget extends WP_Widget {
+class stylepress_template_widget extends WP_Widget {
 	/**
 	 * Contact Us constructor
 	 */
 	function __construct() {
 		$widget_ops  = array(
-			'classname'   => 'dtbaker_elementor_template_widget',
-			'description' => __( 'Display an Elementor template', 'dtbaker_elementor' )
+			'classname'   => 'stylepress_template_widget',
+			'description' => __( 'Display an Elementor template', 'stylepress' )
 		);
-		$control_ops = array( 'id_base' => 'dtbaker_elementor_template_widget' );
-		parent::__construct( 'dtbaker_elementor_template_widget', __( 'Elementor Template', 'dtbaker_elementor' ), $widget_ops, $control_ops );
+		$control_ops = array( 'id_base' => 'stylepress_template_widget' );
+		parent::__construct( 'stylepress_template_widget', __( 'Elementor Template', 'stylepress' ), $widget_ops, $control_ops );
 	}
 
 

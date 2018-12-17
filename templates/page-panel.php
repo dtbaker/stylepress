@@ -2,14 +2,14 @@
 /**
  * Page Templates rendered at the bottom of an Elementor page
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 ?>
-<script type="text/template" id="tmpl-elementor-panel-dtbakerpage">
-	<div class="dtbaker-elementor-page-style-item">
+<script type="text/template" id="tmpl-elementor-panel-stylepresspage">
+	<div class="stylepress-page-style-item">
 
 		StylePress options<br/> coming soon.
 

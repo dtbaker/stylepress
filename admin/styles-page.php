@@ -2,10 +2,10 @@
 /**
  * Admin page showing all available Elementor Styles
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 $title = __( 'Full Site Editor', 'stylepress' );
 
@@ -18,35 +18,35 @@ if ( ! $this->has_permission() ) {
 
 add_thickbox();
 
-$settings     = DtbakerElementorManager::get_instance()->get_settings();
-$page_types   = DtbakerElementorManager::get_instance()->get_possible_page_types();
-$designs      = DtbakerElementorManager::get_instance()->get_all_page_styles();
-$downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles();
+$settings     = StylepressManager::get_instance()->get_settings();
+$page_types   = StylepressManager::get_instance()->get_possible_page_types();
+$designs      = StylepressManager::get_instance()->get_all_page_styles();
+$downloadable = StylepressManager::get_instance()->get_downloadable_styles();
 ?>
 
 	<div class="wrap">
 
-		<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php';
+		<?php require_once STYLEPRESS_PATH . 'admin/_header.php';
 
 		if ( isset( $_GET['style_id'] ) ) {
-			require_once DTBAKER_ELEMENTOR_PATH . 'admin/styles-page-inner.php';
+			require_once STYLEPRESS_PATH . 'admin/styles-page-inner.php';
 		} else {
 			?>
-			<div class="dtbaker-elementor-browser">
+			<div class="stylepress-browser">
 
 				<div class="wp-clearfix">
 
 					<h3 class="stylepress-header">
 						<div class="buttons">
 							<!--                    <a href="-->
-							<?php //echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style' ) );
+							<?php //echo esc_url( admin_url( 'post-new.php?post_type=stylepress_style' ) );
 							?><!--" class="button">Import</a>-->
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=new' ) ); ?>"
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=new' ) ); ?>"
 							   class="button button-primary">Create New Style</a>
 						</div>
 						<span>Your Styles</span>
 						<small>These are your website styles. A style can be applied to your website from the <a
-								href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">Settings</a>
+								href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">Settings</a>
 							page.
 						</small>
 					</h3>
@@ -70,16 +70,16 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 							<div class="design stylebox" tabindex="0">
 								<?php if ( has_post_thumbnail( $design_id ) ) { ?>
 									<a
-										href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $design_id ) ); ?>"
+										href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>"
 										class="thumb">
 										<?php echo get_the_post_thumbnail( $design_id, 'full' ); ?>
 									</a>
 								<?php } else { ?>
 									<a
-										href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $design_id ) ); ?>"
+										href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>"
 										class="thumb">
 										<img
-											src="<?php echo esc_url( DTBAKER_ELEMENTOR_URI . 'assets/img/wp-theme-thumb-logo-sml.jpg' ); ?>">
+											src="<?php echo esc_url( STYLEPRESS_URI . 'assets/img/wp-theme-thumb-logo-sml.jpg' ); ?>">
 									</a>
 								<?php } ?>
 
@@ -87,7 +87,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 								// find out where it's applied, if anywhere.
 								$used        = array();
 								$args        = array(
-									'post_type'           => 'dtbaker_style',
+									'post_type'           => 'stylepress_style',
 									'post_parent'         => $design_id,
 									'post_status'         => 'any',
 									'posts_per_page'      => - 1,
@@ -110,7 +110,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 
 								?>
 								<div class="theme-usage">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">
 										<?php if ( $used ) { ?>
 											<i class="fa fa-check"></i> Style Applied To: <?php echo implode( ', ', $used ); ?>.
 										<?php } else { ?>
@@ -126,7 +126,7 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 									<?php //esc_html_e( 'Copy', 'stylepress' );
 									?><!--</a>-->
 									<a class="button button-primary"
-									   href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $design_id ) ); ?>"><?php esc_html_e( 'Edit Style', 'stylepress' ); ?></a>
+									   href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>"><?php esc_html_e( 'Edit Style', 'stylepress' ); ?></a>
 								</div>
 
 							</div>
@@ -201,4 +201,4 @@ $downloadable = DtbakerElementorManager::get_instance()->get_downloadable_styles
 		<?php } ?>
 	</div>
 
-<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/payment-modal.php';
+<?php require_once STYLEPRESS_PATH . 'admin/payment-modal.php';

@@ -2,10 +2,10 @@
 /**
  * Admin page showing all available Elementor Styles
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 $title = __( 'Add-Ons', 'stylepress' );
 
@@ -17,14 +17,14 @@ if ( ! $this->has_permission() ) {
 
 add_thickbox();
 
-$styles     = DtbakerElementorManager::get_instance()->get_all_page_styles();
-$settings   = DtbakerElementorManager::get_instance()->get_settings();
-$page_types = DtbakerElementorManager::get_instance()->get_possible_page_types();
+$styles     = StylepressManager::get_instance()->get_all_page_styles();
+$settings   = StylepressManager::get_instance()->get_settings();
+$page_types = StylepressManager::get_instance()->get_possible_page_types();
 ?>
 
 <div class="wrap">
 
-	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
+	<?php require_once STYLEPRESS_PATH . 'admin/_header.php'; ?>
 
 	<?php if ( isset( $_GET['saved'] ) ) { ?>
 		<div id="message" class="updated notice notice-success is-dismissible"><p>Settings updated.</p>

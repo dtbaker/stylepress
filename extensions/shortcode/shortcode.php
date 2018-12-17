@@ -1,8 +1,8 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
-class DtbakerElementorShortcode {
+class StylepressShortcode {
 
 	const SHORTCODE = 'elementor-template';
 
@@ -50,4 +50,4 @@ class DtbakerElementorShortcode {
 	}
 }
 
-$shortcode = new DtbakerElementorShortcode();
+$shortcode = new StylepressShortcode();

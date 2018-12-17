@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /**
- * Class Skin_Dtbaker
+ * Class Skin_stylepress
  */
 class Skin_StylePressDynamic_Image extends Skin_Base {
 
@@ -78,8 +78,8 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 		$settings = $this->parent->get_settings();
 
 		if ( $this->get_instance_value( 'stylepress_dynamic_image' ) == 'post_thumbnail' ) {
-			require_once DTBAKER_ELEMENTOR_PATH . 'widgets/class.dynamic-field.php';
-			$dyno_generator           = \DtbakerDynamicField::get_instance();
+			require_once STYLEPRESS_PATH . 'widgets/class.dynamic-field.php';
+			$dyno_generator           = \stylepressDynamicField::get_instance();
 			$settings['image']['url'] = $dyno_generator->post_thumbnail();
 			$link                     = array(
 				'url' => $dyno_generator->permalink()

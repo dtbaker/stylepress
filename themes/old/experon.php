@@ -2,20 +2,20 @@
 /**
  * Custom CSS Support for 3rd party theme
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 $experon = '
-		.dtbaker-elementor-template-std #content {
+		.stylepress-template-std #content {
             padding: 0;
         }
-		.dtbaker-elementor-template-std #content-core {
+		.stylepress-template-std #content-core {
             max-width: 100%;
         }
-		.dtbaker-elementor-template-std #intro {
+		.stylepress-template-std #intro {
 			display: none;
 		}
 	';

@@ -32,11 +32,11 @@ class Stylepress_Loop extends Widget_Base {
 	}
 
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 	public function get_script_depends() {
@@ -62,7 +62,7 @@ class Stylepress_Loop extends Widget_Base {
 		);
 
 		// choose stylepress component layout to render in each column.
-		$components = \DtbakerElementorManager::get_instance()->get_all_page_components();
+		$components = \StylepressManager::get_instance()->get_all_page_components();
 
 		$this->add_control(
 			'stylepress_layout',

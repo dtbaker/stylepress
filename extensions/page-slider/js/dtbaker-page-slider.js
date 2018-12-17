@@ -6,7 +6,7 @@ window.console = window.console || {
   }
 };
 
-var dtbakerPageSlider = {
+var stylepressPageSlider = {
   init: function ($) {
     if ($().slick) {
 
@@ -36,7 +36,7 @@ var dtbakerPageSlider = {
             },
             slickOptions = $.extend({}, defaultOptions, savedOptions);
           $(this).slick(slickOptions);
-          if (typeof savedOptions.dtbaker_type !== 'undefined' && 'icons' === savedOptions.dtbaker_type) {
+          if (typeof savedOptions.stylepress_type !== 'undefined' && 'icons' === savedOptions.stylepress_type) {
             $('.elementor-page-carousel-icons [data-slide-id]').first().addClass('current');
             var $thisslick = $(this);
             var current_slide = 0;
@@ -76,5 +76,5 @@ var dtbakerPageSlider = {
 };
 
 jQuery(function ($) {
-  dtbakerPageSlider.init($);
+  stylepressPageSlider.init($);
 });

@@ -6,12 +6,12 @@
     display: block;
   }
 }
-.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-dtbaker-page-slider-icons {
+.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-stylepress-page-slider-icons {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
-.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-dtbaker-page-slider-icons > div {
+.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-stylepress-page-slider-icons > div {
   cursor: pointer;
   display: table-cell;
   width: 1%;
@@ -21,10 +21,10 @@
   background: #EFEFEF;
   transition: background-color 300ms linear;
 }
-.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-dtbaker-page-slider-icons > div.current {
+.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-stylepress-page-slider-icons > div.current {
   background: #FFF;
 }
-.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-dtbaker-page-slider-icons > div h4 {
+.elementor-page-carousel-icons .page-carousel-icon-wrapper .elementor-stylepress-page-slider-icons > div h4 {
   margin: 0;
   padding: 0;
   font-weight: normal;

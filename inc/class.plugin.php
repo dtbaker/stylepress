@@ -1,24 +1,24 @@
 <?php
 /**
- * Our DtbakerElementorManager class.
+ * Our StylepressManager class.
  * This handles all our hooks and stuff.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 /**
  * All the magic happens here.
  *
- * Class DtbakerElementorManager
+ * Class StylepressManager
  */
-class DtbakerElementorManager {
+class StylepressManager {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.
 	 *
-	 * @var DtbakerElementorManager null
+	 * @var StylepressManager null
 	 *
 	 * @since 1.0.0
 	 */
@@ -29,7 +29,7 @@ class DtbakerElementorManager {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return DtbakerElementorManager
+	 * @return StylepressManager
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
@@ -150,7 +150,7 @@ class DtbakerElementorManager {
 					if ( $elementor && isset( $elementor->elements_manager ) ) {
 						if ( method_exists( $elementor->elements_manager, 'add_category' ) ) {
 							$elementor->elements_manager->add_category(
-								'dtbaker-elementor',
+								'stylepress',
 								[
 									'title' => 'StylePress',
 									'icon'  => 'font'
@@ -175,20 +175,20 @@ class DtbakerElementorManager {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/dynamic-field.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/email-subscribe/email-subscribe.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/modal-popup/modal-popup.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/wp-menu.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/form/form-fields.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/tooltip/tooltip.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/google-maps/google-maps.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/page-slider/dtbaker-page-slider.php';
-							require_once DTBAKER_ELEMENTOR_PATH . 'extensions/woocommerce/woocommerce.php';
+							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
+							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
+							require_once STYLEPRESS_PATH . 'extensions/modal-popup/modal-popup.php';
+							require_once STYLEPRESS_PATH . 'extensions/wp-menu/wp-menu.php';
+							require_once STYLEPRESS_PATH . 'extensions/form/form-fields.php';
+							require_once STYLEPRESS_PATH . 'extensions/tooltip/tooltip.php';
+							require_once STYLEPRESS_PATH . 'extensions/google-maps/google-maps.php';
+							require_once STYLEPRESS_PATH . 'extensions/page-slider/stylepress-page-slider.php';
+							require_once STYLEPRESS_PATH . 'extensions/woocommerce/woocommerce.php';
 							// only works with pro:
 							if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-								require_once DTBAKER_ELEMENTOR_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
+								require_once STYLEPRESS_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
 							} else {
-								require_once DTBAKER_ELEMENTOR_PATH . 'extensions/shortcode/shortcode.php';
+								require_once STYLEPRESS_PATH . 'extensions/shortcode/shortcode.php';
 							}
 
 							do_action( 'stylepress_init_extensions' );
@@ -204,8 +204,8 @@ class DtbakerElementorManager {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 			if ( class_exists( 'Elementor\Plugin' ) ) {
 				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-					require_once DTBAKER_ELEMENTOR_PATH . 'extensions/widget/widget.php';
-					register_widget( "dtbaker_elementor_template_widget" );
+					require_once STYLEPRESS_PATH . 'extensions/widget/widget.php';
+					register_widget( "stylepress_template_widget" );
 				}
 			}
 		}
@@ -226,7 +226,7 @@ class DtbakerElementorManager {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
 							// todo: option these out in 'Add-Ons' section
-							require_once DTBAKER_ELEMENTOR_PATH . 'widgets/inner-content.php';
+							require_once STYLEPRESS_PATH . 'widgets/inner-content.php';
 
 						}
 					}
@@ -247,7 +247,7 @@ class DtbakerElementorManager {
 						$column_count++;
 						$sub_children = $child->get_children();
 						foreach ( $sub_children as $sub_child ) {
-							if ( 'dtbaker_inner_content' === $sub_child->get_name() ) {
+							if ( 'stylepress_inner_content' === $sub_child->get_name() ) {
 								$has_inner = true;
 							}
 						}
@@ -255,8 +255,8 @@ class DtbakerElementorManager {
 			}
 			if ( $has_inner ) {
 				$section->add_render_attribute( 'wrapper', 'class', [
-						'section-dtbaker-has-inner',
-						'section-dtbaker-column-count-' . $column_count,
+						'section-stylepress-has-inner',
+						'section-stylepress-column-count-' . $column_count,
 					]
 				);
 			}
@@ -281,7 +281,7 @@ class DtbakerElementorManager {
 					if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
 						$elementor = Elementor\Plugin::instance();
 						if ( isset( $elementor->editor ) && $elementor->editor->is_edit_mode() ) {
-							include_once DTBAKER_ELEMENTOR_PATH . 'templates/page-panel.php';
+							include_once STYLEPRESS_PATH . 'templates/page-panel.php';
 						}
 					}
 				}
@@ -332,20 +332,20 @@ class DtbakerElementorManager {
 			if ( is_file( $path ) ) {
 				return $path;
 			}
-		} else if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type ) {
+		} else if ( $post && ! empty( $post->ID ) && 'stylepress_style' === $post->post_type ) {
 			$this->previewing_style = true;
-			$template_include       = DTBAKER_ELEMENTOR_PATH . 'templates/editor.php';
+			$template_include       = STYLEPRESS_PATH . 'templates/editor.php';
 			add_filter( 'body_class', function ( $classes ) use ( $post ) {
-				$classes[] = 'dtbaker-elementor-template';
-				$classes[] = 'dtbaker-elementor-template-preview';
+				$classes[] = 'stylepress-template';
+				$classes[] = 'stylepress-template-preview';
 				if ( $post->post_parent ) {
-					$classes[] = 'dtbaker-elementor-style-' . $post->post_parent;
-					$classes[] = 'dtbaker-elementor-sub-style-' . $post->ID;
+					$classes[] = 'stylepress-style-' . $post->post_parent;
+					$classes[] = 'stylepress-sub-style-' . $post->ID;
 				} else {
-					$classes[] = 'dtbaker-elementor-style-' . $post->ID;
+					$classes[] = 'stylepress-style-' . $post->ID;
 				}
-				if ( $post->post_parent && get_post_meta( $post->ID, 'dtbaker_is_component', true ) ) {
-					$classes[] = 'dtbaker-elementor-template-component';
+				if ( $post->post_parent && get_post_meta( $post->ID, 'stylepress_is_component', true ) ) {
+					$classes[] = 'stylepress-template-component';
 				}
 
 				return $classes;
@@ -360,7 +360,7 @@ class DtbakerElementorManager {
 
 			if ( $GLOBALS['our_elementor_template'] > 0 ) {
 				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'dtbaker_style' === $template->post_type ) {
+				if ( 'stylepress_style' === $template->post_type ) {
 
 					// success, we've got an outer template to display.
 					// there's two options now:
@@ -373,26 +373,26 @@ class DtbakerElementorManager {
 
 						// we need to render our outer template, then pass the current template into that.
 						$GLOBALS['stylepress_render_this_template_inside'] = $original_template;
-						$template_include                                  = DTBAKER_ELEMENTOR_PATH . 'templates/render-outer.php';
+						$template_include                                  = STYLEPRESS_PATH . 'templates/render-outer.php';
 
 
 					} else if ( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_PLAIN ) {
 						// plain old output, no stylepress wizardty
-						$template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
+						$template_include = STYLEPRESS_PATH . 'templates/render.php';
 					} else if ( $GLOBALS['our_elementor_inner_template'] > 0 ) {
 						// using a stylepress inner layout. and outer layout. easy!
-						$template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
+						$template_include = STYLEPRESS_PATH . 'templates/render.php';
 					} else {
 						// using "default" layout which means we pass into render to figure out.
-						$template_include = DTBAKER_ELEMENTOR_PATH . 'templates/render.php';
+						$template_include = STYLEPRESS_PATH . 'templates/render.php';
 					}
 					add_filter( 'body_class', function ( $classes ) use ( $template ) {
-						$classes[] = 'dtbaker-elementor-template';
+						$classes[] = 'stylepress-template';
 						if ( $template->post_parent ) {
-							$classes[] = 'dtbaker-elementor-style-' . $template->post_parent;
-							$classes[] = 'dtbaker-elementor-sub-style-' . $template->ID;
+							$classes[] = 'stylepress-style-' . $template->post_parent;
+							$classes[] = 'stylepress-sub-style-' . $template->ID;
 						} else {
-							$classes[] = 'dtbaker-elementor-style-' . $template->ID;
+							$classes[] = 'stylepress-style-' . $template->ID;
 						}
 
 						return $classes;
@@ -422,9 +422,9 @@ we get two hooks (e.g. ocean_before_main & ocean_after_main )
 on the first hook we render our stylepress output
 then start output buffering and remove everything we capture until the ocean_after_main hook runs.
 					$theme    = get_option( 'template' );
-		$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . basename( $theme ) . '.css';
+		$filename = STYLEPRESS_PATH . 'themes/' . basename( $theme ) . '.css';
 		if ( file_exists( $filename ) ) {
-			wp_enqueue_style( 'stylepress-theme-addons', DTBAKER_ELEMENTOR_URI . 'themes/' . basename( $theme ) . '.css', false, DTBAKER_ELEMENTOR_VERSION );
+			wp_enqueue_style( 'stylepress-theme-addons', STYLEPRESS_URI . 'themes/' . basename( $theme ) . '.css', false, STYLEPRESS_VERSION );
 		}
 					*/
 
@@ -473,16 +473,16 @@ then start output buffering and remove everything we capture until the ocean_aft
 			$GLOBALS['stylepress_overwrite_theme_output'] = true;
 			if ( $GLOBALS['our_elementor_template'] > 0 ) {
 				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'dtbaker_style' === $template->post_type ) {
+				if ( 'stylepress_style' === $template->post_type ) {
 					// do we overwrite the entire page, or just the header/footer components.
 
 					add_filter( 'body_class', function ( $classes ) {
-						$classes[] = 'dtbaker-elementor-template';
-						$classes[] = 'dtbaker-elementor-style-' . $GLOBALS['our_elementor_template'];
+						$classes[] = 'stylepress-template';
+						$classes[] = 'stylepress-style-' . $GLOBALS['our_elementor_template'];
 
 						return $classes;
 					} );
-					require_once DTBAKER_ELEMENTOR_PATH . 'templates/render-header.php';
+					require_once STYLEPRESS_PATH . 'templates/render-header.php';
 
 				}
 			}
@@ -507,10 +507,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 			$GLOBALS['stylepress_overwrite_theme_output'] = true;
 			if ( $GLOBALS['our_elementor_template'] > 0 ) {
 				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'dtbaker_style' === $template->post_type ) {
+				if ( 'stylepress_style' === $template->post_type ) {
 					// do we overwrite the entire page, or just the header/footer components.
 
-					require_once DTBAKER_ELEMENTOR_PATH . 'templates/render-footer.php';
+					require_once STYLEPRESS_PATH . 'templates/render-footer.php';
 
 				}
 			}
@@ -604,8 +604,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 				return $dropdown_args;
 			} );
-			add_action( 'admin_action_dtbaker_elementor_save', array( $this, 'dtbaker_elementor_save' ) );
-			add_action( 'admin_action_dtbaker_elementor_create', array( $this, 'dtbaker_elementor_create' ) );
+			add_action( 'admin_action_stylepress_save', array( $this, 'stylepress_save' ) );
+			add_action( 'admin_action_stylepress_create', array( $this, 'stylepress_create' ) );
 			add_action( 'admin_action_stylepress_export', array( $this, 'stylepress_export' ) );
 			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 			add_action( 'admin_action_stylepress_clone', array( $this, 'stylepress_clone' ) );
@@ -663,8 +663,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 			if ( $current_page_style > 0 ) {
 				//$this->add_sub_menu( __('Settings: CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
 			}
-			$this->add_sub_menu( sprintf( __( 'Settings: Style %s' ), ucwords( str_replace( '_', ' ', $page_type ) ) ), $parent_menu . 'ni', admin_url( 'admin.php?page=dtbaker-stylepress-settings&highlight=' . $page_type ), $parent_menu );
-			//			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=dtbaker-stylepress-settings'), $parent_menu);
+			$this->add_sub_menu( sprintf( __( 'Settings: Style %s' ), ucwords( str_replace( '_', ' ', $page_type ) ) ), $parent_menu . 'ni', admin_url( 'admin.php?page=stylepress-settings&highlight=' . $page_type ), $parent_menu );
+			//			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=stylepress-settings'), $parent_menu);
 		}
 	}
 
@@ -719,10 +719,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function override_wordpress_submenu( $this_parent_file ) {
 		global $post, $submenu_file;
-		if ( is_admin() && $post && $post->ID && 'dtbaker_style' === $post->post_type ) {
+		if ( is_admin() && $post && $post->ID && 'stylepress_style' === $post->post_type ) {
 
-			$submenu_file     = 'dtbaker-stylepress'; // WPCS: override ok.
-			$this_parent_file = 'dtbaker-stylepress';
+			$submenu_file     = 'stylepress'; // WPCS: override ok.
+			$this_parent_file = 'stylepress';
 		}
 
 		return $this_parent_file;
@@ -740,24 +740,24 @@ then start output buffering and remove everything we capture until the ocean_aft
 			return;
 		}
 		if ( $this->show_full_ui() ) {
-			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'dtbaker-stylepress', array(
+			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'stylepress', array(
 				$this,
 				'styles_page_callback',
-			), DTBAKER_ELEMENTOR_URI . 'assets/img/icon.png' );
+			), STYLEPRESS_URI . 'assets/img/icon.png' );
 			// hack to rmeove default submenu
-			$page = add_submenu_page( 'dtbaker-stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'dtbaker-stylepress', array(
+			$page = add_submenu_page( 'stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
 				$this,
 				'styles_page_callback'
 			) );
 			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-			$page = add_submenu_page( 'dtbaker-stylepress', __( 'Add-Ons', 'stylepress' ), __( 'Add-Ons', 'stylepress' ), 'manage_options', 'dtbaker-stylepress-addons', array(
+			$page = add_submenu_page( 'stylepress', __( 'Add-Ons', 'stylepress' ), __( 'Add-Ons', 'stylepress' ), 'manage_options', 'stylepress-addons', array(
 				$this,
 				'addons_page_callback'
 			) );
 			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-			$page = add_submenu_page( 'dtbaker-stylepress', __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'dtbaker-stylepress-settings', array(
+			$page = add_submenu_page( 'stylepress', __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'stylepress-settings', array(
 				$this,
 				'settings_page_callback'
 			) );
@@ -773,22 +773,22 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function admin_page_assets() {
 
-		wp_enqueue_style( 'font-awesome', DTBAKER_ELEMENTOR_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
+		wp_enqueue_style( 'font-awesome', STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
 
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
-		wp_register_script( 'stylepress-payments', DTBAKER_ELEMENTOR_URI . 'assets/js/payment.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+		wp_register_script( 'stylepress-payments', STYLEPRESS_URI . 'assets/js/payment.js', false, STYLEPRESS_VERSION, true );
 		wp_localize_script( 'stylepress-payments', 'stylepress_payment', array(
 			'payment_nonce'  => wp_create_nonce( 'payment_nonce' ),
 			'hostname'       => get_home_url(),
-			'plugin_version' => DTBAKER_ELEMENTOR_VERSION,
+			'plugin_version' => STYLEPRESS_VERSION,
 		) );
 		wp_enqueue_script( 'stylepress-payments' );
 
-		wp_enqueue_script( 'stylepress-slider', DTBAKER_ELEMENTOR_URI . 'assets/js/omni-slider.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+		wp_enqueue_script( 'stylepress-slider', STYLEPRESS_URI . 'assets/js/omni-slider.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 
-		require_once DTBAKER_ELEMENTOR_PATH . 'admin/_help_text.php';
+		require_once STYLEPRESS_PATH . 'admin/_help_text.php';
 
 	}
 
@@ -799,7 +799,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.0
 	 */
 	public function styles_page_callback() {
-		include DTBAKER_ELEMENTOR_PATH . 'admin/styles-page.php';
+		include STYLEPRESS_PATH . 'admin/styles-page.php';
 	}
 
 	/**
@@ -809,7 +809,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.0
 	 */
 	public function settings_page_callback() {
-		include DTBAKER_ELEMENTOR_PATH . 'admin/settings-page.php';
+		include STYLEPRESS_PATH . 'admin/settings-page.php';
 	}
 
 	/**
@@ -819,7 +819,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.8
 	 */
 	public function addons_page_callback() {
-		include DTBAKER_ELEMENTOR_PATH . 'admin/addons-page.php';
+		include STYLEPRESS_PATH . 'admin/addons-page.php';
 	}
 
 
@@ -841,18 +841,18 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.0
 	 */
 	public function frontend_css() {
-		wp_enqueue_style( 'dtbaker-elementor-css', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend.css', false, DTBAKER_ELEMENTOR_VERSION );
-		wp_enqueue_script( 'dtbaker-elementor-js', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend.js', false, DTBAKER_ELEMENTOR_VERSION, true );
-		// inject adds inline style against 'dtbaker-elementor'
+		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.css', false, STYLEPRESS_VERSION );
+		wp_enqueue_script( 'stylepress-js', STYLEPRESS_URI . 'assets/js/frontend.js', false, STYLEPRESS_VERSION, true );
+		// inject adds inline style against 'stylepress'
 		$this->inject_additional_font_css();
 
-		wp_enqueue_style( 'font-awesome' );//, DTBAKER_ELEMENTOR_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
+		wp_enqueue_style( 'font-awesome' );//, STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
 
 
 		if ( $this->show_full_ui() && $this->has_permission() ) {
-			wp_enqueue_style( 'stylepress-css-editor', DTBAKER_ELEMENTOR_URI . 'assets/css/frontend-css-editor.css', false, DTBAKER_ELEMENTOR_VERSION );
+			wp_enqueue_style( 'stylepress-css-editor', STYLEPRESS_URI . 'assets/css/frontend-css-editor.css', false, STYLEPRESS_VERSION );
 
-			wp_register_script( 'stylepress-css-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/frontend-css-editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+			wp_register_script( 'stylepress-css-editor', STYLEPRESS_URI . 'assets/js/frontend-css-editor.js', false, STYLEPRESS_VERSION, true );
 			wp_localize_script( 'stylepress-css-editor', 'stylepress_css', array(
 				'nonce'    => wp_create_nonce( 'stylepress_css' ),
 				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
@@ -864,8 +864,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 		}
 
 		if ( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-			wp_enqueue_style( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/css/editor-in.css', false, DTBAKER_ELEMENTOR_VERSION );
-			wp_enqueue_script( 'dtbaker-elementor-editor-in', DTBAKER_ELEMENTOR_URI . 'assets/js/editor-in.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.css', false, STYLEPRESS_VERSION );
+			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.js', false, STYLEPRESS_VERSION, true );
 
 		}
 
@@ -906,7 +906,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.0
 	 */
 	public function admin_css() {
-		wp_enqueue_style( 'dtbaker-elementor-admin', DTBAKER_ELEMENTOR_URI . 'assets/css/admin.css', false, DTBAKER_ELEMENTOR_VERSION );
+		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/admin.css', false, STYLEPRESS_VERSION );
 	}
 
 	/**
@@ -918,8 +918,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 		if ( ! $this->show_full_ui() ) {
 			return;
 		}
-		wp_enqueue_script( 'dtbaker-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/js/editor.js', false, DTBAKER_ELEMENTOR_VERSION, true );
-		wp_enqueue_style( 'stylepress-elementor-editor', DTBAKER_ELEMENTOR_URI . 'assets/css/editor.css', false, DTBAKER_ELEMENTOR_VERSION );
+		wp_enqueue_script( 'stylepress-editor', STYLEPRESS_URI . 'assets/js/editor.js', false, STYLEPRESS_VERSION, true );
+		wp_enqueue_style( 'stylepress-elementor-editor', STYLEPRESS_URI . 'assets/css/editor.css', false, STYLEPRESS_VERSION );
 	}
 
 	/**
@@ -933,10 +933,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 			$post_types = get_post_types();
 			foreach ( $post_types as $post_type ) {
 
-				if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library' ), true ) ) {
+				if ( ! in_array( $post_type, array( 'stylepress_style', 'elementor_library' ), true ) ) {
 					// todo: only for ones that are public queriable.
 					add_meta_box(
-						'dtbaker_style_metabox',
+						'stylepress_style_metabox',
 						__( 'StylePress', 'stylepress' ),
 						array( $this, 'meta_box_display' ),
 						$post_type,
@@ -946,27 +946,27 @@ then start output buffering and remove everything we capture until the ocean_aft
 				}
 			}
 			add_meta_box(
-				'dtbaker_stylepress_export',
+				'stylepress_export',
 				__( 'Export', 'stylepress' ),
 				array( $this, 'meta_box_export' ),
-				'dtbaker_style',
+				'stylepress_style',
 				'side',
 				'low'
 			);
 
 			add_meta_box(
-				'dtbaker_sub_style',
+				'stylepress_sub_style',
 				__( 'StylePress Settings', 'stylepress' ),
 				array( $this, 'meta_box_sub_styles' ),
-				'dtbaker_style',
+				'stylepress_style',
 				'normal',
 				'high'
 			);
 			add_meta_box(
-				'dtbaker_sub_style_advanced',
+				'stylepress_sub_style_advanced',
 				__( 'StylePress Advanced', 'stylepress' ),
 				array( $this, 'meta_box_sub_advanced' ),
-				'dtbaker_style',
+				'stylepress_style',
 				'normal',
 				'low'
 			);
@@ -983,22 +983,22 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function edit_form_after_title( $post ) {
 
-		if ( $this->has_permission() && 'dtbaker_style' === $post->post_type ) {
+		if ( $this->has_permission() && 'stylepress_style' === $post->post_type ) {
 
 			$parent = $post->post_parent ? (int) $post->post_parent : ( ! empty( $_GET['post_parent'] ) ? (int) $_GET['post_parent'] : false );
 
 			if ( $parent ) {
 				?>
-				<div id="dtbaker-return-to-style">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $parent ) ); ?>"
+				<div id="stylepress-return-to-style">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $parent ) ); ?>"
 					   class="button"><?php echo esc_html__( '&laquo; Return To Style Page', 'stylepress' ); ?></a>
 				</div>
 				<?php
 			} else {
 
 				?>
-				<div id="dtbaker-return-to-style">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $post->ID ) ); ?>"
+				<div id="stylepress-return-to-style">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $post->ID ) ); ?>"
 					   class="button"><?php echo esc_html__( '&laquo; Return To Style Page', 'stylepress' ); ?></a>
 				</div>
 				<div id="stylepress-modify-font">
@@ -1033,7 +1033,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	public function get_all_page_styles() {
 		$styles      = array();
 		$args        = array(
-			'post_type'           => 'dtbaker_style',
+			'post_type'           => 'stylepress_style',
 			'post_status'         => 'publish',
 			'posts_per_page'      => - 1,
 			'ignore_sticky_posts' => 1,
@@ -1046,7 +1046,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		foreach ( $posts_array as $style ) {
 			if ( ! $style->post_parent ) {
 				$styles[ $style->ID ] = $style->post_title;
-			} else if ( ! get_post_meta( $style->ID, 'dtbaker_is_component', true ) ) {
+			} else if ( ! get_post_meta( $style->ID, 'stylepress_is_component', true ) ) {
 				if ( ! isset( $children[ $style->post_parent ] ) ) {
 					$children[ $style->post_parent ] = array();
 				}
@@ -1083,7 +1083,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	public function get_all_page_components() {
 		$styles      = array();
 		$args        = array(
-			'post_type'           => 'dtbaker_style',
+			'post_type'           => 'stylepress_style',
 			'post_status'         => 'publish',
 			'posts_per_page'      => - 1,
 			'ignore_sticky_posts' => 1,
@@ -1096,7 +1096,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		foreach ( $posts_array as $style ) {
 			if ( ! $style->post_parent ) {
 				$styles[ $style->ID ] = $style->post_title;
-			} else if ( get_post_meta( $style->ID, 'dtbaker_is_component', true ) ) {
+			} else if ( get_post_meta( $style->ID, 'stylepress_is_component', true ) ) {
 				if ( ! isset( $children[ $style->post_parent ] ) ) {
 					$children[ $style->post_parent ] = array();
 				}
@@ -1142,7 +1142,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 				array(
 					'body' => array(
 						'action'         => 'stylepress_get_available',
-						'plugin_version' => DTBAKER_ELEMENTOR_VERSION,
+						'plugin_version' => STYLEPRESS_VERSION,
 						'blog_url'       => get_site_url(),
 					),
 				)
@@ -1191,7 +1191,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function meta_box_sub_styles( $post ) {
 
-		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
+		if ( $this->has_permission( $post ) && 'stylepress_style' === $post->post_type ) {
 
 			if ( isset( $_GET['post_parent'] ) && empty( $post->post_parent ) ) {
 				$post->post_parent = (int) $_GET['post_parent'];
@@ -1199,7 +1199,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 			$this->admin_page_assets();
 
-			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/style-meta-box.php';
+			include_once STYLEPRESS_PATH . 'metaboxes/style-meta-box.php';
 		}
 	}
 
@@ -1212,9 +1212,9 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function meta_box_export( $post ) {
 
-		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
+		if ( $this->has_permission( $post ) && 'stylepress_style' === $post->post_type ) {
 
-			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/export.php';
+			include_once STYLEPRESS_PATH . 'metaboxes/export.php';
 		}
 	}
 
@@ -1228,11 +1228,11 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function meta_box_sub_advanced( $post ) {
 
-		if ( $this->has_permission( $post ) && 'dtbaker_style' === $post->post_type ) {
+		if ( $this->has_permission( $post ) && 'stylepress_style' === $post->post_type ) {
 			if ( isset( $_GET['post_parent'] ) && empty( $post->post_parent ) ) {
 				$post->post_parent = (int) $_GET['post_parent'];
 			}
-			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/advanced-meta-box.php';
+			include_once STYLEPRESS_PATH . 'metaboxes/advanced-meta-box.php';
 		}
 	}
 
@@ -1247,7 +1247,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 		if ( $this->has_permission( $post ) ) {
 
-			include_once DTBAKER_ELEMENTOR_PATH . 'metaboxes/post-meta-box.php';
+			include_once STYLEPRESS_PATH . 'metaboxes/post-meta-box.php';
 
 		}
 	}
@@ -1263,7 +1263,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @return bool
 	 */
 	public function get_page_template( $post_id ) {
-		$current_option = get_post_meta( $post_id, 'dtbaker_style', true );
+		$current_option = get_post_meta( $post_id, 'stylepress_style', true );
 		if ( $current_option && ! empty( $current_option['style'] ) ) {
 			return $current_option['style'];
 		}
@@ -1282,7 +1282,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @return bool
 	 */
 	public function get_page_inner_style( $post_id ) {
-		$current_option = get_post_meta( $post_id, 'dtbaker_style', true );
+		$current_option = get_post_meta( $post_id, 'stylepress_style', true );
 		if ( $current_option && ! empty( $current_option['inner_style'] ) ) {
 			return $current_option['inner_style'];
 		}
@@ -1300,7 +1300,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @return int
 	 */
 	public function get_settings() {
-		return apply_filters( 'dtbaker_elementor_settings', get_option( 'dtbaker-elementor', array() ) );
+		return apply_filters( 'stylepress_settings', get_option( 'stylepress', array() ) );
 	}
 
 	/**
@@ -1321,7 +1321,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		//        }
 
 		global $post;
-		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type ) {
+		if ( $post && ! empty( $post->ID ) && 'stylepress_style' === $post->post_type ) {
 			// we're previewing a style.
 			return $post->ID;
 		}
@@ -1341,7 +1341,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 						if ( STYLEPRESS_OUTER_USE_THEME === $style ) {
 							return $style; // Use theme by default.
 						} else if ( $style > 0 ) {
-							return apply_filters( 'dtbaker_elementor_current_style', $style );
+							return apply_filters( 'stylepress_current_style', $style );
 						}
 					}
 				}
@@ -1353,7 +1353,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 					if ( STYLEPRESS_OUTER_USE_THEME === $style ) {
 						return $style; // Use theme by default.
 					} else if ( $style > 0 ) {
-						return apply_filters( 'dtbaker_elementor_current_style', $style );
+						return apply_filters( 'stylepress_current_style', $style );
 					}
 				}
 			}
@@ -1362,11 +1362,11 @@ then start output buffering and remove everything we capture until the ocean_aft
 		// check for defaults for this page type
 		$page_type = $this->get_current_page_type();
 		if ( $page_type && ! empty( $style_settings['defaults'][ $page_type ] ) ) {
-			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults'][ $page_type ] );
+			return apply_filters( 'stylepress_current_style', $style_settings['defaults'][ $page_type ] );
 		}
 		// otherwise check for site wide default:
 		if ( ! empty( $style_settings['defaults']['_global'] ) ) {
-			return apply_filters( 'dtbaker_elementor_current_style', $style_settings['defaults']['_global'] );
+			return apply_filters( 'stylepress_current_style', $style_settings['defaults']['_global'] );
 		}
 
 		// otherwise return nothing, so we fallback to default standard theme
@@ -1390,7 +1390,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		$style_settings = $this->get_settings();
 
 		global $post;
-		if ( $post && ! empty( $post->ID ) && 'dtbaker_style' === $post->post_type ) {
+		if ( $post && ! empty( $post->ID ) && 'stylepress_style' === $post->post_type ) {
 			// we're previewing a style.
 			return false;
 		}
@@ -1410,7 +1410,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 						if ( STYLEPRESS_INNER_USE_PLAIN === $style || STYLEPRESS_INNER_USE_THEME === $style ) {
 							return $style;
 						} else if ( $style > 0 ) {
-							return apply_filters( 'dtbaker_elementor_current_inner_style', $style );
+							return apply_filters( 'stylepress_current_inner_style', $style );
 						}
 					}
 				}
@@ -1422,7 +1422,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 					if ( STYLEPRESS_INNER_USE_PLAIN === $style || STYLEPRESS_INNER_USE_THEME === $style ) {
 						return $style; // Use theme by default.
 					} else if ( $style > 0 ) {
-						return apply_filters( 'dtbaker_elementor_current_inner_style', $style );
+						return apply_filters( 'stylepress_current_inner_style', $style );
 					}
 				}
 			}
@@ -1439,17 +1439,17 @@ then start output buffering and remove everything we capture until the ocean_aft
 					//
 				} else if ( $settings_key_to_check != 'archive_inner' ) {
 					$settings_key_to_check = 'archive_inner';
-					\DtbakerElementorManager::get_instance()->debug_message( "get_current_inner_style(): We're showing blog post output on home page, using inner style $settings_key_to_check instead" );
+					\StylepressManager::get_instance()->debug_message( "get_current_inner_style(): We're showing blog post output on home page, using inner style $settings_key_to_check instead" );
 				}
 			}
 
 			if ( $page_type && ! empty( $style_settings['defaults'][ $settings_key_to_check ] ) ) {
-				return apply_filters( 'dtbaker_elementor_current_inner_style', $style_settings['defaults'][ $settings_key_to_check ] );
+				return apply_filters( 'stylepress_current_inner_style', $style_settings['defaults'][ $settings_key_to_check ] );
 			}
 		}
 		// otherwise check for site wide default:
 		if ( ! empty( $style_settings['defaults']['_global_inner'] ) ) {
-			return apply_filters( 'dtbaker_elementor_current_inner_style', $style_settings['defaults']['_global_inner'] );
+			return apply_filters( 'stylepress_current_inner_style', $style_settings['defaults']['_global_inner'] );
 		}
 
 		// otherwise return nothing, so we fallback to default standard theme
@@ -1537,7 +1537,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 		$post_types = get_post_types( array( 'public' => true ) );
 		foreach ( $post_types as $post_type ) {
-			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
+			if ( ! in_array( $post_type, array( 'stylepress_style', 'elementor_library', 'attachment' ), true ) ) {
 				if ( ! isset( $defaults[ $post_type ] ) ) {
 					$data                   = get_post_type_object( $post_type );
 					$defaults[ $post_type ] = $data->labels->singular_name;
@@ -1566,7 +1566,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		);
 		$post_types = get_post_types( array( 'public' => true ) );
 		foreach ( $post_types as $post_type ) {
-			if ( ! in_array( $post_type, array( 'dtbaker_style', 'elementor_library', 'attachment' ), true ) ) {
+			if ( ! in_array( $post_type, array( 'stylepress_style', 'elementor_library', 'attachment' ), true ) ) {
 				if ( ! isset( $defaults[ $post_type . '_single' ] ) ) {
 					$defaults[ $post_type . '_single' ] = ucwords( str_replace( "_", " ", $post_type ) ) . ' Single';
 				}
@@ -1585,12 +1585,12 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 */
 	public function save_meta_box( $post_id ) {
 		// Check if our nonce is set.
-		if ( ! isset( $_POST['dtbaker_elementor_style_nonce'] ) ) { // WPCS: input var okay.
+		if ( ! isset( $_POST['stylepress_style_nonce'] ) ) { // WPCS: input var okay.
 			return;
 		}
 
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['dtbaker_elementor_style_nonce'], 'dtbaker_elementor_style_nonce' ) ) { // WPCS: sanitization ok. input var okay.
+		if ( ! wp_verify_nonce( $_POST['stylepress_style_nonce'], 'stylepress_style_nonce' ) ) { // WPCS: sanitization ok. input var okay.
 			return;
 		}
 
@@ -1599,8 +1599,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 			return;
 		}
 
-		if ( isset( $_POST['dtbaker_style'] ) && is_array( $_POST['dtbaker_style'] ) ) { // WPCS: sanitization ok. input var okay.
-			update_post_meta( $post_id, 'dtbaker_style', $_POST['dtbaker_style'] ); // WPCS: sanitization ok. input var okay.
+		if ( isset( $_POST['stylepress_style'] ) && is_array( $_POST['stylepress_style'] ) ) { // WPCS: sanitization ok. input var okay.
+			update_post_meta( $post_id, 'stylepress_style', $_POST['stylepress_style'] ); // WPCS: sanitization ok. input var okay.
 		}
 
 
@@ -1608,8 +1608,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 			update_post_meta( $post_id, 'stylepress_advanced', $_POST['stylepress_advanced'] ); // WPCS: sanitization ok. input var okay.
 		}
 
-		if ( isset( $_POST['dtbaker_is_component_check'] ) ) {
-			update_post_meta( $post_id, 'dtbaker_is_component', empty( $_POST['dtbaker_is_component'] ) ? 0 : 1 ); // WPCS: sanitization ok. input var okay.
+		if ( isset( $_POST['stylepress_is_component_check'] ) ) {
+			update_post_meta( $post_id, 'stylepress_is_component', empty( $_POST['stylepress_is_component'] ) ? 0 : 1 ); // WPCS: sanitization ok. input var okay.
 		}
 
 	}
@@ -1620,14 +1620,14 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.5
 	 *
 	 */
-	public function dtbaker_elementor_save() {
+	public function stylepress_save() {
 		// Check if our nonce is set.
-		if ( ! isset( $_POST['dtbaker_elementor_save_options'] ) ) { // WPCS: input var okay.
+		if ( ! isset( $_POST['stylepress_save_options'] ) ) { // WPCS: input var okay.
 			return;
 		}
 
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['dtbaker_elementor_save_options'], 'dtbaker_elementor_save_options' ) ) { // WPCS: sanitization ok. input var okay.
+		if ( ! wp_verify_nonce( $_POST['stylepress_save_options'], 'stylepress_save_options' ) ) { // WPCS: sanitization ok. input var okay.
 			return;
 		}
 
@@ -1635,7 +1635,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		if ( isset( $_POST['stylepress_styles'] ) && is_array( $_POST['stylepress_styles'] ) ) { // WPCS: sanitization ok. input var okay.
 			$settings             = $this->get_settings();
 			$settings['defaults'] = $_POST['stylepress_styles'];
-			update_option( 'dtbaker-elementor', $settings );
+			update_option( 'stylepress', $settings );
 		}
 
 		if ( isset( $_POST['stylepress_settings'] ) && is_array( $_POST['stylepress_settings'] ) ) { // WPCS: sanitization ok. input var okay.
@@ -1646,10 +1646,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 					$settings[ $key ] = $_POST['stylepress_settings'][ $key ];
 				}
 			}
-			update_option( 'dtbaker-elementor', $settings );
+			update_option( 'stylepress', $settings );
 		}
 
-		wp_redirect( admin_url( 'admin.php?page=dtbaker-stylepress-settings&saved' ) );
+		wp_redirect( admin_url( 'admin.php?page=stylepress-settings&saved' ) );
 		exit;
 
 
@@ -1661,14 +1661,14 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * @since 1.0.15
 	 *
 	 */
-	public function dtbaker_elementor_create() {
+	public function stylepress_create() {
 		// Check if our nonce is set.
-		if ( ! isset( $_POST['dtbaker_elementor_create_options'] ) ) { // WPCS: input var okay.
+		if ( ! isset( $_POST['stylepress_create_options'] ) ) { // WPCS: input var okay.
 			return;
 		}
 
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $_POST['dtbaker_elementor_create_options'], 'dtbaker_elementor_create_options' ) ) { // WPCS: sanitization ok. input var okay.
+		if ( ! wp_verify_nonce( $_POST['stylepress_create_options'], 'stylepress_create_options' ) ) { // WPCS: sanitization ok. input var okay.
 			return;
 		}
 
@@ -1676,20 +1676,20 @@ then start output buffering and remove everything we capture until the ocean_aft
 		if ( isset( $_POST['new_style_name'] ) && trim( $_POST['new_style_name'] ) ) { // WPCS: sanitization ok. input var okay.
 
 			$new_style_id = wp_insert_post( array(
-				'post_type'    => 'dtbaker_style',
+				'post_type'    => 'stylepress_style',
 				'post_name'    => trim( $_POST['new_style_name'] ),
 				'post_title'   => trim( $_POST['new_style_name'] ),
 				'post_content' => '', // todo: default style layout here maybe?
 				'post_status'  => 'publish',
 			) );
 			if ( $new_style_id ) {
-				wp_redirect( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=' . $new_style_id . '&saved' ) );
+				wp_redirect( admin_url( 'admin.php?page=stylepress&style_id=' . $new_style_id . '&saved' ) );
 				exit;
 			}
 		}
 
 
-		wp_redirect( admin_url( 'admin.php?page=dtbaker-stylepress&style_id=new' ) );
+		wp_redirect( admin_url( 'admin.php?page=stylepress&style_id=new' ) );
 		exit;
 
 
@@ -1754,7 +1754,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 			'map_meta_cap'        => true,
 		);
 
-		register_post_type( 'dtbaker_style', $args );
+		register_post_type( 'stylepress_style', $args );
 
 	}
 
@@ -1777,11 +1777,11 @@ then start output buffering and remove everything we capture until the ocean_aft
 		if ( $current_style > 0 ) {
 			// check if this one has a json elementor override
 			$json = $this->get_style_elementor_overrides( $current_style );
-			$json = apply_filters( 'dtbaker_elementor_style_json', $json, $current_style );
+			$json = apply_filters( 'stylepress_style_json', $json, $current_style );
 			$this->_apply_json_overrides( $json );
 		}
 
-		require_once DTBAKER_ELEMENTOR_PATH . 'extensions/skins/skins.php';
+		require_once STYLEPRESS_PATH . 'extensions/skins/skins.php';
 
 
 	}
@@ -1915,7 +1915,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 				}
 			}
 
-			wp_enqueue_style( 'stylepress-theme-overwrites', DTBAKER_ELEMENTOR_URI . 'assets/css/theme-overwrites.css', false, DTBAKER_ELEMENTOR_VERSION );
+			wp_enqueue_style( 'stylepress-theme-overwrites', STYLEPRESS_URI . 'assets/css/theme-overwrites.css', false, STYLEPRESS_VERSION );
 		}
 
 	}
@@ -1933,7 +1933,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 		$theme = get_option( 'template' );
 		if ( $theme_name = strtolower( basename( $theme ) ) ) {
-			$filename = DTBAKER_ELEMENTOR_PATH . 'themes/' . $theme_name . '/' . $theme_name . '.php';
+			$filename = STYLEPRESS_PATH . 'themes/' . $theme_name . '/' . $theme_name . '.php';
 			if ( is_readable( $filename ) ) {
 				require_once $filename;
 			}
@@ -1955,7 +1955,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		foreach ( $styles as $style_id => $style_name ) {
 
 			$post = get_post( $style_id );
-			if ( $post->post_parent || $post->post_type != 'dtbaker_style' ) {
+			if ( $post->post_parent || $post->post_type != 'stylepress_style' ) {
 				continue;
 			}
 
@@ -1994,7 +1994,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		foreach ( $styles as $style_id => $style_name ) {
 
 			$post = get_post( $style_id );
-			if ( $post->post_parent || $post->post_type != 'dtbaker_style' ) {
+			if ( $post->post_parent || $post->post_type != 'stylepress_style' ) {
 				continue;
 			}
 
@@ -2013,9 +2013,9 @@ then start output buffering and remove everything we capture until the ocean_aft
 					foreach ( $bits as $bit_id => $bit ) {
 						$bit = trim( $bit );
 						if ( strpos( $bit, 'body' ) === 0 ) {
-							$bit = str_replace( 'body', 'body.dtbaker-elementor-style-' . (int) $style_id, $bit );
+							$bit = str_replace( 'body', 'body.stylepress-style-' . (int) $style_id, $bit );
 						} else {
-							$bit = '.dtbaker-elementor-style-' . (int) $style_id . ' ' . $bit;
+							$bit = '.stylepress-style-' . (int) $style_id . ' ' . $bit;
 						}
 						$bits[ $bit_id ] = $bit;
 					}
@@ -2061,7 +2061,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 			$style_id     = (int) $this->get_current_style();
 			if ( $style_id > 0 ) {
 				$post = get_post( $style_id );
-				if ( $post && ! $post->post_parent && $post->post_type === 'dtbaker_style' ) {
+				if ( $post && ! $post->post_parent && $post->post_type === 'stylepress_style' ) {
 					$json = $this->get_page_style_font_json( $style_id );
 
 					if ( $json ) {
@@ -2078,9 +2078,9 @@ then start output buffering and remove everything we capture until the ocean_aft
 								foreach ( $bits as $bit_id => $bit ) {
 									$bit = trim( $bit );
 									if ( strpos( $bit, 'body' ) === 0 ) {
-										$bit = str_replace( 'body', 'body.dtbaker-elementor-style-' . (int) $style_id, $bit );
+										$bit = str_replace( 'body', 'body.stylepress-style-' . (int) $style_id, $bit );
 									} else {
-										$bit = '.dtbaker-elementor-style-' . (int) $style_id . ' ' . $bit;
+										$bit = '.stylepress-style-' . (int) $style_id . ' ' . $bit;
 									}
 									$bits[ $bit_id ] = $bit;
 								}
@@ -2107,7 +2107,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 					}
 
 					if ( $additional_css ) {
-						wp_add_inline_style( 'dtbaker-elementor-css', $additional_css );
+						wp_add_inline_style( 'stylepress-css', $additional_css );
 					}
 				}
 
@@ -2200,8 +2200,8 @@ then start output buffering and remove everything we capture until the ocean_aft
 			return;
 		}
 
-		require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
-		$import_export = DtbakerElementorImportExport::get_instance();
+		require_once STYLEPRESS_PATH . 'inc/class.import-export.php';
+		$import_export = StylepressImportExport::get_instance();
 		$data          = $import_export->export_data( $post_id );
 
 		echo '<pre>';
@@ -2242,7 +2242,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 					'action'         => 'stylepress_download',
 					'slug'           => $slug,
 					'pay_nonce'      => $designs[ $slug ]['pay_nonce'],
-					'plugin_version' => DTBAKER_ELEMENTOR_VERSION,
+					'plugin_version' => STYLEPRESS_VERSION,
 					'blog_url'       => get_site_url(),
 				),
 			)
@@ -2252,10 +2252,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 			$api_response = json_decode( wp_remote_retrieve_body( $response ), true );
 			if ( $api_response && ! empty( $api_response['success'] ) && ! empty( $api_response['data'] ) ) {
 				$style_to_import = $api_response['data'];
-				require_once DTBAKER_ELEMENTOR_PATH . 'inc/class.import-export.php';
-				$import_export = DtbakerElementorImportExport::get_instance();
+				require_once STYLEPRESS_PATH . 'inc/class.import-export.php';
+				$import_export = StylepressImportExport::get_instance();
 				$result        = $import_export->import_data( $style_to_import );
-				wp_redirect( admin_url( 'admin.php?page=dtbaker-stylepress-settings&imported' ) );
+				wp_redirect( admin_url( 'admin.php?page=stylepress-settings&imported' ) );
 			} else if ( isset( $api_response['success'] ) && ! $api_response['success'] ) {
 				wp_die( sprintf( __( 'Failed to install style: %s ' ), $api_response['data'] ), __( 'Style Install Failed.' ), 403 );
 			}
@@ -2285,7 +2285,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		/*
 		 * if post data exists, create the post duplicate
 		 */
-		if ( $post && 'dtbaker_style' === $post->post_type ) {
+		if ( $post && 'stylepress_style' === $post->post_type ) {
 
 			if ( ! $post->post_parent ) {
 				$post->post_parent = $post_id; // we're cloaning the parent one, put it underneath itself.
@@ -2369,7 +2369,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 	public function debug_message( $message ) {
 
-		if ( DTBAKER_ELEMENTOR_DEBUG_OUTPUT && is_user_logged_in() ) {
+		if ( STYLEPRESS_DEBUG_OUTPUT && is_user_logged_in() ) {
 			echo '<div class="stylepress-debug">';
 			echo '<span>StylePress:</span> &nbsp; ';
 			echo $message;

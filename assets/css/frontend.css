@@ -27,7 +27,7 @@
 #site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section:nth-child(6) {
   z-index: 2;
 }
-body.dtbaker-elementor-template.elementor-editor-active #site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
+body.stylepress-template.elementor-editor-active #site-offcanvas-wrap > .elementor > .elementor-inner > .elementor-section-wrap section.elementor-section {
   z-index: 1 !important;
 }
 .stylepress-debug {

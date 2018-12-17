@@ -1,24 +1,24 @@
 <?php
 /**
- * Our DtbakerElementorImportExport class.
+ * Our StylepressImportExport class.
  * Handles importing/exporting our custom designs.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 /**
  * Handles importing/exporting our custom designs.
  *
- * Class DtbakerElementorManager
+ * Class StylepressManager
  */
-class DtbakerElementorImportExport {
+class StylepressImportExport {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.
 	 *
-	 * @var DtbakerElementorManager null
+	 * @var StylepressManager null
 	 *
 	 * @since 1.0.0
 	 */
@@ -29,7 +29,7 @@ class DtbakerElementorImportExport {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return DtbakerElementorManager
+	 * @return StylepressManager
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
@@ -55,11 +55,11 @@ class DtbakerElementorImportExport {
 			'options'          => array(),
 		);
 
-		// Export code copied from dtbaker's theme setup wizard shindig.
-		if ( $post_data && $post_data->post_type == 'dtbaker_style' && ! $post_data->post_parent ) {
+		// Export code copied from stylepress's theme setup wizard shindig.
+		if ( $post_data && $post_data->post_type == 'stylepress_style' && ! $post_data->post_parent ) {
 
 			// cool, we have out post parent ready to export.
-			$post_type       = 'dtbaker_style';
+			$post_type       = 'stylepress_style';
 			$media_to_export = array();
 			// export child style data.
 			$args           = array(
@@ -89,7 +89,7 @@ class DtbakerElementorImportExport {
 							// which keys we want to keep all the time, using strpos:
 							strpos( $meta_key, 'elementor' ) === false &&
 							strpos( $meta_key, 'stylepress' ) === false &&
-							strpos( $meta_key, 'dtbaker' ) === false &&
+							strpos( $meta_key, 'stylepress' ) === false &&
 							// other meta keys we always want to keep:
 							! in_array( $meta_key, array(
 								'_wp_attached_file',
@@ -163,7 +163,7 @@ class DtbakerElementorImportExport {
 							// which keys we want to keep all the time, using strpos:
 							strpos( $meta_key, 'elementor' ) === false &&
 							strpos( $meta_key, 'stylepress' ) === false &&
-							strpos( $meta_key, 'dtbaker' ) === false &&
+							strpos( $meta_key, 'stylepress' ) === false &&
 							// other meta keys we always want to keep:
 							! in_array( $meta_key, array(
 								'_wp_attached_file',
@@ -698,7 +698,7 @@ class DtbakerElementorImportExport {
 				$item = $new_meta_val;
 			}
 		}
-		if ( $key == 'url' && ! empty( $item ) && ( strstr( $item, 'ocalhost' ) || strstr( $item, 'dev.dtbaker' ) ) ) {
+		if ( $key == 'url' && ! empty( $item ) && ( strstr( $item, 'ocalhost' ) || strstr( $item, 'dev.stylepress' ) ) ) {
 			// check if this has been imported before
 			$new_meta_val = $this->_imported_post_id( $item );
 			if ( $new_meta_val ) {

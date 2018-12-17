@@ -2,10 +2,10 @@
 /**
  * Admin page showing all available Elementor Styles
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 // Help tab: Previewing and Customizing.
 if ( ! $this->has_permission() ) {
@@ -18,14 +18,14 @@ $styles   = $components = array();
 
 if ( $style_id ) {
 	$post = get_post( $style_id );
-	if ( ! $post || $post->post_type !== 'dtbaker_style' ) {
+	if ( ! $post || $post->post_type !== 'stylepress_style' ) {
 		$style_id = 0;
 		$post     = false;
 	}
 }
 if ( $post && $style_id ) {
 	$args        = array(
-		'post_type'           => 'dtbaker_style',
+		'post_type'           => 'stylepress_style',
 		'post_parent'         => $post->ID,
 		'post_status'         => 'any',
 		'posts_per_page'      => - 1,
@@ -38,7 +38,7 @@ if ( $post && $style_id ) {
 	$styles[] = $post;
 
 	foreach ( $posts_array as $post_array ) {
-		if ( get_post_meta( $post_array->ID, 'dtbaker_is_component', true ) ) {
+		if ( get_post_meta( $post_array->ID, 'stylepress_is_component', true ) ) {
 			$components[] = $post_array;
 		} else {
 			$styles[] = $post_array;
@@ -51,18 +51,18 @@ if ( $post && $style_id ) {
 <div class="wrap">
 
 
-	<?php require_once DTBAKER_ELEMENTOR_PATH . 'admin/_header.php'; ?>
+	<?php require_once STYLEPRESS_PATH . 'admin/_header.php'; ?>
 
 
-	<div class="dtbaker-elementor-browser">
+	<div class="stylepress-browser">
 
 		<div class="wp-clearfix">
 
 			<?php if ( ! $styles && ! $components ) { ?>
 
 				<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
-					<input type="hidden" name="action" value="dtbaker_elementor_create"/>
-					<?php wp_nonce_field( 'dtbaker_elementor_create_options', 'dtbaker_elementor_create_options' ); ?>
+					<input type="hidden" name="action" value="stylepress_create"/>
+					<?php wp_nonce_field( 'stylepress_create_options', 'stylepress_create_options' ); ?>
 
 
 					<h3 class="stylepress-header">
@@ -86,12 +86,12 @@ if ( $post && $style_id ) {
 				<h3 class="stylepress-header">
 					<div class="buttons">
 						<a
-							href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style&post_parent=' . (int) $post->ID ) ); ?>"
+							href="<?php echo esc_url( admin_url( 'post-new.php?post_type=stylepress_style&post_parent=' . (int) $post->ID ) ); ?>"
 							class="button button-primary">Create New</a>
 					</div>
 					<span>Your Outer Styles for "<?php echo $post ? esc_html( $post->post_title ) : 'Create New'; ?>"</span>
 					<small>These styles can surround your existing website content. Activate these styles from the <a
-							href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">Settings</a>
+							href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">Settings</a>
 						page. <br/> There can be multiple variations for an outer style (e.g. Home Page, Blog Page, Product Page,
 						404 Page).
 					</small>
@@ -128,7 +128,7 @@ if ( $post && $style_id ) {
 									   href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php echo esc_html( $style->post_title ); ?></a>
 								</td>
 								<td>
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">
 										<?php if ( $used ) { ?>
 											<i class="fa fa-check"></i> Style Applied To: <?php echo implode( ', ', $used ); ?>.
 										<?php } else { ?>
@@ -157,12 +157,12 @@ if ( $post && $style_id ) {
 				<h3 class="stylepress-header">
 					<div class="buttons">
 						<a
-							href="<?php echo esc_url( admin_url( 'post-new.php?post_type=dtbaker_style&dtbaker_component=1&post_parent=' . (int) $post->ID ) ); ?>"
+							href="<?php echo esc_url( admin_url( 'post-new.php?post_type=stylepress_style&stylepress_component=1&post_parent=' . (int) $post->ID ) ); ?>"
 							class="button button-primary">Create New</a>
 					</div>
 					<span>Your Inner Styles for "<?php echo $post ? esc_html( $post->post_title ) : 'Create New'; ?>"</span>
 					<small>These are your inner website styles. Activate these styles from the <a
-							href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">Settings</a>
+							href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">Settings</a>
 						page. <br/> These styles can be used to style inner website components (Blog Summary, Shop Product,
 						Sidebars).
 					</small>
@@ -199,7 +199,7 @@ if ( $post && $style_id ) {
 									   href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php echo esc_html( $style->post_title ); ?></a>
 								</td>
 								<td>
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress-settings' ) ); ?>">
 										<?php if ( $used ) { ?>
 											<i class="fa fa-check"></i> Style Applied To: <?php echo implode( ', ', $used ); ?>.
 										<?php } else { ?>
