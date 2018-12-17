@@ -1,0 +1,14 @@
+.inner-page-content-area{text-align:center;padding:80px 20px;color:#000;background:#FFF;background:-webkit-repeating-linear-gradient(45deg,#efefef,#efefef 10px,#fff 10px,#fff 20px);background:repeating-linear-gradient(45deg,#efefef,#efefef 10px,#fff 10px,#fff 20px)}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section{position:relative}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(1){z-index:7}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(2){z-index:6}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(3){z-index:5}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(4){z-index:4}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(5){z-index:3}
+#site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section:nth-child(6){z-index:2}
+body.stylepress-template.elementor-editor-active #site-offcanvas-wrap>.elementor>.elementor-inner>.elementor-section-wrap section.elementor-section{z-index:1 !important}
+.stylepress-debug{background:#fff;border-left:4px solid #fff;box-shadow:0 1px 1px 0 rgba(0,0,0,0.1);margin:10px 15px;padding:5px 12px;position:relative;font-size:13px;border-left-color:#46b450;color:#444}
+.stylepress-debug span{color:#CCC}
+.elementor-widget-icon-list[data-element_type="icon-list.stylepress-icons-inline"] ul.elementor-icon-list-items{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.elementor-widget-icon-list[data-element_type="icon-list.stylepress-icons-inline"] ul.elementor-icon-list-items>li.elementor-icon-list-item{padding:6px 10px}
+.elementor-widget-icon-list[data-element_type="icon-list.stylepress-icons-inline"] ul.elementor-icon-list-items>li.elementor-icon-list-item:after{border-top:0 !important;border-right-style:solid;border-right-width:1px;border-right-color:#ddd;left:auto;bottom:auto;right:0;height:58%;width:auto}

@@ -1,18 +1,9 @@
-.elementor-editor-active.stylepress-template-component .elementor-edit-mode:before {
-  content: 'Design Your Inner Style Below';
-  position: absolute;
-  display: block;
-  left: 50%;
-  padding: 18px;
-  margin-left: -265px;
-  font-size: 25px;
-}
-.elementor-editor-active.stylepress-template-component .elementor-inner {
-  margin-top: 0 !important;
-  padding: 120px 50px;
-  background: #f5f5f5;
-}
-.elementor-editor-active.stylepress-template-component .elementor-inner > .elementor-section-wrap {
-  background: #FFF;
-  padding: 50px 0;
-}
+.elementor-editor-active.stylepress-template-component .elementor-edit-mode:before { content: 'Design Your Inner Style Below'; position: absolute; display: block; left: 50%; padding: 18px; margin-left: -265px; font-size: 25px; }
+
+.elementor-editor-active.stylepress-template-component .elementor-inner { margin-top: 0 !important; padding: 120px 50px; background: #f5f5f5; }
+
+.elementor-editor-active.stylepress-template-component .elementor-inner > .elementor-section-wrap { background: #FFF; padding: 50px 0; }
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWRpdG9yLWluLmNzcyIsInNvdXJjZXMiOlsiZWRpdG9yLWluLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsQUFFSSx3QkFGb0IsQUFBQSw4QkFBOEIsQ0FDcEQsb0JBQW9CLEFBQ2pCLE9BQU8sQ0FBQyxFQUNQLE9BQU8sRUFBRSwrQkFBK0IsRUFDeEMsUUFBUSxFQUFFLFFBQVEsRUFDbEIsT0FBTyxFQUFFLEtBQUssRUFDZCxJQUFJLEVBQUUsR0FBRyxFQUNULE9BQU8sRUFBRSxJQUFJLEVBQ2IsV0FBVyxFQUFFLE1BQU0sRUFDbkIsU0FBUyxFQUFFLElBQUksR0FDaEI7O0FBVkwsQUFZRSx3QkFac0IsQUFBQSw4QkFBOEIsQ0FZcEQsZ0JBQWdCLENBQUMsRUFDZixVQUFVLEVBQUUsWUFBWSxFQUN4QixPQUFPLEVBQUUsVUFBVSxFQUNuQixVQUFVLEVBQUUsT0FBTyxHQVdwQjs7QUExQkgsQUFnQkksd0JBaEJvQixBQUFBLDhCQUE4QixDQVlwRCxnQkFBZ0IsR0FJWix1QkFBdUIsQ0FBQyxFQUN4QixVQUFVLEVBQUUsSUFBSSxFQUNoQixPQUFPLEVBQUUsTUFBTSxHQU9oQiJ9 */
+
+/*# sourceMappingURL=editor-in.css.map */

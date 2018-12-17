@@ -1,0 +1,76 @@
+{
+  "name": "stylepress",
+  "slug": "stylepress",
+  "version": "2.0.0",
+  "author": "dtbaker",
+  "homepage": "https://stylepress.org",
+  "description": "Easily apply styles to your entire website - no coding required.",
+  "scripts": {
+    "precommit": "gulp pre-commit"
+  },
+  "dependencies": {
+    "body-scroll-lock": "^2.4.6",
+    "gulp-watch": "^5.0.1",
+    "handlebars": "^4.0.11",
+    "history": "^4.7.2",
+    "jquery": "^3.3.1",
+    "overlayscrollbars": "^1.4.5",
+    "select2": "^4.0.6-rc.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babelify": "^8.0.0",
+    "browser-sync": "^2.11.1",
+    "browserify-shim": "^3.8.14",
+    "eslint": "^4.18.0",
+    "eslint-config-wordpress": "^2.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.9.1",
+    "git-pre-commit": "^2.1.4",
+    "grunt-browserify": "^5.3.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-copy": "^1.1.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-line-ending-corrector": "^1.0.1",
+    "gulp-merge-media-queries": "^0.2.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-sort": "^2.0.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-uglifycss": "^1.0.6",
+    "gulp-wp-pot": "^1.2.2",
+    "gulp-zip": "^4.1.0",
+    "run-sequence": "^2.2.1",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "underscore": "global:_"
+  },
+  "changelog": {
+    "2.0.0": {
+      "date": "2018-12-17",
+      "changes": [
+        "Lots of new features"
+      ]
+    }
+  }
+}

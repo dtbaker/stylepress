@@ -39,7 +39,7 @@ class Admin extends Base {
 		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'stylepress', array(
 			$this,
 			'styles_page_callback',
-		), STYLEPRESS_URI . 'assets/img/icon.png' );
+		), STYLEPRESS_URI . 'assets/images/icon.png' );
 		// hack to rmeove default submenu
 		$page = add_submenu_page( 'stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
 			$this,
@@ -68,20 +68,7 @@ class Admin extends Base {
 	 */
 	public function admin_page_assets() {
 
-		wp_enqueue_style( 'font-awesome', STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
-
-		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_style( 'wp-jquery-ui-dialog' );
-
-		wp_register_script( 'stylepress-payments', STYLEPRESS_URI . 'assets/js/payment.js', false, STYLEPRESS_VERSION, true );
-		wp_localize_script( 'stylepress-payments', 'stylepress_payment', array(
-			'payment_nonce'  => wp_create_nonce( 'payment_nonce' ),
-			'hostname'       => get_home_url(),
-			'plugin_version' => STYLEPRESS_VERSION,
-		) );
-		wp_enqueue_script( 'stylepress-payments' );
-
-		wp_enqueue_script( 'stylepress-slider', STYLEPRESS_URI . 'assets/js/omni-slider.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
+		wp_enqueue_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/admin.min.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 
 		require_once STYLEPRESS_PATH . 'views/_help_text.php';
 

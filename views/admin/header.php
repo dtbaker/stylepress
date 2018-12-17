@@ -5,27 +5,26 @@ namespace StylePress;
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 ?>
-<div id="stylepress-header">
-	<a href="https://stylepress.org" target="_blank" class="stylepress-logo"><img
-			src="<?php echo esc_url( STYLEPRESS_URI . 'assets/img/logo-stylepress-sml.png' ); ?>"></a>
-	<div class="icons">
-		<a href="https://stylepress.org" target="_blank">StylePress by dtbaker</a>
-		<a href="https://stylepress.org" target="_blank">v<?php echo STYLEPRESS_VERSION; ?></a>
-		<a href="https://twitter.com/WPStylePress" target="_blank"><i class="fa fa-twitter"></i></a>
-		<a href="https://github.com/stylepress/stylepress" target="_blank"><i class="fa fa-github"></i></a>
-		<br/><br/>
+<div class="stylepress__header">
+	<a href="https://stylepress.org" target="_blank" class="stylepress__logo">
+		<img alt="StylePress" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/logo-stylepress-sml.png' ); ?>">
+	</a>
+	<div class="stylepress__about">
+		<div class="stylepress__links">
+			<a href="https://stylepress.org" target="_blank" class="stylepress__link">StylePress by dtbaker</a>
+			<a href="https://stylepress.org" target="_blank" class="stylepress__link">v<?php echo STYLEPRESS_VERSION; ?></a>
+			<a href="https://twitter.com/WPStylePress" target="_blank" class="stylepress__link">
+				<img alt="Twitter" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/t-icon.png' ); ?>">
+			</a>
+			<a href="https://github.com/dtbaker/stylepress" target="_blank" class="stylepress__link">
+				<img alt="Github" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/github.png' ); ?>">
+			</a>
+		</div>
 		<em>StylePress is in BETA</em><br/>
-		<em><a href="https://github.com/stylepress/stylepress/issues" target="_blank">Report issues and feedback on github</a></em>
+		<em>
+			<a href="https://github.com/dtbaker/stylepress/issues" target="_blank" class="stylepress__link">
+				Report issues and feedback on github
+			</a>
+		</em>
 	</div>
-	<?php /*switch($_GET['page']) {
-		case 'stylepress': ?>
-			<div class="buttons">
-				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=stylepress_style' ) ); ?>" class="button">Import</a>
-				<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=stylepress_style' ) ); ?>"
-				   class="button button-primary">Create New Style</a>
-			</div>
-			<?php
-			break;
-	}*/
-	?>
 </div>

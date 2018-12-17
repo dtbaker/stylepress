@@ -1,6 +1,6 @@
 === StylePress  ===
 Contributors: dtbaker
-Donate link: https://stylepress.net
+Donate link: https://stylepress.org
 Tags: page builder, editor, elementor, builder, visual editor, front-end editor, design, drag and drop builder, front-end builder, landing page, page builder plugin, site builder, template builder, visual builder, website builder, wysiwyg
 Requires at least: 4.9
 Tested up to: 5.0.1
@@ -23,7 +23,7 @@ Design your entire website without a theme. Easily apply a Style to every page o
 
 = Contributions & Bugs: =
 
-Head over to github: https://github.com/stylepress/stylepress
+Head over to github: https://github.com/dtbaker/stylepress
 
 Copyright @stylepress
 

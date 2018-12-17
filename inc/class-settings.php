@@ -21,7 +21,7 @@ class Settings extends Base {
 	const OPTION_KEY = STYLEPRESS_SLUG . '-options';
 
 	public function get( $key = false ) {
-		$settings = get_option( self::OPTION_KEY . ( defined( 'ENVATO_ELEMENTS_API_ENDPOINT' ) ? md5( ENVATO_ELEMENTS_API_ENDPOINT ) : '' ), [] );
+		$settings = get_option( self::OPTION_KEY, [] );
 		if ( ! $settings || ! is_array( $settings ) ) {
 			$settings = [];
 		}
@@ -35,7 +35,7 @@ class Settings extends Base {
 	public function set( $key, $value ) {
 		$settings         = $this->get();
 		$settings[ $key ] = $value;
-		update_option( self::OPTION_KEY . ( defined( 'ENVATO_ELEMENTS_API_ENDPOINT' ) ? md5( ENVATO_ELEMENTS_API_ENDPOINT ) : '' ), $settings );
+		update_option( self::OPTION_KEY, $settings );
 	}
 
 	/**

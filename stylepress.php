@@ -5,8 +5,8 @@
  * Plugin URI: https://stylepress.org/
  * Author: dtbaker
  * Version: 2.0.0
- * Author URI: https://stylepress.net/
- * GitHub Plugin URI: https://github.com/stylepress/stylepress
+ * Author URI: https://dtbaker.net
+ * GitHub Plugin URI: https://github.com/dtbaker/stylepress
  * Requires at least:   4.9
  * Tested up to:        5.0.1
  *

@@ -89,20 +89,23 @@ class Styles extends Base {
 		$stylepress_categories   = [];
 		$stylepress_categories[] = [
 			'order'       => 10,
-			'slug'        => 'headers',
+			'slug'        => 'header',
 			'title'       => 'Header',
+			'plural'      => 'Headers',
 			'description' => 'These show at ..',
 		];
 		$stylepress_categories[] = [
 			'order'       => 20,
 			'slug'        => 'hero',
 			'title'       => 'Hero',
+			'plural'      => 'Heros',
 			'description' => 'These show at ..',
 		];
 		$stylepress_categories[] = [
 			'order'       => 30,
 			'slug'        => 'content',
 			'title'       => 'Content',
+			'plural'      => 'Content Area',
 			'inner'       => true,
 			'description' => 'These show at ..',
 		];
@@ -110,15 +113,16 @@ class Styles extends Base {
 			'order'       => 40,
 			'slug'        => 'footer',
 			'title'       => 'Footer',
+			'plural'      => 'Footers',
 			'description' => 'These show at ..',
 		];
 
 		return apply_filters( 'stylepress_categories', $stylepress_categories );
 	}
 
-	public function get_all_styles() {
-		$styles      = array();
-		$args        = array(
+	public function get_all_styles( $category_slug = false ) {
+		$styles = array();
+		$args   = array(
 			'post_type'           => STYLEPRESS_SLUG . '-style',
 			'post_status'         => 'publish',
 			'posts_per_page'      => - 1,
@@ -126,35 +130,23 @@ class Styles extends Base {
 			'suppress_filters'    => false,
 			'order'               => 'ASC',
 			'orderby'             => 'title',
+			'post_parent'         => 0,
 		);
+		if ( $category_slug ) {
+			$args['tax_query'] = array(
+				array(
+					'taxonomy' => STYLEPRESS_SLUG . '-cat',
+					'field'    => 'slug',
+					'terms'    => $category_slug,
+				)
+			);
+		}
 		$posts_array = get_posts( $args );
-		$children    = array();
 		foreach ( $posts_array as $style ) {
-			if ( ! $style->post_parent ) {
-				$styles[ $style->ID ] = $style->post_title;
-			} else if ( ! get_post_meta( $style->ID, 'stylepress_is_component', true ) ) {
-				if ( ! isset( $children[ $style->post_parent ] ) ) {
-					$children[ $style->post_parent ] = array();
-				}
-				$children[ $style->post_parent ][ $style->ID ] = $style->post_title;
-			}
-		}
-		// todo: sort alpha:
-
-		$return = array();
-		//we're only doing 1 level deep, not themes all the way down, so we don't need recursion here.
-
-		foreach ( $styles as $style_id => $style_name ) {
-			$return[ $style_id ] = $style_name;
-			if ( isset( $children[ $style_id ] ) ) {
-				foreach ( $children[ $style_id ] as $child_style_id => $child_name ) {
-					$return[ $child_style_id ] = '&nbsp; &#8627; ' . $child_name;
-				}
-			}
+			$styles[ $style->ID ] = $style->post_title;
 		}
 
-
-		return $return;
+		return $styles;
 	}
 
 }

@@ -266,10 +266,6 @@ class Plugin extends Base {
 		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.css', false, STYLEPRESS_VERSION );
 		wp_enqueue_script( 'stylepress-js', STYLEPRESS_URI . 'assets/js/frontend.js', false, STYLEPRESS_VERSION, true );
 		// inject adds inline style against 'stylepress'
-		$this->inject_additional_font_css();
-
-		wp_enqueue_style( 'font-awesome' );//, STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
-
 
 		if ( $this->has_permission() ) {
 			wp_enqueue_style( 'stylepress-css-editor', STYLEPRESS_URI . 'assets/css/frontend-css-editor.css', false, STYLEPRESS_VERSION );

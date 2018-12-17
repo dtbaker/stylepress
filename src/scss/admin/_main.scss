@@ -1,0 +1,155 @@
+
+.stylepress__category {
+
+}
+
+.stylepress__category-header {
+  background: #FFF;
+  padding: 15px 20px;
+  position: relative;
+  margin: 0 0 30px;
+
+  &:before {
+    position: absolute;
+    left: 0;
+    content: '';
+    display: block;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #e6e6e6
+  }
+
+  span {
+    font-weight: bold;
+    display: block;
+    padding: 0 0 5px;
+  }
+
+  small {
+    font-weight: normal;
+    display: block;
+  }
+}
+
+.stylepress__main {
+  margin-top: 40px;
+}
+
+
+.stylepress__category-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.stylepress__style {
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 25%;
+  }
+}
+
+.stylepress__style-inner {
+  margin-bottom: 20px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+
+  .stylepress__style-thumb {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    height: 150px;
+    background-position: center;
+    background-size: 100% auto;
+
+  }
+
+  .theme-usage {
+    padding: 6px 0 6px 12px;
+    font-size: 12px;
+    background-color: #fafafa;
+    text-overflow: ellipsis;
+    min-height: 18px;
+
+    &.style-description {
+      height: auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: #444;
+    }
+  }
+  h3.stylepress__style-name {
+    font-size: 15px;
+    position: relative;
+    font-weight: 600;
+    height: 18px;
+    margin: 0;
+    padding: 15px;
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: #fafafa;
+    color: #23282d;
+
+    small {
+      font-weight: normal;
+      font-size: 12px;
+      color: #CCC;
+    }
+
+    a {
+      color: #23282d;
+      text-decoration: none;
+    }
+  }
+
+  .stylepress__style-action {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 38px;
+    padding: 9px 10px 0 10px;
+    background: rgba(244, 244, 244, 0.7);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+}
+.stylepress__style--new{
+  position: relative;
+  .stylepress__style-inner{
+    opacity: 0.3;
+    transition: opacity 0.3s;
+    border: 1px dashed #a2a2a2;
+    &:hover{
+      opacity: 1;
+    }
+  }
+
+  h3.stylepress__style-name {
+    padding: 0;
+    height: 48px;
+  }
+  .stylepress__style-name-input{
+    position: absolute;
+    background: transparent;
+    padding: 4px 12px;
+    line-height: 40px;
+    font-size: 15px;
+    border: 0;
+  }
+
+}
