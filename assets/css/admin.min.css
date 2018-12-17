@@ -6,6 +6,24 @@
 .stylepress__links{margin-bottom:15px}
 .stylepress__links .stylepress__link:after{content:'|';color:#545c63;padding:0 4px 0 7px}
 .stylepress__links .stylepress__link:last-child:after{display:none}
+div.stylepress__defaults--basic{display:block}
+div.stylepress__defaults--advanced{display:none}
+#stylepress_advanced:checked ~ div.stylepress__defaults--basic{display:none}
+#stylepress_advanced:checked ~ div.stylepress__defaults--advanced{display:block}
+.stylepress__defaults-page{width:500px;border:3px solid #ccc;border-top-left-radius:4px;border-top-right-radius:4px;background:#FFF}
+.stylepress__defaults-pagesection{border-bottom:1px solid #CCC;padding:20px 15px;position:relative;text-align:center}
+.stylepress__defaults-pagesection:last-child{border-bottom:0}
+.stylepress__defaults-pagesection label{position:absolute;background:#f1f1f1;border-radius:5px;top:5px;left:5px;padding:4px 9px;font-size:12px}
+.stylepress-chrome{padding:0;text-align:center}
+.stylepress-chrome *{box-sizing:border-box}
+.stylepress-chrome-row{padding:10px;background:#f1f1f1;border-top-left-radius:4px;border-top-right-radius:4px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between}
+.stylepress-chrome-left{width:55px;margin-right:auto;margin-left:0}
+.stylepress-chrome-right{margin-right:0;margin-left:auto;width:20px}
+.stylepress-chrome-middle{width:200px}
+.stylepress-chrome-row:after{content:"";display:table;clear:both}
+.stylepress-chrome-dot{margin-top:4px;height:12px;width:12px;background-color:#bbb;border-radius:50%;display:inline-block}
+.stylepress-chrome-addr{width:100%;border-radius:3px;border:0;background-color:white;margin-top:-8px;height:25px;color:#666;padding:5px}
+.stylepress-chrome-bar{width:17px;height:3px;background-color:#aaa;margin:3px 0;display:block}
 .stylepress__category-header{background:#FFF;padding:15px 20px;position:relative;margin:0 0 30px}
 .stylepress__category-header:before{position:absolute;left:0;content:'';display:block;top:0;bottom:0;width:4px;background:#e6e6e6}
 .stylepress__category-header span{font-weight:bold;display:block;padding:0 0 5px}

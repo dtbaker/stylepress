@@ -78,30 +78,9 @@ class Base {
 		return self::$instances[ $module ];
 	}
 
-	/**
-	 * Initializing StylePress plugin.
-	 *
-	 * @since 2.0.0
-	 * @access private
-	 */
-	public function __construct() {
-
-		add_action( 'init', [ $this, 'init' ], 0 );
-
-	}
-
 	public $content = '';
 	public $header = '';
 
-	/**
-	 * Runs in the init WordPress hook and sets everything up.
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 */
-	public function init() {
-
-	}
 
 	public function get_url() {
 		return admin_url( 'admin.php?page=' . self::PAGE_SLUG );
