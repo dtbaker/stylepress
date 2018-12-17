@@ -5,7 +5,9 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">

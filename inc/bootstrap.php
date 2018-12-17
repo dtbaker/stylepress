@@ -33,6 +33,7 @@ spl_autoload_register(
 
 Plugin::get_instance();
 Styles::get_instance();
+ElementorCSS::get_instance();
 if(is_admin()){
 	Admin::get_instance();
 }

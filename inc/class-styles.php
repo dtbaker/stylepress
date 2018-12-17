@@ -163,7 +163,7 @@ class Styles extends Base {
 	 *
 	 * @param int $post_id Current post ID we're querying.
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function get_page_styles( $post_id ) {
 		$current_option = get_post_meta( $post_id, 'stylepress_style', true );
@@ -206,7 +206,7 @@ class Styles extends Base {
 	public function is_stylpress_enabled( $post ) {
 		if ( $post && $post->ID ) {
 			$template = get_post_meta( $post->ID, '_wp_page_template', true );
-			if ( $template ) {
+			if ( $template && $template !== 'default' ) {
 				return [
 					'enabled' => false,
 					'reason'  => 'StylePress disabled due to a custom template assigned to this page. Please remove the custom page template if you wish to use StylePress on this page.',

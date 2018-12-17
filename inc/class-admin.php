@@ -42,12 +42,18 @@ class Admin extends Base {
 
 		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'stylepress', array(
 			$this,
-			'styles_page_callback',
+			'sections_page_callback',
 		), STYLEPRESS_URI . 'assets/images/icon.png' );
 		// hack to rmeove default submenu
-		$page = add_submenu_page( 'stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
+		$page = add_submenu_page( 'stylepress', __( 'Sections', 'stylepress' ), __( 'Sections', 'stylepress' ), 'manage_options', 'stylepress', array(
 			$this,
-			'styles_page_callback'
+			'sections_page_callback'
+		) );
+		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+		$page = add_submenu_page( 'stylepress', __( 'Styles', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress-styles', array(
+			$this,
+			'default_styles_page_callback'
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
@@ -78,9 +84,23 @@ class Admin extends Base {
 	 *
 	 * @since 2.0.0
 	 */
-	public function styles_page_callback() {
+	public function sections_page_callback() {
 		$this->content = $this->render_template(
-			'admin/main.php', [
+			'admin/sections.php', [
+			]
+		);
+		$this->header  = $this->render_template( 'admin/header.php' );
+		echo $this->render_template( 'wrapper.php' );
+	}
+	/**
+	 * This is our callback for rendering our custom menu page.
+	 * This page shows all our site styles and currently selected defaults.
+	 *
+	 * @since 2.0.0
+	 */
+	public function default_styles_page_callback() {
+		$this->content = $this->render_template(
+			'admin/styles.php', [
 			]
 		);
 		$this->header  = $this->render_template( 'admin/header.php' );
@@ -95,7 +115,7 @@ class Admin extends Base {
 	 */
 	public function settings_page_callback() {
 		$this->content = $this->render_template(
-			'admin/defaults.php', [
+			'admin/settings.php', [
 			]
 		);
 		$this->header  = $this->render_template( 'admin/header.php' );
