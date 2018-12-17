@@ -12,7 +12,7 @@ add_filter( 'woocommerce_template_loader_files', function ( $search_files, $temp
 	if ( $file && file_exists( STYLEPRESS_PATH . 'extensions/woocommerce/templates/' . $file ) ) {
 		// hacky hack hack.
 		// we only do this if the current page has chosen our style.
-		$style_id = (int) \StylepressManager::get_instance()->get_current_style();
+		$style_id = (int) \Plugin::get_instance()->get_current_style();
 		if ( $style_id > 0 ) {
 			$plugin_slug_dir = str_replace( WP_CONTENT_DIR, '', WP_PLUGIN_DIR );
 			$search_files[]  = '../..' . $plugin_slug_dir . '/' . STYLEPRESS_SLUG . '/extensions/woocommerce/templates/' . $file;
@@ -26,12 +26,12 @@ add_action( 'stylepress/render-inner', function () {
 
 	if ( function_exists( 'WC' ) && class_exists( 'WC_Template_Loader' ) ) {
 
-		$style_id = (int) \StylepressManager::get_instance()->get_current_style();
+		$style_id = (int) \Plugin::get_instance()->get_current_style();
 		if ( $style_id > 0 && $template_file = WC_Template_Loader::template_loader( '' ) ) {
 			// this will only fire on shop pages.
 			if ( file_exists( $template_file ) ) {
 
-				\StylepressManager::get_instance()->debug_message( "woocommerce.php: including a WooCommerce template ( " . basename( $template_file ) . " ) " . get_the_ID() );
+				\Plugin::get_instance()->debug_message( "woocommerce.php: including a WooCommerce template ( " . basename( $template_file ) . " ) " . get_the_ID() );
 
 				remove_action( 'stylepress/render-inner', 'stylepress_page_content', 20 );
 

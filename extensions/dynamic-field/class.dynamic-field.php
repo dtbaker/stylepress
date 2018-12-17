@@ -1,6 +1,6 @@
 <?php
 /**
- * Our StylepressManager class.
+ * Our Plugin class.
  * This handles all our hooks and stuff.
  *
  * @package stylepress
@@ -11,25 +11,25 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 /**
  * All the magic happens here.
  *
- * Class StylepressManager
+ * Class Plugin
  */
 class stylepressDynamicField {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.
 	 *
-	 * @var StylepressManager null
+	 * @var Plugin null
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	private static $instance = null;
 
 	/**
 	 * Grab a static instance of this class.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
-	 * @return StylepressManager
+	 * @return Plugin
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {

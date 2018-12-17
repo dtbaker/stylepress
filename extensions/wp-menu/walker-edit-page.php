@@ -5,7 +5,7 @@
  * Create HTML list of nav menu input items.
  *
  * @package WordPress
- * @since 3.0.0
+ * @since 2.0.0
  * @uses Walker_Nav_Menu
  */
 
@@ -16,7 +16,7 @@ class Walker_Nav_Menu_Edit_StylePress extends Walker_Nav_Menu {
 	 *
 	 * @see Walker_Nav_Menu::start_lvl()
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $output Passed by reference.
 	 * @param int    $depth Depth of menu item. Used for padding.
@@ -30,7 +30,7 @@ class Walker_Nav_Menu_Edit_StylePress extends Walker_Nav_Menu {
 	 *
 	 * @see Walker_Nav_Menu::end_lvl()
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $output Passed by reference.
 	 * @param int    $depth Depth of menu item. Used for padding.
@@ -43,7 +43,7 @@ class Walker_Nav_Menu_Edit_StylePress extends Walker_Nav_Menu {
 	 * Start the element output.
 	 *
 	 * @see Walker_Nav_Menu::start_el()
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 *
 	 * @global int   $_wp_nav_menu_max_depth
 	 *

@@ -7,9 +7,9 @@
  * (just the do_content hook for the elementor widget, maybe more later on)
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
 
-
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 
 if ( ! function_exists( 'stylepress_page_content' ) ) {
@@ -22,19 +22,19 @@ if ( ! function_exists( 'stylepress_page_content' ) ) {
  */
 function stylepress_page_content( $settings = array() ) {
 
-$current_page_type = StylepressManager::get_instance()->get_current_page_type();
+$current_page_type = Plugin::get_instance()->get_current_page_type();
 
 if ( ! isset( $GLOBALS['stylepress_template_turtles'] ) ) {
 	$GLOBALS['stylepress_template_turtles'] = array();
 }
 
-\StylepressManager::get_instance()->debug_message( "template-functions.php: Rendering from stylepress/render-inner action hook " );
+\Plugin::get_instance()->debug_message( "template-functions.php: Rendering from stylepress/render-inner action hook " );
 
 
 if ( count( $GLOBALS['stylepress_template_turtles'] ) ) {
 
 
-	\StylepressManager::get_instance()->debug_message( "template-functions.php: Nested inner content for " . $current_page_type . "." );
+	\Plugin::get_instance()->debug_message( "template-functions.php: Nested inner content for " . $current_page_type . "." );
 
 	// save and restore global post entry while we do this.
 	if ( isset( $GLOBALS['post'] ) ) {
@@ -89,7 +89,7 @@ if ( count( $GLOBALS['stylepress_template_turtles'] ) ) {
 }
 
 
-\StylepressManager::get_instance()->debug_message( "template-functions.php: Current page type for inner content style lookup is: $current_page_type " );
+\Plugin::get_instance()->debug_message( "template-functions.php: Current page type for inner content style lookup is: $current_page_type " );
 
 if(! empty( $GLOBALS['stylepress_render_this_template_inside'] )){
 // hook here on our header/footer callbacks to strip double rendered content.
@@ -112,13 +112,13 @@ ob_start();
 <body <?php body_class( 'stylepress-render' ); ?>>
 <?php
 
-$page_type = StylepressManager::get_instance()->get_current_page_type();
-StylepressManager::get_instance()->debug_message( "render.php: Rendering full page output for page type '$page_type' in render.php using the style: " . (
+$page_type = Plugin::get_instance()->get_current_page_type();
+Plugin::get_instance()->debug_message( "render.php: Rendering full page output for page type '$page_type' in render.php using the style: " . (
 	! empty( $GLOBALS['our_elementor_template'] ) ? '<a href="' . get_permalink( $GLOBALS['our_elementor_template'] ) . '">' . esc_html( get_the_title( $GLOBALS['our_elementor_template'] ) ) . '</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
 	) . '' );
 
-if ( StylepressManager::get_instance()->removing_theme_css ) {
-	StylepressManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
+if ( Plugin::get_instance()->removing_theme_css ) {
+	Plugin::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
 }
 
 do_action( 'stylepress/before-render' );
@@ -164,7 +164,7 @@ while ( have_posts() ) : the_post();
 	$GLOBALS['stylepress_post_for_dynamic_fields'] = $post;
 
 	$style_id            = $GLOBALS['our_elementor_inner_template'];
-	$current_inner_style = (int) StylepressManager::get_instance()->get_page_inner_style( $post->ID );
+	$current_inner_style = (int) Plugin::get_instance()->get_page_inner_style( $post->ID );
 	if ( $current_inner_style ) {
 		// override default in loop.
 		// hmm this might not work well in output of a blog.
@@ -173,10 +173,10 @@ while ( have_posts() ) : the_post();
 
 	if ( $style_id > 0 ) {
 		$GLOBALS['stylepress_template_turtles'][ $style_id ] = $style_id;
-		\StylepressManager::get_instance()->debug_message( "template-functions.php: Rendering style: $style_id " );
+		\Plugin::get_instance()->debug_message( "template-functions.php: Rendering style: $style_id " );
 		echo Elementor\Plugin::instance()->frontend->get_builder_content( $style_id, false );
 	} else {
-		\StylepressManager::get_instance()->debug_message( "template-functions.php: Rendering plain content: $style_id " );
+		\Plugin::get_instance()->debug_message( "template-functions.php: Rendering plain content: $style_id " );
 		// todo: handle inner theme output from here.
 
 		the_content();

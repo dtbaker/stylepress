@@ -5,7 +5,9 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 // Help tab: Previewing and Customizing.
 if ( ! $this->has_permission() ) {

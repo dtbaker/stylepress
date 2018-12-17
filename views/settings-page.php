@@ -5,7 +5,9 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 $title = __( 'Full Site Editor', 'stylepress' );
 
@@ -16,10 +18,10 @@ if ( ! $this->has_permission() ) {
 
 add_thickbox();
 
-$styles = StylepressManager::get_instance()->get_all_page_styles();
-$components = StylepressManager::get_instance()->get_all_page_components();
-$settings = StylepressManager::get_instance()->get_settings();
-$page_types = StylepressManager::get_instance()->get_possible_page_types();
+$styles = Plugin::get_instance()->get_all_page_styles();
+$components = Plugin::get_instance()->get_all_page_components();
+$settings = Plugin::get_instance()->get_settings();
+$page_types = Plugin::get_instance()->get_possible_page_types();
 
 ?>
 

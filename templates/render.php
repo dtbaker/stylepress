@@ -28,13 +28,13 @@ ob_start();
 	ob_start();
 
 
-	$page_type = StylepressManager::get_instance()->get_current_page_type();
-	StylepressManager::get_instance()->debug_message( "render.php: Rendering full page output for page type '$page_type' in render.php using the style: " . (
+	$page_type = Plugin::get_instance()->get_current_page_type();
+	Plugin::get_instance()->debug_message( "render.php: Rendering full page output for page type '$page_type' in render.php using the style: " . (
 		! empty( $GLOBALS['our_elementor_template'] ) ? '<a href="' . get_permalink( $GLOBALS['our_elementor_template'] ) . '">' . esc_html( get_the_title( $GLOBALS['our_elementor_template'] ) ) . '</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
 		) . '' );
 
-	if ( StylepressManager::get_instance()->removing_theme_css ) {
-		StylepressManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
+	if ( Plugin::get_instance()->removing_theme_css ) {
+		Plugin::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
 	}
 
 	do_action( 'stylepress/before-render' );

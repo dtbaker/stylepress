@@ -6,30 +6,32 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 /**
  * Handles importing/exporting our custom designs.
  *
- * Class StylepressManager
+ * Class Plugin
  */
 class StylepressImportExport {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.
 	 *
-	 * @var StylepressManager null
+	 * @var Plugin null
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	private static $instance = null;
 
 	/**
 	 * Grab a static instance of this class.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
-	 * @return StylepressManager
+	 * @return Plugin
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {

@@ -62,7 +62,7 @@ class Stylepress_Loop extends Widget_Base {
 		);
 
 		// choose stylepress component layout to render in each column.
-		$components = \StylepressManager::get_instance()->get_all_page_components();
+		$components = \Plugin::get_instance()->get_all_page_components();
 
 		$this->add_control(
 			'stylepress_layout',

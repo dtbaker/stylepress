@@ -1,77 +1,27 @@
 <?php
 /**
- * Our StylepressManager class.
+ * Our Plugin class.
  * This handles all our hooks and stuff.
  *
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 /**
  * All the magic happens here.
  *
- * Class StylepressManager
+ * Class Plugin
  */
-class StylepressManager {
+class Plugin extends Base {
 
-	/**
-	 * Stores our instance that can (and is) accessed from various places.
-	 *
-	 * @var StylepressManager null
-	 *
-	 * @since 1.0.0
-	 */
-	private static $instance = null;
-
-	/**
-	 * Grab a static instance of this class.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return StylepressManager
-	 */
-	public static function get_instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * Flag to let us know if the user is currently previewing a site wide style.
-	 * Do not render inside content when previewing site wide style.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var bool
-	 */
-	public $previewing_style = false;
-
-
-	/**
-	 * Flag to let us know if we render entire page or just overwrite get_header() and get_footer().
-	 *
-	 * @since 1.0.5
-	 *
-	 * @var bool
-	 */
-	public $overwrite_theme_output = true;
-
-	/**
-	 * Flag to let us know that theme css is removed.
-	 *
-	 * @since 1.0.11
-	 *
-	 * @var bool
-	 */
-	public $removing_theme_css = false;
 
 	/**
 	 * Initializes the plugin and sets all required filters.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function init() {
 
@@ -80,8 +30,6 @@ class StylepressManager {
 
 
 		add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_action( 'init', array( $this, 'theme_compatibility' ) );
 		add_action( 'wp_ajax_stylepress_purchase_complete', array( $this, 'payment_complete' ) );
 		add_action( 'wp_ajax_stylepress_get_css', array( $this, 'editor_get_css' ) );
@@ -89,8 +37,6 @@ class StylepressManager {
 		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'theme_override_styles' ), 99999 );
-		add_filter( 'tt_font_get_settings_page_tabs', array( $this, 'tt_font_get_settings_page_tabs' ), 101 );
-		add_filter( 'tt_font_get_option_parameters', array( $this, 'tt_font_get_option_parameters' ), 10 );
 
 		add_filter( 'template_include', array( $this, 'template_include' ), 999 );
 
@@ -102,36 +48,9 @@ class StylepressManager {
 
 		// stylepress plugin hooks
 		add_action( 'init', array( $this, 'load_extensions' ) );
-		add_filter( 'nav_menu_item_title', array( $this, 'dropdown_icon' ), 10, 4 );
 
 		add_action( 'widgets_init', [ $this, 'load_widgets' ] );
 
-		add_action( 'wp_before_admin_bar_render', array( $this, 'wp_admin_bar' ) );
-
-
-	}
-
-	public function show_full_ui() {
-		return ! ( defined( 'STYLEPRESS_ONLY_WIDGETS' ) && STYLEPRESS_ONLY_WIDGETS );
-	}
-
-	public function dropdown_icon( $title, $item, $args, $depth ) {
-		// Build an array with our theme location
-		$theme_locations = array(
-			'primary',
-			'secondary',
-			'slideout'
-		);
-
-		// Loop through our menu items and add our dropdown icons
-		foreach ( $item->classes as $value ) {
-			if ( 'menu-item-has-children' === $value ) {
-				$title = $title . '<span role="button" class="dropdown-menu-toggle" aria-expanded="false"></span>';
-			}
-		}
-
-		// Return our title
-		return $title;
 	}
 
 	/**
@@ -139,14 +58,14 @@ class StylepressManager {
 	 * This method loads our custom Elementor classes and injects them into the elementor widget_manager
 	 * so our widgets appear in the Elementor ui.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function elementor_init_complete() {
 
-		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( 'Elementor\Plugin' ) ) {
-				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-					$elementor = Elementor\Plugin::instance();
+		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( '\Elementor\Widget_Base' ) ) {
+			if ( class_exists( '\Elementor\Plugin' ) ) {
+				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
+					$elementor = \Elementor\Plugin::instance();
 					if ( $elementor && isset( $elementor->elements_manager ) ) {
 						if ( method_exists( $elementor->elements_manager, 'add_category' ) ) {
 							$elementor->elements_manager->add_category(
@@ -168,13 +87,14 @@ class StylepressManager {
 	public function load_extensions() {
 
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( 'Elementor\Plugin' ) ) {
+			if ( class_exists( '\Elementor\Plugin' ) ) {
 
-				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-					$elementor = Elementor\Plugin::instance();
+				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
+					$elementor = \Elementor\Plugin::instance();
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
+							return;
 							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
 							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
 							require_once STYLEPRESS_PATH . 'extensions/modal-popup/modal-popup.php';
@@ -202,8 +122,8 @@ class StylepressManager {
 
 	public function load_widgets() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( 'Elementor\Plugin' ) ) {
-				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
+			if ( class_exists( '\Elementor\Plugin' ) ) {
+				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
 					require_once STYLEPRESS_PATH . 'extensions/widget/widget.php';
 					register_widget( "stylepress_template_widget" );
 				}
@@ -214,14 +134,14 @@ class StylepressManager {
 	/**
 	 * Adds our new widgets to the Elementor widget area.
 	 *
-	 * @since 1.0.8
+	 * @since 2.0.0
 	 */
 	public function elementor_add_new_widgets() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( 'Elementor\Plugin' ) ) {
+			if ( class_exists( '\Elementor\Plugin' ) ) {
 
-				if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-					$elementor = Elementor\Plugin::instance();
+				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
+					$elementor = \Elementor\Plugin::instance();
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
@@ -236,33 +156,6 @@ class StylepressManager {
 	}
 
 
-	public function section_before_render( $section ) {
-
-		/*if( 'section' === $section->get_name() ) {
-			$children  = $section->get_children();
-			$has_inner = false;
-			$column_count = 0;
-			foreach ( $children as $child ) {
-					if( 'column' === $child->get_name()){
-						$column_count++;
-						$sub_children = $child->get_children();
-						foreach ( $sub_children as $sub_child ) {
-							if ( 'stylepress_inner_content' === $sub_child->get_name() ) {
-								$has_inner = true;
-							}
-						}
-							}
-			}
-			if ( $has_inner ) {
-				$section->add_render_attribute( 'wrapper', 'class', [
-						'section-stylepress-has-inner',
-						'section-stylepress-column-count-' . $column_count,
-					]
-				);
-			}
-		}*/
-	}
-
 	public function has_permission( $post = false ) {
 		return current_user_can( 'edit_posts' );
 		//current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' )
@@ -272,14 +165,14 @@ class StylepressManager {
 	 * This loads a custom "panel" template to the frontend Elementor editor page.
 	 * Only when the user is logged in and only when the Elementor editor has loaded.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function wp_print_footer_scripts() {
 		if ( ! is_admin() && $this->has_permission() ) {
 			if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-				if ( class_exists( 'Elementor\Plugin' ) ) {
-					if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-						$elementor = Elementor\Plugin::instance();
+				if ( class_exists( '\Elementor\Plugin' ) ) {
+					if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
+						$elementor = \Elementor\Plugin::instance();
 						if ( isset( $elementor->editor ) && $elementor->editor->is_edit_mode() ) {
 							include_once STYLEPRESS_PATH . 'templates/page-panel.php';
 						}
@@ -294,10 +187,9 @@ class StylepressManager {
 	 * This can overwrite our site wide template for every page of the website.
 	 * This is where the magic happens! :)
 	 *
-	 * There are two "modes". We are in the editor and editing the template (loads editor.php)
-	 * Or we are on the frontend and we are rending normal page content (render.php)
+	 * If the user has disabled stylepress for a particular item then we just render default.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $template_include The path to the current template file.
 	 *
@@ -305,299 +197,49 @@ class StylepressManager {
 	 */
 	public function template_include( $template_include ) {
 
-		if ( ! $this->show_full_ui() ) {
-			return $template_include;
-		}
 		global $post;
 
-		// whitelist certain templates that don't get overwitten:
-		$whitelist = array(
-			'plugins/elementor',
-		);
-		foreach ( $whitelist as $w ) {
-			if ( strpos( $template_include, $w ) ) {
-				return $template_include;
-			}
-		}
-		$whitelist_post_types = array();
-		if ( $post && ! empty( $post->ID ) && in_array( $post->post_type, $whitelist_post_types ) ) {
-			return $template_include;
-		}
+		// If stylepress has been disabled for this particular post then we just use the normal template include.
+		// Not sure how to do this for category pages. We'll have to add a taxonomy settings area to each tax.
+		$queried_object = get_queried_object();
+		var_dump( $queried_object );
 
-		$original_template = $template_include;
-
-		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type ) {
-			$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
-			$path                  = $page_templates_module->get_template_path( 'elementor_canvas' );
-			if ( is_file( $path ) ) {
-				return $path;
-			}
-		} else if ( $post && ! empty( $post->ID ) && 'stylepress_style' === $post->post_type ) {
-			$this->previewing_style = true;
-			$template_include       = STYLEPRESS_PATH . 'templates/editor.php';
-			add_filter( 'body_class', function ( $classes ) use ( $post ) {
-				$classes[] = 'stylepress-template';
-				$classes[] = 'stylepress-template-preview';
-				if ( $post->post_parent ) {
-					$classes[] = 'stylepress-style-' . $post->post_parent;
-					$classes[] = 'stylepress-sub-style-' . $post->ID;
-				} else {
-					$classes[] = 'stylepress-style-' . $post->ID;
-				}
-				if ( $post->post_parent && get_post_meta( $post->ID, 'stylepress_is_component', true ) ) {
-					$classes[] = 'stylepress-template-component';
-				}
-
-				return $classes;
-			} );
-		} else {
-			// check if this particular page has a template set.
-			// we work out the outer and inner template and decide how we should render the page based on that info.
-
-			// outer template. This checks the current page manual overrides, along with the default for the page type.
-			$GLOBALS['our_elementor_template']       = (int) $this->get_current_style();
-			$GLOBALS['our_elementor_inner_template'] = (int) $this->get_current_inner_style();
-
-			if ( $GLOBALS['our_elementor_template'] > 0 ) {
-				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'stylepress_style' === $template->post_type ) {
-
-					// success, we've got an outer template to display.
-					// there's two options now:
-					// 1) continue with normal rendered content from stylepress
-					// 2) revert back to theme output for the inner sections ( tricky! )
-
-					if ( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_THEME ) {
-						//tricky time! stylepress outer + normal theme inner.
-						// will only work for some themes.
-
-						// we need to render our outer template, then pass the current template into that.
-						$GLOBALS['stylepress_render_this_template_inside'] = $original_template;
-						$template_include                                  = STYLEPRESS_PATH . 'templates/render-outer.php';
+		$this->debug_message( 'template_include (start): ' . $template_include );
 
 
-					} else if ( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_PLAIN ) {
-						// plain old output, no stylepress wizardty
-						$template_include = STYLEPRESS_PATH . 'templates/render.php';
-					} else if ( $GLOBALS['our_elementor_inner_template'] > 0 ) {
-						// using a stylepress inner layout. and outer layout. easy!
-						$template_include = STYLEPRESS_PATH . 'templates/render.php';
-					} else {
-						// using "default" layout which means we pass into render to figure out.
-						$template_include = STYLEPRESS_PATH . 'templates/render.php';
-					}
-					add_filter( 'body_class', function ( $classes ) use ( $template ) {
-						$classes[] = 'stylepress-template';
-						if ( $template->post_parent ) {
-							$classes[] = 'stylepress-style-' . $template->post_parent;
-							$classes[] = 'stylepress-sub-style-' . $template->ID;
-						} else {
-							$classes[] = 'stylepress-style-' . $template->ID;
-						}
-
-						return $classes;
-					} );
-				}
-			} else if ( $GLOBALS['our_elementor_template'] == STYLEPRESS_OUTER_USE_THEME ) {
-
-				add_filter( 'body_class', function ( $classes ) {
-					$classes[] = 'stylepress-outer-inner';
-
-					return $classes;
-				} );
-
-				if ( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_THEME ) {
-					// that's fine! go ahead and use defualt inner content.
-
-				} else if ( $GLOBALS['our_elementor_inner_template'] == STYLEPRESS_INNER_USE_PLAIN ) {
-
-					// fine as well, use elementor output.
-
-				} else if ( $GLOBALS['our_elementor_inner_template'] > 0 ) {
-					// using a stylepress inner layout. with a default theme outer layout. a bit tricky! hooks!
-
-					/* theme outer + stylepress inner
-= tricky as well!
-we get two hooks (e.g. ocean_before_main & ocean_after_main )
-on the first hook we render our stylepress output
-then start output buffering and remove everything we capture until the ocean_after_main hook runs.
-					$theme    = get_option( 'template' );
-		$filename = STYLEPRESS_PATH . 'themes/' . basename( $theme ) . '.css';
-		if ( file_exists( $filename ) ) {
-			wp_enqueue_style( 'stylepress-theme-addons', STYLEPRESS_URI . 'themes/' . basename( $theme ) . '.css', false, STYLEPRESS_VERSION );
-		}
-					*/
-
-					$theme_hooks = apply_filters( 'stylepress_theme_hooks', array() );
-
-					if ( ! empty( $theme_hooks['before'] ) && ! empty( $theme_hooks['after'] ) ) {
-						add_action( $theme_hooks['before'], function () { // ocean_before_main
-							// render our content here.
-							do_action( 'stylepress/render-inner' );
-							ob_start();
-							// capture all output and discard at end below:
-						} );
-						add_action( $theme_hooks['after'], function () { // ocean_after_main
-							ob_end_clean();
-						} );
-					}
-
-				} else {
-
-				}
-
-			}
-		}
-
-		$this->debug_message( 'template_include: ' . $template_include . ' ' . ( $template_include != $original_template ? ' (changed from: ' . $original_template . ' )' : '' ) );
+		$this->debug_message( 'template_include (end): ' . $template_include );
 
 		return $template_include;
 	}
 
 
 	/**
-	 * Hack to render header only, leaving inner content up to theme to render.
-	 *
-	 * @since 1.0.5
-	 *
-	 * @param string $name The optional header name
-	 */
-	public function get_header( $name = null ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
-		global $post;
-
-		if ( ! $this->overwrite_theme_output ) {
-			$GLOBALS['stylepress_overwrite_theme_output'] = true;
-			if ( $GLOBALS['our_elementor_template'] > 0 ) {
-				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'stylepress_style' === $template->post_type ) {
-					// do we overwrite the entire page, or just the header/footer components.
-
-					add_filter( 'body_class', function ( $classes ) {
-						$classes[] = 'stylepress-template';
-						$classes[] = 'stylepress-style-' . $GLOBALS['our_elementor_template'];
-
-						return $classes;
-					} );
-					require_once STYLEPRESS_PATH . 'templates/render-header.php';
-
-				}
-			}
-		}
-	}
-
-	/**
-	 * Hack to render header only, leaving inner content up to theme to render.
-	 *
-	 * @since 1.0.5
-	 *
-	 * @param string $name The optional header name
-	 */
-	public function get_footer( $name = null ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
-		global $post;
-
-		if ( ! $this->overwrite_theme_output ) {
-			$GLOBALS['stylepress_overwrite_theme_output'] = true;
-			if ( $GLOBALS['our_elementor_template'] > 0 ) {
-				$template = get_post( $GLOBALS['our_elementor_template'] );
-				if ( 'stylepress_style' === $template->post_type ) {
-					// do we overwrite the entire page, or just the header/footer components.
-
-					require_once STYLEPRESS_PATH . 'templates/render-footer.php';
-
-				}
-			}
-		}
-	}
-
-	/**
-	 * Theme filters will check this to decide if they should print the standard header/footer
-	 *
-	 * @since 1.0.5
-	 *
-	 * @param string $should_we_skip_printing Var to filter. false.
-	 */
-	public function theme_header_filter( $should_we_skip_printing ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return $should_we_skip_printing;
-		}
-
-		if ( ! $this->overwrite_theme_output && $GLOBALS['our_elementor_template'] > 0 ) {
-			$should_we_skip_printing = true;
-		}
-
-		return $should_we_skip_printing;
-	}
-
-
-	/**
-	 * Epic hack on elementor to splt header/footer around custom template footer.
-	 * Wooo
-	 *
-	 * @since 1.0.5
-	 *
-	 * @param string $rendered_content Elementor output so far.
-	 */
-	public function elementor_footer_hack( $rendered_content ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return $rendered_content;
-		}
-		if ( ! $this->overwrite_theme_output && ! empty( $GLOBALS['stylepress_only_render'] ) && $GLOBALS['stylepress_only_render'] == 'header' ) {
-			// $rendered_content will contain only our footer code.
-			// inner content is in outout buffer.
-			$GLOBALS['stylepress_only_render'] = 'done';
-			$GLOBALS['stylepress_footer']      = $rendered_content;
-
-			$rendered_content = ob_get_clean(); // this ends the built in elementor ob start.
-		}
-
-		return $rendered_content;
-	}
-
-	/**
 	 * Admin hooks.
 	 *
 	 * We add some meta boxes, some admin css, and do a hack on 'parent_file' so the admin ui menu highlights correctly.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function admin_init() {
 
 
-		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
+		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( '\Elementor\Widget_Base' ) ) {
 			// we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
 
 			add_action( 'admin_notices', function () {
-				$message      = esc_html__( 'Please install and activate Elementor before attempting to use the StylePress plugin.', 'stylepress' );
+				$message      = esc_html__( 'Please install and activate the latest version of Elementor before attempting to use the StylePress plugin.', 'stylepress' );
 				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 				echo wp_kses_post( $html_message );
 			} );
 
 
-		} else if ( $this->show_full_ui() ) {
-
-
-			//			if ( ! get_option( 'elementor_pro_license_key', '' ) || get_option( 'elementor_pro_license_key', '' ) == 'local' ) {
-			//				set_transient( 'elementor_pro_license_data', 'test', HOUR_IN_SECONDS );
-			//				update_option( 'elementor_pro_license_key', 'local' );
-			//			}
+		} else {
 
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_meta_box' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_css' ) );
-			add_filter( 'parent_file', array( $this, 'override_wordpress_submenu' ) );
 			add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
 			add_filter( 'page_attributes_dropdown_pages_args', function ( $dropdown_args ) {
-
 				if ( ! empty( $_GET['post_parent'] ) ) {
 					$dropdown_args['selected'] = (int) $_GET['post_parent'];
 				}
@@ -610,235 +252,15 @@ then start output buffering and remove everything we capture until the ocean_aft
 			add_action( 'admin_action_stylepress_download', array( $this, 'stylepress_download' ) );
 			add_action( 'admin_action_stylepress_clone', array( $this, 'stylepress_clone' ) );
 
-
 		}
 
 	}
 
-
-	public function wp_admin_bar() {
-		if ( $this->show_full_ui() && $this->has_permission() && ! is_admin() ) {
-			$parent_menu = "stylepress_nav";
-			$this->add_root_menu( __( 'StylePress' ), $parent_menu );
-			$current_page_style = (int) $this->get_current_style();
-			if ( $current_page_style > 0 ) {
-				$style_details = get_post( $current_page_style );
-				$this->add_sub_menu( sprintf( __( 'Outer Style: %s' ), esc_html( $style_details->post_title ) ), $parent_menu . 'p', \Elementor\Utils::get_edit_link( $current_page_style ), $parent_menu );
-			}
-			if ( ! empty( $GLOBALS['stylepress_template_turtles'] ) ) {
-				foreach ( $GLOBALS['stylepress_template_turtles'] as $used_style_id ) {
-					$style_details = get_post( $used_style_id );
-					$this->add_sub_menu( sprintf( __( 'Inner Style: %s' ), esc_html( $style_details->post_title ) ), $parent_menu . 'inner' . $used_style_id, \Elementor\Utils::get_edit_link( $used_style_id ), $parent_menu );
-				}
-			}
-
-
-			if ( ! empty( $GLOBALS['stylepress_slidein'] ) || ! empty( $GLOBALS['stylepress_modal_popups'] ) || ! empty( $GLOBALS['stylepress_nav_slideouts'] ) ) {
-
-				$modal_menu = $parent_menu . 'mod';
-
-				$this->add_sub_menu( __( 'Modals' ), $modal_menu, '#', $parent_menu );
-
-				if ( ! empty( $GLOBALS['stylepress_slidein'] ) ) {
-					foreach ( $GLOBALS['stylepress_slidein'] as $template_id => $options ) {
-						$post = get_post( $template_id );
-						$this->add_sub_menu( esc_html( $post->post_title ), $modal_menu . $template_id, \Elementor\Utils::get_edit_link( $template_id ), $modal_menu );
-					}
-				}
-				if ( ! empty( $GLOBALS['stylepress_modal_popups'] ) ) {
-					foreach ( $GLOBALS['stylepress_modal_popups'] as $template_id => $options ) {
-						$post = get_post( $template_id );
-						$this->add_sub_menu( esc_html( $post->post_title ), $modal_menu . $template_id, \Elementor\Utils::get_edit_link( $template_id ), $modal_menu );
-					}
-				}
-				if ( ! empty( $GLOBALS['stylepress_nav_slideouts'] ) ) {
-					foreach ( $GLOBALS['stylepress_nav_slideouts'] as $template_id => $options ) {
-						$post = get_post( $template_id );
-						$this->add_sub_menu( esc_html( $post->post_title ), $modal_menu . $template_id, \Elementor\Utils::get_edit_link( $template_id ), $modal_menu );
-					}
-				}
-			}
-
-			$page_type = $this->get_current_page_type();
-			if ( $current_page_style > 0 ) {
-				//$this->add_sub_menu( __('Settings: CSS') , $parent_menu . 'c', get_edit_post_link($current_page_style), $parent_menu );
-			}
-			$this->add_sub_menu( sprintf( __( 'Settings: Style %s' ), ucwords( str_replace( '_', ' ', $page_type ) ) ), $parent_menu . 'ni', admin_url( 'admin.php?page=stylepress-settings&highlight=' . $page_type ), $parent_menu );
-			//			$this->add_sub_menu(__('StylePress Settings'), $parent_menu.'w', admin_url('admin.php?page=stylepress-settings'), $parent_menu);
-		}
-	}
-
-	/**
-	 * @param      $name
-	 * @param      $id
-	 * @param bool $href
-	 *
-	 * @return mixed
-	 * helper function to add a menu to WP header bar
-	 * adapted from demo on wp codex
-	 */
-	public function add_root_menu( $name, $id, $href = false ) {
-		global $wp_admin_bar;
-		$wp_admin_bar->add_menu( array(
-			'id'    => $id,
-			'title' => $name,
-			'href'  => $href
-		) );
-	}
-
-	/**
-	 * @param      $name
-	 * @param      $id
-	 * @param      $link
-	 * @param      $root_menu
-	 * @param bool $meta
-	 *
-	 * @return mixed
-	 * helper function to add a menu to WP header bar
-	 * adapted from demo on wp codex
-	 */
-	public function add_sub_menu( $name, $id, $link, $root_menu, $meta = false ) {
-		global $wp_admin_bar;
-		$wp_admin_bar->add_menu( array(
-			'parent' => $root_menu,
-			'id'     => $id,
-			'title'  => $name,
-			'href'   => $link,
-			'meta'   => $meta
-		) );
-
-	}
-
-
-	/**
-	 * We override the "submenu_file" WordPress global so that the correct submenu is highlighted when on our custom admin page.
-	 *
-	 * @param string $this_parent_file Current parent file for menu rendering.
-	 *
-	 * @return string
-	 */
-	public function override_wordpress_submenu( $this_parent_file ) {
-		global $post, $submenu_file;
-		if ( is_admin() && $post && $post->ID && 'stylepress_style' === $post->post_type ) {
-
-			$submenu_file     = 'stylepress'; // WPCS: override ok.
-			$this_parent_file = 'stylepress';
-		}
-
-		return $this_parent_file;
-	}
-
-	/**
-	 * This is our custom "Full Site Builder" menu item that appears under the appearance tab.
-	 *
-	 * @since 1.0.0
-	 */
-	public function admin_menu() {
-
-
-		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
-			return;
-		}
-		if ( $this->show_full_ui() ) {
-			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'stylepress', array(
-				$this,
-				'styles_page_callback',
-			), STYLEPRESS_URI . 'assets/img/icon.png' );
-			// hack to rmeove default submenu
-			$page = add_submenu_page( 'stylepress', __( 'StylePress', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
-				$this,
-				'styles_page_callback'
-			) );
-			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
-
-			$page = add_submenu_page( 'stylepress', __( 'Add-Ons', 'stylepress' ), __( 'Add-Ons', 'stylepress' ), 'manage_options', 'stylepress-addons', array(
-				$this,
-				'addons_page_callback'
-			) );
-			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
-
-			$page = add_submenu_page( 'stylepress', __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'stylepress-settings', array(
-				$this,
-				'settings_page_callback'
-			) );
-			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
-		}
-
-	}
-
-	/**
-	 * Font Awesome and other assets for admin pages.
-	 *
-	 * @since 1.0.9
-	 */
-	public function admin_page_assets() {
-
-		wp_enqueue_style( 'font-awesome', STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
-
-		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_style( 'wp-jquery-ui-dialog' );
-
-		wp_register_script( 'stylepress-payments', STYLEPRESS_URI . 'assets/js/payment.js', false, STYLEPRESS_VERSION, true );
-		wp_localize_script( 'stylepress-payments', 'stylepress_payment', array(
-			'payment_nonce'  => wp_create_nonce( 'payment_nonce' ),
-			'hostname'       => get_home_url(),
-			'plugin_version' => STYLEPRESS_VERSION,
-		) );
-		wp_enqueue_script( 'stylepress-payments' );
-
-		wp_enqueue_script( 'stylepress-slider', STYLEPRESS_URI . 'assets/js/omni-slider.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
-
-		require_once STYLEPRESS_PATH . 'admin/_help_text.php';
-
-	}
-
-	/**
-	 * This is our callback for rendering our custom menu page.
-	 * This page shows all our site styles and currently selected defaults.
-	 *
-	 * @since 1.0.0
-	 */
-	public function styles_page_callback() {
-		include STYLEPRESS_PATH . 'admin/styles-page.php';
-	}
-
-	/**
-	 * This is our callback for rendering our custom menu page.
-	 * This page shows all our site styles and currently selected defaults.
-	 *
-	 * @since 1.0.0
-	 */
-	public function settings_page_callback() {
-		include STYLEPRESS_PATH . 'admin/settings-page.php';
-	}
-
-	/**
-	 * This is our callback for rendering our custom menu page.
-	 * This page shows all our site styles and currently selected defaults.
-	 *
-	 * @since 1.0.8
-	 */
-	public function addons_page_callback() {
-		include STYLEPRESS_PATH . 'admin/addons-page.php';
-	}
-
-
-	/**
-	 * Check if the current theme/plugin/hosting setup supports a particular feature.
-	 *
-	 * @param string $feature Feature name. e.g. theme-inner
-	 *
-	 * @return bool
-	 */
-	public function supports( $feature ) {
-		return count( apply_filters( 'stylepress_theme_hooks', array() ) );
-		//	    return (bool) get_theme_support('stylepress-elementor');
-	}
 
 	/**
 	 * Register some frontend css files
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function frontend_css() {
 		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.css', false, STYLEPRESS_VERSION );
@@ -849,7 +271,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 		wp_enqueue_style( 'font-awesome' );//, STYLEPRESS_URI . 'assets/icons/font-awesome/css/font-awesome.min.css' );
 
 
-		if ( $this->show_full_ui() && $this->has_permission() ) {
+		if ( $this->has_permission() ) {
 			wp_enqueue_style( 'stylepress-css-editor', STYLEPRESS_URI . 'assets/css/frontend-css-editor.css', false, STYLEPRESS_VERSION );
 
 			wp_register_script( 'stylepress-css-editor', STYLEPRESS_URI . 'assets/js/frontend-css-editor.js', false, STYLEPRESS_VERSION, true );
@@ -863,7 +285,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 
 		}
 
-		if ( Elementor\Plugin::$instance->editor->is_edit_mode() || Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
 			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.css', false, STYLEPRESS_VERSION );
 			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.js', false, STYLEPRESS_VERSION, true );
 
@@ -903,7 +325,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Register some backend admin css files.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function admin_css() {
 		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/admin.css', false, STYLEPRESS_VERSION );
@@ -912,12 +334,9 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * This is our Elementor injection script. We load some custom JS to modify the Elementor control panel during live editing.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function editor_scripts() {
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
 		wp_enqueue_script( 'stylepress-editor', STYLEPRESS_URI . 'assets/js/editor.js', false, STYLEPRESS_VERSION, true );
 		wp_enqueue_style( 'stylepress-elementor-editor', STYLEPRESS_URI . 'assets/css/editor.css', false, STYLEPRESS_VERSION );
 	}
@@ -925,7 +344,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Adds a meta box to every post type.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function add_meta_box() {
 
@@ -977,7 +396,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Adds a meta box to every post type.
 	 *
-	 * @since 1.0.5
+	 * @since 2.0.0
 	 *
 	 * @var WP_Post $post The current displayed post.
 	 */
@@ -1026,7 +445,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Returns a list of all availalbe page styles.
 	 * This list is used in the style select drop down visible on most pages.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -1076,7 +495,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Returns a list of all availalbe page styles.
 	 * This list is used in the style select drop down visible on most pages.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -1125,7 +544,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Returns a list of all availalbe page styles.
 	 * This list is used in the style select drop down visible on most pages.
 	 *
-	 * @since 1.0.9
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -1185,7 +604,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * This renders our metabox on the style edit page
 	 *
-	 * @since 1.0.3
+	 * @since 2.0.0
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
@@ -1206,7 +625,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * This renders our metabox on the style edit page
 	 *
-	 * @since 1.0.3
+	 * @since 2.0.0
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
@@ -1222,7 +641,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * This renders our metabox on the style edit page
 	 *
-	 * @since 1.0.9
+	 * @since 2.0.0
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
@@ -1239,7 +658,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * This renders our metabox on most page/post types.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param WP_Post $post Current post object.
 	 */
@@ -1256,7 +675,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * This lets us query what the currently selected page template is for a particular post ID
 	 * We use the other function to get the defaults for non-page-ID posts (like archive etc..)
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $post_id Current post ID we're querying.
 	 *
@@ -1275,7 +694,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * This lets us query what the currently selected page template is for a particular post ID
 	 * We use the other function to get the defaults for non-page-ID posts (like archive etc..)
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $post_id Current post ID we're querying.
 	 *
@@ -1295,7 +714,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
 	 * Copied from my Widget Area Manager plugin
 	 *
-	 * @since 1.0.2
+	 * @since 2.0.0
 	 *
 	 * @return int
 	 */
@@ -1307,7 +726,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
 	 * Copied from my Widget Area Manager plugin
 	 *
-	 * @since 1.0.2
+	 * @since 2.0.0
 	 *
 	 * @param bool $ignore_override Ignore manually set post overrides.
 	 *
@@ -1379,7 +798,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
 	 * Copied from my Widget Area Manager plugin
 	 *
-	 * @since 1.0.2
+	 * @since 2.0.0
 	 *
 	 * @param bool $ignore_override Ignore manually set post overrides.
 	 *
@@ -1439,7 +858,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 					//
 				} else if ( $settings_key_to_check != 'archive_inner' ) {
 					$settings_key_to_check = 'archive_inner';
-					\StylepressManager::get_instance()->debug_message( "get_current_inner_style(): We're showing blog post output on home page, using inner style $settings_key_to_check instead" );
+					\Plugin::get_instance()->debug_message( "get_current_inner_style(): We're showing blog post output on home page, using inner style $settings_key_to_check instead" );
 				}
 			}
 
@@ -1461,7 +880,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Works out the type of page we're currently quer\ying.
 	 * Copied from my Widget Area Manager plugin
 	 *
-	 * @since 1.0.2
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -1506,53 +925,11 @@ then start output buffering and remove everything we capture until the ocean_aft
 		return 'post';
 	}
 
-	/**
-	 * Returns a list of all our configuraable page types.
-	 *
-	 * @since 1.0.5
-	 *
-	 */
-	public function get_possible_page_types() {
-		$defaults = array(
-			'_global'    => 'Global Defaults',
-			'archive'    => 'Archive/Post Summary',
-			'post'       => 'Post Single',
-			'page'       => 'Page Single',
-			//	        'attachment' => 'Attachment',
-			'404'        => '404',
-			//	        'product' => 'Product',
-			//	        'product_category' => 'Product Category',
-			'category'   => 'Category',
-			'tag'        => 'Tag',
-			'front_page' => 'Front Page',
-			'search'     => 'Search Results',
-		);
-
-		if ( function_exists( 'WC' ) ) {
-			// add our own woocommerce entries.
-			$defaults['products']         = 'WooCommerce Shop';
-			$defaults['product']          = 'WooCommerce Product';
-			$defaults['product_category'] = 'WooCommerce Category';
-		}
-
-		$post_types = get_post_types( array( 'public' => true ) );
-		foreach ( $post_types as $post_type ) {
-			if ( ! in_array( $post_type, array( 'stylepress_style', 'elementor_library', 'attachment' ), true ) ) {
-				if ( ! isset( $defaults[ $post_type ] ) ) {
-					$data                   = get_post_type_object( $post_type );
-					$defaults[ $post_type ] = $data->labels->singular_name;
-				}
-			}
-		}
-
-
-		return $defaults;
-	}
 
 	/**
 	 * Returns a list of all our configurable componente areas.
 	 *
-	 * @since 1.0.10
+	 * @since 2.0.0
 	 *
 	 */
 	public function get_component_regions() {
@@ -1579,7 +956,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Saves our metabox details, which is the style for a particular page.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $post_id The post we're current saving.
 	 */
@@ -1617,7 +994,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Handles saving the settings page.
 	 *
-	 * @since 1.0.5
+	 * @since 2.0.0
 	 *
 	 */
 	public function stylepress_save() {
@@ -1658,7 +1035,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Handles creating a new style
 	 *
-	 * @since 1.0.15
+	 * @since 2.0.0
 	 *
 	 */
 	public function stylepress_create() {
@@ -1699,7 +1076,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * We register two new nav menu items that can be used within the new Elementor Menu area.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function register_new_nav_menu() {
 		register_nav_menus( array(
@@ -1708,63 +1085,13 @@ then start output buffering and remove everything we capture until the ocean_aft
 		) );
 	}
 
-	/**
-	 * Here is our magical custom post type that stores all our Elementor site wide styles.
-	 *
-	 * @since 1.0.0
-	 */
-	public function register_custom_post_type() {
-
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
-		$labels = array(
-			'name'               => 'Styles',
-			'singular_name'      => 'Style',
-			'menu_name'          => 'Styles',
-			'parent_item_colon'  => 'Parent Style:',
-			'all_items'          => 'All Styles',
-			'view_item'          => 'View Style',
-			'add_new_item'       => 'Add New Style',
-			'add_new'            => 'New Style',
-			'edit_item'          => 'Edit Style',
-			'update_item'        => 'Update Style',
-			'search_items'       => 'Search Styles',
-			'not_found'          => 'No Styles found',
-			'not_found_in_trash' => 'No Styles found in Trash',
-		);
-
-		$args = array(
-			'description'         => 'Styles',
-			'labels'              => $labels,
-			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes' ),
-			'taxonomies'          => array(),
-			'hierarchical'        => true,
-			'public'              => true,
-			'show_in_menu'        => false,
-			'show_in_nav_menus'   => true,
-			'exclude_from_search' => true,
-			'menu_position'       => 36,
-			'menu_icon'           => 'dashicons-star-filled',
-			'can_export'          => true,
-			'has_archive'         => false,
-			'publicly_queryable'  => true,
-			'rewrite'             => false,
-			'capability_type'     => 'post',
-			'map_meta_cap'        => true,
-		);
-
-		register_post_type( 'stylepress_style', $args );
-
-	}
-
 
 	/**
 	 * We get a little tricky here and read in our custom Elementor element overrides from a json configuration file.
 	 *
 	 * Why? Because it's easier to define these overrides in json than in PHP.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function add_elementor_overrides() {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -1790,7 +1117,7 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Do the actual overriding work.
 	 * Private here so we can call it for individual style elementor overrides.
 	 *
-	 * @since 1.0.2
+	 * @since 2.0.0
 	 */
 	private function _apply_json_overrides( $json ) {
 
@@ -1868,13 +1195,10 @@ then start output buffering and remove everything we capture until the ocean_aft
 	 * Load some CSS overrides for active theme.
 	 * Thanks to WPDevHQ for the list.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function theme_override_styles() {
 
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
 		// do we remove theme styles for this current page type?
 		// get all styles data
 		$settings          = $this->get_settings();
@@ -1923,13 +1247,9 @@ then start output buffering and remove everything we capture until the ocean_aft
 	/**
 	 * Loads the compatibility with various popular themes.
 	 *
-	 * @since 1.0.16
+	 * @since 2.0.0
 	 */
 	public function theme_compatibility() {
-
-		if ( ! $this->show_full_ui() ) {
-			return;
-		}
 
 		$theme = get_option( 'template' );
 		if ( $theme_name = strtolower( basename( $theme ) ) ) {
@@ -1940,248 +1260,6 @@ then start output buffering and remove everything we capture until the ocean_aft
 		}
 	}
 
-	/**
-	 * Load our default font configuration styles into the Easy Google Fonts plugin
-	 *
-	 * @since 1.0.2
-	 */
-	public function tt_font_get_settings_page_tabs( $options ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return $options;
-		}
-		// we have a tab for each style.
-		$styles = $this->get_all_page_styles();
-		foreach ( $styles as $style_id => $style_name ) {
-
-			$post = get_post( $style_id );
-			if ( $post->post_parent || $post->post_type != 'stylepress_style' ) {
-				continue;
-			}
-
-			$options[ 'style-' . $style_id ] = array(
-				'name'        => 'style-' . $style_id,
-				// Translators: %s is the name of the style from Appearance > Full Site Builder
-				'title'       => sprintf( __( 'Style: %s', 'stylepress' ), $style_name ),
-				'panel'       => 'tt_font_typography_panel',
-				'description' => __( 'Styles for this custom design.', 'stylepress' ),
-				'sections'    => array(
-					'stylepress' => array(
-						'name'        => 'custom',
-						'title'       => __( 'Style Fonts', 'stylepress' ),
-						'description' => __( 'Custom style font options', 'stylepress' ),
-					),
-				)
-			);
-		}
-
-		return $options;
-	}
-
-	/**
-	 * Load our default font configuration styles into the Easy Google Fonts plugin
-	 *
-	 * @since 1.0.2
-	 */
-	public function tt_font_get_option_parameters( $options ) {
-
-		if ( ! $this->show_full_ui() ) {
-			return $options;
-		}
-
-		// we have a tab for each style.
-		$styles = $this->get_all_page_styles();
-		foreach ( $styles as $style_id => $style_name ) {
-
-			$post = get_post( $style_id );
-			if ( $post->post_parent || $post->post_type != 'stylepress_style' ) {
-				continue;
-			}
-
-			$json  = $this->get_page_style_font_json( $style_id );
-			$sizes = '100,100italic,200,200italic,300,300italic,400,400italic';
-
-			if ( $json ) {
-				foreach ( $json as $key => $val ) {
-					$font_key = $style_id . $key;
-
-					if ( empty( $val['selector'] ) ) {
-						continue;
-					}
-
-					$bits = explode( ',', $val['selector'] );
-					foreach ( $bits as $bit_id => $bit ) {
-						$bit = trim( $bit );
-						if ( strpos( $bit, 'body' ) === 0 ) {
-							$bit = str_replace( 'body', 'body.stylepress-style-' . (int) $style_id, $bit );
-						} else {
-							$bit = '.stylepress-style-' . (int) $style_id . ' ' . $bit;
-						}
-						$bits[ $bit_id ] = $bit;
-					}
-					$val['selector'] = implode( ', ', $bits );
-
-					$new_font_style       = array(
-						'name'        => $font_key,
-						'title'       => $val['title'],
-						'section'     => 'stylepress',
-						'tab'         => 'style-' . $style_id,
-						'description' => '',
-						'properties'  => array( 'selector' => $val['selector'] ),
-						'default'     => $val['defaults'],
-						/*'font_id'           => 'open_sans',
-						'font_name'         => 'Open Sans',
-						'font_weight'       => '100',
-						'font_style'        => 'normal',
-						'font_weight_style' => $sizes,
-						'stylesheet_url'    => 'https://fonts.googleapis.com/css?family=Open+Sans:'.$sizes,
-						'font_size'         => array(
-							'amount' => '15',
-							'unit'   => 'px',
-						),*/
-					);
-					$options[ $font_key ] = $new_font_style;
-				}
-			}
-		}
-
-		return $options;
-	}
-
-	/**
-	 * Inject additional CSS based on font selector attributes.
-	 *
-	 * @since 1.0.10
-	 */
-	public function inject_additional_font_css() {
-
-		$additional_css = '';
-		if ( class_exists( 'EGF_Register_Options' ) && is_callable( 'EGF_Register_Options::get_options' ) ) {
-			$font_options = EGF_Register_Options::get_options();
-			$style_id     = (int) $this->get_current_style();
-			if ( $style_id > 0 ) {
-				$post = get_post( $style_id );
-				if ( $post && ! $post->post_parent && $post->post_type === 'stylepress_style' ) {
-					$json = $this->get_page_style_font_json( $style_id );
-
-					if ( $json ) {
-						foreach ( $json as $key => $val ) {
-							$font_key = $style_id . $key;
-
-							if ( empty( $val['selector'] ) || empty( $val['inject_additional'] ) ) {
-								continue;
-							}
-
-							foreach ( $val['inject_additional'] as $additional_selector => $additional_styles ) {
-
-								$bits = explode( ',', $additional_selector );
-								foreach ( $bits as $bit_id => $bit ) {
-									$bit = trim( $bit );
-									if ( strpos( $bit, 'body' ) === 0 ) {
-										$bit = str_replace( 'body', 'body.stylepress-style-' . (int) $style_id, $bit );
-									} else {
-										$bit = '.stylepress-style-' . (int) $style_id . ' ' . $bit;
-									}
-									$bits[ $bit_id ] = $bit;
-								}
-								$additional_selector = implode( ', ', $bits );
-
-								$additional_css .= "\n\n" . $additional_selector . '{';
-								foreach ( $additional_styles as $additional_style ) {
-									if ( ! empty( $font_options[ $font_key ][ $additional_style ] ) ) {
-										switch ( $additional_style ) {
-											case 'font_color':
-												$additional_css .= 'color: ' . esc_attr( $font_options[ $font_key ][ $additional_style ] ) . ';';
-												break;
-											case 'font_size':
-												$additional_css .= 'font-size: ' . esc_attr( $font_options[ $font_key ][ $additional_style ]['amount'] . $font_options[ $font_key ][ $additional_style ]['unit'] ) . ';';
-												break;
-										}
-									}
-								}
-								$additional_css .= '}';
-
-							}
-
-						}
-					}
-
-					if ( $additional_css ) {
-						wp_add_inline_style( 'stylepress-css', $additional_css );
-					}
-				}
-
-			}
-		}
-	}
-
-	/**
-	 * Returns advanced details for the current style.
-	 * These are CSS/Font/Elementor tweaks.
-	 *
-	 * @param int $style_id Current post id of the selected style.
-	 *
-	 * @return array
-	 */
-	public function get_advanced( $style_id, $format = true ) {
-
-		$advanced = get_post_meta( $style_id, 'stylepress_advanced', true );
-		if ( ! is_array( $advanced ) ) {
-			$advanced = array();
-		}
-		if ( empty( $advanced['css'] ) ) {
-			$advanced['css'] = '/* Add your StylePress CSS here */' . "\n\n";
-		}
-		if ( $format ) {
-			if ( ! empty( $advanced['font'] ) ) {
-				$advanced['font'] = @json_decode( $advanced['font'], true );
-			}
-			if ( ! empty( $advanced['elementor'] ) ) {
-				$advanced['elementor'] = @json_decode( $advanced['elementor'], true );
-			}
-		}
-
-		return apply_filters( 'stylepress_style_advanced', $advanced, $style_id );
-
-	}
-
-	public function get_page_style_font_json( $style_id ) {
-
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		WP_Filesystem();
-		global $wp_filesystem;
-		$json = json_decode( $wp_filesystem->get_contents( trailingslashit( plugin_dir_path( __DIR__ ) ) . 'font.json' ), true );
-		$json = apply_filters( 'stylepress_font_json', $json );
-		if ( ! is_array( $json ) ) {
-			$json = array();
-		}
-
-		// and we also want to do some custom stuyff here to match our elementor.json
-		// in this case we're adding the custom footer style configuration.
-		/*foreach(array('light','mid','dark') as $color){
-			$json['section_'.$color] = array(
-					"title" => ucwords($color). " Section",
-						"selector" => '.stylepress-section-color-'.$color,
-						'defaults' => array(),
-				);
-		}*/
-
-		$advanced = $this->get_advanced( $style_id );
-		if ( $advanced && ! empty( $advanced['font'] ) && is_array( $advanced['font'] ) ) {
-			$json = array_merge( $json, $advanced['font'] );
-		}
-
-		return $json;
-	}
-
-	public function get_style_elementor_overrides( $style_id ) {
-		$advanced = $this->get_advanced( $style_id );
-		if ( $advanced && ! empty( $advanced['elementor'] ) && is_array( $advanced['elementor'] ) ) {
-			return $advanced['elementor'];
-		}
-
-		return array();
-	}
 
 	public function stylepress_export() {
 

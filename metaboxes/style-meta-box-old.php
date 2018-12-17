@@ -56,8 +56,8 @@ if ( $post->post_parent ) {
 	}
 
 
-	$settings   = StylepressManager::get_instance()->get_settings();
-	$page_types = StylepressManager::get_instance()->get_possible_page_types();
+	$settings   = Plugin::get_instance()->get_settings();
+	$page_types = Plugin::get_instance()->get_possible_page_types();
 
 	?>
 	<div id="stylepress-styles-metabox" class="stylepress-metabox stylepress-browser">

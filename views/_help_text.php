@@ -5,7 +5,9 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 
 ob_start();

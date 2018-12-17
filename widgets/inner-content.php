@@ -117,9 +117,9 @@ class Widget_stylepress_Inner_Content extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		\StylepressManager::get_instance()->debug_message( "inner-content.php: inside render() method. " . get_the_ID() );
+		\Plugin::get_instance()->debug_message( "inner-content.php: inside render() method. " . get_the_ID() );
 
-		if ( \StylepressManager::get_instance()->previewing_style ) {
+		if ( \Plugin::get_instance()->previewing_style ) {
 			$this->content_template();
 		} elseif ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
 
@@ -139,7 +139,7 @@ class Widget_stylepress_Inner_Content extends Widget_Base {
 
 			/*if( apply_filters('stylepress_rendered_header',false) && !empty( $GLOBALS['stylepress_only_render'] )){
 
-				\StylepressManager::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
+				\Plugin::get_instance()->debug_message("inner-content.php: Now rendering ".$GLOBALS['stylepress_only_render']." from within the inner-content.php render()");
 
 			    // we are splitting header/footer up into multiple renders.
                 // haha. Hows your brain going now trying to follow this code???

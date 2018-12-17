@@ -5,7 +5,9 @@
  * @package stylepress
  */
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
 $current_user = wp_get_current_user();
 $name         = trim( $current_user->user_firstname . ' ' . $current_user->user_lastname );

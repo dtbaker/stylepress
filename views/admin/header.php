@@ -1,13 +1,20 @@
+<?php
+
+namespace StylePress;
+
+defined( 'STYLEPRESS_VERSION' ) || exit;
+
+?>
 <div id="stylepress-header">
 	<a href="https://stylepress.org" target="_blank" class="stylepress-logo"><img
 			src="<?php echo esc_url( STYLEPRESS_URI . 'assets/img/logo-stylepress-sml.png' ); ?>"></a>
 	<div class="icons">
-		<a href="https://stylepress.org" target="_blank">StylePress by stylepress</a>
+		<a href="https://stylepress.org" target="_blank">StylePress by dtbaker</a>
 		<a href="https://stylepress.org" target="_blank">v<?php echo STYLEPRESS_VERSION; ?></a>
 		<a href="https://twitter.com/WPStylePress" target="_blank"><i class="fa fa-twitter"></i></a>
 		<a href="https://github.com/stylepress/stylepress" target="_blank"><i class="fa fa-github"></i></a>
 		<br/><br/>
-		<em>StylePress is BETA - there are bugs!</em><br/>
+		<em>StylePress is in BETA</em><br/>
 		<em><a href="https://github.com/stylepress/stylepress/issues" target="_blank">Report issues and feedback on github</a></em>
 	</div>
 	<?php /*switch($_GET['page']) {

@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: StylePress for Elementor
+ * Plugin Name: StylePress
  * Description: Allows you to apply full site layout templates to pages on your website using Elementor.
  * Plugin URI: https://stylepress.org/
- * Author: stylepress
+ * Author: dtbaker
  * Version: 2.0.0
  * Author URI: https://stylepress.net/
  * GitHub Plugin URI: https://github.com/stylepress/stylepress
@@ -29,10 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-/*
- Constants:
-*/
-
 // dev stuff by stylepress:
 //set_time_limit(2);
 
@@ -40,10 +36,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'STYLEPRESS_VERSION', '2.0.0' );
 
 /* Debug output control. */
-define( 'STYLEPRESS_DEBUG_OUTPUT', 0 );
+define( 'STYLEPRESS_DEBUG_OUTPUT', true );
 
 /* Set constant path to the plugin directory. */
-define( 'STYLEPRESS_SLUG', basename( plugin_dir_path( __FILE__ ) ) );
+define( 'STYLEPRESS_SLUG', 'stylepress' );
 
 /* Set constant path to the plugin directory. */
 define( 'STYLEPRESS_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
@@ -58,28 +54,14 @@ if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 	add_action( 'admin_notices', 'stylepress_fail_php_version' );
 } else {
 
-
-	define( 'STYLEPRESS_OUTER_USE_THEME', - 1 );
-	define( 'STYLEPRESS_INNER_USE_PLAIN', - 1 );
-	define( 'STYLEPRESS_INNER_USE_THEME', - 2 );
-
-
-	/* StylepressManager Class */
-	require_once( STYLEPRESS_PATH . 'inc/class.plugin.php' );
-
-	/* Template Functions */
-	require_once( STYLEPRESS_PATH . 'inc/template-functions.php' );
-
-	/* Start up our magic */
-	StylepressManager::get_instance()->init();
-
+	require_once STYLEPRESS_PATH . 'inc/bootstrap.php';
 
 }
 
 /**
  * Load gettext translate for our text domain.
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @return void
  */
@@ -90,7 +72,7 @@ function stylepress_load_plugin_textdomain() {
 /**
  * Show in WP Dashboard notice about the plugin is not activated.
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @return void
  */
