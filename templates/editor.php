@@ -9,6 +9,8 @@ namespace StylePress;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
+$categories = Styles::get_instance()->get_categories();
+
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
 <head>
