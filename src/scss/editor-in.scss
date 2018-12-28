@@ -1,28 +1,35 @@
-.elementor-editor-active.stylepress-template-component {
-  .elementor-edit-mode {
-    &:before {
-      content: 'Design Your Inner Style Below';
-      position: absolute;
-      display: block;
-      left: 50%;
-      padding: 18px;
-      margin-left: -265px;
-      font-size: 25px;
-    }
-  }
-  .elementor-inner {
-    margin-top: 0 !important;
-    padding: 120px 50px;
-    background: #f5f5f5;
-    > .elementor-section-wrap {
-      background: #FFF;
-      padding: 50px 0;
-      > section {
 
-      }
-      .elementor-editor-column-settings-list {
-
-      }
-    }
+.stylepress__header--editor {
+  margin: 30px;
+  background: #EFEFEF;
+  padding: 20px;
+  border-radius: 10px;
+}
+.stylepress__editor-info{
+  margin: 20px 0 0 0;
+  h3{
+    font-size: 20px;
+    font-weight: 500;
   }
+  span{
+    font-weight: bold;
+  }
+}
+
+.stylepress__editor-infotext{
+  &--warning{
+    background: #ff7f80;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+  }
+}
+
+.stylepress-inner-page-content-area {
+  text-align: center;
+  padding: 80px 20px;
+  color: #000;
+  background: #FFF;
+  background: -webkit-repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
+  background: repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
 }

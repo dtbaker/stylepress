@@ -24,6 +24,9 @@ $categories     = Styles::get_instance()->get_categories();
 <p>This is the default style settings page. Here you can choose the default styles that will apply in each section of
 	your website.</p>
 
+<?php
+$edit_links = [];
+?>
 <form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 	<input type="hidden" name="action" value="stylepress_save"/>
 	<?php wp_nonce_field( 'stylepress_save_options', 'stylepress_save_options' ); ?>
@@ -65,11 +68,14 @@ $categories     = Styles::get_instance()->get_categories();
 							for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?>
 						</label>
 						<select
+							class="stylepress__default-select js-stylepress-select"
 							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
 							<option value="">Choose a style for the <?php echo esc_attr( $category['title'] ); ?> </option>
 							<?php
 							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
-							foreach ( $styles as $design_id => $design ) { ?>
+							foreach ( $styles as $design_id => $design ) {
+								$edit_links[ $design_id ] = Styles::get_instance()->get_design_edit_url( $design_id );
+								?>
 								<option
 									value="<?php echo (int) $design_id; ?>"
 									<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
@@ -78,6 +84,7 @@ $categories     = Styles::get_instance()->get_categories();
 								<?php
 							} ?>
 						</select>
+						<span class="stylepress__default-link js-stylepress-link"></span>
 					</div>
 					<?php
 				}
@@ -110,6 +117,7 @@ $categories     = Styles::get_instance()->get_categories();
 						?>
 						<td>
 							<select
+								class="stylepress__default-select js-stylepress-select"
 								name="default_style[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
 								<option value="">Choose <?php echo esc_attr( $category['title'] ); ?> </option>
 								<?php
@@ -135,5 +143,23 @@ $categories     = Styles::get_instance()->get_categories();
 		       type="submit" value="<?php esc_attr_e( 'Save Settings', 'stylepress' ); ?>">
 
 	</div>
+
+	<script type="text/javascript">
+    jQuery(function ($) {
+      var edit_links = <?php echo json_encode( $edit_links );?>;
+      $('.js-stylepress-select').change(function () {
+        var design_id = $(this).val();
+        var $edit = $(this).parent().find('.js-stylepress-link');
+        if ($edit.length > 0) {
+          $edit.html('');
+          if (design_id !== '') {
+            if (typeof edit_links[design_id] !== 'undefined') {
+              $edit.html('<a href="' + edit_links[design_id] + '">Edit</a>');
+            }
+          }
+        }
+      }).change();
+    });
+	</script>
 
 </form>
