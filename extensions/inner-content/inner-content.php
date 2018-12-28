@@ -82,8 +82,9 @@ class Stylepress_Inner_Content extends Widget_Base {
 			}
 		}
 		if ( ! $editing_this_template ) {
-			$settings = $this->get_settings();
+			//$settings = $this->get_settings();
 			if ( ! is_404() ) {
+				the_post();
 				the_content();
 			}
 		} else {
