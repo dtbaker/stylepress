@@ -60,7 +60,7 @@ class Styles extends Base {
 			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes', 'revisions' ),
 			'taxonomies'          => array(),
 			'hierarchical'        => true,
-			'public'              => true,
+			'public'              => false,
 			'show_in_menu'        => STYLEPRESS_DEBUG_OUTPUT ? true : false,
 			'show_in_nav_menus'   => true,
 			'exclude_from_search' => true,
