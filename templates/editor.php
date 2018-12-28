@@ -25,17 +25,19 @@ do_action( 'stylepress/before-render' );
 <!-- stylepress editor template begin -->
 <?php
 //do_action( 'stylepress/render-inner' ); // Priority 20 is the_content().
-$is_inner_template = false;
+$is_inner_template     = false;
 $current_page_category = false;
-$post              = get_post();
+$post                  = get_post();
 if ( $post->post_type === Styles::CPT ) {
 	$post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
 	$categories      = Styles::get_instance()->get_categories();
 	foreach ( $categories as $category ) {
 		foreach ( $post_categories as $post_category ) {
-			if ( $post_category->slug === $category['slug'] && ! empty( $category['inner'] ) ) {
+			if ( $post_category->slug === $category['slug'] ) {
 				$current_page_category = $category;
-				$is_inner_template = true;
+				if ( ! empty( $category['inner'] ) ) {
+					$is_inner_template = true;
+				}
 			}
 		}
 	}
@@ -45,12 +47,12 @@ if ( $post->post_type === Styles::CPT ) {
 			<img alt="StylePress" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/logo-stylepress-sml.png' ); ?>">
 		</div>
 		<div class="stylepress__editor-info">
-			<h3><?php echo esc_html($current_page_category['title']);?> Style: <span><?php
-				if ( $post->post_parent ) {
-					$parent = get_post( $post->post_parent );
-					echo esc_html( $parent->post_title ) . ' > ';
-				}
-				echo esc_html( $post->post_title ); ?></span></h3>
+			<h3><?php echo esc_html( $current_page_category['title'] ); ?> Style: <span><?php
+					if ( $post->post_parent ) {
+						$parent = get_post( $post->post_parent );
+						echo esc_html( $parent->post_title ) . ' > ';
+					}
+					echo esc_html( $post->post_title ); ?></span></h3>
 			<?php
 			if ( $is_inner_template ) {
 				?>
