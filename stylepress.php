@@ -36,7 +36,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'STYLEPRESS_VERSION', '2.0.0' );
 
 /* Debug output control. */
-define( 'STYLEPRESS_DEBUG_OUTPUT', true );
+if ( ! defined( 'STYLEPRESS_DEBUG_OUTPUT' ) ) {
+	define( 'STYLEPRESS_DEBUG_OUTPUT', false );
+}
 
 /* Set constant path to the plugin directory. */
 define( 'STYLEPRESS_SLUG', 'stylepress' );
