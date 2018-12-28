@@ -1,4 +1,6 @@
 .stylepress__header{margin:40px 0 40px;background:#FFF;padding:20px;border-radius:10px}
+.wp-core-ui .stylepress_buttons{margin:20px 0 10px}
+.wp-core-ui .stylepress_buttons--return{font-size:20px;padding:20px;line-height:1px}
 .stylepress__logo img{width:334px;height:75px}
 .stylepress__about{float:right;text-align:right;padding:5px 4px 20px}
 .stylepress__about .stylepress__link{text-decoration:none;color:#545c63}

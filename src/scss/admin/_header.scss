@@ -5,7 +5,16 @@
   padding: 20px;
   border-radius: 10px;
 }
-
+.wp-core-ui {
+  .stylepress_buttons {
+    margin: 20px 0 10px;
+    &--return {
+      font-size: 20px;
+      padding: 20px;
+      line-height: 1px;
+    }
+  }
+}
 .stylepress__logo {
   img {
     width: 334px;

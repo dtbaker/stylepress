@@ -27,6 +27,7 @@ class Styles extends Base {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
+		add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
 
 	}
 
@@ -93,14 +94,14 @@ class Styles extends Base {
 			'slug'        => 'header',
 			'title'       => 'Header',
 			'plural'      => 'Headers',
-			'description' => 'These show at ..',
+			'description' => 'These are the header designs for this style.',
 		];
 		$stylepress_categories[] = [
 			'order'       => 20,
 			'slug'        => 'hero',
 			'title'       => 'Hero',
 			'plural'      => 'Heros',
-			'description' => 'These show at ..',
+			'description' => 'These are the hero designs for this style.',
 		];
 		$stylepress_categories[] = [
 			'order'       => 30,
@@ -108,20 +109,28 @@ class Styles extends Base {
 			'title'       => 'Content',
 			'plural'      => 'Content Area',
 			'inner'       => true,
-			'description' => 'These show at ..',
+			'description' => 'These are the content designs for this style.',
 		];
 		$stylepress_categories[] = [
 			'order'       => 40,
 			'slug'        => 'footer',
 			'title'       => 'Footer',
 			'plural'      => 'Footers',
-			'description' => 'These show at ..',
+			'description' => 'These are the footer designs for this style.',
+		];
+		$stylepress_categories[] = [
+			'order'       => 50,
+			'slug'        => 'classes',
+			'title'       => 'Default Class',
+			'plural'      => 'Classes',
+			'description' => 'These are the default classes to use when building out the page content',
+			'page_style'  => true,
 		];
 
 		return apply_filters( 'stylepress_categories', $stylepress_categories );
 	}
 
-	public function get_all_styles( $category_slug = false, $include_empty = false ) {
+	public function get_all_styles( $category_slug = false, $include_empty = false, $parent_id = 0 ) {
 		$styles = array();
 		$args   = array(
 			'post_type'           => self::CPT,
@@ -131,7 +140,7 @@ class Styles extends Base {
 			'suppress_filters'    => false,
 			'order'               => 'ASC',
 			'orderby'             => 'title',
-			'post_parent'         => 0,
+			'post_parent'         => (int) $parent_id,
 		);
 		if ( $category_slug ) {
 			$args['tax_query'] = array(
@@ -154,6 +163,25 @@ class Styles extends Base {
 		return $styles;
 	}
 
+	/**
+	 * Returns a URL used to edit a particular design.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int $design_id the design we want to edit.
+	 *
+	 * @return string
+	 */
+	public function get_design_edit_url( $design_id ) {
+		// defaul to Elementor, but we want to support other page builders down the track.
+		if ( class_exists( '\Elementor\Plugin' ) ) {
+			if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
+				return \Elementor\Plugin::$instance->documents->get( $design_id )->get_edit_url();
+			}
+		}
+
+		return get_edit_post_link( $design_id, 'edit' );
+	}
 
 	/**
 	 * This lets us query what the currently selected page template is for a particular post ID
@@ -271,6 +299,37 @@ class Styles extends Base {
 		return false;
 
 	}
+
+
+	/**
+	 * Adds a meta box to every post type.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var \WP_Post $post The current displayed post.
+	 */
+	public function edit_form_after_title( $post ) {
+
+		if ( self::CPT === $post->post_type ) {
+
+			$parent = $post->post_parent ? (int) $post->post_parent : ( ! empty( $_GET['post_parent'] ) ? (int) $_GET['post_parent'] : false );
+			?>
+			<div class="stylepress__header">
+				<a href="https://stylepress.org" target="_blank" class="stylepress__logo">
+					<img alt="StylePress"
+					     src="//localhost:3000/wp-content/plugins/stylepress/assets/images/logo-stylepress-sml.png">
+				</a>
+				<div class="stylepress_buttons">
+					<a
+						href="<?php echo esc_url( admin_url( 'admin.php?page=' . STYLEPRESS_SLUG . '&style_id=' . ( $parent ? $parent : $post->ID ) ) ); ?>"
+						class="button stylepress_buttons--return"><?php echo esc_html__( '&laquo; Return To Style Settings Page', 'stylepress' ); ?></a>
+				</div>
+			</div>
+			<?php
+		}
+
+	}
+
 
 }
 

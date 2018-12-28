@@ -11,7 +11,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 
 $default_styles = Styles::get_instance()->get_default_styles();
 $page_types     = Settings::get_instance()->get_all_page_types();
-$categories = Styles::get_instance()->get_categories();
+$categories     = Styles::get_instance()->get_categories();
 
 ?>
 
@@ -21,7 +21,8 @@ $categories = Styles::get_instance()->get_categories();
 	</div>
 <?php } ?>
 
-<p>This is the default style settings page. Here you can choose the default styles that will apply in each section of your website. You can override these default styles on a page by page basis. </p>
+<p>This is the default style settings page. Here you can choose the default styles that will apply in each section of
+	your website. You can override these default styles on a page by page basis. </p>
 
 <form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 	<input type="hidden" name="action" value="stylepress_save"/>
@@ -42,7 +43,8 @@ $categories = Styles::get_instance()->get_categories();
 						<span class="stylepress-chrome-dot" style="background:#5AC05A;"></span>
 					</div>
 					<div class="stylepress-chrome-column stylepress-chrome-middle">
-						<input type="text" value="<?php echo esc_attr(get_home_url());?>" disabled class="stylepress-chrome-addr">
+						<input type="text" value="<?php echo esc_attr( get_home_url() ); ?>" disabled
+						       class="stylepress-chrome-addr">
 					</div>
 					<div class="stylepress-chrome-column stylepress-chrome-right">
 						<div>
@@ -56,22 +58,27 @@ $categories = Styles::get_instance()->get_categories();
 			<?php
 			$page_type = '_global';
 			foreach ( $categories as $category ) {
-				$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
-				if ( count( $designs ) > 1 ) {
-					?>
-					<div class="stylepress__defaults-pagesection">
-						<label
-							for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?> Area</label>
-						<select
-							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-							<option value="">Choose a default style</option>
-							<?php foreach ( $designs as $design_id => $design ) { ?>
-								<option
-									value="<?php echo (int) $design_id; ?>"<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>><?php echo esc_attr( $design ); ?></option>
-							<?php } ?>
-						</select>
-					</div>
-				<?php }
+				if ( true ) { //|| empty( $category['page_style'] ) ) { // push this out into a different UI element.
+					$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
+					if ( count( $designs ) > 0 ) {
+						?>
+						<div class="stylepress__defaults-pagesection">
+							<label
+								for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?>
+							</label>
+							<select
+								name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
+								<option value="">Choose a default style</option>
+								<?php foreach ( $designs as $design_id => $design ) { ?>
+									<option
+										value="<?php echo (int) $design_id; ?>"<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>><?php echo esc_attr( $design ); ?></option>
+								<?php } ?>
+							</select>
+							<br/>
+							(todo: make this a left/right scroller)
+						</div>
+					<?php }
+				}
 			}
 			?>
 		</div>

@@ -10,10 +10,27 @@ namespace StylePress;
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 //$page_types = Settings::get_instance()->get_all_page_types();
-$categories = Styles::get_instance()->get_categories();
+$categories      = Styles::get_instance()->get_categories();
+$parent_style_id = isset( $_GET['style_id'] ) ? (int) $_GET['style_id'] : 0;
+$parent_style    = false;
+if ( $parent_style_id ) {
+	$parent_style = get_post( $parent_style_id );
+}
+if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
+	wp_die( 'Invalid parent style' );
+}
 ?>
 
 <div class="stylepress__main">
+	<div class="stylepress__summary">
+		<h3>Current Style: <?php echo esc_html( $parent_style->post_title ); ?></h3>
+		<img src="<?php if ( has_post_thumbnail( $parent_style->ID ) ) {
+			echo esc_url( get_the_post_thumbnail( $parent_style->ID, 'full' ) );
+		} else {
+			echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
+		} ?>">
+		<p>Below are a list of designs included within this style.</p>
+	</div>
 	<?php foreach ( $categories as $category ) { ?>
 		<div class="stylepress__category">
 			<a name="cat-<?php echo esc_attr( $category['slug'] ); ?>"></a>
@@ -23,16 +40,16 @@ $categories = Styles::get_instance()->get_categories();
 			</h3>
 			<div class="stylepress__category-content">
 				<?php
-				$designs = Styles::get_instance()->get_all_styles( $category['slug'] );
+				$designs = Styles::get_instance()->get_all_styles( $category['slug'], false, $parent_style_id );
 				//						$designs[] = 'asdf';
 				foreach ( $designs as $design_id => $design ) {
 					?>
 					<div class="stylepress__style">
 						<div class="stylepress__style-inner">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>"
+							<a href="<?php echo esc_url( Styles::get_instance()->get_design_edit_url( $design_id ) ); ?>"
 							   class="stylepress__style-thumb"
 							   style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
-								   echo get_the_post_thumbnail( $design_id, 'full' );
+								   echo esc_url( get_the_post_thumbnail( $design_id, 'full' ) );
 							   } else {
 								   echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
 							   } ?>);">
@@ -79,7 +96,7 @@ $categories = Styles::get_instance()->get_categories();
 
 							<div class="stylepress__style-action">
 								<a class="button button-primary"
-								   href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>">
+								   href="<?php echo esc_url( Styles::get_instance()->get_design_edit_url( $design_id ) ); ?>">
 									<?php esc_html_e( 'Edit Style', 'stylepress' ); ?>
 								</a>
 							</div>
@@ -91,6 +108,7 @@ $categories = Styles::get_instance()->get_categories();
 
 					<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 						<input type="hidden" name="new_style_category" value="<?php echo esc_attr( $category['slug'] ); ?>"/>
+						<input type="hidden" name="new_style_parent" value="<?php echo (int) $parent_style->ID; ?>"/>
 						<input type="hidden" name="action" value="stylepress_new_style"/>
 						<?php wp_nonce_field( 'stylepress_new_style', 'stylepress_new_style' ); ?>
 
@@ -103,7 +121,7 @@ $categories = Styles::get_instance()->get_categories();
 
 							<h3 class="stylepress__style-name">
 								<input type="text" class="stylepress__style-name-input" name="new_style_name"
-								       placeholder="<?php esc_attr_e( 'Enter New Style Name', 'stylepress' ); ?>">
+								       placeholder="<?php printf( esc_attr( 'Enter New %s Name', 'stylepress' ), $category['title'] ); ?>">
 							</h3>
 
 							<div class="stylepress__style-action">

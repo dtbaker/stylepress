@@ -40,24 +40,18 @@ class Admin extends Base {
 	public function admin_menu() {
 
 
-		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', 'stylepress', array(
+		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', STYLEPRESS_SLUG, array(
 			$this,
-			'sections_page_callback',
+			'default_styles_page_callback',
 		), STYLEPRESS_URI . 'assets/images/icon.png' );
 		// hack to rmeove default submenu
-		$page = add_submenu_page( 'stylepress', __( 'Sections', 'stylepress' ), __( 'Sections', 'stylepress' ), 'manage_options', 'stylepress', array(
-			$this,
-			'sections_page_callback'
-		) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
-
-		$page = add_submenu_page( 'stylepress', __( 'Styles', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress-styles', array(
+		$page = add_submenu_page( STYLEPRESS_SLUG, __( 'Styles', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
 			$this,
 			'default_styles_page_callback'
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( 'stylepress', __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'stylepress-settings', array(
+		$page = add_submenu_page( STYLEPRESS_SLUG, __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'stylepress-settings', array(
 			$this,
 			'settings_page_callback'
 		) );
@@ -84,26 +78,20 @@ class Admin extends Base {
 	 *
 	 * @since 2.0.0
 	 */
-	public function sections_page_callback() {
-		$this->content = $this->render_template(
-			'admin/sections.php', [
-			]
-		);
-		$this->header  = $this->render_template( 'admin/header.php' );
-		echo $this->render_template( 'wrapper.php' );
-	}
-	/**
-	 * This is our callback for rendering our custom menu page.
-	 * This page shows all our site styles and currently selected defaults.
-	 *
-	 * @since 2.0.0
-	 */
 	public function default_styles_page_callback() {
-		$this->content = $this->render_template(
-			'admin/styles.php', [
-			]
-		);
-		$this->header  = $this->render_template( 'admin/header.php' );
+
+		if ( isset( $_GET['style_id'] ) ) {
+			$this->content = $this->render_template(
+				'admin/sections.php', [
+				]
+			);
+		} else {
+			$this->content = $this->render_template(
+				'admin/styles.php', [
+				]
+			);
+		}
+		$this->header = $this->render_template( 'admin/header.php' );
 		echo $this->render_template( 'wrapper.php' );
 	}
 
@@ -134,8 +122,9 @@ class Admin extends Base {
 			return;
 		}
 
-		$new_style_name = stripslashes( sanitize_text_field( trim( $_POST['new_style_name'] ) ) );
-		$new_category   = sanitize_text_field( trim( $_POST['new_style_category'] ) );
+		$new_style_name   = stripslashes( sanitize_text_field( trim( $_POST['new_style_name'] ) ) );
+		$new_category     = sanitize_text_field( trim( $_POST['new_style_category'] ) );
+		$new_style_parent = (int) $_POST['new_style_parent'];
 
 		if ( ! $new_style_name ) {
 			wp_die( 'Please go back and enter a new style name' );
@@ -149,15 +138,15 @@ class Admin extends Base {
 			'post_type'   => Styles::CPT,
 			'post_status' => 'publish',
 			'post_title'  => $new_style_name,
+			'post_parent' => $new_style_parent,
 		], true );
 		if ( is_wp_error( $post_id ) || ! $post_id ) {
-			die( 'Failed to create new style' );
+			wp_die( 'Failed to create new style' );
 		}
 
 		wp_set_object_terms( $post_id, $new_category, STYLEPRESS_SLUG . '-cat', false );
 
-
-		wp_redirect( admin_url( 'admin.php?page=stylepress&saved#cat-' . $new_category ) );
+		wp_redirect( admin_url( 'admin.php?page=stylepress' . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
 		exit;
 
 	}
