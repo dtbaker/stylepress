@@ -75,9 +75,10 @@ class ElementorCSS extends Base {
 
 		static $completed_items = [];
 
-		if ( ! isset( $completed_items[ $section->get_name() ] ) ) {
+		$widget_name = $section->get_name();
+		if ( ! isset( $completed_items[ $widget_name ] ) ) {
 
-			$completed_items[ $section->get_name() ] = true;
+			$completed_items[ $widget_name ] = true;
 
 			if ( $this->is_editing_internal_style_page() ) {
 				$section->start_controls_section(
@@ -107,25 +108,12 @@ class ElementorCSS extends Base {
 				// todo: pull in all defaults from all $default_style_post_ids available in the parent style.
 				$post = get_post();
 				if ( $post->post_type === Styles::CPT ) {
-					// pull in all available options?
+					// pull in all available options, as it wont have a default assigned.
 				}
-				if ( empty( $GLOBALS['stylepress_render'] ) ) {
-					Plugin::get_instance()->populate_globals();
-				}
-
-				$section->start_controls_section(
-					'stylepress_default_css',
-					[
-						'label' => __( 'StylePress Default Styles', 'elementor' ),
-					]
-				);
-
+				Plugin::get_instance()->populate_globals();
 
 				if ( ! empty( $GLOBALS['stylepress_render'] ) && ! empty( $GLOBALS['stylepress_render']['styles'] ) ) {
 
-					$options                = [
-						'' => 'No Default Styles'
-					];
 					$default_style_post_ids = [];
 					$categories             = Styles::get_instance()->get_categories();
 					foreach ( $GLOBALS['stylepress_render']['styles'] as $category_slug => $category_post_id ) {
@@ -149,31 +137,44 @@ class ElementorCSS extends Base {
 							continue;
 						}
 
-						\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( & $defined_style_names ) {
-							if ( ! empty( $element['settings']['default_style_name'] ) ) {
+						\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( $widget_name, & $defined_style_names ) {
+
+							if ( ! empty( $element['widgetType'] ) && $element['widgetType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
 								$defined_style_names[] = $element['settings']['default_style_name'];
 							}
 						} );
 
 					}
-					foreach ( $defined_style_names as $defined_style_name ) {
-						$options[ $this->sanitise_class_name( $defined_style_name ) ] = $defined_style_name;
+					if ( $defined_style_names ) {
+						$section->start_controls_section(
+							'stylepress_default_css',
+							[
+								'label' => __( 'StylePress Default Styles', 'elementor' ),
+							]
+						);
+
+						$options = [
+							'' => 'No Default Styles'
+						];
+						foreach ( $defined_style_names as $defined_style_name ) {
+							$options[ $this->sanitise_class_name( $defined_style_name ) ] = $defined_style_name;
+						}
+						// find out which style has been applied to this current page view.
+						$section->add_control(
+							'default_style_name',
+							[
+								'label'       => 'Choose Default Style',
+								'type'        => \Elementor\Controls_Manager::SELECT,
+								'options'     => $options,
+								'default'     => '',
+								'label_block' => true,
+							]
+						);
+						$section->end_controls_section();
 					}
-					// find out which style has been applied to this current page view.
-					$section->add_control(
-						'default_style_name',
-						[
-							'label'       => 'Choose Default Style',
-							'type'        => \Elementor\Controls_Manager::SELECT,
-							'options'     => $options,
-							'default'     => '',
-							'label_block' => true,
-						]
-					);
 
 				}
 
-				$section->end_controls_section();
 			}
 		}
 
