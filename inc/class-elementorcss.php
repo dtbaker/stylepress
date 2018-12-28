@@ -81,7 +81,7 @@ class ElementorCSS extends Base {
 					[
 						'label'       => 'Default Style Name',
 						'type'        => \Elementor\Controls_Manager::TEXT,
-						'default'     => '',
+						'default'     => 'default',
 						'label_block' => true,
 					]
 				);
@@ -135,11 +135,15 @@ class ElementorCSS extends Base {
 							]
 						);
 
-						$options = [
+						$options           = [
 							'' => 'No Default Styles'
 						];
+						$default_selection = '';
 						foreach ( $defined_style_names as $defined_style_name ) {
-							$options[ $this->sanitise_class_name( $defined_style_name ) ] = $defined_style_name;
+							if ( ! $default_selection && strtolower( $defined_style_name ) == 'default' ) {
+								$default_selection = $this->sanitise_class_name( $defined_style_name, $widget_name );
+							}
+							$options[ $this->sanitise_class_name( $defined_style_name, $widget_name ) ] = $defined_style_name;
 						}
 						// find out which style has been applied to this current page view.
 						$section->add_control(
@@ -148,7 +152,7 @@ class ElementorCSS extends Base {
 								'label'       => 'Choose Default Style',
 								'type'        => \Elementor\Controls_Manager::SELECT,
 								'options'     => $options,
-								'default'     => '',
+								'default'     => $default_selection,
 								'label_block' => true,
 							]
 						);
@@ -180,15 +184,15 @@ class ElementorCSS extends Base {
 			$debug_text       .= '<span>StylePress:</span> &nbsp; ';
 			$debug_text       .= '<#
 		if ( \'\' !== settings.default_style_name ) {
-			print( \'This is the default style for: \' + settings.default_style_name );		
+			print( \'This default style is named: <strong>\' + settings.default_style_name + \'</strong>\' );		
 		}else{
-			print( \'Warning: No default style name selected for the below element:\' );
+			print( \'Warning: Please enter a default style name.\' );
 		}
 		#>
 		</div>
 		';
 			$template_content = $debug_text . $template_content;
-		}else{
+		} else {
 			$template_content = "<#
 //			console.log(view);
 			view.\$el.removeClass (function (index, className) {
@@ -217,7 +221,7 @@ class ElementorCSS extends Base {
 			echo '<span>StylePress:</span> &nbsp; ';
 			$settings = $widget->get_settings();
 			if ( ! empty( $settings['default_style_name'] ) ) {
-				echo 'This is the default style for: ' . esc_html( $settings['default_style_name'] );
+				echo 'This default style is named: <strong>' . esc_html( $settings['default_style_name'] ) . '</strong>';
 			} else {
 				echo 'Warning: No default style name selected for the below element:';
 			}
@@ -240,8 +244,8 @@ class ElementorCSS extends Base {
 	 *
 	 * @param $widget
 	 */
-	public function sanitise_class_name( $default_style_name ) {
-		return 'stylepress-' . strtolower( preg_replace( '#[^a-zA-Z0-9_-]#', '', $default_style_name ) );
+	public function sanitise_class_name( $default_style_name, $widget_name ) {
+		return 'stylepress-' . $widget_name . '-' . strtolower( preg_replace( '#[^a-zA-Z0-9_-]#', '', $default_style_name ) );
 	}
 
 
@@ -270,7 +274,7 @@ class ElementorCSS extends Base {
 		if ( ! empty( $data ) ) {
 			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) ) {
-					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'] ), $css_contents );
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
 				}
 			} );
 		}
