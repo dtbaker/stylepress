@@ -23,9 +23,9 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 
 <div class="stylepress__main">
 	<div class="stylepress__summary">
-		<h3>Current Style: <?php echo esc_html( $parent_style->post_title ); ?></h3>
+		<h3>Style: <?php echo esc_html( $parent_style->post_title ); ?></h3>
 		<img src="<?php if ( has_post_thumbnail( $parent_style->ID ) ) {
-			echo esc_url( get_the_post_thumbnail( $parent_style->ID, 'full' ) );
+			echo esc_url( get_the_post_thumbnail_url( $parent_style->ID, 'full' ) );
 		} else {
 			echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
 		} ?>">
@@ -49,7 +49,7 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 							<a href="<?php echo esc_url( Styles::get_instance()->get_design_edit_url( $design_id ) ); ?>"
 							   class="stylepress__style-thumb"
 							   style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
-								   echo esc_url( get_the_post_thumbnail( $design_id, 'full' ) );
+								   echo esc_url( get_the_post_thumbnail_url( $design_id, 'full' ) );
 							   } else {
 								   echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
 							   } ?>);">

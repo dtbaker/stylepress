@@ -130,7 +130,7 @@ class Styles extends Base {
 		return apply_filters( 'stylepress_categories', $stylepress_categories );
 	}
 
-	public function get_all_styles( $category_slug = false, $include_empty = false, $parent_id = 0 ) {
+	public function get_all_styles( $category_slug = false, $include_empty = false, $parent_id = false ) {
 		$styles = array();
 		$args   = array(
 			'post_type'           => self::CPT,
@@ -140,8 +140,10 @@ class Styles extends Base {
 			'suppress_filters'    => false,
 			'order'               => 'ASC',
 			'orderby'             => 'title',
-			'post_parent'         => (int) $parent_id,
 		);
+		if ( $parent_id !== false ) {
+			$args['post_parent'] = (int) $parent_id;
+		}
 		if ( $category_slug ) {
 			$args['tax_query'] = array(
 				array(
@@ -153,6 +155,10 @@ class Styles extends Base {
 		}
 		$posts_array = get_posts( $args );
 		foreach ( $posts_array as $style ) {
+			if ( $parent_id === false && $style->post_parent ) {
+				$parent            = get_post( $style->post_parent );
+				$style->post_title = $parent->post_title . ' > ' . $style->post_title;
+			}
 			$styles[ $style->ID ] = $style->post_title;
 		}
 
@@ -315,13 +321,12 @@ class Styles extends Base {
 			$parent = $post->post_parent ? (int) $post->post_parent : ( ! empty( $_GET['post_parent'] ) ? (int) $_GET['post_parent'] : false );
 			?>
 			<div class="stylepress__header">
-				<a href="https://stylepress.org" target="_blank" class="stylepress__logo">
-					<img alt="StylePress"
-					     src="//localhost:3000/wp-content/plugins/stylepress/assets/images/logo-stylepress-sml.png">
-				</a>
+				<div class="stylepress__logo">
+					<img alt="StylePress" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/logo-stylepress-sml.png' ); ?>">
+				</div>
 				<div class="stylepress_buttons">
 					<a
-						href="<?php echo esc_url( admin_url( 'admin.php?page=' . STYLEPRESS_SLUG . '&style_id=' . ( $parent ? $parent : $post->ID ) ) ); ?>"
+						href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&style_id=' . ( $parent ? $parent : $post->ID ) ) ); ?>"
 						class="button stylepress_buttons--return"><?php echo esc_html__( '&laquo; Return To Style Settings Page', 'stylepress' ); ?></a>
 				</div>
 			</div>

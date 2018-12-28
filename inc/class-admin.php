@@ -18,6 +18,8 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
  */
 class Admin extends Base {
 
+	const SETTINGS_PAGE_SLUG = 'stylepress';
+	const STYLES_PAGE_SLUG = STYLEPRESS_SLUG . '-styles';
 
 	/**
 	 * Initializes the plugin and sets all required filters.
@@ -40,20 +42,20 @@ class Admin extends Base {
 	public function admin_menu() {
 
 
-		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', STYLEPRESS_SLUG, array(
+		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
 			$this,
-			'default_styles_page_callback',
+			'settings_page_callback',
 		), STYLEPRESS_URI . 'assets/images/icon.png' );
 		// hack to rmeove default submenu
-		$page = add_submenu_page( STYLEPRESS_SLUG, __( 'Styles', 'stylepress' ), __( 'Styles', 'stylepress' ), 'manage_options', 'stylepress', array(
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', self::SETTINGS_PAGE_SLUG, array(
 			$this,
-			'default_styles_page_callback'
+			'settings_page_callback'
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( STYLEPRESS_SLUG, __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', 'stylepress-settings', array(
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'Edit Styles', 'stylepress' ), __( 'Edit Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
 			$this,
-			'settings_page_callback'
+			'default_styles_page_callback'
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
@@ -146,7 +148,7 @@ class Admin extends Base {
 
 		wp_set_object_terms( $post_id, $new_category, STYLEPRESS_SLUG . '-cat', false );
 
-		wp_redirect( admin_url( 'admin.php?page=stylepress' . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
+		wp_redirect( admin_url( 'admin.php?page=' . self::STYLES_PAGE_SLUG . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
 		exit;
 
 	}
@@ -204,7 +206,7 @@ class Admin extends Base {
 
 		Settings::get_instance()->set( 'stylepress_styles', $defaults_to_save );
 
-		wp_redirect( admin_url( 'admin.php?page=stylepress-settings&saved' ) );
+		wp_redirect( admin_url( 'admin.php?page=' . self::SETTINGS_PAGE_SLUG . '&saved' ) );
 		exit;
 
 

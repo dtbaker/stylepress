@@ -28,18 +28,19 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 				?>
 				<div class="stylepress__style">
 					<div class="stylepress__style-inner">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>"
-						   class="stylepress__style-thumb"
-						   style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
-							   echo esc_url( get_the_post_thumbnail( $design_id, 'full' ) );
-						   } else {
-							   echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
-						   } ?>);">
+						<a
+							href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&style_id=' . $design_id ) ); ?>"
+							class="stylepress__style-thumb"
+							style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
+								echo esc_url( get_the_post_thumbnail( $design_id, 'full' ) );
+							} else {
+								echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
+							} ?>);">
 						</a>
 						<h3 class="stylepress__style-name"><?php echo esc_html( $design ); ?></h3>
 						<div class="stylepress__style-action">
 							<a class="button button-primary"
-							   href="<?php echo esc_url( admin_url( 'admin.php?page=stylepress&style_id=' . $design_id ) ); ?>">
+							   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&style_id=' . $design_id ) ); ?>">
 								<?php esc_html_e( 'Edit Style', 'stylepress' ); ?>
 							</a>
 						</div>

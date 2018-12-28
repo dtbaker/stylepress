@@ -79,6 +79,7 @@ class Plugin extends Base {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
+							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
 							return;
 							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
 							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';

@@ -70,8 +70,10 @@
     overflow: hidden;
     position: relative;
     height: 150px;
+    background-color: #FFF;
     background-position: center;
-    background-size: 100% auto;
+    background-size: contain;
+    background-repeat: no-repeat;
 
   }
 

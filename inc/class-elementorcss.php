@@ -40,7 +40,7 @@ class ElementorCSS extends Base {
 	public function before_parse_css( $dynamic_css, $element ) {
 
 		// todo: do this when we save one of our global styles:
-		\Elementor\Plugin::$instance->files_manager->clear_cache();
+//		\Elementor\Plugin::$instance->files_manager->clear_cache();
 
 //		echo $element->get_name()."\n<br>";
 		if ( $element->get_name() == 'heading' ) {

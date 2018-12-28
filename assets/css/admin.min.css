@@ -34,7 +34,7 @@ div.stylepress__defaults--advanced{display:none}
 .stylepress__category-content{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap}
 .stylepress__style{width:100%;padding:0 20px;box-sizing:border-box}
 .stylepress__style-inner{margin-bottom:20px;cursor:pointer;position:relative;border:1px solid #ddd;box-shadow:0 1px 1px -1px rgba(0,0,0,0.1);box-sizing:border-box}
-.stylepress__style-inner .stylepress__style-thumb{display:block;overflow:hidden;position:relative;height:150px;background-position:center;background-size:100% auto}
+.stylepress__style-inner .stylepress__style-thumb{display:block;overflow:hidden;position:relative;height:150px;background-color:#FFF;background-position:center;background-size:contain;background-repeat:no-repeat}
 .stylepress__style-inner .theme-usage{padding:6px 0 6px 12px;font-size:12px;background-color:#fafafa;text-overflow:ellipsis;min-height:18px}
 .stylepress__style-inner .theme-usage.style-description{height:auto}
 .stylepress__style-inner .theme-usage a{text-decoration:none;color:#444}

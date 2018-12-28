@@ -22,7 +22,7 @@ $categories     = Styles::get_instance()->get_categories();
 <?php } ?>
 
 <p>This is the default style settings page. Here you can choose the default styles that will apply in each section of
-	your website. You can override these default styles on a page by page basis. </p>
+	your website.</p>
 
 <form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 	<input type="hidden" name="action" value="stylepress_save"/>
@@ -59,25 +59,27 @@ $categories     = Styles::get_instance()->get_categories();
 			$page_type = '_global';
 			foreach ( $categories as $category ) {
 				if ( true ) { //|| empty( $category['page_style'] ) ) { // push this out into a different UI element.
-					$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
-					if ( count( $designs ) > 0 ) {
-						?>
-						<div class="stylepress__defaults-pagesection">
-							<label
-								for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?>
-							</label>
-							<select
-								name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-								<option value="">Choose a default style</option>
-								<?php foreach ( $designs as $design_id => $design ) { ?>
-									<option
-										value="<?php echo (int) $design_id; ?>"<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>><?php echo esc_attr( $design ); ?></option>
-								<?php } ?>
-							</select>
-							<br/>
-							(todo: make this a left/right scroller)
-						</div>
-					<?php }
+					?>
+					<div class="stylepress__defaults-pagesection">
+						<label
+							for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?>
+						</label>
+						<select
+							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
+							<option value="">Choose a style for the <?php echo esc_attr( $category['title'] ); ?> </option>
+							<?php
+							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
+							foreach ( $styles as $design_id => $design ) { ?>
+								<option
+									value="<?php echo (int) $design_id; ?>"
+									<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
+									<?php echo esc_attr( $design ); ?>
+								</option>
+								<?php
+							} ?>
+						</select>
+					</div>
+					<?php
 				}
 			}
 			?>
@@ -105,16 +107,21 @@ $categories     = Styles::get_instance()->get_categories();
 						<?php esc_html_e( $page_type_name ); ?>
 					</td>
 					<?php foreach ( $categories as $category ) {
-						$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
 						?>
 						<td>
 							<select
 								name="default_style[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-								<option value=""></option>
-								<?php foreach ( $designs as $design_id => $design ) { ?>
+								<option value="">Choose <?php echo esc_attr( $category['title'] ); ?> </option>
+								<?php
+								$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
+								foreach ( $styles as $design_id => $design ) { ?>
 									<option
-										value="<?php echo (int) $design_id; ?>"<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>><?php echo esc_attr( $design ); ?></option>
-								<?php } ?>
+										value="<?php echo (int) $design_id; ?>"
+										<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
+										<?php echo esc_attr( $design ); ?>
+									</option>
+									<?php
+								} ?>
 							</select>
 						</td>
 					<?php } ?>
