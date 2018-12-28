@@ -80,6 +80,7 @@ class Plugin extends Base {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
 							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
+
 							return;
 							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
 							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
@@ -168,6 +169,58 @@ class Plugin extends Base {
 		}
 	}
 
+	public function populate_globals() {
+
+		if(isset($GLOBALS['stylepress_render']))return;
+		global $post;
+		$GLOBALS['stylepress_render'] = [];
+
+		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type ) {
+			$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
+			$path                  = $page_templates_module->get_template_path( 'elementor_canvas' );
+			if ( is_file( $path ) ) {
+				$GLOBALS['stylepress_render']['template'] = $path;
+			}
+		} else if ( $post && ! empty( $post->ID ) && Styles::CPT === $post->post_type ) {
+			$GLOBALS['stylepress_render']['template'] = STYLEPRESS_PATH . 'templates/editor.php';
+		}
+
+		$default_styles = Styles::get_instance()->get_default_styles();
+		$page_type      = $this->get_current_page_type();
+		$these_styles   = isset( $default_styles[ $page_type ] ) ? $default_styles[ $page_type ] : false;
+
+		$queried_object = get_queried_object();
+		if ( $these_styles ) {
+			// If stylepress has been disabled for this particular post then we just use the normal template include.
+			// Not sure how to do this for category pages. We'll have to add a taxonomy settings area to each tax.
+			if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
+				$enabled = Styles::get_instance()->is_stylpress_enabled( $post );
+				if ( ! $enabled['enabled'] ) {
+					$this->debug_message( 'Skipping stylepress template because ' . $enabled['reason'] );
+					$GLOBALS['stylepress_render']['template'] = false;
+				}
+				// todo: confirm our queried object isn't the first blog post in a list of things view.. that would mess it up.
+				// We're doing a single object post, should be easy.
+				$page_styles = Styles::get_instance()->get_page_styles( $queried_object->ID );
+				if ( $page_styles ) {
+					foreach ( $page_styles as $category_slug => $chosen_style_id ) {
+						if ( $chosen_style_id != 0 ) {
+							if ( isset( $these_styles[ $category_slug ] ) ) {
+								$these_styles[ $category_slug ] = $chosen_style_id;
+							}
+						}
+					}
+				}
+			}
+		}
+		if ( ! isset( $GLOBALS['stylepress_render']['template'] ) ) {
+			$GLOBALS['stylepress_render']['template'] = STYLEPRESS_PATH . 'templates/render.php';
+		}
+		$GLOBALS['stylepress_render']['queried_object'] = $queried_object;
+		$GLOBALS['stylepress_render']['page_type']      = $page_type;
+		$GLOBALS['stylepress_render']['styles']         = $these_styles;
+	}
+
 	/**
 	 * Filter on the template_include path.
 	 * This can overwrite our site wide template for every page of the website.
@@ -183,63 +236,13 @@ class Plugin extends Base {
 	 */
 	public function template_include( $template_include ) {
 
-		global $post;
+		$this->populate_globals();
 
-		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type ) {
-			$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
-			$path                  = $page_templates_module->get_template_path( 'elementor_canvas' );
-			if ( is_file( $path ) ) {
-				return $path;
-			}
-		} else if ( $post && ! empty( $post->ID ) && Styles::CPT === $post->post_type ) {
-			return STYLEPRESS_PATH . 'templates/editor.php';
-		} else {
-
-			$default_styles = Styles::get_instance()->get_default_styles();
-			$page_type      = $this->get_current_page_type();
-			$these_styles   = isset( $default_styles[ $page_type ] ) ? $default_styles[ $page_type ] : false;
-
-			if ( $these_styles ) {
-				// If stylepress has been disabled for this particular post then we just use the normal template include.
-				// Not sure how to do this for category pages. We'll have to add a taxonomy settings area to each tax.
-				$queried_object = get_queried_object();
-				if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
-					$enabled = Styles::get_instance()->is_stylpress_enabled( $post );
-					if ( ! $enabled['enabled'] ) {
-						$this->debug_message( 'Skipping stylepress template because ' . $enabled['reason'] );
-
-						return $template_include;
-					}
-					// todo: confirm our queried object isn't the first blog post in a list of things view.. that would mess it up.
-					// We're doing a single object post, should be easy.
-					$page_styles = Styles::get_instance()->get_page_styles( $queried_object->ID );
-					if ( $page_styles ) {
-						foreach ( $page_styles as $category_slug => $chosen_style_id ) {
-							if ( $chosen_style_id != 0 ) {
-								if ( isset( $these_styles[ $category_slug ] ) ) {
-									$these_styles[ $category_slug ] = $chosen_style_id;
-								}
-							}
-						}
-					}
-				}
-
-				$GLOBALS['stylepress_render'] = [
-					'queried_object' => $queried_object,
-					'page_type'      => $page_type,
-					'styles'         => $these_styles,
-				];
-
-				return STYLEPRESS_PATH . 'templates/render.php';
-
-
-			} else {
-				// todo: revert to _global here
-				$this->debug_message( 'no styles found for type' . $page_type );
-
-			}
-
+		if ( ! empty( $GLOBALS['stylepress_render']['template'] ) ) {
+			return $GLOBALS['stylepress_render']['template'];
 		}
+
+		$this->debug_message( 'Sorry no styles found for this page type' );
 
 		return $template_include;
 	}

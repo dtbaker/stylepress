@@ -43,14 +43,16 @@ class ElementorCSS extends Base {
 	public function is_editing_internal_style_page() {
 
 		$is_style_template = false;
-		$post              = get_post();
-		if ( $post->post_type === Styles::CPT ) {
-			$post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
-			$categories      = Styles::get_instance()->get_categories();
-			foreach ( $categories as $category ) {
-				foreach ( $post_categories as $post_category ) {
-					if ( $post_category->slug === $category['slug'] && ! empty( $category['page_style'] ) ) {
-						$is_style_template = true;
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+			$post = get_post();
+			if ( $post->post_type === Styles::CPT ) {
+				$post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
+				$categories      = Styles::get_instance()->get_categories();
+				foreach ( $categories as $category ) {
+					foreach ( $post_categories as $post_category ) {
+						if ( $post_category->slug === $category['slug'] && ! empty( $category['page_style'] ) ) {
+							$is_style_template = true;
+						}
 					}
 				}
 			}
@@ -77,16 +79,15 @@ class ElementorCSS extends Base {
 
 			$completed_items[ $section->get_name() ] = true;
 
-			$section->start_controls_section(
-				'stylepress_default_css',
-				[
-					'label' => __( 'StylePress Default Styles', 'elementor' ),
-				]
-			);
-
-			// depending on what we're editing.
-
 			if ( $this->is_editing_internal_style_page() ) {
+				$section->start_controls_section(
+					'stylepress_default_css',
+					[
+						'label' => __( 'StylePress Default Styles', 'elementor' ),
+					]
+				);
+
+				// depending on what we're editing.
 
 				$section->add_control(
 					'default_style_name',
@@ -97,10 +98,85 @@ class ElementorCSS extends Base {
 						'label_block' => true,
 					]
 				);
-			}
 
-			$section->end_controls_section();
+				$section->end_controls_section();
+			} else {
+
+				// This falls over if we're editing some styles that do not have a default applied
+				// e.g. if we're editing the "footer" style and we want to use the fancy font default.
+				// todo: pull in all defaults from all $default_style_post_ids available in the parent style.
+				$post = get_post();
+				if ( $post->post_type === Styles::CPT ) {
+					// pull in all available options?
+				}
+				if ( empty( $GLOBALS['stylepress_render'] ) ) {
+					Plugin::get_instance()->populate_globals();
+				}
+
+				$section->start_controls_section(
+					'stylepress_default_css',
+					[
+						'label' => __( 'StylePress Default Styles', 'elementor' ),
+					]
+				);
+
+
+				if ( ! empty( $GLOBALS['stylepress_render'] ) && ! empty( $GLOBALS['stylepress_render']['styles'] ) ) {
+
+					$options                = [
+						'' => 'No Default Styles'
+					];
+					$default_style_post_ids = [];
+					$categories             = Styles::get_instance()->get_categories();
+					foreach ( $GLOBALS['stylepress_render']['styles'] as $category_slug => $category_post_id ) {
+						foreach ( $categories as $category ) {
+							if ( ! empty( $category['page_style'] ) && $category['slug'] === $category_slug ) {
+								$default_style_post_ids[] = $category_post_id;
+							}
+						}
+					}
+
+					// Now that we've got our default style post ids, we want to grab the names of any defined styles from that post.
+					$defined_style_names = [];
+					foreach ( $default_style_post_ids as $default_style_post_id ) {
+
+						$document = \Elementor\Plugin::$instance->documents->get( $default_style_post_id );
+						if ( ! $document ) {
+							continue;
+						}
+						$data = $document->get_elements_data();
+						if ( empty( $data ) ) {
+							continue;
+						}
+
+						\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( & $defined_style_names ) {
+							if ( ! empty( $element['settings']['default_style_name'] ) ) {
+								$defined_style_names[] = $element['settings']['default_style_name'];
+							}
+						} );
+
+					}
+					foreach ( $defined_style_names as $defined_style_name ) {
+						$options[ $this->sanitise_class_name( $defined_style_name ) ] = $defined_style_name;
+					}
+					// find out which style has been applied to this current page view.
+					$section->add_control(
+						'default_style_name',
+						[
+							'label'       => 'Choose Default Style',
+							'type'        => \Elementor\Controls_Manager::SELECT,
+							'options'     => $options,
+							'default'     => '',
+							'label_block' => true,
+						]
+					);
+
+				}
+
+				$section->end_controls_section();
+			}
 		}
+
 
 	}
 
@@ -150,9 +226,28 @@ class ElementorCSS extends Base {
 			} else {
 				echo 'Warning: No default style name selected for the below element:';
 			}
-
 			echo "</div>";
+		} else {
+			$settings = $widget->get_settings();
+			if ( ! empty( $settings['default_style_name'] ) ) {
+				$settings_css_class = $this->sanitise_class_name( $settings['default_style_name'] );
+				$widget->add_render_attribute( '_wrapper', 'class', [
+						$settings_css_class,
+					]
+				);
+			}
 		}
+	}
+
+	/**
+	 * Outputs our helper text before the default css.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param $widget
+	 */
+	public function sanitise_class_name( $default_style_name ) {
+		return 'stylepress-' . strtolower( preg_replace( '#[^a-zA-Z0-9_-]#', '', $default_style_name ) );
 	}
 
 	/**
