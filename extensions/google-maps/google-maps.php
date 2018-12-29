@@ -17,7 +17,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 
 	// ?libraries=places
-	wp_register_script( 'googlemaps', 'https://maps.googleapis.com/maps/api/js?key=' . esc_attr( get_option( 'google_maps_api_key', 'AIzaSyBsnYWO4SSibatp0SjsU9D2aZ6urI-_cJ8' ) ) . '&sensor=false', false, '3' );
+	wp_register_script( 'googlemaps', 'https://maps.googleapis.com/maps/api/js?key=' . esc_attr( get_option( 'google_maps_api_key', '' ) ) . '&sensor=false', false, '3' );
 
 	wp_register_style( 'stylepress-google-map', STYLEPRESS_URI . 'extensions/google-maps/google-maps.css' );
 

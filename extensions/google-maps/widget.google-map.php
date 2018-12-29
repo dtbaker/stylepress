@@ -144,6 +144,16 @@ class StylePress_Google_Map extends Widget_Base {
 			]
 		);
 
+		if ( ! get_option( 'google_maps_api_key', '' ) ) {
+			$this->add_control(
+				'maps_api_key',
+				[
+					'label' => sprintf( __( '<strong>Important</strong> <a href="%s" target="_blank">Please click here to enter a Google Maps API Key in the Customizer.</a> A Google Maps API key is required for maps to generate correctly.', 'stylepress' ), admin_url( '/customize.php?autofocus[section]=stylepress_google_map' ) ),
+					'type'  => Controls_Manager::RAW_HTML,
+				]
+			);
+		}
+
 
 		$this->end_controls_section();
 

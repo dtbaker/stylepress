@@ -81,7 +81,6 @@ class Plugin extends Base {
 
 							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
 
-							return;
 							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
 							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
 							require_once STYLEPRESS_PATH . 'extensions/modal-popup/modal-popup.php';
@@ -89,11 +88,11 @@ class Plugin extends Base {
 							require_once STYLEPRESS_PATH . 'extensions/form/form-fields.php';
 							require_once STYLEPRESS_PATH . 'extensions/tooltip/tooltip.php';
 							require_once STYLEPRESS_PATH . 'extensions/google-maps/google-maps.php';
-							require_once STYLEPRESS_PATH . 'extensions/page-slider/stylepress-page-slider.php';
+							require_once STYLEPRESS_PATH . 'extensions/page-slider/page-slider.php';
 							require_once STYLEPRESS_PATH . 'extensions/woocommerce/woocommerce.php';
 							// only works with pro:
 							if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-								require_once STYLEPRESS_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
+								//require_once STYLEPRESS_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
 							} else {
 								require_once STYLEPRESS_PATH . 'extensions/shortcode/shortcode.php';
 							}
