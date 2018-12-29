@@ -76,6 +76,9 @@ class Stylepress_Inner_Content extends Widget_Base {
 	 * Render our custom menu onto the page.
 	 */
 	protected function render() {
+		if ( ! empty( $GLOBALS['stylepress_render']['has_done_inner_content'] ) ) {
+			return;
+		}
 		$editing_this_template = false;
 		if ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
 			$post = get_post();
@@ -88,6 +91,7 @@ class Stylepress_Inner_Content extends Widget_Base {
 			if ( ! is_404() ) {
 				the_post();
 				the_content();
+				$GLOBALS['stylepress_render']['has_done_inner_content'] = true;
 			}
 		} else {
 			$this->content_template();

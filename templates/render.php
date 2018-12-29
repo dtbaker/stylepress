@@ -34,7 +34,7 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
 				if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
 					$page_classes_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
-					ElementorCSS::get_instance()->render_css_header($page_classes_template);
+					ElementorCSS::get_instance()->render_css_header( $page_classes_template );
 				}
 			}
 		}
@@ -51,7 +51,6 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 		if ( ! empty( $category['page_style'] ) ) {
 			continue;
 		}
-		$has_rendered_a_category_template = false;
 		if ( STYLEPRESS_DEBUG_OUTPUT ) {
 			if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
 				if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
@@ -68,10 +67,9 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
 				$with_css = false;
 				echo \Elementor\Plugin::$instance->frontend->get_builder_content( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ], $with_css );
-				$has_rendered_a_category_template = true;
 			}
 		}
-		if ( ! empty( $category['inner'] ) && ! $has_rendered_a_category_template ) {
+		if ( ! empty( $category['inner'] ) && empty( $GLOBALS['stylepress_render']['has_done_inner_content'] ) ) {
 			the_post();
 			the_content();
 		}
