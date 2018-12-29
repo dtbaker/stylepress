@@ -26,6 +26,7 @@ do_action( 'stylepress/before-render' );
 <?php
 //do_action( 'stylepress/render-inner' ); // Priority 20 is the_content().
 $is_inner_template     = false;
+$is_style_template     = false;
 $current_page_category = false;
 $post                  = get_post();
 if ( $post->post_type === Styles::CPT ) {
@@ -38,8 +39,20 @@ if ( $post->post_type === Styles::CPT ) {
 				if ( ! empty( $category['inner'] ) ) {
 					$is_inner_template = true;
 				}
+				if ( ! empty( $category['page_style'] ) ) {
+					$is_style_template = true;
+				}
 			}
 		}
+	}
+	if($is_style_template){
+		?>
+		<style>
+			.elementor-element-edit-mode{
+				margin-top: 60px;
+			}
+		</style>
+		<?php
 	}
 	?>
 	<div class="stylepress__header stylepress__header--editor">
@@ -58,6 +71,13 @@ if ( $post->post_type === Styles::CPT ) {
 				?>
 				<div class="stylepress__editor-infotext--warning">
 					<strong>Important:</strong> Please add at least one <strong>Inner Content</strong> widget to the page.
+				</div>
+				<?php
+			}
+			if ( $is_style_template ) {
+				?>
+				<div class="stylepress__editor-infotext">
+					<strong>Important:</strong> This page lets you configure default styles that can be used on elements.
 				</div>
 				<?php
 			}

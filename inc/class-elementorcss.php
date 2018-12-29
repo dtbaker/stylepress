@@ -20,8 +20,11 @@ class ElementorCSS extends Base {
 	public function __construct() {
 
 		// Default styling stuff:
-		add_action( 'elementor/element/after_section_end', [ $this, 'after_section_end' ], 10, 3 );
+		//		add_action( 'elementor/element/after_section_end', [ $this, 'after_section_end' ], 10, 3 );
+		add_action( 'elementor/element/before_section_start', [ $this, 'after_section_end' ], 10, 3 );
+		add_action( 'elementor/section/print_template', [ $this, 'print_template' ], 10, 2 );
 		add_action( 'elementor/widget/print_template', [ $this, 'print_template' ], 10, 2 );
+		add_action( 'elementor/section/before_render_content', [ $this, 'before_render_content' ], 10, 1 );
 		add_action( 'elementor/widget/before_render_content', [ $this, 'before_render_content' ], 10, 1 );
 	}
 
@@ -59,6 +62,9 @@ class ElementorCSS extends Base {
 	 */
 	public function after_section_end( $section, $section_id, $args ) {
 
+		if ( ! $args || empty( $args['tab'] ) || $args['tab'] !== 'style' ) {
+			return;
+		}
 		static $completed_items = [];
 
 		$widget_name = $section->get_name();
@@ -70,18 +76,26 @@ class ElementorCSS extends Base {
 				$section->start_controls_section(
 					'stylepress_default_css',
 					[
-						'label' => __( 'StylePress Default Styles', 'elementor' ),
+						'label' => __( 'StylePress Default Styles', 'stylepress' ),
+						'tab'   => 'style',
 					]
 				);
 
-				// depending on what we're editing.
+				$section->add_control(
+					'stylepress_default_description',
+					[
+						'raw'             => __( 'Choose a name for this style. You will be able to select this style when building your pages. If you name this style "default" then it will be selected by default for new page elements.', 'stylepress' ),
+						'type'            => \Elementor\Controls_Manager::RAW_HTML,
+						'content_classes' => 'elementor-descriptor',
+					]
+				);
 
 				$section->add_control(
 					'default_style_name',
 					[
 						'label'       => 'Default Style Name',
 						'type'        => \Elementor\Controls_Manager::TEXT,
-						'default'     => 'default',
+						'default'     => '',
 						'label_block' => true,
 					]
 				);
@@ -131,7 +145,17 @@ class ElementorCSS extends Base {
 						$section->start_controls_section(
 							'stylepress_default_css',
 							[
-								'label' => __( 'StylePress Default Styles', 'elementor' ),
+								'label' => __( 'StylePress Default Styles', 'stylepress' ),
+								'tab'   => 'style',
+							]
+						);
+
+						$section->add_control(
+							'stylepress_default_description',
+							[
+								'raw'             => __( 'Choose which default style to use on this element. Default styles can be chosen from the StylePress WordPress menu.', 'stylepress' ),
+								'type'            => \Elementor\Controls_Manager::RAW_HTML,
+								'content_classes' => 'elementor-descriptor',
 							]
 						);
 
@@ -158,13 +182,9 @@ class ElementorCSS extends Base {
 						);
 						$section->end_controls_section();
 					}
-
 				}
-
 			}
 		}
-
-
 	}
 
 	/**
@@ -180,15 +200,20 @@ class ElementorCSS extends Base {
 		// $template_content = apply_filters( "elementor/{$element_type}/print_template", $template_content, $this );
 
 		if ( $this->is_editing_internal_style_page() && $template_content ) {
-			$debug_text       = '<div class="stylepress-debug">';
+			$debug_text       = '<div class="stylepress-inline-style">';
+			$debug_text       .= '<div class="stylepress-debug">';
 			$debug_text       .= '<span>StylePress:</span> &nbsp; ';
 			$debug_text       .= '<#
 		if ( \'\' !== settings.default_style_name ) {
-			print( \'This default style is named: <strong>\' + settings.default_style_name + \'</strong>\' );		
+			print( \'This ' . $widget->get_name() . ' style is called: <strong>\' + settings.default_style_name + \'</strong>\' );		
+			if ( \'default\' == settings.default_style_name ) {
+				print( \'. This style will be used for every new ' . $widget->get_name() . ' added to the page.\' );
+			}
 		}else{
-			print( \'Warning: Please enter a default style name.\' );
+			print( \'Warning: This ' . $widget->get_name() . ' element does not have a default style name.\' );
 		}
 		#>
+		</div>
 		</div>
 		';
 			$template_content = $debug_text . $template_content;
@@ -217,14 +242,19 @@ class ElementorCSS extends Base {
 	 */
 	public function before_render_content( $widget ) {
 		if ( $this->is_editing_internal_style_page() ) {
+			echo '<div class="stylepress-inline-style">';
 			echo '<div class="stylepress-debug">';
 			echo '<span>StylePress:</span> &nbsp; ';
 			$settings = $widget->get_settings();
 			if ( ! empty( $settings['default_style_name'] ) ) {
-				echo 'This default style is named: <strong>' . esc_html( $settings['default_style_name'] ) . '</strong>';
+				echo 'This ' . $widget->get_name() . ' style is called: <strong>' . esc_html( $settings['default_style_name'] ) . '</strong>';
+				if ( $settings['default_style_name'] == 'default' ) {
+					echo '. This style will be used for every new ' . $widget->get_name() . ' added to the page.';
+				}
 			} else {
-				echo 'Warning: No default style name selected for the below element:';
+				echo 'Warning: This ' . $widget->get_name() . ' element does not have a default style name.';
 			}
+			echo "</div>";
 			echo "</div>";
 		} else {
 			$settings = $widget->get_settings();
@@ -273,7 +303,7 @@ class ElementorCSS extends Base {
 		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '', $css_contents );
 		if ( ! empty( $data ) ) {
 			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
-				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) ) {
+				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['widgetType'] ) ) {
 					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
 				}
 			} );

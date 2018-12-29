@@ -1,2 +1,4 @@
 .stylepress-debug{background:#fff;border-left:4px solid #fff;box-shadow:0 1px 1px 0 rgba(0,0,0,0.1);margin:10px 15px;padding:5px 12px;position:relative;font-size:13px;border-left-color:#46b450;color:#444}
 .stylepress-debug span{color:#CCC}
+.stylepress-inline-style{margin:0}
+.stylepress-inline-style .stylepress-debug{position:absolute;margin:0;top:-30px}
