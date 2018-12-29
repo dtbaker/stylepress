@@ -74,7 +74,9 @@ $edit_links = [];
 							<?php
 							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
 							foreach ( $styles as $design_id => $design ) {
-								$edit_links[ $design_id ] = Styles::get_instance()->get_design_edit_url( $design_id );
+								if ( $design_id > 0 ) {
+									$edit_links[ $design_id ] = Styles::get_instance()->get_design_edit_url( $design_id );
+								}
 								?>
 								<option
 									value="<?php echo (int) $design_id; ?>"

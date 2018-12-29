@@ -171,7 +171,9 @@ class Plugin extends Base {
 
 	public function populate_globals() {
 
-		if(isset($GLOBALS['stylepress_render']))return;
+		if ( isset( $GLOBALS['stylepress_render'] ) ) {
+			return;
+		}
 		global $post;
 		$GLOBALS['stylepress_render'] = [];
 

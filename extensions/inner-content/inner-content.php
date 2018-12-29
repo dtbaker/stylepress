@@ -49,7 +49,9 @@ class Stylepress_Inner_Content extends Widget_Base {
 	 * @return bool
 	 */
 	public function show_in_panel() {
-		return true;
+
+		return \StylePress\ElementorCSS::get_instance()->is_editing_internal_content_page();
+
 	}
 
 	/**

@@ -51,6 +51,29 @@ class ElementorCSS extends Base {
 
 	}
 
+
+	public function is_editing_internal_content_page() {
+
+		$is_inner_content_page = false;
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+			$post = get_post();
+			if ( $post->post_type === Styles::CPT ) {
+				$post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
+				$categories      = Styles::get_instance()->get_categories();
+				foreach ( $categories as $category ) {
+					foreach ( $post_categories as $post_category ) {
+						if ( $post_category->slug === $category['slug'] && ! empty( $category['inner'] ) ) {
+							$is_inner_content_page = true;
+						}
+					}
+				}
+			}
+		}
+
+		return $is_inner_content_page;
+
+	}
+
 	/**
 	 * Adds our default styles selector to the styles page.
 	 *
@@ -68,6 +91,9 @@ class ElementorCSS extends Base {
 		static $completed_items = [];
 
 		$widget_name = $section->get_name();
+		if ( $widget_name == 'column' ) {
+			return;
+		}
 		if ( ! isset( $completed_items[ $widget_name ] ) ) {
 
 			$completed_items[ $widget_name ] = true;
