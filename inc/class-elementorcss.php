@@ -129,15 +129,29 @@ class ElementorCSS extends Base {
 				$section->end_controls_section();
 			} else {
 
-				// This falls over if we're editing some styles that do not have a default applied
-				// e.g. if we're editing the "footer" style and we want to use the fancy font default.
-				// todo: pull in all defaults from all $default_style_post_ids available in the parent style.
 				Plugin::get_instance()->populate_globals();
 
-				if ( ! empty( $GLOBALS['stylepress_render'] ) && ! empty( $GLOBALS['stylepress_render']['styles'] ) ) {
+				$default_style_post_ids = [];
 
-					$default_style_post_ids = [];
-					$categories             = Styles::get_instance()->get_categories();
+				$categories = Styles::get_instance()->get_categories();
+
+				if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+					if ( empty( $GLOBALS['stylepress_render']['styles'] ) ) {
+						$post = get_post();
+						if ( $post->post_type === Styles::CPT ) {
+							foreach ( $categories as $category ) {
+								if ( ! empty( $category['page_style'] ) ) {
+									$styles = Styles::get_instance()->get_all_styles( $category['slug'] );
+									foreach ( $styles as $style_id => $style_name ) {
+										$default_style_post_ids[] = $style_id;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if ( ! empty( $GLOBALS['stylepress_render'] ) && ! empty( $GLOBALS['stylepress_render']['styles'] ) ) {
 					foreach ( $GLOBALS['stylepress_render']['styles'] as $category_slug => $category_post_id ) {
 						foreach ( $categories as $category ) {
 							if ( ! empty( $category['page_style'] ) && $category['slug'] === $category_slug ) {
@@ -145,72 +159,72 @@ class ElementorCSS extends Base {
 							}
 						}
 					}
+				}
 
-					// Now that we've got our default style post ids, we want to grab the names of any defined styles from that post.
-					$defined_style_names = [];
-					foreach ( $default_style_post_ids as $default_style_post_id ) {
+				// Now that we've got our default style post ids, we want to grab the names of any defined styles from that post.
+				$defined_style_names = [];
+				foreach ( $default_style_post_ids as $default_style_post_id ) {
 
-						$document = \Elementor\Plugin::$instance->documents->get( $default_style_post_id );
-						if ( ! $document ) {
-							continue;
-						}
-						$data = $document->get_elements_data();
-						if ( empty( $data ) ) {
-							continue;
-						}
-
-						\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( $widget_name, & $defined_style_names ) {
-
-							if ( ! empty( $element['elType'] ) && $element['elType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
-								$defined_style_names[] = $element['settings']['default_style_name'];
-							}
-							if ( ! empty( $element['widgetType'] ) && $element['widgetType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
-								$defined_style_names[] = $element['settings']['default_style_name'];
-							}
-						} );
-
+					$document = \Elementor\Plugin::$instance->documents->get( $default_style_post_id );
+					if ( ! $document ) {
+						continue;
 					}
-					if ( $defined_style_names ) {
-						$section->start_controls_section(
-							'stylepress_default_css',
-							[
-								'label' => __( 'StylePress Default Styles', 'stylepress' ),
-								'tab'   => 'style',
-							]
-						);
-
-						$section->add_control(
-							'stylepress_default_description',
-							[
-								'raw'             => __( 'Choose which default style to use on this element. Default styles can be chosen from the StylePress WordPress menu.', 'stylepress' ),
-								'type'            => \Elementor\Controls_Manager::RAW_HTML,
-								'content_classes' => 'elementor-descriptor',
-							]
-						);
-
-						$options           = [
-							'' => 'No Default Styles'
-						];
-						$default_selection = '';
-						foreach ( $defined_style_names as $defined_style_name ) {
-							if ( ! $default_selection && strtolower( $defined_style_name ) == 'default' ) {
-								$default_selection = $this->sanitise_class_name( $defined_style_name, $widget_name );
-							}
-							$options[ $this->sanitise_class_name( $defined_style_name, $widget_name ) ] = $defined_style_name;
-						}
-						// find out which style has been applied to this current page view.
-						$section->add_control(
-							'default_style_name',
-							[
-								'label'       => 'Choose Default Style',
-								'type'        => \Elementor\Controls_Manager::SELECT,
-								'options'     => $options,
-								'default'     => $default_selection,
-								'label_block' => true,
-							]
-						);
-						$section->end_controls_section();
+					$data = $document->get_elements_data();
+					if ( empty( $data ) ) {
+						continue;
 					}
+
+					\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( $widget_name, & $defined_style_names ) {
+
+						if ( ! empty( $element['elType'] ) && $element['elType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
+							$defined_style_names[] = $element['settings']['default_style_name'];
+						}
+						if ( ! empty( $element['widgetType'] ) && $element['widgetType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
+							$defined_style_names[] = $element['settings']['default_style_name'];
+						}
+					} );
+
+				}
+				if ( $defined_style_names ) {
+					$section->start_controls_section(
+						'stylepress_default_css',
+						[
+							'label' => __( 'StylePress Default Styles', 'stylepress' ),
+							'tab'   => 'style',
+						]
+					);
+
+					$section->add_control(
+						'stylepress_default_description',
+						[
+							'raw'             => __( 'Choose which default style to use on this element. Default styles can be chosen from the StylePress WordPress menu.', 'stylepress' ),
+							'type'            => \Elementor\Controls_Manager::RAW_HTML,
+							'content_classes' => 'elementor-descriptor',
+						]
+					);
+
+					$options           = [
+						'' => 'No Default Styles'
+					];
+					$default_selection = '';
+					foreach ( $defined_style_names as $defined_style_name ) {
+						if ( ! $default_selection && strtolower( $defined_style_name ) == 'default' ) {
+							$default_selection = $this->sanitise_class_name( $defined_style_name, $widget_name );
+						}
+						$options[ $this->sanitise_class_name( $defined_style_name, $widget_name ) ] = $defined_style_name;
+					}
+					// find out which style has been applied to this current page view.
+					$section->add_control(
+						'default_style_name',
+						[
+							'label'       => 'Choose Default Style',
+							'type'        => \Elementor\Controls_Manager::SELECT,
+							'options'     => $options,
+							'default'     => $default_selection,
+							'label_block' => true,
+						]
+					);
+					$section->end_controls_section();
 				}
 			}
 		}
