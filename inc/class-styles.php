@@ -121,7 +121,7 @@ class Styles extends Base {
 		$stylepress_categories[] = [
 			'order'       => 50,
 			'slug'        => 'classes',
-			'title'       => 'Default Class',
+			'title'       => 'Default Styles',
 			'plural'      => 'Classes',
 			'description' => 'These are the default classes to use when building out the page content',
 			'page_style'  => true,

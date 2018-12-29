@@ -213,7 +213,7 @@ class ElementorCSS extends Base {
 				print( \'. This style will be used for every new ' . $widget->get_name() . ' added to the page.\' );
 			}
 		}else{
-			print( \'Warning: This ' . $widget->get_name() . ' element does not have a default style name.\' );
+			print( \'Warning: This ' . $widget->get_name() . ' element does not have a default style name. If you want this style to be available please enter a name.\' );
 		}
 		#>
 		</div>
@@ -255,7 +255,7 @@ class ElementorCSS extends Base {
 					echo '. This style will be used for every new ' . $widget->get_name() . ' added to the page.';
 				}
 			} else {
-				echo 'Warning: This ' . $widget->get_name() . ' element does not have a default style name.';
+				echo 'Warning: This ' . $widget->get_name() . ' element does not have a default style name. If you want this style to be available please enter a name.';
 			}
 			echo "</div>";
 			echo "</div>";

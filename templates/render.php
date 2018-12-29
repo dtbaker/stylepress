@@ -72,6 +72,7 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			}
 		}
 		if ( ! empty( $category['inner'] ) && ! $has_rendered_a_category_template ) {
+			the_post();
 			the_content();
 		}
 	}
