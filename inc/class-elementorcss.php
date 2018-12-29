@@ -24,7 +24,7 @@ class ElementorCSS extends Base {
 		add_action( 'elementor/element/before_section_start', [ $this, 'after_section_end' ], 10, 3 );
 		add_action( 'elementor/section/print_template', [ $this, 'print_template' ], 10, 2 );
 		add_action( 'elementor/widget/print_template', [ $this, 'print_template' ], 10, 2 );
-		add_action( 'elementor/section/before_render_content', [ $this, 'before_render_content' ], 10, 1 );
+		add_action( 'elementor/frontend/section/before_render', [ $this, 'before_render_content' ], 10, 1 );
 		add_action( 'elementor/widget/before_render_content', [ $this, 'before_render_content' ], 10, 1 );
 	}
 
@@ -135,6 +135,9 @@ class ElementorCSS extends Base {
 
 						\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( $widget_name, & $defined_style_names ) {
 
+							if ( ! empty( $element['elType'] ) && $element['elType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
+								$defined_style_names[] = $element['settings']['default_style_name'];
+							}
 							if ( ! empty( $element['widgetType'] ) && $element['widgetType'] === $widget_name && ! empty( $element['settings']['default_style_name'] ) ) {
 								$defined_style_names[] = $element['settings']['default_style_name'];
 							}
@@ -305,6 +308,9 @@ class ElementorCSS extends Base {
 			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['widgetType'] ) ) {
 					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
+				}
+				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['elType'] ) ) {
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['elType'] ), $css_contents );
 				}
 			} );
 		}
