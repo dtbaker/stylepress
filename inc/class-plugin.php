@@ -79,8 +79,8 @@ class Plugin extends Base {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
+							require_once STYLEPRESS_PATH . 'extensions/post-grid/post-grid.php';
 							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
-
 							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
 							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
 							require_once STYLEPRESS_PATH . 'extensions/modal-popup/modal-popup.php';
@@ -296,6 +296,8 @@ class Plugin extends Base {
 
 
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
+			// todo: count be bundled into the frontend files above ^^
 			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.min.css', false, STYLEPRESS_VERSION );
 			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.min.js', false, STYLEPRESS_VERSION, true );
 
@@ -311,7 +313,14 @@ class Plugin extends Base {
 	 */
 	public function admin_enqueue_scripts() {
 		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/backend.min.css', false, STYLEPRESS_VERSION );
-		wp_enqueue_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/backend.min.js', false, STYLEPRESS_VERSION );
+
+		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/backend.min.js', false, STYLEPRESS_VERSION );
+		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
+				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
+			)
+		);
+		wp_enqueue_script( 'stylepress-admin' );
 	}
 
 	/**
@@ -320,8 +329,8 @@ class Plugin extends Base {
 	 * @since 2.0.0
 	 */
 	public function editor_scripts() {
-		wp_enqueue_script( 'stylepress-editor', STYLEPRESS_URI . 'assets/js/editor.min.js', false, STYLEPRESS_VERSION, true );
-		wp_enqueue_style( 'stylepress-editor', STYLEPRESS_URI . 'assets/css/editor.min.css', false, STYLEPRESS_VERSION );
+		// load our backend scripts within the editor as well:
+		$this->admin_enqueue_scripts();
 	}
 
 	/**

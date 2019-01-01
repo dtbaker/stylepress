@@ -47,6 +47,7 @@ div.stylepress__defaults--advanced{display:none}
 .stylepress__style--new .stylepress__style-inner:hover{opacity:1}
 .stylepress__style--new h3.stylepress__style-name{padding:0;height:48px}
 .stylepress__style--new .stylepress__style-name-input{position:absolute;background:transparent;padding:4px 12px;line-height:40px;font-size:15px;border:0}
+.stylepress-elementor-widget{background:url(../images/widget-logo.png) no-repeat center;background-size:contain;padding:26px;font-size:20px;line-height:46px}
 .stylepress__wrapper{margin:0 20px 0 0}
 @media(min-width:768px){.stylepress__style{width:50%}
 }@media(min-width:1200px){.stylepress__style{width:25%}

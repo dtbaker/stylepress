@@ -11,7 +11,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'stylepress_inner';
+		return 'stylepress_post_grid';
 	}
 
 	/**
@@ -20,7 +20,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return __( 'Inner Content', 'stylepress' );
+		return __( 'Post Grid', 'stylepress' );
 	}
 
 	/**
@@ -43,28 +43,12 @@ class Stylepress_Post_Grid extends Widget_Base {
 	}
 
 	/**
-	 * Whether the reload preview is required or not.
-	 *
-	 * Used to determine whether the reload preview is required.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return bool Whether the reload preview is required.
-	 */
-	public function is_reload_preview_required() {
-		return true;
-	}
-
-	/**
 	 * We always show this item in the panel.
 	 *
 	 * @return bool
 	 */
 	public function show_in_panel() {
-
 		return true;
-
 	}
 
 	/**
@@ -73,7 +57,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_stylepress_wp_menu',
+			'section_stylepress_post_grid',
 			[
 				'label' => __( 'Post Grid', 'stylepress' ),
 			]
@@ -118,7 +102,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label'       => __( 'Select Terms (usually categories/tags) * Must Select Taxonomy First', 'stylepress' ),
+				'label'       => __( 'Select Terms (usually categories/tags)', 'stylepress' ),
 				'type'        => Controls_Manager::SELECT2,
 				'label_block' => true,
 				'options'     => '',
@@ -136,7 +120,6 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label_block' => true,
 				'type'        => Controls_Manager::TEXT,
 				'description' => __( ' To include a category use the Category ID directly (e.g. 1,2,3). To exclude category add a minus sign before the Category ID (e.g. -1,-44,-3343)', 'stylepress' ),
-				'placeholder' => __( '-1,-2,-33,10,11', 'stylepress' ),
 			]
 		);
 
@@ -147,7 +130,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_content2',
 			[
-				'label' => esc_html__( 'Pagination & Setting', 'stylepress' ),   //section name for controler view
+				'label' => esc_html__( 'Pagination & Ordering', 'stylepress' ),   //section name for controler view
 			]
 		);
 
@@ -250,13 +233,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'   => esc_html__( 'Choose your desired style', 'stylepress' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => [
-					'1' => 'Grid Layout',
-					'2' => 'List Layout',
-					'3' => '1st Full Post then Grid',
-					'4' => '1st Full Post then List',
-					'5' => 'Minimal Grid'
+					'grid'            => 'Grid Layout',
+					'list'            => 'List Layout',
+					'first-post-grid' => '1st Full Post then Grid',
+					'first-post-list' => '1st Full Post then List',
+					'minimal'         => 'Minimal Grid'
 				],
-				'default' => '1'
+				'default' => 'grid'
 			]
 		);
 
@@ -266,7 +249,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Posts Per Row', 'stylepress' ),
 				'type'      => Controls_Manager::SELECT,
 				'condition' => [
-					'display_type' => [ '1', '5' ],
+					'display_type' => [ 'grid', 'minimal' ],
 				],
 				'options'   => [
 					'1' => '1',
@@ -312,9 +295,9 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Featured Image Style', 'stylepress' ),
 				'type'      => Controls_Manager::SELECT2,
 				'options'   => [
-					'1' => 'Standard',
-					'2' => 'left top rounded',
-					'3' => 'left bottom rounded'
+					'standard'   => 'Standard',
+					'top-left'   => 'left top rounded',
+					'top-bottom' => 'left bottom rounded'
 				],
 				'default'   => '1',
 				'condition' => [
@@ -592,9 +575,118 @@ class Stylepress_Post_Grid extends Widget_Base {
 		} else {
 			$category = '';
 		}
-		echo '<div class="elementor-shortcode">';
-		echo do_shortcode( '[stylepressgrid_sc_post_grid filter_thumbnail="' . $settings['filter_thumbnail'] . '" cat_exclude="' . $settings['cat_exclude'] . '" post_type="' . $settings['post_type'] . '" pagination_yes="' . $settings['pagination_yes'] . '" display_type="' . $settings['display_type'] . '" posts="' . $settings['posts'] . '" posts_per_row="' . $settings['posts_per_row'] . '" image_style="' . $settings['image_style'] . '" sticky_ignore="' . $settings['sticky_ignore'] . '"  orderby="' . $settings['orderby'] . '" order="' . $settings['order'] . '" offset="' . $settings['offset'] . '"  terms="' . $category . '" taxonomy_type="' . $settings['taxonomy_type'] . '" image_size="' . $settings['image_size'] . '" ]' );
-		echo '</div>';
+
+		if ( ! empty( $settings['taxonomy_type'] ) ) {
+			$tax_query = array(
+				array(
+					'taxonomy' => $settings['taxonomy_type'],
+					'field'    => 'term_id',
+					'terms'    => explode( ',', $category ),
+				),
+			);
+		} else {
+			$tax_query = '';
+		}
+		if ( ! empty( $settings['filter_thumbnail'] ) ) {
+			$stylepress_image_condition = array(
+				'meta_query' => array(
+					array(
+						'key'     => '_thumbnail_id',
+						'compare' => $settings['filter_thumbnail'],
+					)
+				)
+			);
+		} else {
+			$stylepress_image_condition = '';
+		}
+
+
+		if ( get_query_var( 'paged' ) ) {
+			$paged = get_query_var( 'paged' );
+		} elseif ( get_query_var( 'page' ) ) { // if is static front page
+			$paged = get_query_var( 'page' );
+		} else {
+			$paged = 1;
+		}
+
+
+		$args = array(
+			'post_type'             => $settings['post_type'],
+			'meta_query'            => $stylepress_image_condition,
+			'cat'                   => $settings['cat_exclude'],
+			'post_status'           => 'publish',
+			'posts_per_page'        => $settings['posts'],
+			'paged'                 => $paged,
+			'tax_query'             => $tax_query,
+			'orderby'               => $settings['orderby'],
+			'order'                 => $settings['order'],   //ASC / DESC
+			'ignore_sticky_posts'   => $settings['sticky_ignore'],
+			'stylepress_grid_query' => 'yes',
+			'stylepress_set_offset' => $settings['offset'],
+		);
+
+		$grid_query = new \WP_Query( $args );
+
+		$count = 0;
+		?>
+
+		<div class="content-area stylepress-grid">
+			<div class="site-main <?php echo esc_html( $settings['display_type'] . ' ' . $settings['image_style'] ); ?>">
+				<div class="row">
+					<?php
+					if ( $grid_query->have_posts() ) :
+
+						/* Start the Loop */
+						while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
+							$count ++;
+							\StylePress\Templates::get_template_part( 'content', $settings['display_type'], 'extensions/post-grid/', [
+								'count'      => $count,
+								'col_no'     => 2,
+								'col_width'  => 12,
+								'post_count' => '',
+								'image_size' => 'full',
+							] );
+						endwhile; // End of posts loop found posts
+
+						if ( $settings['pagination_yes'] == 1 ) :  //Start of pagination condition
+							$big = 999999999; // need an unlikely integer
+							$totalpages = $grid_query->max_num_pages;
+							$current = max( 1, $paged );
+							$paginate_args = array(
+								'base'      => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+								'format'    => '?paged=%#%',
+								'current'   => $current,
+								'total'     => $totalpages,
+								'show_all'  => false,
+								'end_size'  => 1,
+								'mid_size'  => 3,
+								'prev_next' => true,
+								'prev_text' => esc_html__( '« Previous' ),
+								'next_text' => esc_html__( 'Next »' ),
+								'type'      => 'plain',
+								'add_args'  => false,
+							);
+
+							$pagination = paginate_links( $paginate_args ); ?>
+							<div class="col-md-12">
+								<nav class='pagination wp-caption stylepress-grid-nav'>
+									<?php echo $pagination; ?>
+								</nav>
+							</div>
+						<?php endif; //end of pagination condition
+						?>
+
+
+					<?php else :   //if no posts found
+						\StylePress\Templates::get_template_part( 'content', 'none', 'extensions/post-grid/' );
+					endif; //end of post loop ?>
+
+				</div><!-- #main -->
+			</div><!-- #primary -->
+		</div>
+
+		<?php
+		wp_reset_postdata();
 	}
 
 

@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
- * @package void
+ * @package stylepress
  */
 
 defined( 'STYLEPRESS_PATH' ) || exit;
@@ -19,8 +19,8 @@ global $count,$col_no,$col_width,$post_count;
 			<div class="post-img">
 				<a href="<?php echo esc_url( get_permalink() ); ?>">
 				<?php
-					if( get_transient('void_grid_image_size') ){
-						$grid_image_size = get_transient('void_grid_image_size');
+					if( get_transient('stylepress_grid_image_size') ){
+						$grid_image_size = get_transient('stylepress_grid_image_size');
 					}else{
 						$grid_image_size = 'full';
 					}
@@ -39,7 +39,7 @@ global $count,$col_no,$col_width,$post_count;
 					if ( 'post' === get_post_type() ) : ?>
 						<div class="entry-meta">
 							<?php
-								void_entry_header();
+								stylepress_entry_header();
 							?>
 						</div><!-- .entry-meta -->
 				<?php endif; ?>

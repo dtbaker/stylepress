@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
- * @package void
+ * @package stylepress
  */
 
 defined( 'STYLEPRESS_PATH' ) || exit;
@@ -17,8 +17,8 @@ global $blog_style;
 		<div class="post-img">
 			<a href="<?php echo esc_url( get_permalink() ); ?>">
 				<?php
-					if( get_transient('void_grid_image_size') ){
-						$grid_image_size = get_transient('void_grid_image_size');
+					if( get_transient('stylepress_grid_image_size') ){
+						$grid_image_size = get_transient('stylepress_grid_image_size');
 					}else{
 						$grid_image_size = 'blog-list-post-size';
 					}
@@ -40,7 +40,7 @@ global $blog_style;
 					<div class="entry-meta">
 
 						<?php
-							void_entry_header();
+							stylepress_entry_header();
 						?>
 
 					</div><!-- .entry-meta -->
