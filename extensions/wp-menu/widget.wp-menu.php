@@ -68,6 +68,20 @@ class Widget_stylepress_WP_Menu extends Widget_Base {
 	}
 
 	/**
+	 * Whether the reload preview is required or not.
+	 *
+	 * Used to determine whether the reload preview is required.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return bool Whether the reload preview is required.
+	 */
+	public function is_reload_preview_required() {
+		return true;
+	}
+
+	/**
 	 * We always show this item in the panel.
 	 *
 	 * @return bool

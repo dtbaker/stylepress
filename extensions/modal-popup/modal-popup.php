@@ -23,9 +23,9 @@ if ( $control ) {
 
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_register_script( 'stylepress-modal-popup', STYLEPRESS_URI . 'extensions/modal-popup/popup.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
+	wp_register_script( 'stylepress-modal-popup', STYLEPRESS_URI . 'extensions/modal-popup/js/modal-popup.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 	wp_localize_script( 'stylepress-modal-popup', 'stylepress_modal', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-	wp_register_style( 'stylepress-modal-button', STYLEPRESS_URI . 'extensions/modal-popup/popup.css' );
+	wp_register_style( 'stylepress-modal-button', STYLEPRESS_URI . 'extensions/modal-popup/css/modal-popup.css' );
 } );
 
 add_filter( 'stylepress_modal_link', function ( $link, $popup_template, $options = array() ) {

@@ -25,7 +25,7 @@ $categories     = Styles::get_instance()->get_categories();
 	your website.</p>
 
 <?php
-$edit_links = [];
+$edit_links = $manage_links = [];
 ?>
 <form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
 	<input type="hidden" name="action" value="stylepress_save"/>
@@ -87,6 +87,11 @@ $edit_links = [];
 							} ?>
 						</select>
 						<span class="stylepress__default-link js-stylepress-link"></span>
+						<span class="stylepress__manage-link">
+							 / <a href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG ) ); ?>">
+								Add New
+							</a>
+						</span>
 					</div>
 					<?php
 				}

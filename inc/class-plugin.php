@@ -271,7 +271,7 @@ class Plugin extends Base {
 
 		} else {
 
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_css' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 		}
 
@@ -284,12 +284,20 @@ class Plugin extends Base {
 	 * @since 2.0.0
 	 */
 	public function frontend_css() {
-		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.css', false, STYLEPRESS_VERSION );
-		wp_enqueue_script( 'stylepress-js', STYLEPRESS_URI . 'assets/js/frontend.js', false, STYLEPRESS_VERSION, true );
+		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.min.css', false, STYLEPRESS_VERSION );
+
+		wp_register_script( 'stylepress-js', STYLEPRESS_URI . 'assets/js/frontend.min.js', false, STYLEPRESS_VERSION, true );
+		wp_localize_script( 'stylepress-js', 'stylepress_frontend', array(
+				'ajaxurl'      => admin_url( 'admin-ajax.php' ),
+				'public_nonce' => wp_create_nonce( 'stylepress-public-nonce' ),
+			)
+		);
+		wp_enqueue_script( 'stylepress-js' );
+
 
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.css', false, STYLEPRESS_VERSION );
-			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.js', false, STYLEPRESS_VERSION, true );
+			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.min.css', false, STYLEPRESS_VERSION );
+			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.min.js', false, STYLEPRESS_VERSION, true );
 
 		}
 
@@ -301,8 +309,9 @@ class Plugin extends Base {
 	 *
 	 * @since 2.0.0
 	 */
-	public function admin_css() {
-		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/admin.css', false, STYLEPRESS_VERSION );
+	public function admin_enqueue_scripts() {
+		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/backend.min.css', false, STYLEPRESS_VERSION );
+		wp_enqueue_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/backend.min.js', false, STYLEPRESS_VERSION );
 	}
 
 	/**
@@ -311,8 +320,8 @@ class Plugin extends Base {
 	 * @since 2.0.0
 	 */
 	public function editor_scripts() {
-		wp_enqueue_script( 'stylepress-editor', STYLEPRESS_URI . 'assets/js/editor.js', false, STYLEPRESS_VERSION, true );
-		wp_enqueue_style( 'stylepress-elementor-editor', STYLEPRESS_URI . 'assets/css/editor.css', false, STYLEPRESS_VERSION );
+		wp_enqueue_script( 'stylepress-editor', STYLEPRESS_URI . 'assets/js/editor.min.js', false, STYLEPRESS_VERSION, true );
+		wp_enqueue_style( 'stylepress-editor', STYLEPRESS_URI . 'assets/css/editor.min.css', false, STYLEPRESS_VERSION );
 	}
 
 	/**

@@ -6,7 +6,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 
 add_action( 'wp_enqueue_scripts', function () {
 
-	wp_register_script( 'stylepress_page_slider', STYLEPRESS_URI . 'extensions/page-slider/js/stylepress-page-slider.js', array(
+	wp_register_script( 'stylepress_page_slider', STYLEPRESS_URI . 'extensions/page-slider/js/page-slider.js', array(
 		'jquery',
 		'jquery-slick'
 	), STYLEPRESS_VERSION, true );

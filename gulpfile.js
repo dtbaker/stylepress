@@ -74,10 +74,12 @@ var customJSWatchFiles = './src/js/custom/*.js'; // Path to all custom JS files.
 var projectPHPWatchFiles = [ './**/*.php', '!build/**/*.php', '!wordpress-svn/**/*.php' ]; // Path to all PHP files.
 
 // es6 stuff:
-var jses6SRC = './src/js/app/index.js'; // Path to JS custom scripts folder.
+var jses6SRC_F = './src/js/frontend/index.js'; // Path to JS custom scripts folder.
+var jses6SRC_B = './src/js/backend/index.js'; // Path to JS custom scripts folder.
 var jses6Destination = './assets/js/'; // Path to place the compiled JS custom scripts file.
-var jses6File = 'app'; // Compiled JS custom file name.
-var jses6WatchFiles = './src/js/app/**/*.js'; // Path to all custom JS files.
+var jses6File_F = 'frontend'; // Compiled JS custom file name.
+var jses6File_B = 'backend'; // Compiled JS custom file name.
+var jses6WatchFiles = [ './src/js/**/*.js', './extensions/**/*.js' ];
 
 var anyJsReload = './assets/js/**/*.js'; // Browsersync every time these change.
 
@@ -285,15 +287,34 @@ gulp.task( 'refreshes6JS', [ 'es6JS' ], function () {
   reload();
 } );
 
-gulp.task( 'es6JS', function () {
-  return; // none for now.
-  return browserify( jses6SRC, { debug: true } )
+gulp.task( 'es6JS', [ 'es6JS_F', 'es6JS_B' ], function () {
+  reload();
+} );
+
+gulp.task( 'es6JS_F', function () {
+  return browserify( jses6SRC_F, { debug: true } )
     .transform( babelify )
     .bundle()
-    .pipe( source( jses6File + '.js' ) )
+    .pipe( source( jses6File_F + '.js' ) )
     .pipe( buffer() )
     .pipe( gulp.dest( jses6Destination ) )
-    .pipe( rename( jses6File + '.min.js' ) )
+    .pipe( rename( jses6File_F + '.min.js' ) )
+    .pipe( sourcemaps.init() )
+    .pipe( uglify() )
+    .pipe( lineec() ) // Consistent Line Endings for non UNIX systems.
+    .pipe( sourcemaps.write( '.' ) )
+    .pipe( gulp.dest( jsCustomDestination ) )
+    .pipe( notify( { message: 'TASK: "es6JS" Completed! 💯', onLast: true } ) );
+
+} );
+gulp.task( 'es6JS_B', function () {
+  return browserify( jses6SRC_B, { debug: true } )
+    .transform( babelify )
+    .bundle()
+    .pipe( source( jses6File_B + '.js' ) )
+    .pipe( buffer() )
+    .pipe( gulp.dest( jses6Destination ) )
+    .pipe( rename( jses6File_B + '.min.js' ) )
     .pipe( sourcemaps.init() )
     .pipe( uglify() )
     .pipe( lineec() ) // Consistent Line Endings for non UNIX systems.
