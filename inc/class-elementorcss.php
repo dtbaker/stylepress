@@ -261,16 +261,8 @@ class ElementorCSS extends Base {
 		';
 			$template_content = $debug_text . $template_content;
 		} else {
-			$template_content = "<#
-//			console.log(view);
-			view.\$el.removeClass (function (index, className) {
-			    return (className.match (/(^|\s)stylepress-\S+/g) || []).join(' ');
-			});
-			if ( '' !== settings.default_style_name ) {
-				view.\$el.addClass(settings.default_style_name);
-			}
-			//view.addRenderAttribute( '_wrapper', 'class', 'stylepress-test2' );
-					#> " . $template_content;
+			$template_content = "<# view.\$el.removeClass (function (index, className) { return (className.match (/(^|\s)stylepress-\S+/g) || []).join(' '); });
+			if ( '' !== settings.default_style_name ) { view.\$el.addClass(settings.default_style_name); } #> " . $template_content;
 		}
 
 		return $template_content;

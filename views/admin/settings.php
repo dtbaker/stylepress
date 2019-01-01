@@ -70,7 +70,7 @@ $edit_links = $manage_links = [];
 						<select
 							class="stylepress__default-select js-stylepress-select"
 							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-							<option value="">Choose a style for the <?php echo esc_attr( $category['title'] ); ?> </option>
+							<option value=""> - choose a style - </option>
 							<?php
 							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
 							foreach ( $styles as $design_id => $design ) {

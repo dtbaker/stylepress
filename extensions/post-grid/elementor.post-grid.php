@@ -23,6 +23,11 @@ class Stylepress_Post_Grid extends Widget_Base {
 		return __( 'Post Grid', 'stylepress' );
 	}
 
+	protected $_has_template_content = false;
+	public function is_reload_preview_required() {
+		return false;
+	}
+
 	/**
 	 * Get the current icon for display on frontend.
 	 * The extra 'stylepress-widget' class is styled differently in frontend.css
@@ -689,6 +694,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		wp_reset_postdata();
 	}
 
+	public function render_plain_content() {}
 
 }
 
