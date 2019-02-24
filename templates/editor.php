@@ -1,6 +1,6 @@
 <?php
 /**
- * Special template used when editing StylePress styles.
+ * Special template used when editing back end StylePress styles.
  *
  * @package stylepress
  */
@@ -15,21 +15,21 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<?php wp_head(); ?>
+	<?php
+	$categories = Styles::get_instance()->get_categories();
+	foreach ( $categories as $category ) {
+		if ( ! empty( $category['page_style'] ) ) {
+			$styles = Styles::get_instance()->get_all_styles( $category['slug'] );
+			foreach ( $styles as $style_id => $style_name ) {
+				$page_classes_template = get_post( $style_id );
+				ElementorCSS::get_instance()->render_css_header( $page_classes_template );
+			}
+		}
+	}
+	wp_head(); ?>
 </head>
 <body <?php body_class( 'stylepress-editor' ); ?>>
 <?php
-$categories = Styles::get_instance()->get_categories();
-foreach ( $categories as $category ) {
-	if ( ! empty( $category['page_style'] ) ) {
-		$styles = Styles::get_instance()->get_all_styles( $category['slug'] );
-		foreach ( $styles as $style_id => $style_name ) {
-			$page_classes_template = get_post( $style_id );
-			ElementorCSS::get_instance()->render_css_header( $page_classes_template );
-		}
-	}
-}
-
 do_action( 'stylepress/before-render' );
 ?>
 <!-- stylepress editor template begin -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * Layout for previewing our site wide styles
+ * This is used in the back end editor, and the front end display.
  *
  * @package stylepress
  */
@@ -22,25 +22,25 @@ $page_classes_template = false;
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<?php wp_head();
-	?>
-</head>
-<body <?php body_class(); ?>>
-<?php
-// pull in the default page classes
-if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
-	foreach ( $categories as $category ) {
-		if ( ! empty( $category['page_style'] ) ) {
-			if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
-				if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
-					$page_classes_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
-					ElementorCSS::get_instance()->render_css_header( $page_classes_template );
+	<?php
+	// pull in the default page classes
+	if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
+		foreach ( $categories as $category ) {
+			if ( ! empty( $category['page_style'] ) ) {
+				if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
+					if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
+						$page_classes_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
+						ElementorCSS::get_instance()->render_css_header( $page_classes_template );
+					}
 				}
 			}
 		}
 	}
-}
-
+	wp_head();
+	?>
+</head>
+<body <?php body_class(); ?>>
+<?php
 if ( $page_classes_template ) {
 	Plugin::get_instance()->debug_message( 'Using default page classes:  ' . esc_html( $page_classes_template->post_title ) . ' (#' . $page_classes_template->ID . ')' );
 }

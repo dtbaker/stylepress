@@ -20,12 +20,50 @@ class ElementorCSS extends Base {
 	public function __construct() {
 
 		// Default styling stuff:
-		//		add_action( 'elementor/element/after_section_end', [ $this, 'after_section_end' ], 10, 3 );
-		add_action( 'elementor/element/before_section_start', [ $this, 'after_section_end' ], 10, 3 );
+		add_action( 'elementor/element/before_section_start', [ $this, 'before_section_start' ], 10, 3 );
 		add_action( 'elementor/section/print_template', [ $this, 'print_template' ], 10, 2 );
 		add_action( 'elementor/widget/print_template', [ $this, 'print_template' ], 10, 2 );
 		add_action( 'elementor/frontend/section/before_render', [ $this, 'before_render_content' ], 10, 1 );
 		add_action( 'elementor/widget/before_render_content', [ $this, 'before_render_content' ], 10, 1 );
+//		add_action( 'elementor/widgets/widgets_registered', array( $this, 'remove_default_attributes' ) );
+	}
+
+	public function remove_default_attributes( $widgets ) {
+		$config = $widgets->get_widget_types_config();
+
+		foreach ( $widgets->get_widget_types() as $widget_type_name => $widget_type ) {
+			$widget_settings = $widget_type->get_config();
+			if($widget_type_name === 'divider') {
+				echo $widget_type_name . "\n";
+				if(!empty($widget_settings['controls'])){
+					foreach($widget_settings['controls'] as $control_id => $control_args){
+						if($control_id=='weight' && !empty($control_args['default'])) {
+							print_r($control_args);
+							var_export($widget_type->update_control( $control_id, [
+								'default' => [
+									'size' => '10',
+									'unit' => 'px'
+								]
+							] ));
+						}
+					}
+				}
+
+				$stack = $widget_type->get_stack();
+				print_r($stack);exit;
+				$widget_settings = $widget_type->get_config();
+				print_r( $widget_settings );
+				exit;
+
+
+				$widget_settings = $widget_type->get_config();
+
+				print_r( $widget_type );
+				exit;
+			}
+		}
+
+		exit;
 	}
 
 
@@ -83,12 +121,12 @@ class ElementorCSS extends Base {
 	 * @param $section_id
 	 * @param $args
 	 */
-	public function after_section_end( $section, $section_id, $args ) {
+	public function before_section_start( $section, $section_id, $args ) {
 
 		$which_tab_to_add_to = 'style';
-		if( $section->get_name() === 'divider'){
+		if ( $section->get_name() === 'divider' ) {
 			$which_tab_to_add_to = 'content';
-			if(empty($args['tab'])){
+			if ( empty( $args['tab'] ) ) {
 				$args['tab'] = 'content';
 			}
 		}
@@ -343,14 +381,22 @@ class ElementorCSS extends Base {
 		}
 
 		$css_contents = $css->get_content();
-		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ? '#elementor ' : '' ), $css_contents );
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+			// Edit mode, needs #elementor and NO .elementor-element
+			$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '#elementor ', $css_contents );
+			$element_replace = '';
+		} else {
+			// View mode, needs page ID and elementor-element below.
+			$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '.elementor-' . get_the_ID() . ' ', $css_contents );
+			$element_replace = '.elementor-element';
+		}
 		if ( ! empty( $data ) ) {
-			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
+			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents, $element_replace ) {
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['widgetType'] ) ) {
-					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.elementor-element.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], $element_replace . '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
 				}
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['elType'] ) ) {
-					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.elementor-element.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['elType'] ), $css_contents );
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], $element_replace . '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['elType'] ), $css_contents );
 				}
 			} );
 		}

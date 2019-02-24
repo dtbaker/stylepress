@@ -66,7 +66,7 @@ class Widget_stylepress_Inner_Content extends Widget_Base {
 	public function show_in_panel() {
 		global $post;
 
-		return 'stylepress_style' === $post->post_type;
+		return $post && 'stylepress_style' === $post->post_type;
 	}
 
 	/**
