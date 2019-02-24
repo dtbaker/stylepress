@@ -343,7 +343,7 @@ class ElementorCSS extends Base {
 		}
 
 		$css_contents = $css->get_content();
-		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ? '#elementor' : '' ) . '.elementor-' . get_the_ID() . ' ', $css_contents );
+		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ? '#elementor' . '.elementor-' . get_the_ID() . ' ' : '' ), $css_contents );
 		if ( ! empty( $data ) ) {
 			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['widgetType'] ) ) {
