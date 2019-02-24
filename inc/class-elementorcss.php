@@ -85,7 +85,15 @@ class ElementorCSS extends Base {
 	 */
 	public function after_section_end( $section, $section_id, $args ) {
 
-		if ( ! $args || empty( $args['tab'] ) || $args['tab'] !== 'style' ) {
+		$which_tab_to_add_to = 'style';
+		if( $section->get_name() === 'divider'){
+			$which_tab_to_add_to = 'content';
+			if(empty($args['tab'])){
+				$args['tab'] = 'content';
+			}
+		}
+
+		if ( ! $args || empty( $args['tab'] ) || $args['tab'] !== $which_tab_to_add_to ) {
 			return;
 		}
 		static $completed_items = [];
@@ -103,7 +111,7 @@ class ElementorCSS extends Base {
 					'stylepress_default_css',
 					[
 						'label' => __( 'StylePress Default Styles', 'stylepress' ),
-						'tab'   => 'style',
+						'tab'   => $which_tab_to_add_to,
 					]
 				);
 
@@ -190,7 +198,7 @@ class ElementorCSS extends Base {
 						'stylepress_default_css',
 						[
 							'label' => __( 'StylePress Default Styles', 'stylepress' ),
-							'tab'   => 'style',
+							'tab'   => $which_tab_to_add_to,
 						]
 					);
 
@@ -335,14 +343,14 @@ class ElementorCSS extends Base {
 		}
 
 		$css_contents = $css->get_content();
-		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '', $css_contents );
+		$css_contents = str_replace( '.elementor-' . $post->ID . ' ', ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ? '#elementor' : '' ) . '.elementor-' . get_the_ID() . ' ', $css_contents );
 		if ( ! empty( $data ) ) {
 			\Elementor\Plugin::$instance->db->iterate_data( $data, function ( $element ) use ( &$css_contents ) {
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['widgetType'] ) ) {
-					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.elementor-element.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['widgetType'] ), $css_contents );
 				}
 				if ( ! empty( $element['settings'] ) && ! empty( $element['settings']['default_style_name'] ) && ! empty( $element['elType'] ) ) {
-					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['elType'] ), $css_contents );
+					$css_contents = str_replace( '.elementor-element.elementor-element-' . $element['id'], '.elementor-element.' . $this->sanitise_class_name( $element['settings']['default_style_name'], $element['elType'] ), $css_contents );
 				}
 			} );
 		}

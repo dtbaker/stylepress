@@ -21,7 +21,11 @@ class Templates extends Base {
 
 	public static function get_template_part( $slug, $name, $base_path = '', $args = [] ) {
 
+		// Todo: search theme/child for template, then without base_path.
 		$template_path = STYLEPRESS_PATH . $base_path . 'template-parts/' . $slug . '-' . $name . '.php';
+		if ( ! is_file( $template_path ) ) {
+			$template_path = STYLEPRESS_PATH . $base_path . 'template-parts/' . $slug . '.php';
+		}
 		if ( is_file( $template_path ) ) {
 			global $wp_query;
 			// These are extracted in load_template()

@@ -133,7 +133,9 @@ class stylepress_Shortcode_Google_Map {
 		// comment this 'add_action' out to disable shortcode backend mce view feature
 		add_action( 'admin_init', array( $this, 'init_plugin' ), 20 );
 		add_shortcode( 'stylepress_google_map', array( $this, 'stylepress_shortcode_gmap' ) );
-		add_action( 'widgets_init', create_function( '', 'return register_widget("stylepress_Widget_Google_Map");' ) );
+		add_action( 'widgets_init', function(){
+			register_widget("stylepress_Widget_Google_Map");
+		} );
 
 		add_action( 'customize_register', array( $this, 'customize_register' ), 30 );
 

@@ -1,3 +1,31 @@
-.post-grid{
-color:#FF0000;
+.stylepress-grid{
+  .stylepress-grid__item{
+    border:1px solid #EFEFEF;
+  }
+  &--grid{
+    .stylepress-grid__content{
+      display:flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+    .stylepress-grid__item{
+      flex: 1 0 50%;
+    }
+  }
+  &--list{
+    .stylepress-grid__content{
+      display:flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+    }
+    .stylepress-grid__item{
+      flex:1;
+    }
+  }
+  &--first-post-grid{
+  }
+  &--first-post-list{
+  }
+  &--minimal{
+  }
 }

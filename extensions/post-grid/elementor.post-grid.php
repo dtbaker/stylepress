@@ -24,6 +24,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 	}
 
 	protected $_has_template_content = false;
+
 	public function is_reload_preview_required() {
 		return false;
 	}
@@ -64,7 +65,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_stylepress_post_grid',
 			[
-				'label' => __( 'Post Grid', 'stylepress' ),
+				'label' => __( 'Grid Query', 'stylepress' ),
 			]
 		);
 
@@ -140,30 +141,27 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'posts',
+			'posts_per_page',
 			[
 				'label'       => esc_html__( 'Post Per Page', 'stylepress' ),
-				'description' => esc_html__( 'Give -1 for all post & No Pagination', 'stylepress' ),
+				'description' => esc_html__( 'Give -1 for all post', 'stylepress' ),
 				'type'        => Controls_Manager::NUMBER,
-				'default'     => - 1,
+				'default'     => 20,
 			]
 		);
 
 		$this->add_control(
 			'pagination_yes',
 			[
-				'label'     => esc_html__( 'Pagination Enabled', 'stylepress' ),
-				'type'      => Controls_Manager::SELECT,
-				'options'   => [
-					1 => 'Yes',
-					2 => 'No'
-				],
-				'default'   => 1,
-				'condition' => [
-					'posts!' => - 1,
-				]
+				'label'        => __( 'Enable Pagination', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
 			]
 		);
+
 		$this->add_control(
 			'offset',
 			[
@@ -221,6 +219,100 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'default' => '1',
 			]
 		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_grid_meta',
+			[
+				'label' => esc_html__( 'Meta Information', 'stylepress' ),   //section name for controler view
+			]
+		);
+
+		$this->add_control(
+			'meta_show_date',
+			[
+				'label'        => __( 'Show Date', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_author',
+			[
+				'label'        => __( 'Show Author', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_category',
+			[
+				'label'        => __( 'Show Category', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_excerpt',
+			[
+				'label'        => __( 'Show Excerpt', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_comments',
+			[
+				'label'        => __( 'Show Comments', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_readmore',
+			[
+				'label'        => __( 'Read More Button', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_readmore_text',
+			[
+				'label'     => __( 'Read More Text', 'stylepress' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => 'Read More',
+				'condition' => [
+					'meta_show_readmore' => 'yes',
+				],
+			]
+		);
+
 
 		$this->end_controls_section();
 
@@ -620,7 +712,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 			'meta_query'            => $stylepress_image_condition,
 			'cat'                   => $settings['cat_exclude'],
 			'post_status'           => 'publish',
-			'posts_per_page'        => $settings['posts'],
+			'posts_per_page'        => $settings['posts_per_page'],
 			'paged'                 => $paged,
 			'tax_query'             => $tax_query,
 			'orderby'               => $settings['orderby'],
@@ -635,66 +727,79 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$count = 0;
 		?>
 
-		<div class="content-area stylepress-grid">
-			<div class="site-main <?php echo esc_html( $settings['display_type'] . ' ' . $settings['image_style'] ); ?>">
-				<div class="row">
+		<div class="stylepress-grid
+		stylepress-grid--<?php echo esc_attr( $settings['display_type'] ); ?>
+		stylepress-grid--image-<?php echo esc_attr( $settings['image_style'] ); ?>
+		stylepress-grid--<?php echo esc_attr( $settings['posts_per_row'] ); ?>-per-row
+			">
+
+			<?php
+			if ( $grid_query->have_posts() ) :
+				/* Start the Loop */
+				?>
+				<div class="stylepress-grid__content">
 					<?php
-					if ( $grid_query->have_posts() ) :
+					while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
+						$count ++;
+						\StylePress\Templates::get_template_part( 'content', $settings['display_type'], 'extensions/post-grid/', [
+							'count'          => $count,
+							'posts_per_row'  => $settings['posts_per_row'],
+							'post_count'     => $grid_query->found_posts,
+							'image_size'     => $settings['image_size'],
+							'meta_show_date' => $settings['meta_show_date'],
+						] );
+					endwhile; // End of posts loop found posts
+					?>
+				</div>
+				<?php
 
-						/* Start the Loop */
-						while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
-							$count ++;
-							\StylePress\Templates::get_template_part( 'content', $settings['display_type'], 'extensions/post-grid/', [
-								'count'      => $count,
-								'col_no'     => 2,
-								'col_width'  => 12,
-								'post_count' => '',
-								'image_size' => 'full',
-							] );
-						endwhile; // End of posts loop found posts
+				if ( $settings['pagination_yes'] == 'yes' ) :  //Start of pagination condition
+					$big = 999999999; // need an unlikely integer
+					$totalpages = $grid_query->max_num_pages;
+					$current = max( 1, $paged );
+					$paginate_args = array(
+						'base'      => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+						'format'    => '?paged=%#%',
+						'current'   => $current,
+						'total'     => $totalpages,
+						'show_all'  => false,
+						'end_size'  => 1,
+						'mid_size'  => 3,
+						'prev_next' => true,
+						'prev_text' => esc_html__( '« Previous' ),
+						'next_text' => esc_html__( 'Next »' ),
+						'type'      => 'plain',
+						'add_args'  => false,
+					);
 
-						if ( $settings['pagination_yes'] == 1 ) :  //Start of pagination condition
-							$big = 999999999; // need an unlikely integer
-							$totalpages = $grid_query->max_num_pages;
-							$current = max( 1, $paged );
-							$paginate_args = array(
-								'base'      => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-								'format'    => '?paged=%#%',
-								'current'   => $current,
-								'total'     => $totalpages,
-								'show_all'  => false,
-								'end_size'  => 1,
-								'mid_size'  => 3,
-								'prev_next' => true,
-								'prev_text' => esc_html__( '« Previous' ),
-								'next_text' => esc_html__( 'Next »' ),
-								'type'      => 'plain',
-								'add_args'  => false,
-							);
-
-							$pagination = paginate_links( $paginate_args ); ?>
-							<div class="col-md-12">
-								<nav class='pagination wp-caption stylepress-grid-nav'>
-									<?php echo $pagination; ?>
-								</nav>
-							</div>
-						<?php endif; //end of pagination condition
-						?>
+					$pagination = paginate_links( $paginate_args ); ?>
+					<div class="stylepress-grid__pagination">
+						<nav class="stylepress-grid__pagination-nav">
+							<?php echo $pagination; ?>
+						</nav>
+					</div>
+				<?php endif; //end of pagination condition
+				?>
 
 
-					<?php else :   //if no posts found
-						\StylePress\Templates::get_template_part( 'content', 'none', 'extensions/post-grid/' );
-					endif; //end of post loop ?>
+			<?php else :   //if no posts found
+				?>
+				<div class="stylepress-grid__content">
+					<?php
+					\StylePress\Templates::get_template_part( 'content', 'none', 'extensions/post-grid/' );
+					?>
+				</div>
+			<?php
+			endif; //end of post loop ?>
 
-				</div><!-- #main -->
-			</div><!-- #primary -->
 		</div>
 
 		<?php
 		wp_reset_postdata();
 	}
 
-	public function render_plain_content() {}
+	public function render_plain_content() {
+	}
 
 }
 

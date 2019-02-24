@@ -68,7 +68,7 @@ var imagesSRC = './src/images/**/*.{png,jpg,gif,svg}'; // Source folder of image
 var imagesDestination = './assets/images/'; // Destination folder of optimized images. Must be different from the imagesSRC folder.
 
 // Watch files paths.
-var styleWatchFiles = './src/scss/**/*.scss'; // Path to all *.scss files inside css folder and inside them.
+var styleWatchFiles = [ './src/scss/**/*.scss', './extensions/**/*.scss' ]; // Path to all *.scss files inside css folder and inside them.
 var vendorJSWatchFiles = './src/js/vendor/*.js'; // Path to all vendor JS files.
 var customJSWatchFiles = './src/js/custom/*.js'; // Path to all custom JS files.
 var projectPHPWatchFiles = [ './**/*.php', '!build/**/*.php', '!wordpress-svn/**/*.php' ]; // Path to all PHP files.
