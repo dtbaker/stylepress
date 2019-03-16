@@ -230,6 +230,30 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
+			'meta_show_thumbnail',
+			[
+				'label'        => __( 'Show Thumbnail', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_show_title',
+			[
+				'label'        => __( 'Show Title', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
 			'meta_show_date',
 			[
 				'label'        => __( 'Show Date', 'stylepress' ),
@@ -266,6 +290,18 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
+			'meta_show_tags',
+			[
+				'label'        => __( 'Show Tags', 'stylepress' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'default'      => 'yes',
+				'label_on'     => 'Show',
+				'label_off'    => 'Hide',
+				'return_value' => 'yes',
+			]
+		);
+
+		$this->add_control(
 			'meta_show_excerpt',
 			[
 				'label'        => __( 'Show Excerpt', 'stylepress' ),
@@ -276,6 +312,19 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'return_value' => 'yes',
 			]
 		);
+
+		$this->add_control(
+			'meta_exceprt_length',
+			[
+				'label'     => __( 'Excerpt Length', 'stylepress' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => '10',
+				'condition' => [
+					'meta_show_excerpt' => 'yes',
+				],
+			]
+		);
+
 
 		$this->add_control(
 			'meta_show_comments',
@@ -655,6 +704,9 @@ class Stylepress_Post_Grid extends Widget_Base {
 	 */
 	protected function render() {
 
+
+		$GLOBALS['stylepress_render']['has_done_inner_content'] = true;
+
 		$settings = $this->get_settings();
 		if ( ! empty( $settings['taxonomy_type'] ) ) {
 			$terms = get_terms( array(
@@ -724,6 +776,20 @@ class Stylepress_Post_Grid extends Widget_Base {
 
 		$grid_query = new \WP_Query( $args );
 
+		add_filter( 'excerpt_length', function($length) use ( $settings){
+			return (int)$settings['meta_exceprt_length'];
+		}, 999 );
+
+		add_filter( 'excerpt_more', function($more) use ($settings){
+			if( $settings['meta_show_readmore']) {
+				return sprintf( '<a class="read-more" href="%1$s">%2$s</a>',
+					get_permalink( get_the_ID() ),
+					esc_attr( ! empty( $settings['meta_readmore_text'] ) ? $settings['meta_readmore_text'] : 'Read More' )
+				);
+			}
+			return '';
+		} );
+
 		$count = 0;
 		?>
 
@@ -741,13 +807,10 @@ class Stylepress_Post_Grid extends Widget_Base {
 					<?php
 					while ( $grid_query->have_posts() ) : $grid_query->the_post();  // Start of posts loop found posts
 						$count ++;
-						\StylePress\Templates::get_template_part( 'content', $settings['display_type'], 'extensions/post-grid/', [
-							'count'          => $count,
-							'posts_per_row'  => $settings['posts_per_row'],
-							'post_count'     => $grid_query->found_posts,
-							'image_size'     => $settings['image_size'],
-							'meta_show_date' => $settings['meta_show_date'],
-						] );
+						$this_settings = $settings;
+						$this_settings['count'] = $count;
+						$this_settings['post_count'] = $grid_query->found_posts;
+						\StylePress\Templates::get_template_part( 'content', $this_settings['display_type'], 'extensions/post-grid/', $this_settings );
 					endwhile; // End of posts loop found posts
 					?>
 				</div>

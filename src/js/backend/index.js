@@ -20,7 +20,7 @@ class StylePressBackend {
     // Adjust default values
     for (var widget in elementor.config.widgets) {
       if (elementor.config.widgets.hasOwnProperty(widget)) {
-        if(typeof elementor.config.widgets[widget].controls.stylepress_default_css !== 'undefined'){
+        if(typeof elementor.config.widgets[widget].controls !== 'undefined' && typeof elementor.config.widgets[widget].controls.stylepress_default_css !== 'undefined'){
           // This widget has some default styles available, time to clear the default options.
           //console.log && console.log(widget + '!!');
           for (var control in elementor.config.widgets[widget].controls) {

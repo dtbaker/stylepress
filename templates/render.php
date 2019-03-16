@@ -44,6 +44,8 @@ $page_classes_template = false;
 if ( $page_classes_template ) {
 	Plugin::get_instance()->debug_message( 'Using default page classes:  ' . esc_html( $page_classes_template->post_title ) . ' (#' . $page_classes_template->ID . ')' );
 }
+Plugin::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
+Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] ? $GLOBALS['stylepress_render']['queried_object']->ID : 'inknown' ) );
 
 do_action( 'stylepress/before-render' );
 if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
@@ -70,8 +72,14 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			}
 		}
 		if ( ! empty( $category['inner'] ) && empty( $GLOBALS['stylepress_render']['has_done_inner_content'] ) ) {
-			the_post();
-			the_content();
+			// todo: we may with to turn off this defualt behaviour for pages that don't want the default content displaying
+			// e.g. we got the first blog post content showing on archive page that had a stylepress-loop widget.
+			// this might be an issue for shops too
+			Plugin::get_instance()->debug_message( 'Rendering default inner_content() from render.php' );
+			if ( have_posts() ) {
+				the_post();
+				the_content();
+			}
 		}
 	}
 }

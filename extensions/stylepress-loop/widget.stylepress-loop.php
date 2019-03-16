@@ -420,6 +420,7 @@ class Stylepress_Loop extends Widget_Base {
 	public function render() {
 		$this->query_posts();
 
+
 		$wp_query = $this->get_query();
 
 		if ( ! $wp_query->found_posts ) {

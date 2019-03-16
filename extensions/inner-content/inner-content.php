@@ -89,8 +89,11 @@ class Stylepress_Inner_Content extends Widget_Base {
 		if ( ! $editing_this_template ) {
 			//$settings = $this->get_settings();
 			if ( ! is_404() ) {
-				the_post();
-				the_content();
+				\StylePress\Plugin::get_instance()->debug_message( 'Rendering inner_content() from Widget' );
+				if ( have_posts() ) {
+					the_post();
+					the_content();
+				}
 				$GLOBALS['stylepress_render']['has_done_inner_content'] = true;
 			}
 		} else {
