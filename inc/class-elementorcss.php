@@ -386,8 +386,9 @@ class ElementorCSS extends Base {
 			$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '#elementor ', $css_contents );
 			$element_replace = '';
 		} else {
+			// We don't want to use the Page ID here as that might not apply to the footer section etc..
 			// View mode, needs page ID and elementor-element below.
-			$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '.elementor-' . get_the_ID() . ' ', $css_contents );
+			$css_contents = str_replace( '.elementor-' . $post->ID . ' ', '.elementor ', $css_contents );
 			$element_replace = '.elementor-element';
 		}
 		if ( ! empty( $data ) ) {

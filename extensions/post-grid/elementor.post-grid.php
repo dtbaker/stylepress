@@ -355,7 +355,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 			[
 				'label'     => __( 'Read More Text', 'stylepress' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => 'Read More',
+				'default'   => 'Read More »',
 				'condition' => [
 					'meta_show_readmore' => 'yes',
 				],
@@ -388,26 +388,6 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'default' => 'grid'
 			]
 		);
-
-		$this->add_control(
-			'posts_per_row',
-			[
-				'label'     => esc_html__( 'Posts Per Row', 'stylepress' ),
-				'type'      => Controls_Manager::SELECT,
-				'condition' => [
-					'display_type' => [ 'grid', 'minimal' ],
-				],
-				'options'   => [
-					'1' => '1',
-					'2' => '2',
-					'3' => '3',
-					'4' => '4',
-					'6' => '6',
-				],
-				'default'   => '2',
-			]
-		);
-
 
 		$this->add_control(
 			'filter_thumbnail',
@@ -457,9 +437,118 @@ class Stylepress_Post_Grid extends Widget_Base {
 
 
 		$this->start_controls_section(
+			'section_style_card',
+			[
+				'label' => esc_html__( 'Card', 'stylepress' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'background_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+
+		$this->add_responsive_control(
+			'card_row_gap',
+			[
+				'label'      => esc_html__( 'Row Gap', 'stylepress' ),
+				'type'       => Controls_Manager::SLIDER,
+				'range'      => [
+					'px' => [
+						'min'  => 0,
+						'max'  => 200,
+						'step' => 1,
+					],
+					'%'  => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'size_units' => [ '%', 'px' ],
+				'selectors'  => [
+					'{{WRAPPER}} .stylepress-grid__item' => 'margin: 0 0 {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'card_inner_padding',
+			[
+				'label'      => esc_html__( 'Card Padding', 'stylepress' ),
+				'type'       => Controls_Manager::SLIDER,
+				'range'      => [
+					'px' => [
+						'min'  => 0,
+						'max'  => 50,
+						'step' => 1,
+					],
+					'%'  => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'size_units' => [ '%', 'px' ],
+				'selectors'  => [
+					'{{WRAPPER}} .stylepress-grid__item' => 'padding: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'card_width',
+			[
+				'label'      => esc_html__( 'Card Width', 'stylepress' ),
+				'type'       => Controls_Manager::SLIDER,
+				'range'      => [
+					'px' => [
+						'min'  => 0,
+						'max'  => 1000,
+						'step' => 5,
+					],
+					'%'  => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'size_units' => [ '%', 'px' ],
+				'selectors'  => [
+					'{{WRAPPER}} .stylepress-grid__item' => 'flex: 0 1 {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'card_border',
+				'selector' => '{{WRAPPER}} .stylepress-grid__item',
+				'separator' => 'before',
+			]
+		);
+
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'card_box_shadow',
+				'selector' => '{{WRAPPER}} .stylepress-grid__item',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
 			'section_style_grid',
 			[
-				'label' => esc_html__( 'Style', 'stylepress' ),
+				'label' => esc_html__( 'Content', 'stylepress' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -477,7 +566,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 					'capitalize' => esc_html__( 'Capitalize', 'stylepress' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} .entry-title' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
+					'{{WRAPPER}} .stylepress-grid__item-title' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
 				],
 			]
 		);
@@ -490,8 +579,8 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'range'      => [
 					'px' => [
 						'min'  => 0,
-						'max'  => 1000,
-						'step' => 5,
+						'max'  => 100,
+						'step' => 1,
 					],
 					'%'  => [
 						'min' => 0,
@@ -500,7 +589,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				],
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .entry-title' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .stylepress-grid__item-title' => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -511,7 +600,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Title Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .entry-title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-title a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -522,7 +611,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Title Hover Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .entry-title a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-title a:hover, {{WRAPPER}} .stylepress-grid__item-title a:active, {{WRAPPER}} .stylepress-grid__item-title a:focus' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -533,7 +622,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Meta Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .entry-meta a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-meta, {{WRAPPER}} .stylepress-grid__item-meta a, {{WRAPPER}} .stylepress-grid__item-readmore a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -544,18 +633,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Meta Hover Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .entry-meta a:hover' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'meta_color_i',
-			[
-				'label'     => esc_html__( 'Meta Icon Color', 'stylepress' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .entry-meta' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-meta a:hover, {{WRAPPER}} .stylepress-grid__item-meta a:active, {{WRAPPER}} .stylepress-grid__item-meta a:focus, {{WRAPPER}} .stylepress-grid__item-readmore a:hover, {{WRAPPER}} .stylepress-grid__item-readmore a:active, {{WRAPPER}} .stylepress-grid__item-readmore a:focus' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -573,7 +651,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 					'capitalize' => esc_html__( 'Capitalize', 'stylepress' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} .blog-excerpt p' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
 				],
 			]
 		);
@@ -586,8 +664,8 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'range'      => [
 					'px' => [
 						'min'  => 0,
-						'max'  => 1000,
-						'step' => 5,
+						'max'  => 100,
+						'step' => 1,
 					],
 					'%'  => [
 						'min' => 0,
@@ -596,7 +674,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				],
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .blog-excerpt p' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p, {{WRAPPER}} .stylepress-grid__item-readmore' => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -607,7 +685,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Excerpt Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .blog-excerpt p' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -638,10 +716,22 @@ class Stylepress_Post_Grid extends Widget_Base {
 				],
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .blog-excerpt p' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'text-align: {{VALUE}};',
 				],
 			]
 		);
+
+		$this->end_controls_section();
+
+
+		$this->start_controls_section(
+			'section_style_pagination',
+			[
+				'label' => esc_html__( 'Pagination', 'stylepress' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 
 		$this->add_responsive_control(
 			'pagination_align',
@@ -668,10 +758,11 @@ class Stylepress_Post_Grid extends Widget_Base {
 				],
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid-nav' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__pagination' => 'text-align: {{VALUE}};',
 				],
 			]
 		);
+
 		$this->add_responsive_control(
 			'pagi_font_size',
 			[
@@ -694,6 +785,146 @@ class Stylepress_Post_Grid extends Widget_Base {
 				],
 			]
 		);
+
+		$this->start_controls_tabs( 'tabs_pagination_style' );
+
+		$this->start_controls_tab(
+			'tab_pagination_normal',
+			[
+				'label' => __( 'Normal', 'stylepress' ),
+			]
+		);
+		/////////////////////////
+
+		$this->add_control(
+			'pagination_text_normal',
+			[
+				'label'     => esc_html__( 'Text Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#4a4a4a',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination span, {{WRAPPER}} .stylepress-grid__pagination a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_background_normal',
+			[
+				'label'     => esc_html__( 'Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#f7f7f7',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination span, {{WRAPPER}} .stylepress-grid__pagination a' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_border_normal',
+			[
+				'label'     => esc_html__( 'Border Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#d7d8d8',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination a, {{WRAPPER}} .stylepress-grid__pagination span' => 'border-color: {{VALUE}}; box-shadow: 0px 1px 0px {{VALUE}}; ',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_pagination_hover',
+			[
+				'label' => __( 'Hover', 'stylepress' ),
+			]
+		);
+		/////////////////////////
+
+		$this->add_control(
+			'pagination_text_hover',
+			[
+				'label'     => esc_html__( 'Text Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination a:hover, {{WRAPPER}} .stylepress-grid__pagination a:active, {{WRAPPER}} .stylepress-grid__pagination a:focus' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_background_hover',
+			[
+				'label'     => esc_html__( 'Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination a:hover, {{WRAPPER}} .stylepress-grid__pagination a:active, {{WRAPPER}} .stylepress-grid__pagination a:focus' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_border_hover',
+			[
+				'label'     => esc_html__( 'Border Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination a:hover, {{WRAPPER}} .stylepress-grid__pagination a:active, {{WRAPPER}} .stylepress-grid__pagination a:focus' => 'border-color: {{VALUE}}; box-shadow: 0px 1px 0px {{VALUE}}; ',
+				],
+			]
+		);
+
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_pagination_current',
+			[
+				'label' => __( 'Current', 'stylepress' ),
+			]
+		);
+		/////////////////////////
+
+		$this->add_control(
+			'pagination_text_current',
+			[
+				'label'     => esc_html__( 'Text Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination span.current' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_background_current',
+			[
+				'label'     => esc_html__( 'Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#0073af',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination span.current' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'pagination_border_current',
+			[
+				'label'     => esc_html__( 'Border Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'default' => '#03537d',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__pagination span.current' => 'border-color: {{VALUE}}; box-shadow: 0px 1px 0px {{VALUE}}; ',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 
@@ -780,13 +1011,8 @@ class Stylepress_Post_Grid extends Widget_Base {
 			return (int)$settings['meta_exceprt_length'];
 		}, 999 );
 
-		add_filter( 'excerpt_more', function($more) use ($settings){
-			if( $settings['meta_show_readmore']) {
-				return sprintf( '<a class="read-more" href="%1$s">%2$s</a>',
-					get_permalink( get_the_ID() ),
-					esc_attr( ! empty( $settings['meta_readmore_text'] ) ? $settings['meta_readmore_text'] : 'Read More' )
-				);
-			}
+		add_filter( 'excerpt_more', function($more){
+			// Kill the built in exceprt link for our own custom one that always displays.
 			return '';
 		} );
 
@@ -796,7 +1022,6 @@ class Stylepress_Post_Grid extends Widget_Base {
 		<div class="stylepress-grid
 		stylepress-grid--<?php echo esc_attr( $settings['display_type'] ); ?>
 		stylepress-grid--image-<?php echo esc_attr( $settings['image_style'] ); ?>
-		stylepress-grid--<?php echo esc_attr( $settings['posts_per_row'] ); ?>-per-row
 			">
 
 			<?php
