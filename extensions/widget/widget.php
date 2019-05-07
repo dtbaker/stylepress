@@ -1,9 +1,10 @@
 <?php
 
+namespace StylePress;
 
 defined( 'STYLEPRESS_PATH' ) || exit;
 
-class stylepress_template_widget extends WP_Widget {
+class stylepress_template_widget extends \WP_Widget {
 	/**
 	 * Contact Us constructor
 	 */

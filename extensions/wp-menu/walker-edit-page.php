@@ -1,4 +1,7 @@
 <?php
+
+namespace StylePress;
+
 /**
  *  /!\ This is a copy of Walker_Nav_Menu_Edit class in core
  *
@@ -10,7 +13,7 @@
  */
 
 
-class Walker_Nav_Menu_Edit_StylePress extends Walker_Nav_Menu {
+class Walker_Nav_Menu_Edit_StylePress extends \Walker_Nav_Menu {
 	/**
 	 * Starts the list before the elements are added.
 	 *

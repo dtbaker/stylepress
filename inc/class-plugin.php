@@ -111,7 +111,7 @@ class Plugin extends Base {
 			if ( class_exists( '\Elementor\Plugin' ) ) {
 				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
 					require_once STYLEPRESS_PATH . 'extensions/widget/widget.php';
-					register_widget( "stylepress_template_widget" );
+					register_widget( "\StylePress\stylepress_template_widget" );
 				}
 			}
 		}

@@ -79,7 +79,7 @@ class Skin_StylePressDynamic_Image extends Skin_Base {
 
 		if ( $this->get_instance_value( 'stylepress_dynamic_image' ) == 'post_thumbnail' ) {
 			require_once STYLEPRESS_PATH . 'widgets/class.dynamic-field.php';
-			$dyno_generator           = \stylepressDynamicField::get_instance();
+			$dyno_generator           = StylePressDynamicField::get_instance();
 			$settings['image']['url'] = $dyno_generator->post_thumbnail();
 			$link                     = array(
 				'url' => $dyno_generator->permalink()

@@ -26,7 +26,7 @@ spl_autoload_register(
 		if ( file_exists( $file ) ) {
 			require $file;
 		} else {
-			wp_die( esc_html( 'Filename: ' . basename( $file ) . ' missing.' ) );
+			wp_die( esc_html( 'Filename: ' . $file.' '.basename( $file ) . ' missing.' ) );
 		}
 	}
 );

@@ -6,6 +6,8 @@
  * @package stylepress
  */
 
+namespace StylePress;
+
 defined( 'STYLEPRESS_PATH' ) || exit;
 
 /**
@@ -13,7 +15,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
  *
  * Class Plugin
  */
-class stylepressDynamicField {
+class StylePressDynamicField {
 
 	/**
 	 * Stores our instance that can (and is) accessed from various places.

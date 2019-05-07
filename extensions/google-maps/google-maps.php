@@ -9,6 +9,7 @@
  * Copyright 2014
  */
 
+namespace StylePress;
 
 defined( 'STYLEPRESS_PATH' ) || exit;
 
@@ -38,7 +39,7 @@ require_once $widget_file;
 add_action( 'customize_register', 'stylepress_register_google_maps_customize_control' );
 
 function stylepress_register_google_maps_customize_control() {
-	class stylepress_Google_Maps_Custom_Text_Control extends WP_Customize_Control {
+	class stylepress_Google_Maps_Custom_Text_Control extends \WP_Customize_Control {
 		public $type = 'google_maps_customtext';
 		public $extra = ''; // we add this for the extra description
 
@@ -52,7 +53,7 @@ function stylepress_register_google_maps_customize_control() {
 	}
 }
 
-class stylepress_Widget_Google_Map extends WP_Widget {
+class stylepress_Widget_Google_Map extends \WP_Widget {
 	/** constructor */
 	function __construct() {
 		$widget_ops = array(
@@ -68,7 +69,7 @@ class stylepress_Widget_Google_Map extends WP_Widget {
 		echo $before_widget;
 		echo $title ? ( $before_title . $title . $after_title ) : '';
 		// fire our shortcode below to generate map output.
-		$shortcode = stylepress_Shortcode_Google_Map::get_instance();
+		$shortcode = StylePress_Shortcode_Google_Map::get_instance();
 		echo $shortcode->stylepress_shortcode_gmap( $instance, isset( $instance['innercontent'] ) ? $instance['innercontent'] : '' );
 		echo $after_widget;
 	}
@@ -88,7 +89,7 @@ class stylepress_Widget_Google_Map extends WP_Widget {
 			</label></p>
 		<?php
 		// pull the same fields in from our mce popup below:
-		$shortcode = stylepress_Shortcode_Google_Map::get_instance();
+		$shortcode = StylePress_Shortcode_Google_Map::get_instance();
 		foreach ( $shortcode->fields as $field ) {
 			?>
 			<p><label for="<?php echo $this->get_field_id( $field['name'] ); ?>"><?php echo $field['label']; ?>
@@ -118,7 +119,7 @@ class stylepress_Widget_Google_Map extends WP_Widget {
 }
 
 
-class stylepress_Shortcode_Google_Map {
+class StylePress_Shortcode_Google_Map {
 	private static $instance = null;
 
 	public static function get_instance() {
@@ -440,6 +441,6 @@ class stylepress_Shortcode_Google_Map {
 	);
 }
 
-stylepress_Shortcode_Google_Map::get_instance()->init();
+StylePress_Shortcode_Google_Map::get_instance()->init();
 
 

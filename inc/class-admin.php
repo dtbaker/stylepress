@@ -53,7 +53,7 @@ class Admin extends Base {
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'Edit Styles', 'stylepress' ), __( 'Edit Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'Site Styles', 'stylepress' ), __( 'Site Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
 			$this,
 			'default_styles_page_callback'
 		) );

@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0.0
  */
-class StylePress_Control_URL extends Control_Base_Multiple {
+class StylePress_Custom_Control_URL extends Control_Base_Multiple {
 
 	public function get_type() {
 		return 'url';

@@ -1,7 +1,8 @@
 <?php
 
-defined( 'STYLEPRESS_PATH' ) || exit;
+namespace StylePress;
 
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 require_once STYLEPRESS_PATH . 'extensions/dynamic-field/widget.dynamic-field.php';
 
@@ -63,7 +64,7 @@ function stylepress_register_dynamics( $widget, $args ) {
 	<ul>
 		<?php
 		require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-		$dyno_generator      = \stylepressDynamicField::get_instance();
+		$dyno_generator      = StylePressDynamicField::get_instance();
 		$available_callbacks = $dyno_generator->get_replace_fields();
 		foreach ( $available_callbacks as $key => $title ) { ?>
 			<li>{{<?php echo $key; ?>}} <span><?php echo $title; ?></span></li>
@@ -114,7 +115,7 @@ function stylepress_dynamic_before_render( $widget ) {
 		$settings = $widget->get_active_settings();
 		if ( ! empty( $settings['stylepress_enable_dynamic_bg'] ) && $settings['stylepress_enable_dynamic_bg'] === 'yes' ) {
 			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \stylepressDynamicField::get_instance();
+			$dyno_generator = StylePressDynamicField::get_instance();
 			$image_url      = $dyno_generator->post_thumbnail();
 			if ( $image_url ) {
 				$widget->add_render_attribute( '_wrapper', 'style', 'background-image: url("' . esc_url( $image_url ) . '") !important;' );
@@ -158,7 +159,7 @@ function stylepress_dynamic_before_render( $widget ) {
 					break;
 			}
 			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \stylepressDynamicField::get_instance();
+			$dyno_generator = StylePressDynamicField::get_instance();
 			//			$available_callbacks = $dyno_generator->get_replace_fields();
 
 			foreach ( $fields as $field ) {

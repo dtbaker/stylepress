@@ -910,7 +910,7 @@ class Widget_stylepress_WP_Menu extends Widget_Base {
 												'container_id'    => 'primary-menu',
 												'menu_class'      => '',
 												'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-												'walker'          => new \stylepress_walker_nav_menu()
+												'walker'          => new stylepress_walker_nav_menu()
 											) );
 										} else {
 											echo "Menu Configuration Issue";
@@ -924,7 +924,7 @@ class Widget_stylepress_WP_Menu extends Widget_Base {
 												'container_id'    => 'primary-menu',
 												'menu_class'      => '',
 												'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-												'walker'          => new \stylepress_walker_nav_menu(),
+												'walker'          => new stylepress_walker_nav_menu(),
 											)
 										);
 									}

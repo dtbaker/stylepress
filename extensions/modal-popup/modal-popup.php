@@ -5,6 +5,7 @@
  * @package stylepress
  */
 
+namespace StylePress;
 
 defined( 'STYLEPRESS_PATH' ) || exit;
 
@@ -16,7 +17,7 @@ if ( $control ) {
 	//StylePress_Control_URL
 	require_once STYLEPRESS_PATH . 'extensions/modal-popup/elementor.url-control.php';
 
-	$class_name = 'Elementor\StylePress_Control_URL';
+	$class_name = 'Elementor\StylePress_Custom_Control_URL';
 
 	$elementor->controls_manager->register_control( $control_id, new $class_name() );
 }

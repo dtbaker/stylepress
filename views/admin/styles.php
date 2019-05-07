@@ -41,7 +41,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 						<div class="stylepress__style-action">
 							<a class="button button-primary"
 							   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&style_id=' . $design_id ) ); ?>">
-								<?php esc_html_e( 'Edit Style', 'stylepress' ); ?>
+								<?php esc_html_e( 'Open Style', 'stylepress' ); ?>
 							</a>
 						</div>
 					</div>

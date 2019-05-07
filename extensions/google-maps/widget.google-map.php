@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class StylePress_Google_Map extends Widget_Base {
+class StylePress_Custom_Google_Map extends Widget_Base {
 
 	public function get_name() {
 		return 'stylepress-google-map';
@@ -257,7 +257,7 @@ class StylePress_Google_Map extends Widget_Base {
 		$instance = $this->get_settings();
 
 		$shortcode = '[stylepress_google_map ';
-		foreach ( \stylepress_Shortcode_Google_Map::get_instance()->fields as $field ) {
+		foreach ( \StylePress\StylePress_Shortcode_Google_Map::get_instance()->fields as $field ) {
 			$value = isset( $instance[ $field['name'] ] ) ? $instance[ $field['name'] ] : $field['default'];
 			if ( $field['name'] == 'mapstyle' ) {
 				$value = str_replace( '[', '&#91;', $value );
@@ -286,4 +286,4 @@ class StylePress_Google_Map extends Widget_Base {
 	}
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Google_Map() );
+Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Custom_Google_Map() );

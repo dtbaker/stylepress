@@ -68,7 +68,7 @@ class Skin_StylePressButtonDynamic extends Skin_Base {
 		$settings = $this->parent->get_settings();
 
 		require_once STYLEPRESS_PATH . 'widgets/class.dynamic-field.php';
-		$dyno_generator      = \stylepressDynamicField::get_instance();
+		$dyno_generator      = StylePressDynamicField::get_instance();
 		$available_callbacks = $this->get_replace_fields();
 
 		if ( ! empty( $settings['link']['url'] ) ) {

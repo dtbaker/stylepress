@@ -16,7 +16,7 @@ add_action( 'wp_enqueue_scripts', function () {
 } );
 
 
-class StylePress_Widget_Page_Carousel extends Widget_Base {
+class StylePress_Custom_Widget_Page_Carousel extends Widget_Base {
 
 	public function get_name() {
 		return 'stylepress-page-carousel';
@@ -681,4 +681,4 @@ class StylePress_Widget_Page_Carousel extends Widget_Base {
 	}
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Widget_Page_Carousel() );
+Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Custom_Widget_Page_Carousel() );

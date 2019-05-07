@@ -182,7 +182,7 @@ class Widget_stylepress_Dynamic_Field extends Widget_Base {
 		}
 		if ( $callback ) {
 			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \stylepressDynamicField::get_instance();
+			$dyno_generator = StylePressDynamicField::get_instance();
 
 			if ( preg_match_all( '#\{\{([a-z_]+)\}\}#imsU', $callback, $matches ) ) {
 				foreach ( $matches[1] as $key => $field ) {

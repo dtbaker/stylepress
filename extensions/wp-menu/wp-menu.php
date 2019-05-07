@@ -1,9 +1,11 @@
 <?php
 
+namespace StylePress;
+
 defined( 'STYLEPRESS_PATH' ) || exit;
 
-define( 'STYLEPRESS_MENU_DISPLAY_MEGA', 1 );
-define( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT', 2 );
+if(!defined('STYLEPRESS_MENU_DISPLAY_MEGA'))define( 'STYLEPRESS_MENU_DISPLAY_MEGA', 1 );
+if(!defined('STYLEPRESS_MENU_DISPLAY_SLIDEOUT'))define( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT', 2 );
 
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'stylepress-nav-menu', STYLEPRESS_URI . 'extensions/wp-menu/menu.css', false );
@@ -57,7 +59,7 @@ add_filter( 'wp_nav_menu_args', function ( $args ) {
 		}
 		if ( $has_stylepress ) {
 			$GLOBALS['stylepress_nav_slideouts'] = array();
-			$args['walker']                      = new \stylepress_walker_nav_menu();
+			$args['walker']                      = new stylepress_walker_nav_menu();
 			$args['do_stylepress']               = true;
 			$args['container']                   = 'div';
 			$args['container_class']             .= ' main-nav stylepress_menu';
