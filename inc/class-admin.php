@@ -87,6 +87,11 @@ class Admin extends Base {
 				'admin/sections.php', [
 				]
 			);
+		} else if ( isset( $_GET['remote_style_id'] ) ) {
+			$this->content = $this->render_template(
+				'admin/remote-style.php', [
+				]
+			);
 		} else {
 			$this->content = $this->render_template(
 				'admin/styles.php', [

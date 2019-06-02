@@ -129,6 +129,21 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'filter_thumbnail',
+			[
+				'label'   => esc_html__( 'Include / Exclude Images', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => [
+					0            => esc_html__( 'Show All Posts', 'stylepress' ),
+					'EXISTS'     => esc_html__( 'Only Posts With Images', 'stylepress' ),
+					'NOT EXISTS' => esc_html__( 'Only Posts Without Images', 'stylepress' ),
+				],
+				'default' => 0,
+
+			]
+		);
+
 
 		$this->end_controls_section();
 
@@ -366,9 +381,10 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'section_content3',
+			'section_post_layout_options',
 			[
-				'label' => esc_html__( 'Post Style & Image Settings', 'stylepress' ),   //section name for controler view
+				'label' => esc_html__( 'Grid', 'stylepress' ),   //section name for controler view
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -376,7 +392,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'display_type',
 			[
-				'label'   => esc_html__( 'Choose your desired style', 'stylepress' ),
+				'label'   => esc_html__( 'Post layout style', 'stylepress' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => [
 					'grid'            => 'Grid Layout',
@@ -388,50 +404,6 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'default' => 'grid'
 			]
 		);
-
-		$this->add_control(
-			'filter_thumbnail',
-			[
-				'label'   => esc_html__( 'Image Condition', 'stylepress' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => [
-					0            => esc_html__( 'Show All', 'stylepress' ),
-					'EXISTS'     => esc_html__( 'With Image', 'stylepress' ),
-					'NOT EXISTS' => esc_html__( 'Without Image', 'stylepress' ),
-				],
-				'default' => 0,
-
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Image_Size::get_type(),
-			[
-				'name'      => 'image', // Actually its `image_size`.
-				'default'   => 'large',
-				'exclude'   => [ 'custom' ],
-				'condition' => [
-					'filter_thumbnail!' => 'NOT EXISTS',
-				],
-			]
-		);
-		$this->add_control(
-			'image_style',
-			[
-				'label'     => esc_html__( 'Featured Image Style', 'stylepress' ),
-				'type'      => Controls_Manager::SELECT2,
-				'options'   => [
-					'standard'   => 'Standard',
-					'top-left'   => 'left top rounded',
-					'top-bottom' => 'left bottom rounded'
-				],
-				'default'   => '1',
-				'condition' => [
-					'filter_thumbnail!' => 'NOT EXISTS',
-				],
-			]
-		);
-
 
 		$this->end_controls_section();
 
@@ -543,6 +515,156 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+
+
+		$this->end_controls_section();
+
+
+		$this->start_controls_section(
+			'section_post_image_options',
+			[
+				'label' => esc_html__( 'Thumbnail', 'stylepress' ),   //section name for controler view
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Image_Size::get_type(),
+			[
+				'name'      => 'image', // Actually its `image_size`.
+				'default'   => 'large',
+				//'exclude'   => [ 'custom' ],
+			]
+		);
+
+		$this->add_responsive_control(
+			'image_margin',
+			[
+				'label'           => __( 'Image Gap', 'stylepress' ),
+				'type'            => Controls_Manager::DIMENSIONS,
+				'size_units'      => [ 'px', 'em', '%' ],
+				'selectors'       => [
+					"{{WRAPPER}} .stylepress-grid__item-image" => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
+		$this->add_control(
+			'image_style',
+			[
+				'label'     => esc_html__( 'Featured Image Style', 'stylepress' ),
+				'type'      => Controls_Manager::SELECT2,
+				'options'   => [
+					'category-over' => 'Category Text Overlay',
+					'standard'   => 'Standard',
+					'top-left'   => 'Left top rounded',
+					'top-bottom' => 'Left bottom rounded',
+				],
+				'default'   => 'category-over',
+				'separator' => 'before',
+			]
+		);
+
+		// stylepress-grid__item-thumb-overlay
+
+
+		$this->add_responsive_control(
+			'category_over_align',
+			[
+				'label'     => __( 'Category Alignment', 'stylepress' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'    => [
+						'title' => __( 'Left', 'stylepress' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'right'   => [
+						'title' => __( 'Right', 'stylepress' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'default'   => '',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-thumb-overlay' => '{{VALUE}}: 0;',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'           => 'category_over_typography',
+				'label'          => __( 'Category Typography', 'stylepress' ),
+				'selector'       => '{{WRAPPER}} .stylepress-grid__item-thumb-overlay',
+				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
+				'fields_options' => [],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
+		$this->add_control(
+			'category_over_typography_color',
+			[
+				'label'     => __( 'Category Text Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-thumb-overlay' => 'color: {{VALUE}};',
+				],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
+		$this->add_control(
+			'category_over_typography_bg',
+			[
+				'label'     => __( 'Category Background Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-thumb-overlay' => 'background-color: {{VALUE}};',
+				],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'category_over_typography_padding',
+			[
+				'label'           => __( 'Category Padding', 'stylepress' ),
+				'type'            => Controls_Manager::DIMENSIONS,
+				'size_units'      => [ 'px', 'em', '%' ],
+				'selectors'       => [
+					"{{WRAPPER}} .stylepress-grid__item-thumb-overlay" => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'category_over_typography_margin',
+			[
+				'label'           => __( 'Category Margin', 'stylepress' ),
+				'type'            => Controls_Manager::DIMENSIONS,
+				'size_units'      => [ 'px', 'em', '%' ],
+				'selectors'       => [
+					"{{WRAPPER}} .stylepress-grid__item-thumb-overlay" => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+				'condition' => [
+					'image_style' => 'category-over',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -553,44 +675,46 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'title_text_transform',
+
+		$this->add_responsive_control(
+			'stylepress_blog_text_align',
 			[
-				'label'     => esc_html__( 'Title Text Transform', 'stylepress' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => '',
+				'label'     => __( 'Text Alignment', 'stylepress' ),
+				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
-					''           => esc_html__( 'None', 'stylepress' ),
-					'uppercase'  => esc_html__( 'UPPERCASE', 'stylepress' ),
-					'lowercase'  => esc_html__( 'lowercase', 'stylepress' ),
-					'capitalize' => esc_html__( 'Capitalize', 'stylepress' ),
+					'left'    => [
+						'title' => __( 'Left', 'stylepress' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center'  => [
+						'title' => __( 'Center', 'stylepress' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'   => [
+						'title' => __( 'Right', 'stylepress' ),
+						'icon'  => 'fa fa-align-right',
+					],
+					'justify' => [
+						'title' => __( 'Justified', 'stylepress' ),
+						'icon'  => 'fa fa-align-justify',
+					],
 				],
+				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-title' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p, {{WRAPPER}} .stylepress-grid__item-title' => 'text-align: {{VALUE}};',
 				],
 			]
 		);
 
-		$this->add_responsive_control(
-			'title_font_size',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'      => esc_html__( 'Title Size', 'stylepress' ),
-				'type'       => Controls_Manager::SLIDER,
-				'range'      => [
-					'px' => [
-						'min'  => 0,
-						'max'  => 100,
-						'step' => 1,
-					],
-					'%'  => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .stylepress-grid__item-title' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
+				'name'           => 'title_text_typo',
+				'label'          => __( 'Title Text', 'stylepress' ),
+				'selector'       => '{{WRAPPER}} .stylepress-grid__item-title',
+				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
+				'fields_options' => [],
+				'separator' => 'before',
 			]
 		);
 
@@ -616,13 +740,49 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'           => 'excerpt_text_typo',
+				'label'          => __( 'Excerpt Text', 'stylepress' ),
+				'selector'       => '{{WRAPPER}} .stylepress-grid__item-excerpt p',
+				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
+				'fields_options' => [],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			'stylepress_blog_excerpt_color',
+			[
+				'label'     => esc_html__( 'Excerpt Color', 'stylepress' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'           => 'meta_text_typo',
+				'label'          => __( 'Meta Text', 'stylepress' ),
+				'selector'       => '{{WRAPPER}} .stylepress-grid__item-meta',
+				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
+				'fields_options' => [],
+				'separator' => 'before',
+			]
+		);
+
 		$this->add_responsive_control(
 			'meta_color',
 			[
 				'label'     => esc_html__( 'Meta Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-meta, {{WRAPPER}} .stylepress-grid__item-meta a, {{WRAPPER}} .stylepress-grid__item-readmore a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-meta, {{WRAPPER}} .stylepress-grid__item-meta a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -633,96 +793,22 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label'     => esc_html__( 'Meta Hover Color', 'stylepress' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-meta a:hover, {{WRAPPER}} .stylepress-grid__item-meta a:active, {{WRAPPER}} .stylepress-grid__item-meta a:focus, {{WRAPPER}} .stylepress-grid__item-readmore a:hover, {{WRAPPER}} .stylepress-grid__item-readmore a:active, {{WRAPPER}} .stylepress-grid__item-readmore a:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .stylepress-grid__item-meta a:hover, {{WRAPPER}} .stylepress-grid__item-meta a:active, {{WRAPPER}} .stylepress-grid__item-meta a:focus' => 'color: {{VALUE}};',
 				],
 			]
 		);
+
 
 		$this->add_control(
-			'excerpt_text_transform',
+			'decoration_image',
 			[
-				'label'     => esc_html__( 'Excerpt Transform', 'stylepress' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => '',
-				'options'   => [
-					''           => esc_html__( 'None', 'stylepress' ),
-					'uppercase'  => esc_html__( 'UPPERCASE', 'stylepress' ),
-					'lowercase'  => esc_html__( 'lowercase', 'stylepress' ),
-					'capitalize' => esc_html__( 'Capitalize', 'stylepress' ),
-				],
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'text-transform: {{VALUE}};',   //the selector used above in add_control
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'excerpt_font_size',
-			[
-				'label'      => esc_html__( 'Excerpt Size', 'stylepress' ),
-				'type'       => Controls_Manager::SLIDER,
-				'range'      => [
-					'px' => [
-						'min'  => 0,
-						'max'  => 100,
-						'step' => 1,
-					],
-					'%'  => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .stylepress-grid__item-excerpt p, {{WRAPPER}} .stylepress-grid__item-readmore' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'exceprt_color',
-			[
-				'label'     => esc_html__( 'Excerpt Color', 'stylepress' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'color: {{VALUE}};',
-				],
-			]
-		);
-
-
-		$this->add_responsive_control(
-			'te_align',
-			[
-				'label'     => __( 'Text Alignment', 'stylepress' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'    => [
-						'title' => __( 'Left', 'stylepress' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center'  => [
-						'title' => __( 'Center', 'stylepress' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'   => [
-						'title' => __( 'Right', 'stylepress' ),
-						'icon'  => 'fa fa-align-right',
-					],
-					'justify' => [
-						'title' => __( 'Justified', 'stylepress' ),
-						'icon'  => 'fa fa-align-justify',
-					],
-				],
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .stylepress-grid__item-excerpt p' => 'text-align: {{VALUE}};',
-				],
+				'label' => __( 'Decoration Image', 'stylepress' ),
+				'type' => \Elementor\Controls_Manager::MEDIA,
+				'separator' => 'before',
 			]
 		);
 
 		$this->end_controls_section();
-
 
 		$this->start_controls_section(
 			'section_style_pagination',

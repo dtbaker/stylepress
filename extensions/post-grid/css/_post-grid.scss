@@ -1,6 +1,9 @@
 .stylepress-grid {
   .stylepress-grid__item {
     border: 1px solid #EFEFEF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   &--grid {
@@ -48,11 +51,18 @@
   }
 
   &__item-title {
-    display: inline;
+    //display: inline;
   }
 
   &__item-thumb {
-    margin-bottom: 30px;
+    position: relative;
+    &-overlay {
+      position: absolute;
+    }
+  }
+
+  &__item-decoration {
+    text-align: center;
   }
 
   &__item-meta {
@@ -74,6 +84,10 @@
 
   &__item-excerpt {
     margin-bottom: 10px;
+  }
+
+  &__item-footer {
+    margin: auto 0 0;
   }
 
   &__pagination {

@@ -14,16 +14,14 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 <div class="stylepress__styles">
 	<div class="stylepress__category">
 		<h3 class="stylepress__category-header">
-			<span>Styles</span>
-			<small>These are default page styles that you can apply to your pages. Choose settings once and apply to entire
-				website.
+			<span>Your Styles</span>
+			<small>These are the page styles which can be applied to your website pages.
 			</small>
 		</h3>
 		<div class="stylepress__category-content">
 			<?php
 			$category = 'styles';
 			$designs  = Styles::get_instance()->get_all_styles( $category );
-			//						$designs[] = 'asdf';
 			foreach ( $designs as $design_id => $design ) {
 				?>
 				<div class="stylepress__style">
@@ -77,6 +75,39 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 			</div>
 
 
+		</div>
+	</div>
+
+	<div class="stylepress__category">
+		<h3 class="stylepress__category-header">
+			<span>Available Styles</span>
+			<small>These are the available default styles, choose one to import into the website.
+			</small>
+		</h3>
+		<div class="stylepress__category-content">
+			<?php
+			$category = 'styles';
+			$designs  = Remote_Styles::get_instance()->get_all_styles( $category );
+			foreach ( $designs as $design_id => $design ) {
+				?>
+				<div class="stylepress__style">
+					<div class="stylepress__style-inner">
+						<a
+							href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&remote_style_id=' . $design_id ) ); ?>"
+							class="stylepress__style-thumb"
+							style="background-image: url(<?php echo esc_url( $design['thumbnail_url']); ?>);">
+						</a>
+						<h3 class="stylepress__style-name"><?php echo esc_html( $design['title'] ); ?></h3>
+						<div class="stylepress__style-action">
+							<a class="button button-primary"
+							   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&remote_style_id=' . $design_id ) ); ?>">
+								<?php esc_html_e( 'Preview Style', 'stylepress' ); ?>
+							</a>
+						</div>
+					</div>
+
+				</div>
+			<?php } ?>
 		</div>
 	</div>
 

