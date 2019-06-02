@@ -19,7 +19,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 				<div class="stylepress-grid__item-thumb">
 					<a href="<?php echo esc_url( get_permalink() ); ?>">
 						<?php
-						if ( !empty($stylepress['image_style']) && $stylepress['image_style'] === 'category-over' ) {
+						if ( ! empty( $stylepress['image_style'] ) && $stylepress['image_style'] === 'category-over' ) {
 							$categories_list = strip_tags( get_the_category_list( esc_html__( ', ', 'stylepress' ) ) );
 							if ( $categories_list ) {
 								?>
@@ -46,7 +46,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 		if ( $stylepress['meta_show_title'] ) {
 			the_title( '<h2 class="stylepress-grid__item-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 		}
-		if(!empty($stylepress['decoration_image']) && !empty($stylepress['decoration_image']['url'])) {
+		if ( ! empty( $stylepress['decoration_image'] ) && ! empty( $stylepress['decoration_image']['url'] ) ) {
 			?>
 			<div class="stylepress-grid__item-decoration">
 				<?php echo '<img src="' . esc_url( $stylepress['decoration_image']['url'] ) . '">' ?>
@@ -122,11 +122,21 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 	<footer class="stylepress-grid__item-footer">
 		<?php if ( $stylepress['meta_show_readmore'] ) { ?>
 			<div class="stylepress-grid__item-readmore">
-				<?php printf( '<a class="stylepress-grid__item-readmorebutton" href="%1$s">%2$s</a>',
-					get_permalink( get_the_ID() ),
-					esc_attr( ! empty( $stylepress['meta_readmore_text'] ) ? $stylepress['meta_readmore_text'] : 'Read More »' )
-				); ?>
-			</div><!--.stylepress-grid__item-readmore-->
+				<a href="<?php echo esc_url( get_permalink( get_the_ID() ) ); ?>" role="button"
+				   class="elementor-button stylepress-grid__item-readmorebutton elementor-size-<?php echo esc_attr( $stylepress['read_more_size'] ); ?> elementor-animation-<?php echo esc_attr( $stylepress['read_more_hover_animation'] ); ?>">
+					<span class="elementor-button-content-wrapper">
+						<?php if ( ! empty( $stylepress['read_more_icon'] ) ) : ?>
+							<span
+								class="elementor-button-icon elementor-align-icon-<?php echo $stylepress['read_more_icon_align']; ?>">
+							<i class="<?php echo esc_attr( $stylepress['read_more_icon'] ); ?>" aria-hidden="true"></i>
+						</span>
+						<?php endif; ?>
+						<span
+							class="elementor-button-text"><?php echo esc_attr( ! empty( $stylepress['read_more_text'] ) ? $stylepress['read_more_text'] : 'Read More »' ); ?></span>
+					</span>
+
+				</a>
+			</div>
 		<?php } ?>
 	</footer>
 

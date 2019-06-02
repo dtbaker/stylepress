@@ -727,7 +727,6 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
-
 		$this->add_responsive_control(
 			'title_spacing',
 			[
@@ -763,6 +762,20 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+
+		$this->add_responsive_control(
+			'title_spacing',
+			[
+				'label'           => __( 'Excerpt Spacing', 'stylepress' ),
+				'type'            => Controls_Manager::DIMENSIONS,
+				'size_units'      => [ 'px', 'em', '%' ],
+				'selectors'       => [
+					"{{WRAPPER}} .stylepress-grid__item-excerpt" => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -797,6 +810,17 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'title_spacing',
+			[
+				'label'           => __( 'Meta Spacing', 'stylepress' ),
+				'type'            => Controls_Manager::DIMENSIONS,
+				'size_units'      => [ 'px', 'em', '%' ],
+				'selectors'       => [
+					"{{WRAPPER}} .stylepress-grid__item-meta" => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
 
 		$this->add_control(
 			'decoration_image',
@@ -1013,9 +1037,12 @@ class Stylepress_Post_Grid extends Widget_Base {
 
 		$this->end_controls_section();
 
+		/****************************************************
+		 **************** BUTTON ***************************
+		 ****************************************************/
 
 		$this->start_controls_section(
-			'section_style',
+			'read_more_section',
 			[
 				'label' => __( 'Button', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
@@ -1023,35 +1050,20 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'text',
+			'read_more_text',
 			[
 				'label' => __( 'Text', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'Click here', 'elementor' ),
-				'placeholder' => __( 'Click here', 'elementor' ),
-			]
-		);
-
-		$this->add_control(
-			'link',
-			[
-				'label' => __( 'Link', 'elementor' ),
-				'type' => Controls_Manager::URL,
-				'dynamic' => [
-					'active' => true,
-				],
-				'placeholder' => __( 'https://your-link.com', 'elementor' ),
-				'default' => [
-					'url' => '#',
-				],
+				'default' => __( 'Read More', 'elementor' ),
+				'placeholder' => __( 'Read More', 'elementor' ),
 			]
 		);
 
 		$this->add_responsive_control(
-			'align',
+			'read_more_align',
 			[
 				'label' => __( 'Alignment', 'elementor' ),
 				'type' => Controls_Manager::CHOOSE,
@@ -1079,7 +1091,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'size',
+			'read_more_size',
 			[
 				'label' => __( 'Size', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
@@ -1096,7 +1108,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'icon',
+			'read_more_icon',
 			[
 				'label' => __( 'Icon', 'elementor' ),
 				'type' => Controls_Manager::ICON,
@@ -1106,7 +1118,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'icon_align',
+			'read_more_icon_align',
 			[
 				'label' => __( 'Icon Position', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
@@ -1116,13 +1128,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 					'right' => __( 'After', 'elementor' ),
 				],
 				'condition' => [
-					'icon!' => '',
+					'read_more_icon!' => '',
 				],
 			]
 		);
 
 		$this->add_control(
-			'icon_indent',
+			'read_more_icon_indent',
 			[
 				'label' => __( 'Icon Spacing', 'elementor' ),
 				'type' => Controls_Manager::SLIDER,
@@ -1132,7 +1144,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 					],
 				],
 				'condition' => [
-					'icon!' => '',
+					'read_more_icon!' => '',
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
@@ -1141,52 +1153,26 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'view',
-			[
-				'label' => __( 'View', 'elementor' ),
-				'type' => Controls_Manager::HIDDEN,
-				'default' => 'traditional',
-			]
-		);
-
-		$this->add_control(
-			'button_css_id',
-			[
-				'label' => __( 'Button ID', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
-				'dynamic' => [
-					'active' => true,
-				],
-				'default' => '',
-				'title' => __( 'Add your custom id WITHOUT the Pound key. e.g: my-id', 'elementor' ),
-				'label_block' => false,
-				'description' => __( 'Please make sure the ID is unique and not used elsewhere on the page this form is displayed. This field allows <code>A-z 0-9</code> & underscore chars without spaces.', 'elementor' ),
-				'separator' => 'before',
-
-			]
-		);
-
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'typography',
+				'name' => 'read_more_typography',
 				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button',
 			]
 		);
 
-		$this->start_controls_tabs( 'tabs_button_style' );
+		$this->start_controls_tabs( 'read_more_tabs_button_style' );
 
 		$this->start_controls_tab(
-			'tab_button_normal',
+			'read_more_tab_button_normal',
 			[
 				'label' => __( 'Normal', 'elementor' ),
 			]
 		);
 
 		$this->add_control(
-			'button_text_color',
+			'read_more_button_text_color',
 			[
 				'label' => __( 'Text Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
@@ -1198,7 +1184,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'button_background_color',
+			'read_more_button_background_color',
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
@@ -1215,14 +1201,14 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab(
-			'tab_button_hover',
+			'read_more_tab_button_hover',
 			[
 				'label' => __( 'Hover', 'elementor' ),
 			]
 		);
 
 		$this->add_control(
-			'hover_color',
+			'read_more_hover_color',
 			[
 				'label' => __( 'Text Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
@@ -1233,7 +1219,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'button_background_hover_color',
+			'read_more_button_background_hover_color',
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
@@ -1244,12 +1230,12 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'button_hover_border_color',
+			'read_more_button_hover_border_color',
 			[
 				'label' => __( 'Border Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'condition' => [
-					'border_border!' => '',
+					'read_more_border_border!' => '',
 				],
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover, {{WRAPPER}} a.elementor-button:focus, {{WRAPPER}} .elementor-button:focus' => 'border-color: {{VALUE}};',
@@ -1258,7 +1244,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'hover_animation',
+			'read_more_hover_animation',
 			[
 				'label' => __( 'Hover Animation', 'elementor' ),
 				'type' => Controls_Manager::HOVER_ANIMATION,
@@ -1272,14 +1258,14 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'border',
+				'name' => 'read_more_border',
 				'selector' => '{{WRAPPER}} .elementor-button',
 				'separator' => 'before',
 			]
 		);
 
 		$this->add_control(
-			'border_radius',
+			'read_more_border_radius',
 			[
 				'label' => __( 'Border Radius', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
@@ -1293,13 +1279,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name' => 'button_box_shadow',
+				'name' => 'read_more_button_box_shadow',
 				'selector' => '{{WRAPPER}} .elementor-button',
 			]
 		);
 
 		$this->add_responsive_control(
-			'text_padding',
+			'read_more_text_padding',
 			[
 				'label' => __( 'Padding', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
@@ -1308,6 +1294,18 @@ class Stylepress_Post_Grid extends Widget_Base {
 					'{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			'read_more_text_margin',
+			[
+				'label' => __( 'Margin', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -1323,7 +1321,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 
 		$GLOBALS['stylepress_render']['has_done_inner_content'] = true;
 
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 		if ( ! empty( $settings['taxonomy_type'] ) ) {
 			$terms = get_terms( array(
 				'taxonomy'   => $settings['taxonomy_type'],
