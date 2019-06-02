@@ -822,16 +822,88 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_blog_decoration',
+			[
+				'label' => __( 'Decoration', 'elementor' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 		$this->add_control(
 			'decoration_image',
 			[
 				'label' => __( 'Decoration Image', 'stylepress' ),
 				'type' => \Elementor\Controls_Manager::MEDIA,
-				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			'decoration_width',
+			[
+				'label' => __( 'Width', 'elementor' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'unit' => '%',
+				],
+				'tablet_default' => [
+					'unit' => '%',
+				],
+				'mobile_default' => [
+					'unit' => '%',
+				],
+				'size_units' => [ '%', 'px', 'vw' ],
+				'range' => [
+					'%' => [
+						'min' => 1,
+						'max' => 100,
+					],
+					'px' => [
+						'min' => 1,
+						'max' => 1000,
+					],
+					'vw' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-decoration-image' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+
+		$this->add_responsive_control(
+			'decoration_align',
+			[
+				'label'     => __( 'Pagination Alignment', 'stylepress' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'    => [
+						'title' => __( 'Left', 'stylepress' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center'  => [
+						'title' => __( 'Center', 'stylepress' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'   => [
+						'title' => __( 'Right', 'stylepress' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'default'   => '',
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-decoration' => 'text-align: {{VALUE}};',
+				],
 			]
 		);
 
 		$this->end_controls_section();
+
 
 		$this->start_controls_section(
 			'section_style_pagination',

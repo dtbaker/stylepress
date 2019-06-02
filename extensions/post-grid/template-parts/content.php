@@ -49,7 +49,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 		if ( ! empty( $stylepress['decoration_image'] ) && ! empty( $stylepress['decoration_image']['url'] ) ) {
 			?>
 			<div class="stylepress-grid__item-decoration">
-				<?php echo '<img src="' . esc_url( $stylepress['decoration_image']['url'] ) . '">' ?>
+				<?php echo '<img src="' . esc_url( $stylepress['decoration_image']['url'] ) . '" class="stylepress-grid__item-decoration-image" aria-hidden="true">' ?>
 			</div>
 			<?php
 		}
