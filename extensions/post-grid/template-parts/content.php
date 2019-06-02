@@ -15,21 +15,25 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 	<header class="stylepress-grid__item-header">
 		<?php
 		if ( $stylepress['meta_show_thumbnail'] ) :
-			if ( has_post_thumbnail() ) : ?>
+			if ( has_post_thumbnail() ) :
+				if ( ! empty( $stylepress['image_style'] ) && $stylepress['image_style'] === 'category-over' ) {
+					$categories_list = strip_tags( get_the_category_list( esc_html__( ', ', 'stylepress' ) ) );
+					if ( $categories_list ) {
+						?>
+						<div class="stylepress-grid__item-thumb-overlay">
+							<?php printf( esc_html__( ' %1$s ', 'stylepress' ), $categories_list ); // WPCS: XSS OK. ?>
+						</div>
+						<?php
+					}
+				}
+				?>
 				<div class="stylepress-grid__item-thumb">
 					<a href="<?php echo esc_url( get_permalink() ); ?>">
 						<?php
-						if ( ! empty( $stylepress['image_style'] ) && $stylepress['image_style'] === 'category-over' ) {
-							$categories_list = strip_tags( get_the_category_list( esc_html__( ', ', 'stylepress' ) ) );
-							if ( $categories_list ) {
-								?>
-								<div class="stylepress-grid__item-thumb-overlay">
-									<?php printf( esc_html__( ' %1$s ', 'stylepress' ), $categories_list ); // WPCS: XSS OK. ?>
-								</div>
-								<?php
-							}
-						}
-						the_post_thumbnail( $stylepress['image_size'] === 'custom' ? array_values( $stylepress['image_custom_dimension'] ) : $stylepress['image_size'], array(
+						the_post_thumbnail( $stylepress['image_size'] === 'custom' ? [
+							0 => $stylepress['image_custom_dimension']['width'],
+							1 => $stylepress['image_custom_dimension']['height']
+						] : $stylepress['image_size'], array(
 								'class' => 'stylepress-grid__item-image',
 								'alt'   => get_the_title( get_post_thumbnail_id() )
 							)
@@ -74,7 +78,7 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 		}
 
 		if ( $stylepress['meta_show_comments'] ) {
-			if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+			if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
 				ob_start();
 				/* translators: %s: post title */
 				comments_popup_link( get_comments_number() > 0 ? sprintf( _x( 'One Comment', '%1$s Comments', get_comments_number(), 'stylepress' ), number_format_i18n( get_comments_number() ) ) : esc_html__( 'No Comments', 'stylepress' ) );

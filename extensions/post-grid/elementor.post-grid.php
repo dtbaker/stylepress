@@ -431,6 +431,10 @@ class Stylepress_Post_Grid extends Widget_Base {
 						'max' => 100,
 					],
 				],
+				'default' => [
+					'size' => 0,
+					'unit' => '%',
+				],
 				'size_units' => [ '%', 'px' ],
 				'selectors'  => [
 					'{{WRAPPER}} .stylepress-grid__item' => 'margin: 0 0 {{SIZE}}{{UNIT}};',
@@ -454,6 +458,10 @@ class Stylepress_Post_Grid extends Widget_Base {
 						'max' => 100,
 					],
 				],
+				'default' => [
+					'size' => 0,
+					'unit' => '%',
+				],
 				'size_units' => [ '%', 'px' ],
 				'selectors'  => [
 					'{{WRAPPER}} .stylepress-grid__item' => 'padding: {{SIZE}}{{UNIT}};',
@@ -476,6 +484,10 @@ class Stylepress_Post_Grid extends Widget_Base {
 						'min' => 0,
 						'max' => 100,
 					],
+				],
+				'default' => [
+					'size' => 0,
+					'unit' => '%',
 				],
 				'size_units' => [ '%', 'px' ],
 				'selectors'  => [
@@ -521,6 +533,37 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'name'      => 'image', // Actually its `image_size`.
 				'default'   => 'large',
 				//'exclude'   => [ 'custom' ],
+			]
+		);
+
+
+		$this->add_control(
+			'thumbnail_height',
+			[
+				'label' => __( 'Max Height', 'stylepress' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '200',
+					'unit' => 'px',
+				],
+				'size_units' => [ '%', 'px', 'vw' ],
+				'range' => [
+					'%' => [
+						'min' => 1,
+						'max' => 100,
+					],
+					'px' => [
+						'min' => 1,
+						'max' => 700,
+					],
+					'vw' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-grid__item-thumb' => 'max-height: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -827,7 +870,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_blog_decoration',
 			[
-				'label' => __( 'Decoration', 'elementor' ),
+				'label' => __( 'Decoration', 'stylepress' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -843,10 +886,11 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'decoration_width',
 			[
-				'label' => __( 'Width', 'elementor' ),
+				'label' => __( 'Width', 'stylepress' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
-					'unit' => '%',
+					'size' => '50',
+					'unit' => 'px',
 				],
 				'tablet_default' => [
 					'unit' => '%',
@@ -944,26 +988,14 @@ class Stylepress_Post_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_responsive_control(
-			'pagi_font_size',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'      => esc_html__( 'Pagination Size', 'stylepress' ),
-				'type'       => Controls_Manager::SLIDER,
-				'range'      => [
-					'px' => [
-						'min'  => 0,
-						'max'  => 1000,
-						'step' => 1,
-					],
-					'%'  => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .stylepress-grid-nav' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
+				'name'           => 'pagination_typo',
+				'label'          => __( 'Pagination Text', 'stylepress' ),
+				'selector'       => '{{WRAPPER}} .stylepress-grid-nav',
+				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
+				'fields_options' => [],
 			]
 		);
 
@@ -1116,7 +1148,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'read_more_section',
 			[
-				'label' => __( 'Button', 'elementor' ),
+				'label' => __( 'Button', 'stylepress' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1124,36 +1156,36 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_text',
 			[
-				'label' => __( 'Text', 'elementor' ),
+				'label' => __( 'Text', 'stylepress' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'Read More', 'elementor' ),
-				'placeholder' => __( 'Read More', 'elementor' ),
+				'default' => __( 'Read More', 'stylepress' ),
+				'placeholder' => __( 'Read More', 'stylepress' ),
 			]
 		);
 
 		$this->add_responsive_control(
 			'read_more_align',
 			[
-				'label' => __( 'Alignment', 'elementor' ),
+				'label' => __( 'Alignment', 'stylepress' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'stylepress' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'stylepress' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'stylepress' ),
 						'icon' => 'fa fa-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'elementor' ),
+						'title' => __( 'Justified', 'stylepress' ),
 						'icon' => 'fa fa-align-justify',
 					],
 				],
@@ -1165,15 +1197,15 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_size',
 			[
-				'label' => __( 'Size', 'elementor' ),
+				'label' => __( 'Size', 'stylepress' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'sm',
 				'options' => [
-					'xs' => __( 'Extra Small', 'elementor' ),
-					'sm' => __( 'Small', 'elementor' ),
-					'md' => __( 'Medium', 'elementor' ),
-					'lg' => __( 'Large', 'elementor' ),
-					'xl' => __( 'Extra Large', 'elementor' ),
+					'xs' => __( 'Extra Small', 'stylepress' ),
+					'sm' => __( 'Small', 'stylepress' ),
+					'md' => __( 'Medium', 'stylepress' ),
+					'lg' => __( 'Large', 'stylepress' ),
+					'xl' => __( 'Extra Large', 'stylepress' ),
 				],
 				'style_transfer' => true,
 			]
@@ -1182,7 +1214,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_icon',
 			[
-				'label' => __( 'Icon', 'elementor' ),
+				'label' => __( 'Icon', 'stylepress' ),
 				'type' => Controls_Manager::ICON,
 				'label_block' => true,
 				'default' => '',
@@ -1192,12 +1224,12 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_icon_align',
 			[
-				'label' => __( 'Icon Position', 'elementor' ),
+				'label' => __( 'Icon Position', 'stylepress' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'left',
 				'options' => [
-					'left' => __( 'Before', 'elementor' ),
-					'right' => __( 'After', 'elementor' ),
+					'left' => __( 'Before', 'stylepress' ),
+					'right' => __( 'After', 'stylepress' ),
 				],
 				'condition' => [
 					'read_more_icon!' => '',
@@ -1208,7 +1240,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_icon_indent',
 			[
-				'label' => __( 'Icon Spacing', 'elementor' ),
+				'label' => __( 'Icon Spacing', 'stylepress' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -1239,14 +1271,14 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_tab(
 			'read_more_tab_button_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => __( 'Normal', 'stylepress' ),
 			]
 		);
 
 		$this->add_control(
 			'read_more_button_text_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => __( 'Text Color', 'stylepress' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -1258,7 +1290,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_button_background_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => __( 'Background Color', 'stylepress' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -1275,14 +1307,14 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_tab(
 			'read_more_tab_button_hover',
 			[
-				'label' => __( 'Hover', 'elementor' ),
+				'label' => __( 'Hover', 'stylepress' ),
 			]
 		);
 
 		$this->add_control(
 			'read_more_hover_color',
 			[
-				'label' => __( 'Text Color', 'elementor' ),
+				'label' => __( 'Text Color', 'stylepress' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover, {{WRAPPER}} a.elementor-button:focus, {{WRAPPER}} .elementor-button:focus' => 'color: {{VALUE}};',
@@ -1293,7 +1325,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_button_background_hover_color',
 			[
-				'label' => __( 'Background Color', 'elementor' ),
+				'label' => __( 'Background Color', 'stylepress' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover, {{WRAPPER}} a.elementor-button:focus, {{WRAPPER}} .elementor-button:focus' => 'background-color: {{VALUE}};',
@@ -1304,7 +1336,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_button_hover_border_color',
 			[
-				'label' => __( 'Border Color', 'elementor' ),
+				'label' => __( 'Border Color', 'stylepress' ),
 				'type' => Controls_Manager::COLOR,
 				'condition' => [
 					'read_more_border_border!' => '',
@@ -1318,7 +1350,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_hover_animation',
 			[
-				'label' => __( 'Hover Animation', 'elementor' ),
+				'label' => __( 'Hover Animation', 'stylepress' ),
 				'type' => Controls_Manager::HOVER_ANIMATION,
 			]
 		);
@@ -1339,7 +1371,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_control(
 			'read_more_border_radius',
 			[
-				'label' => __( 'Border Radius', 'elementor' ),
+				'label' => __( 'Border Radius', 'stylepress' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -1359,7 +1391,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'read_more_text_padding',
 			[
-				'label' => __( 'Padding', 'elementor' ),
+				'label' => __( 'Padding', 'stylepress' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -1372,7 +1404,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'read_more_text_margin',
 			[
-				'label' => __( 'Margin', 'elementor' ),
+				'label' => __( 'Margin', 'stylepress' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [

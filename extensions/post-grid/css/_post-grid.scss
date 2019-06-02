@@ -40,14 +40,8 @@
   &--minimal {
   }
 
-  &__item_header {
-    text-align: center;
-    margin-bottom: 30px;
+  &__item-header {
     position: relative;
-
-    img {
-      margin: auto auto;
-    }
   }
 
   &__item-title {
@@ -56,7 +50,10 @@
   }
 
   &__item-thumb {
-    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &-overlay {
       position: absolute;
     }
