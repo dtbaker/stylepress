@@ -764,7 +764,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 
 
 		$this->add_responsive_control(
-			'title_spacing',
+			'excerpt_spacing',
 			[
 				'label'           => __( 'Excerpt Spacing', 'stylepress' ),
 				'type'            => Controls_Manager::DIMENSIONS,
@@ -811,7 +811,7 @@ class Stylepress_Post_Grid extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'title_spacing',
+			'meta_spacing',
 			[
 				'label'           => __( 'Meta Spacing', 'stylepress' ),
 				'type'            => Controls_Manager::DIMENSIONS,
