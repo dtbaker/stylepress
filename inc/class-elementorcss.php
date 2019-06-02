@@ -137,7 +137,7 @@ class ElementorCSS extends Base {
 		static $completed_items = [];
 
 		$widget_name = $section->get_name();
-		if ( $widget_name == 'column' ) {
+		if ( $widget_name == 'column' || $widget_name == 'page' ) {
 			return;
 		}
 		if ( ! isset( $completed_items[ $widget_name ] ) ) {
