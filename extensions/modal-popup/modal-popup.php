@@ -230,7 +230,7 @@ add_action( 'stylepress/modal-popups', function () {
 //add_action( 'elementor/element/button/section_button/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 //add_action( 'elementor/element/icon-box/section_icon/after_section_end', 'stylepress_modal_button_hack' , 10 , 2);
 
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_modal_button_before_render', 10, 1 );
+add_action( 'elementor/frontend/widget/before_render', 'StylePress\stylepress_modal_button_before_render', 10, 1 );
 
 
 

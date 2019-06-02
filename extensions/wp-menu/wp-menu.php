@@ -98,13 +98,13 @@ add_filter( 'wp_nav_menu_args', function ( $args ) {
 
 
 // add custom menu fields to menu
-add_filter( 'wp_setup_nav_menu_item', 'stylepress_add_custom_nav_fields' );
+add_filter( 'wp_setup_nav_menu_item', 'StylePress\stylepress_add_custom_nav_fields' );
 
 // save menu custom fields
-add_action( 'wp_update_nav_menu_item', 'stylepress_update_custom_nav_fields', 10, 3 );
+add_action( 'wp_update_nav_menu_item', 'StylePress\stylepress_update_custom_nav_fields', 10, 3 );
 
 // edit menu walker
-add_filter( 'wp_edit_nav_menu_walker', 'stylepress_edit_walker', 10, 2 );
+add_filter( 'wp_edit_nav_menu_walker', 'StylePress\stylepress_edit_walker', 10, 2 );
 
 
 function stylepress_add_custom_nav_fields( $menu_item ) {

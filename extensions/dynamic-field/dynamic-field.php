@@ -243,10 +243,10 @@ function stylepress_dynamic_before_render( $widget ) {
 }
 
 foreach ( $supported_widgets as $widget_name => $widget_options ) {
-	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'stylepress_register_dynamics', 10, 2 );
+	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'StylePress\stylepress_register_dynamics', 10, 2 );
 }
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_dynamic_before_render', 10, 1 );
-add_action( 'elementor/frontend/element/before_render', 'stylepress_dynamic_before_render', 10, 1 );
+add_action( 'elementor/frontend/widget/before_render', 'StylePress\stylepress_dynamic_before_render', 10, 1 );
+add_action( 'elementor/frontend/element/before_render', 'StylePress\stylepress_dynamic_before_render', 10, 1 );
 
 // dynamic background image on certain elements.
-add_action( 'elementor/element/section/section_background/before_section_end', 'stylepress_register_dynamic_background', 10, 2 );
+add_action( 'elementor/element/section/section_background/before_section_end', 'StylePress\stylepress_register_dynamic_background', 10, 2 );

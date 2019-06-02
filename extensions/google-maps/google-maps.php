@@ -36,7 +36,7 @@ $widget_file = STYLEPRESS_PATH . 'extensions/google-maps/widget.google-map.php';
 require_once $widget_file;
 
 
-add_action( 'customize_register', 'stylepress_register_google_maps_customize_control' );
+add_action( 'customize_register', 'StylePress\stylepress_register_google_maps_customize_control' );
 
 function stylepress_register_google_maps_customize_control() {
 	class stylepress_Google_Maps_Custom_Text_Control extends \WP_Customize_Control {

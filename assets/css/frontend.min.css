@@ -5,6 +5,7 @@
 .stylepress-grid--list .stylepress-grid__item{-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1}
 .stylepress-grid__item_header{text-align:center;margin-bottom:30px;position:relative}
 .stylepress-grid__item_header img{margin:auto auto}
+.stylepress-grid__item-title{margin:0;padding:0}
 .stylepress-grid__item-thumb{position:relative}
 .stylepress-grid__item-thumb-overlay{position:absolute}
 .stylepress-grid__item-decoration{text-align:center}

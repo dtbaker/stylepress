@@ -28,7 +28,7 @@ $supported_tooltip_widgets = array(
 );
 
 foreach ( $supported_tooltip_widgets as $widget_name => $widget_options ) {
-	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'stylepress_register_tooltip', 10, 2 );
+	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'StylePress\stylepress_register_tooltip', 10, 2 );
 }
 
 
@@ -111,4 +111,4 @@ function stylepress_tooltip_before_render( $widget ) {
 }
 
 
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_tooltip_before_render', 10, 1 );
+add_action( 'elementor/frontend/widget/before_render', 'StylePress\stylepress_tooltip_before_render', 10, 1 );
