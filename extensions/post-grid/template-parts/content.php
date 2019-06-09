@@ -13,31 +13,35 @@ defined( 'STYLEPRESS_PATH' ) || exit;
 if ( ! function_exists( 'stylepress_post_grid_thumbnail' ) ) {
 	function stylepress_post_grid_thumbnail( $settings ) {
 		if ( has_post_thumbnail() ) :
-			if ( ! empty( $settings['image_style'] ) && $settings['image_style'] === 'category-over' ) {
-				$categories_list = strip_tags( get_the_category_list( esc_html__( ', ', 'stylepress' ) ) );
-				if ( $categories_list ) {
-					?>
-					<div class="stylepress-grid__item-thumb-overlay">
-						<?php printf( esc_html__( ' %1$s ', 'stylepress' ), $categories_list ); // WPCS: XSS OK. ?>
-					</div>
-					<?php
-				}
-			}
 			?>
-			<div class="stylepress-grid__item-thumb">
-				<a href="<?php echo esc_url( get_permalink() ); ?>">
-					<?php
-					the_post_thumbnail( $settings['image_size'] === 'custom' ? [
-						0 => $settings['image_custom_dimension']['width'],
-						1 => $settings['image_custom_dimension']['height']
-					] : $settings['image_size'], array(
-							'class' => 'stylepress-grid__item-image',
-							'alt'   => get_the_title( get_post_thumbnail_id() )
-						)
-					);
-					?>
-				</a>
-			</div><!--.post-img-->
+			<div class="stylepress-grid__item-thumb-wrap">
+				<?php
+				if ( ! empty( $settings['image_style'] ) && $settings['image_style'] === 'category-over' ) {
+					$categories_list = strip_tags( get_the_category_list( esc_html__( ', ', 'stylepress' ) ) );
+					if ( $categories_list ) {
+						?>
+						<div class="stylepress-grid__item-thumb-overlay">
+							<?php printf( esc_html__( ' %1$s ', 'stylepress' ), $categories_list ); // WPCS: XSS OK. ?>
+						</div>
+						<?php
+					}
+				}
+				?>
+				<div class="stylepress-grid__item-thumb">
+					<a href="<?php echo esc_url( get_permalink() ); ?>">
+						<?php
+						the_post_thumbnail( $settings['image_size'] === 'custom' ? [
+							0 => $settings['image_custom_dimension']['width'],
+							1 => $settings['image_custom_dimension']['height']
+						] : $settings['image_size'], array(
+								'class' => 'stylepress-grid__item-image',
+								'alt'   => get_the_title( get_post_thumbnail_id() )
+							)
+						);
+						?>
+					</a>
+				</div>
+			</div>
 		<?php endif;
 	}
 }
