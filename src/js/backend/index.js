@@ -1,10 +1,12 @@
-/* global window, document */
-if (!window._babelPolyfill) {
-  require('babel-polyfill');
-}
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import $ from 'jquery';
 
 import {post_grid_backend} from './../../../extensions/post-grid/js/post-grid-backend';
+import {style_importer} from './importer';
+
+import "../../scss/backend.scss"
 
 class StylePressBackend {
   constructor() {
@@ -12,6 +14,7 @@ class StylePressBackend {
 
   backendLoaded = () => {
     post_grid_backend.backendLoaded();
+    style_importer.backendLoaded();
   };
 
   elementorLoaded = () => {

@@ -1,8 +1,9 @@
-/* global window, document */
-if (!window._babelPolyfill) {
-  require('babel-polyfill');
-}
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import $ from 'jquery';
+
+import '../../scss/frontend.scss'
 
 import {post_grid} from './../../../extensions/post-grid/js/post-grid';
 

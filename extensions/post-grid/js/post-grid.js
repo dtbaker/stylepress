@@ -4,7 +4,7 @@ class PostGrid {
   constructor() {
   }
   pageLoaded = () => {
-    console.log('Post Grid Loaded')
+
   };
 }
 

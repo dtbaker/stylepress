@@ -326,7 +326,7 @@ class Styles extends Base {
 				</div>
 				<div class="stylepress_buttons">
 					<a
-						href="<?php echo esc_url( admin_url( 'admin.php?page=' . Admin::STYLES_PAGE_SLUG . '&style_id=' . ( $parent ? $parent : $post->ID ) ) ); ?>"
+						href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&style_id=' . ( $parent ? $parent : $post->ID ) ) ); ?>"
 						class="button stylepress_buttons--return"><?php echo esc_html__( '&laquo; Return To Style Settings Page', 'stylepress' ); ?></a>
 				</div>
 			</div>

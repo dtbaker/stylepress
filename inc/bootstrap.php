@@ -31,10 +31,11 @@ spl_autoload_register(
 	}
 );
 
-ElementorCSS::get_instance();
 Plugin::get_instance();
+ElementorCSS::get_instance();
+Frontend::get_instance();
 Styles::get_instance();
 ElementorTypography::get_instance();
 if(is_admin()){
-	Admin::get_instance();
+	Backend::get_instance();
 }

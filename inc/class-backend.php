@@ -1,6 +1,6 @@
 <?php
 /**
- * Our Admin class.
+ * Our Backend class.
  *
  * This handles our main admin page
  *
@@ -14,9 +14,9 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 /**
  * All the magic happens here.
  *
- * Class Admin
+ * Class Backend
  */
-class Admin extends Base {
+class Backend extends Base {
 
 	const SETTINGS_PAGE_SLUG = 'stylepress';
 	const STYLES_PAGE_SLUG = STYLEPRESS_SLUG . '-styles';
@@ -27,11 +27,46 @@ class Admin extends Base {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_action_stylepress_new_style', array( $this, 'stylepress_new_style' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_meta_box' ) );
 		add_action( 'admin_action_stylepress_save', array( $this, 'stylepress_save' ) );
+		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
+	}
+
+	/**
+	 * This is our Elementor injection script. We load some custom JS to modify the Elementor control panel during live editing.
+	 *
+	 * @since 2.0.0
+	 */
+	public function editor_scripts() {
+		// load our backend scripts within the editor as well:
+		return;
+		// $this->admin_page_assets(); this failed due to the  ['wp-element', 'wp-components' ] styles breaking elementor
+		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', false, STYLEPRESS_VERSION );
+		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
+				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
+			)
+		);
+		wp_enqueue_script( 'stylepress-admin' );
+
+	}
+
+	public function admin_init() {
+		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( '\Elementor\Widget_Base' ) ) {
+			// we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
+
+			add_action( 'admin_notices', function () {
+				$message      = esc_html__( 'Please install and activate the latest version of Elementor before attempting to use the StylePress plugin.', 'stylepress' );
+				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
+				echo wp_kses_post( $html_message );
+			} );
+
+
+		}
 	}
 
 	/**
@@ -68,7 +103,16 @@ class Admin extends Base {
 	 */
 	public function admin_page_assets() {
 
-		wp_enqueue_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/admin.min.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
+
+		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.css', false, STYLEPRESS_VERSION );
+
+		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', ['wp-element', 'wp-components' ], STYLEPRESS_VERSION );
+		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
+				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
+			)
+		);
+		wp_enqueue_script( 'stylepress-admin' );
 
 		require_once STYLEPRESS_PATH . 'views/_help_text.php';
 
@@ -88,10 +132,17 @@ class Admin extends Base {
 				]
 			);
 		} else if ( isset( $_GET['remote_style_id'] ) ) {
-			$this->content = $this->render_template(
-				'admin/remote-style.php', [
-				]
-			);
+			if(isset($_GET['import_step'])) {
+				$this->content = $this->render_template(
+					'admin/remote-style-import.php', [
+					]
+				);
+			}else {
+				$this->content = $this->render_template(
+					'admin/remote-style.php', [
+					]
+				);
+			}
 		} else {
 			$this->content = $this->render_template(
 				'admin/styles.php', [

@@ -25,13 +25,8 @@ class Plugin extends Base {
 	 */
 	public function __construct() {
 
-		add_filter( 'template_include', array( $this, 'template_include' ), 999 );
-
-		add_action( 'admin_init', array( $this, 'admin_init' ), 20 );
 		add_action( 'init', array( $this, 'theme_compatibility' ) );
-		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
 		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_css' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ), 40 );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
 		add_action( 'init', array( $this, 'load_extensions' ) );
@@ -222,116 +217,8 @@ class Plugin extends Base {
 		$GLOBALS['stylepress_render']['styles']         = $these_styles;
 	}
 
-	/**
-	 * Filter on the template_include path.
-	 * This can overwrite our site wide template for every page of the website.
-	 * This is where the magic happens! :)
-	 *
-	 * If the user has disabled stylepress for a particular item then we just render default.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param string $template_include The path to the current template file.
-	 *
-	 * @return string
-	 */
-	public function template_include( $template_include ) {
-
-		$this->populate_globals();
-
-		if ( ! empty( $GLOBALS['stylepress_render']['template'] ) ) {
-			return $GLOBALS['stylepress_render']['template'];
-		}
-
-		$this->debug_message( 'Sorry no styles found for this page type' );
-
-		return $template_include;
-	}
 
 
-	/**
-	 * Admin hooks.
-	 *
-	 * We add some meta boxes, some admin css, and do a hack on 'parent_file' so the admin ui menu highlights correctly.
-	 *
-	 * @since 2.0.0
-	 */
-	public function admin_init() {
-
-
-		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( '\Elementor\Widget_Base' ) ) {
-			// we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
-
-			add_action( 'admin_notices', function () {
-				$message      = esc_html__( 'Please install and activate the latest version of Elementor before attempting to use the StylePress plugin.', 'stylepress' );
-				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
-				echo wp_kses_post( $html_message );
-			} );
-
-
-		} else {
-
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-
-		}
-
-	}
-
-
-	/**
-	 * Register some frontend css files
-	 *
-	 * @since 2.0.0
-	 */
-	public function frontend_css() {
-		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/css/frontend.min.css', false, STYLEPRESS_VERSION );
-
-		wp_register_script( 'stylepress-js', STYLEPRESS_URI . 'assets/js/frontend.min.js', false, STYLEPRESS_VERSION, true );
-		wp_localize_script( 'stylepress-js', 'stylepress_frontend', array(
-				'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-				'public_nonce' => wp_create_nonce( 'stylepress-public-nonce' ),
-			)
-		);
-		wp_enqueue_script( 'stylepress-js' );
-
-
-		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
-			// todo: count be bundled into the frontend files above ^^
-			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/css/editor-in.min.css', false, STYLEPRESS_VERSION );
-			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/js/editor-in.min.js', false, STYLEPRESS_VERSION, true );
-
-		}
-
-	}
-
-
-	/**
-	 * Register some backend admin css files.
-	 *
-	 * @since 2.0.0
-	 */
-	public function admin_enqueue_scripts() {
-		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/css/backend.min.css', false, STYLEPRESS_VERSION );
-
-		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/js/backend.min.js', false, STYLEPRESS_VERSION );
-		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
-				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
-			)
-		);
-		wp_enqueue_script( 'stylepress-admin' );
-	}
-
-	/**
-	 * This is our Elementor injection script. We load some custom JS to modify the Elementor control panel during live editing.
-	 *
-	 * @since 2.0.0
-	 */
-	public function editor_scripts() {
-		// load our backend scripts within the editor as well:
-		$this->admin_enqueue_scripts();
-	}
 
 	/**
 	 * Works out the type of page we're currently quer\ying.

@@ -240,35 +240,33 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_grid_meta',
 			[
-				'label' => esc_html__( 'Meta Information', 'stylepress' ),   //section name for controler view
+				'label' => esc_html__( 'Card Components', 'stylepress' ),
 			]
 		);
 
-		$this->add_control(
-			'meta_show_thumbnail',
+		$repeater = new Repeater();
+
+		$repeater->add_control(
+			'meta_component',
 			[
-				'label'        => __( 'Show Thumbnail', 'stylepress' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'yes',
-				'label_on'     => 'Show',
-				'label_off'    => 'Hide',
-				'return_value' => 'yes',
+				'label' => __( 'Element', 'stylepress' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => [
+					'thumbnail'            => 'Thumbnail',
+					'title'            => 'Title',
+					'decoration' => 'Decoration Image',
+					'meta' => 'Meta Details',
+					'excerpt' => 'Excerpt',
+					'read_more' => 'Read More Button',
+				],
+				'label_block' => true,
+				'dynamic' => [
+					'active' => true,
+				],
 			]
 		);
 
-		$this->add_control(
-			'meta_show_title',
-			[
-				'label'        => __( 'Show Title', 'stylepress' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'yes',
-				'label_on'     => 'Show',
-				'label_off'    => 'Hide',
-				'return_value' => 'yes',
-			]
-		);
-
-		$this->add_control(
+		$repeater->add_control(
 			'meta_show_date',
 			[
 				'label'        => __( 'Show Date', 'stylepress' ),
@@ -277,10 +275,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label_on'     => 'Show',
 				'label_off'    => 'Hide',
 				'return_value' => 'yes',
+				'condition' => [
+					'meta_component' => 'meta',
+				],
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'meta_show_author',
 			[
 				'label'        => __( 'Show Author', 'stylepress' ),
@@ -289,10 +290,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label_on'     => 'Show',
 				'label_off'    => 'Hide',
 				'return_value' => 'yes',
+				'condition' => [
+					'meta_component' => 'meta',
+				],
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'meta_show_category',
 			[
 				'label'        => __( 'Show Category', 'stylepress' ),
@@ -301,10 +305,13 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label_on'     => 'Show',
 				'label_off'    => 'Hide',
 				'return_value' => 'yes',
+				'condition' => [
+					'meta_component' => 'meta',
+				],
 			]
 		);
 
-		$this->add_control(
+		$repeater->add_control(
 			'meta_show_tags',
 			[
 				'label'        => __( 'Show Tags', 'stylepress' ),
@@ -313,55 +320,42 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'label_on'     => 'Show',
 				'label_off'    => 'Hide',
 				'return_value' => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'meta_show_excerpt',
-			[
-				'label'        => __( 'Show Excerpt', 'stylepress' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'yes',
-				'label_on'     => 'Show',
-				'label_off'    => 'Hide',
-				'return_value' => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'meta_exceprt_length',
-			[
-				'label'     => __( 'Excerpt Length', 'stylepress' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '10',
 				'condition' => [
-					'meta_show_excerpt' => 'yes',
+					'meta_component' => 'meta',
 				],
 			]
 		);
 
-
-		$this->add_control(
+		$repeater->add_control(
 			'meta_show_comments',
 			[
-				'label'        => __( 'Show Comments', 'stylepress' ),
+				'label'        => __( 'Show Comment Count', 'stylepress' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'default'      => 'yes',
 				'label_on'     => 'Show',
 				'label_off'    => 'Hide',
 				'return_value' => 'yes',
+				'condition' => [
+					'meta_component' => 'meta',
+				],
 			]
 		);
 
 		$this->add_control(
-			'meta_show_readmore',
+			'meta_components',
 			[
-				'label'        => __( 'Read More Button', 'stylepress' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'yes',
-				'label_on'     => 'Show',
-				'label_off'    => 'Hide',
-				'return_value' => 'yes',
+				'label' => '',
+				'type' => Controls_Manager::REPEATER,
+				'fields' => $repeater->get_controls(),
+				'default' => [
+					[ '_id' => false, 'meta_component' => 'thumbnail', ],
+					[ '_id' => false, 'meta_component' => 'title', ],
+					[ '_id' => false, 'meta_component' => 'decoration', ],
+					[ '_id' => false, 'meta_component' => 'meta', ],
+					[ '_id' => false, 'meta_component' => 'excerpt', ],
+					[ '_id' => false, 'meta_component' => 'read_more', ],
+				],
+				'title_field' => '{{{ meta_component }}}',
 			]
 		);
 
@@ -791,6 +785,16 @@ class Stylepress_Post_Grid extends Widget_Base {
 				'scheme'         => Scheme_Typography::TYPOGRAPHY_3,
 				'fields_options' => [],
 				'separator' => 'before',
+			]
+		);
+
+
+		$this->add_control(
+			'meta_excerpt_length',
+			[
+				'label'     => __( 'Excerpt Length', 'stylepress' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => '10',
 			]
 		);
 
@@ -1495,11 +1499,11 @@ class Stylepress_Post_Grid extends Widget_Base {
 		$grid_query = new \WP_Query( $args );
 
 		add_filter( 'excerpt_length', function($length) use ( $settings){
-			return (int)$settings['meta_exceprt_length'];
+			return !empty($settings['meta_excerpt_length']) ? (int)$settings['meta_excerpt_length'] : 20;
 		}, 999 );
 
 		add_filter( 'excerpt_more', function($more){
-			// Kill the built in exceprt link for our own custom one that always displays.
+			// Kill the built in excerpt link for our own custom one that always displays.
 			return '';
 		} );
 

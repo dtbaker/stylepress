@@ -17,6 +17,7 @@ add_filter('stylepress_remote_style',function($style, $style_id){
 	$style = [];
 	$style['title'] = 'DashKids';
 	$style['thumbnail_url'] = 'DashKids';
+	$style['api_key'] = 'dashkits';
 
 	return $style;
 }, 10, 2);
