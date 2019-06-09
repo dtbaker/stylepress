@@ -2,8 +2,9 @@
   border: 1px solid #EFEFEF;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  position: relative; }
+  justify-content: space-between; }
+  .stylepress-grid .stylepress-grid__item-thumb-wrap {
+    position: relative; }
 
 .stylepress-grid--grid .stylepress-grid__content {
   display: flex;
