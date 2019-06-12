@@ -1,5 +1,4 @@
 .stylepress-grid .stylepress-grid__item {
-  border: 1px solid #EFEFEF;
   display: flex;
   flex-direction: column;
   justify-content: space-between; }
