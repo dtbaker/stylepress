@@ -1,3 +1,6 @@
+import { Route } from "react-router-dom"
+import { config } from "../../util/config";
+
 class StyleImporter {
   constructor() {
   }
@@ -14,6 +17,16 @@ class StyleImporter {
     }
 
   };
+
+  backendRoute = () => {
+    return <Route
+      path="/embed"
+      exact
+      render={(props) => {
+        return <div>test embed</div>
+      }}
+    />
+  }
 }
 
 export let style_importer = new StyleImporter();

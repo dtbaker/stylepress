@@ -1,61 +1,55 @@
-const path = require( 'path' );
-const webpack = require( 'webpack' );
-const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-
-// Set different CSS extraction for editor only and common block styles
-const blocksCSSPlugin = new ExtractTextPlugin("[name].css");
-
-// Configuration for the ExtractTextPlugin.
-const extractConfig = {
-  use: [
-    { loader: 'raw-loader' },
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: [ require( 'autoprefixer' ) ],
-      },
-    },
-    {
-      loader: 'sass-loader',
-      query: {
-        outputStyle:
-          'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
-      },
-    },
-  ],
-};
-
-
+const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpackPlugins = defaultConfig.plugins
+webpackPlugins.push(
+  new MiniCssExtractPlugin({
+    // Options similar to the same options in webpackOptions.output
+    // all options are optional
+    filename: '[name].css',
+    chunkFilename: '[id].css',
+    ignoreOrder: false, // Enable to remove warnings about conflicting order
+  })
+);
 module.exports = {
+  ...defaultConfig,
+  plugins: webpackPlugins,
+  module: {
+    ...defaultConfig.module,
+    rules: [
+      ...defaultConfig.module.rules,
+      {
+        test: /\.s?css$/,
+        exclude: /\.module\.s?css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        loader: "file-loader",
+        options: {
+          outputPath: "images",
+        },
+      },
+      {
+        test: /\.module\.s?css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "sass-loader",
+        ],
+      }
+    ]
+  },
   entry: {
     './assets/backend' : './src/js/backend/index.js',
     './assets/frontend' : './src/js/frontend/index.js',
     './assets/frontend-edit' : './src/js/frontend/edit.js',
   },
-  output: {
-    path: path.resolve( __dirname ),
-    filename: '[name].js',
-  },
-  watch: 'production' !== process.env.NODE_ENV,
-  devtool: 'cheap-eval-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-      {
-        test: /([a-zA-Z0-9\s_\\.\-\(\):])+(.s?css)$/,
-        use: blocksCSSPlugin.extract( extractConfig ),
-      },
-    ],
-  },
-  plugins: [
-    blocksCSSPlugin,
-  ],
+  //devtool: 'cheap-eval-source-map',
   externals: {
     jquery: 'jQuery'
   }

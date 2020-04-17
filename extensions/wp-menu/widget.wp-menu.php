@@ -78,7 +78,7 @@ class Widget_stylepress_WP_Menu extends Widget_Base {
 	 * @return bool Whether the reload preview is required.
 	 */
 	public function is_reload_preview_required() {
-		return true;
+		//return true;
 	}
 
 	/**
@@ -476,6 +476,28 @@ class Widget_stylepress_WP_Menu extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+
+		$this->add_control(
+			'dropdown_gap_from_top',
+			[
+				'label'     => __( 'Dropdown Gap From Top', 'elementor' ),
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'range'     => [
+					'%' => [
+						'min' => 1,
+						'max' => 300,
+					],
+				],
+				'default'   => [
+					'size' => 100,
+					'unit' => '%',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul' => 'top: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

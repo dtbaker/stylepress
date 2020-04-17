@@ -45,7 +45,7 @@ if ( $page_classes_template ) {
 	Plugin::get_instance()->debug_message( 'Using default page classes:  ' . esc_html( $page_classes_template->post_title ) . ' (#' . $page_classes_template->ID . ')' );
 }
 Plugin::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
-Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] ? $GLOBALS['stylepress_render']['queried_object']->ID : 'inknown' ) );
+Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset($GLOBALS['stylepress_render']['queried_object']->ID) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
 
 do_action( 'stylepress/before-render' );
 if ( ! empty( $GLOBALS['stylepress_render'] ) ) {

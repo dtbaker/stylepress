@@ -20,6 +20,7 @@ class Backend extends Base {
 
 	const SETTINGS_PAGE_SLUG = 'stylepress';
 	const STYLES_PAGE_SLUG = STYLEPRESS_SLUG . '-styles';
+	const REACT_PAGE_SLUG = STYLEPRESS_SLUG . '-reaact';
 
 	/**
 	 * Initializes the plugin and sets all required filters.
@@ -94,6 +95,12 @@ class Backend extends Base {
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'React', 'stylepress' ), __( 'React', 'stylepress' ), 'manage_options', self::REACT_PAGE_SLUG, array(
+			$this,
+			'react_page_callback'
+		) );
+		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets_react' ) );
+
 	}
 
 	/**
@@ -103,10 +110,12 @@ class Backend extends Base {
 	 */
 	public function admin_page_assets() {
 
-
 		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.css', false, STYLEPRESS_VERSION );
 
-		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', ['wp-element', 'wp-components' ], STYLEPRESS_VERSION );
+		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', [
+			'wp-element',
+			'wp-components'
+		], STYLEPRESS_VERSION );
 		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
 				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
@@ -117,6 +126,42 @@ class Backend extends Base {
 		require_once STYLEPRESS_PATH . 'views/_help_text.php';
 
 	}
+
+	private function _timestamp_script( $name, $src, $requirements = [] ) {
+		wp_enqueue_script( $name, STYLEPRESS_URI . $src, $requirements, STYLEPRESS_VERSION );
+	}
+
+	private function _timestamp_style( $name, $src, $requirements = [] ) {
+		wp_enqueue_style( $name, STYLEPRESS_URI . $src, $requirements, STYLEPRESS_VERSION );
+	}
+
+	public function admin_page_assets_react() {
+		$this->_timestamp_script( 'stylepress-react', 'build/assets/backend.js', [ 'wp-element', 'wp-components' ] );
+		$this->_timestamp_style( 'stylepress-react', 'build/assets/backend.css', [] );
+	}
+
+	public function get_config() {
+		return [
+			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+			'admin_nonce' => wp_create_nonce( 'stylepress-react' ),
+		];
+	}
+
+	/**
+	 * This is our callback for rendering our custom menu page.
+	 * This page shows all our site styles and currently selected defaults.
+	 *
+	 * @since 2.0.0
+	 */
+	public function react_page_callback() {
+		$this->content = $this->render_template(
+			'admin/react.php', [
+			]
+		);
+		$this->header  = $this->render_template( 'admin/header.php' );
+		echo $this->render_template( 'wrapper.php' );
+	}
+
 
 	/**
 	 * This is our callback for rendering our custom menu page.
@@ -132,12 +177,12 @@ class Backend extends Base {
 				]
 			);
 		} else if ( isset( $_GET['remote_style_id'] ) ) {
-			if(isset($_GET['import_step'])) {
+			if ( isset( $_GET['import_step'] ) ) {
 				$this->content = $this->render_template(
 					'admin/remote-style-import.php', [
 					]
 				);
-			}else {
+			} else {
 				$this->content = $this->render_template(
 					'admin/remote-style.php', [
 					]
@@ -298,9 +343,10 @@ class Backend extends Base {
 	/**
 	 * This renders our metabox on most page/post types.
 	 *
+	 * @param \WP_Post $post Current post object.
+	 *
 	 * @since 2.0.0
 	 *
-	 * @param \WP_Post $post Current post object.
 	 */
 	public function meta_box_display( $post ) {
 
@@ -314,9 +360,10 @@ class Backend extends Base {
 	/**
 	 * Saves our metabox details, which is the style for a particular page.
 	 *
+	 * @param int $post_id The post we're current saving.
+	 *
 	 * @since 2.0.0
 	 *
-	 * @param int $post_id The post we're current saving.
 	 */
 	public function save_meta_box( $post_id ) {
 		// Check if our nonce is set.

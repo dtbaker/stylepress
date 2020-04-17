@@ -5,7 +5,9 @@ import $ from 'jquery';
 
 import {post_grid_backend} from './../../../extensions/post-grid/js/post-grid-backend';
 import {style_importer} from './importer';
-
+import {home} from './home';
+import { Route, HashRouter } from "react-router-dom"
+import { config } from "../util/config";
 import "../../scss/backend.scss"
 
 class StylePressBackend {
@@ -13,8 +15,18 @@ class StylePressBackend {
   };
 
   backendLoaded = () => {
+    home.backendLoaded();
     post_grid_backend.backendLoaded();
     style_importer.backendLoaded();
+
+    const wrapper = document.querySelector('#stylepress-react')
+    const clientSideConfig = JSON.parse(wrapper.getAttribute('data-config'))
+    config.set(clientSideConfig)
+
+    wp.element.render(<HashRouter>
+      {home.backendRoute()}
+      {style_importer.backendRoute()}
+    </HashRouter>, wrapper)
   };
 
   elementorLoaded = () => {

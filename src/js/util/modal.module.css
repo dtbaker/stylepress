@@ -1,0 +1,109 @@
+.wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9100000;
+}
+.inner {
+  background: rgba(32, 32, 32, 0.54);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  max-width: 600px;
+  width: 100%;
+  min-height: 200px;
+  background: #fff;
+}
+.headerRow {
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-bottom: 1px solid #dddddd;
+}
+.title {
+  flex: 1;
+  font-size: 15px;
+  color: #444;
+  padding-left: 50px;
+}
+.closeButton {
+  display: block;
+  padding: 0 14px;
+  cursor: pointer;
+  border: 0;
+  border-left: 1px solid #dddddd;
+  background: transparent;
+}
+.body {
+  padding: 20px;
+  > div {
+    display: block;
+  }
+}
+.debugActions {
+  padding: 20px 20px 10px;
+}
+.buttonRetry,
+.buttonRefresh,
+.buttonDebug{
+  background: #1486b8;
+  border: 1px solid #0d6897;
+  box-shadow: 0px 1px 0px #0073af;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-right: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  line-height: 18px;
+  box-sizing: border-box;
+}
+.buttonRetry{
+
+}
+.buttonDebug,
+.buttonRefresh{
+  background: #fff;
+  border: 0;
+  box-shadow: none;
+  color: #767676;
+  &:hover{
+    box-shadow: 0px 0px 3px #dee3e8;
+  }
+}
+.debug {
+  padding: 20px;
+  border-top: 1px solid #dddddd;
+}
+.debugText {
+  white-space: pre-wrap;
+  word-break: break-all;
+  user-select: all;
+  height: 100px;
+  width: 100%;
+  overflow: auto;
+}
+.footer {
+  padding: 0 20px 10px;
+}
+.open {
+  display: block;
+}
+.closed {
+  display: none;
+}

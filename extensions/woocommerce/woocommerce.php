@@ -1,11 +1,12 @@
 <?php
 
+namespace StylePress;
 
 defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 // this filter will only fire on shop pages.
-add_filter( 'woocommerce_template_loader_files', function ( $search_files, $template_file ) {
+add_filter( 'woocommerce_template_loader_files2', function ( $search_files, $template_file ) {
 	// check if we have a special template file just for this one.
 
 	$file = basename( $template_file );
@@ -22,7 +23,7 @@ add_filter( 'woocommerce_template_loader_files', function ( $search_files, $temp
 	return $search_files;
 }, 5, 2 );
 
-add_action( 'stylepress/render-inner', function () {
+add_action( 'stylepress/render-inner2', function () {
 
 	if ( function_exists( 'WC' ) && class_exists( 'WC_Template_Loader' ) ) {
 
