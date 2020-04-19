@@ -13,7 +13,7 @@ do_action( 'get_header', 'stylepress' );
 
 $categories = Styles::get_instance()->get_categories();
 
-$page_classes_template = false;
+$elementor_kit_template = false;
 
 ?>
 <!doctype html>
@@ -23,14 +23,24 @@ $page_classes_template = false;
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<?php
-	// pull in the default page classes
+	// pull in the default Elementor Theme:
 	if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 		foreach ( $categories as $category ) {
-			if ( ! empty( $category['page_style'] ) ) {
+			if ( ! empty( $category['is_elementor_kit_style'] ) ) {
 				if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
 					if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
-						$page_classes_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
-						ElementorCSS::get_instance()->render_css_header( $page_classes_template );
+						$elementor_kit_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
+						// We override the Elementor default active kit here based on the current page selection:
+						add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $elementor_kit_template ) {
+							if ( $elementor_kit_template && $elementor_kit_template->ID ) {
+								$elementor_template_type = get_post_meta( $elementor_kit_template->ID, '_elementor_template_type', true );
+								if ( $elementor_template_type === 'kit' ) {
+									$kit_id = $elementor_kit_template->ID;
+								}
+							}
+
+							return $kit_id;
+						} );
 					}
 				}
 			}
@@ -41,16 +51,16 @@ $page_classes_template = false;
 </head>
 <body <?php body_class(); ?>>
 <?php
-if ( $page_classes_template ) {
-	Plugin::get_instance()->debug_message( 'Using default page classes:  ' . esc_html( $page_classes_template->post_title ) . ' (#' . $page_classes_template->ID . ')' );
+if ( $elementor_kit_template ) {
+	Plugin::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
 }
 Plugin::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
-Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset($GLOBALS['stylepress_render']['queried_object']->ID) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
+Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset( $GLOBALS['stylepress_render']['queried_object']->ID ) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
 
 do_action( 'stylepress/before-render' );
 if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 	foreach ( $categories as $category ) {
-		if ( ! empty( $category['page_style'] ) ) {
+		if ( ! $category['render_section'] ) {
 			continue;
 		}
 		if ( STYLEPRESS_DEBUG_OUTPUT ) {

@@ -42,35 +42,37 @@ if ( ! $page_status['enabled'] ) {
 	$categories = Styles::get_instance()->get_categories();
 
 	foreach ( $categories as $category ) {
-		$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
-		if ( $designs ) {
-			?>
-			<p class="post-attributes-label-wrapper">
-				<label class="post-attributes-label"
-				       for="stylepress_page_style<?php echo esc_attr( $category['slug'] ); ?>">
-					<?php esc_html_e( $category['title'] ) ?>
-				</label>
-			</p>
-			<select name="stylepress_style[<?php echo esc_attr( $category['slug'] ); ?>]"
-			        id="stylepress_page_style<?php echo esc_attr( $category['slug'] ); ?>">
-				<option value="0"><?php
-					// Translators: %s contains the current default style.
-					printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr(
-						$default_styles[ $category['slug'] ] !== false && isset( $designs[ $default_styles[ $category['slug'] ] ] ) ?
-							'(' . $designs[ $default_styles[ $category['slug'] ] ] . ')' :
-							'' ) );
-					?></option>
-				<?php foreach ( $designs as $design_id => $design_name ) {
-					?>
-					<option
-						value="<?php echo esc_attr( $design_id ); ?>"<?php echo isset( $page_styles[ $category['slug'] ] ) && (int) $page_styles[ $category['slug'] ] === (int) $design_id ? ' selected' : ''; ?>>
-						<?php echo esc_attr( $design_name ); ?>
-					</option>
-					<?php
-				}
+		if ( $category['global_selector'] ) {
+			$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
+			if ( $designs ) {
 				?>
-			</select>
-		<?php }
+				<p class="post-attributes-label-wrapper">
+					<label class="post-attributes-label"
+					       for="stylepress_page_style<?php echo esc_attr( $category['slug'] ); ?>">
+						<?php esc_html_e( $category['title'] ) ?>
+					</label>
+				</p>
+				<select name="stylepress_style[<?php echo esc_attr( $category['slug'] ); ?>]"
+				        id="stylepress_page_style<?php echo esc_attr( $category['slug'] ); ?>">
+					<option value="0"><?php
+						// Translators: %s contains the current default style.
+						printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr(
+							$default_styles[ $category['slug'] ] !== false && isset( $designs[ $default_styles[ $category['slug'] ] ] ) ?
+								'(' . $designs[ $default_styles[ $category['slug'] ] ] . ')' :
+								'' ) );
+						?></option>
+					<?php foreach ( $designs as $design_id => $design_name ) {
+						?>
+						<option
+							value="<?php echo esc_attr( $design_id ); ?>"<?php echo isset( $page_styles[ $category['slug'] ] ) && (int) $page_styles[ $category['slug'] ] === (int) $design_id ? ' selected' : ''; ?>>
+							<?php echo esc_attr( $design_name ); ?>
+						</option>
+						<?php
+					}
+					?>
+				</select>
+			<?php }
+		}
 	}
 
 }

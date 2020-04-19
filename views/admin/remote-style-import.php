@@ -26,7 +26,7 @@ if(!$remote_style){
 <div class="stylepress__main">
 	<div class="stylepress__summary">
 		<h3>Style: <?php echo esc_html( $remote_style['title'] ); ?></h3>
-		<img src="<?php echo esc_url($remote_style['thumbnail_url']); ?>">
+		Importing...
 	</div>
 </div>
 

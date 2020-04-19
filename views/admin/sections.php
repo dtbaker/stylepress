@@ -27,7 +27,7 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 		<img src="<?php if ( has_post_thumbnail( $parent_style->ID ) ) {
 			echo esc_url( get_the_post_thumbnail_url( $parent_style->ID, 'full' ) );
 		} else {
-			echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
+			echo esc_url( STYLEPRESS_URI . 'src/images/wp-theme-thumb-logo-sml.jpg' );
 		} ?>">
 		<p>Below are a list of designs included within this style.</p>
 	</div>
@@ -51,7 +51,7 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 							   style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
 								   echo esc_url( get_the_post_thumbnail_url( $design_id, 'full' ) );
 							   } else {
-								   echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' );
+								   echo esc_url( STYLEPRESS_URI . 'src/images/wp-theme-thumb-logo-sml.jpg' );
 							   } ?>);">
 							</a>
 
@@ -104,33 +104,36 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 
 					</div>
 				<?php } ?>
-				<div class="stylepress__style stylepress__style--new" tabindex="0">
 
-					<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
-						<input type="hidden" name="new_style_category" value="<?php echo esc_attr( $category['slug'] ); ?>"/>
-						<input type="hidden" name="new_style_parent" value="<?php echo (int) $parent_style->ID; ?>"/>
-						<input type="hidden" name="action" value="stylepress_new_style"/>
-						<?php wp_nonce_field( 'stylepress_new_style', 'stylepress_new_style' ); ?>
+				<?php if ( defined( 'STYLEPRESS_ALLOW_CREATION' ) && STYLEPRESS_ALLOW_CREATION ) { ?>
+					<div class="stylepress__style stylepress__style--new" tabindex="0">
 
-						<div class="stylepress__style-inner">
+						<form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
+							<input type="hidden" name="new_style_category" value="<?php echo esc_attr( $category['slug'] ); ?>"/>
+							<input type="hidden" name="new_style_parent" value="<?php echo (int) $parent_style->ID; ?>"/>
+							<input type="hidden" name="action" value="stylepress_new_style"/>
+							<?php wp_nonce_field( 'stylepress_new_style', 'stylepress_new_style' ); ?>
 
-							<div
-								class="stylepress__style-thumb"
-								style="background-image: url(<?php echo esc_url( STYLEPRESS_URI . 'assets/images/wp-theme-thumb-logo-sml.jpg' ); ?>);">
+							<div class="stylepress__style-inner">
+
+								<div
+									class="stylepress__style-thumb"
+									style="background-image: url(<?php echo esc_url( STYLEPRESS_URI . 'src/images/wp-theme-thumb-logo-sml.jpg' ); ?>);">
+								</div>
+
+								<h3 class="stylepress__style-name">
+									<input type="text" class="stylepress__style-name-input" name="new_style_name"
+									       placeholder="<?php printf( esc_attr( 'Enter New %s Name', 'stylepress' ), $category['title'] ); ?>">
+								</h3>
+
+								<div class="stylepress__style-action">
+									<input class="button button-primary"
+									       type="submit" value="<?php esc_attr_e( 'Create New', 'stylepress' ); ?>">
+								</div>
 							</div>
-
-							<h3 class="stylepress__style-name">
-								<input type="text" class="stylepress__style-name-input" name="new_style_name"
-								       placeholder="<?php printf( esc_attr( 'Enter New %s Name', 'stylepress' ), $category['title'] ); ?>">
-							</h3>
-
-							<div class="stylepress__style-action">
-								<input class="button button-primary"
-								       type="submit" value="<?php esc_attr_e( 'Create New', 'stylepress' ); ?>">
-							</div>
-						</div>
-					</form>
-				</div>
+						</form>
+					</div>
+				<?php } ?>
 
 
 			</div>

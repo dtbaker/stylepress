@@ -55,9 +55,9 @@ class Frontend extends Base {
 	 * @since 2.0.0
 	 */
 	public function frontend_css() {
-		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'assets/frontend.css', false, STYLEPRESS_VERSION );
+		wp_enqueue_style( 'stylepress-css', STYLEPRESS_URI . 'build/assets/frontend.css', false, STYLEPRESS_VERSION );
 
-		wp_register_script( 'stylepress-js', STYLEPRESS_URI . 'assets/frontend.js', false, STYLEPRESS_VERSION, true );
+		wp_register_script( 'stylepress-js', STYLEPRESS_URI . 'build/assets/frontend.js', false, STYLEPRESS_VERSION, true );
 		wp_localize_script( 'stylepress-js', 'stylepress_frontend', array(
 				'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 				'public_nonce' => wp_create_nonce( 'stylepress-public-nonce' ),
@@ -68,8 +68,8 @@ class Frontend extends Base {
 
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
 			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
-			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/frontend-edit.css', false, STYLEPRESS_VERSION );
-			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'assets/frontend-edit.js', false, STYLEPRESS_VERSION, true );
+			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.css', false, STYLEPRESS_VERSION );
+			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.js', false, STYLEPRESS_VERSION, true );
 
 		}
 

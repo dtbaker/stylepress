@@ -18,9 +18,8 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
  */
 class Backend extends Base {
 
-	const SETTINGS_PAGE_SLUG = 'stylepress';
+	const SETTINGS_PAGE_SLUG = STYLEPRESS_SLUG . '-settings';
 	const STYLES_PAGE_SLUG = STYLEPRESS_SLUG . '-styles';
-	const REACT_PAGE_SLUG = STYLEPRESS_SLUG . '-reaact';
 
 	/**
 	 * Initializes the plugin and sets all required filters.
@@ -79,11 +78,17 @@ class Backend extends Base {
 
 
 		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
-			$this,
-			'settings_page_callback',
-		), STYLEPRESS_URI . 'assets/images/icon.png' );
-		// hack to rmeove default submenu
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'Settings', 'stylepress' ), __( 'Settings', 'stylepress' ), 'manage_options', self::SETTINGS_PAGE_SLUG, array(
+			Wizard::get_instance(),
+			'setup_page_callback',
+		), STYLEPRESS_URI . 'src/images/icon.png' );
+		// hack to remove default submenu
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'Setup Wizard', 'stylepress' ), __( 'Setup Wizard', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
+			Wizard::get_instance(),
+			'setup_page_callback'
+		) );
+		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+		$page = add_submenu_page( self::PAGE_SLUG, __( 'Layout', 'stylepress' ), __( 'Layout', 'stylepress' ), 'manage_options', self::SETTINGS_PAGE_SLUG, array(
 			$this,
 			'settings_page_callback'
 		) );
@@ -95,11 +100,6 @@ class Backend extends Base {
 		) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'React', 'stylepress' ), __( 'React', 'stylepress' ), 'manage_options', self::REACT_PAGE_SLUG, array(
-			$this,
-			'react_page_callback'
-		) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets_react' ) );
 
 	}
 
@@ -110,9 +110,9 @@ class Backend extends Base {
 	 */
 	public function admin_page_assets() {
 
-		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.css', false, STYLEPRESS_VERSION );
+		wp_enqueue_style( 'stylepress-admin', STYLEPRESS_URI . 'build/assets/backend.css', false, STYLEPRESS_VERSION );
 
-		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', [
+		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'build/assets/backend.js', [
 			'wp-element',
 			'wp-components'
 		], STYLEPRESS_VERSION );
@@ -135,33 +135,12 @@ class Backend extends Base {
 		wp_enqueue_style( $name, STYLEPRESS_URI . $src, $requirements, STYLEPRESS_VERSION );
 	}
 
-	public function admin_page_assets_react() {
-		$this->_timestamp_script( 'stylepress-react', 'build/assets/backend.js', [ 'wp-element', 'wp-components' ] );
-		$this->_timestamp_style( 'stylepress-react', 'build/assets/backend.css', [] );
-	}
-
 	public function get_config() {
 		return [
 			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 			'admin_nonce' => wp_create_nonce( 'stylepress-react' ),
 		];
 	}
-
-	/**
-	 * This is our callback for rendering our custom menu page.
-	 * This page shows all our site styles and currently selected defaults.
-	 *
-	 * @since 2.0.0
-	 */
-	public function react_page_callback() {
-		$this->content = $this->render_template(
-			'admin/react.php', [
-			]
-		);
-		$this->header  = $this->render_template( 'admin/header.php' );
-		echo $this->render_template( 'wrapper.php' );
-	}
-
 
 	/**
 	 * This is our callback for rendering our custom menu page.
@@ -243,11 +222,17 @@ class Backend extends Base {
 			'post_title'  => $new_style_name,
 			'post_parent' => $new_style_parent,
 		], true );
+
 		if ( is_wp_error( $post_id ) || ! $post_id ) {
 			wp_die( 'Failed to create new style' );
 		}
 
 		wp_set_object_terms( $post_id, $new_category, STYLEPRESS_SLUG . '-cat', false );
+
+		if($new_category === 'theme_styles'){
+			// hack to allow Elementor Theme Style editor:
+			update_post_meta( $post_id, '_elementor_template_type', 'kit' );
+		}
 
 		wp_redirect( admin_url( 'admin.php?page=' . self::STYLES_PAGE_SLUG . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
 		exit;

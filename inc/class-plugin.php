@@ -25,12 +25,9 @@ class Plugin extends Base {
 	 */
 	public function __construct() {
 
-		add_action( 'init', array( $this, 'theme_compatibility' ) );
-		add_action( 'wp_print_footer_scripts', array( $this, 'wp_print_footer_scripts' ) );
 		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ), 40 );
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
-		add_action( 'init', array( $this, 'load_extensions' ) );
-		add_action( 'widgets_init', [ $this, 'load_widgets' ] );
+		//add_action( 'init', array( $this, 'load_extensions' ) );
 	}
 
 	/**
@@ -46,15 +43,19 @@ class Plugin extends Base {
 			if ( class_exists( '\Elementor\Plugin' ) ) {
 				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
 					$elementor = \Elementor\Plugin::instance();
+
+					// We have to enqueue styles on all pages, even non elementor pages, so global styles work.
+					// reference: wp-content/plugins/elementor/includes/frontend.php:209
+					add_action( 'wp_enqueue_scripts', [ $elementor->frontend, 'enqueue_styles' ] );
+
 					if ( $elementor && isset( $elementor->elements_manager ) ) {
 						if ( method_exists( $elementor->elements_manager, 'add_category' ) ) {
 							$elementor->elements_manager->add_category(
 								'stylepress',
 								[
 									'title' => 'StylePress',
-									'icon'  => 'font'
-								],
-								1
+									'icon'  => 'eicon-font'
+								]
 							);
 						}
 					}
@@ -74,24 +75,7 @@ class Plugin extends Base {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
-							require_once STYLEPRESS_PATH . 'extensions/post-grid/post-grid.php';
-							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
-							require_once STYLEPRESS_PATH . 'extensions/dynamic-field/dynamic-field.php';
-							require_once STYLEPRESS_PATH . 'extensions/email-subscribe/email-subscribe.php';
-							require_once STYLEPRESS_PATH . 'extensions/modal-popup/modal-popup.php';
-							require_once STYLEPRESS_PATH . 'extensions/wp-menu/wp-menu.php';
-							require_once STYLEPRESS_PATH . 'extensions/form/form-fields.php';
-							require_once STYLEPRESS_PATH . 'extensions/tooltip/tooltip.php';
-							require_once STYLEPRESS_PATH . 'extensions/google-maps/google-maps.php';
-							require_once STYLEPRESS_PATH . 'extensions/page-slider/page-slider.php';
-							require_once STYLEPRESS_PATH . 'extensions/woocommerce/woocommerce.php';
-							// only works with pro:
-							if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-								//require_once STYLEPRESS_PATH . 'extensions/stylepress-loop/stylepress-loop.php';
-							} else {
-								require_once STYLEPRESS_PATH . 'extensions/shortcode/shortcode.php';
-							}
-
+							//require_once STYLEPRESS_PATH . 'extensions/woocommerce/woocommerce.php';
 							do_action( 'stylepress_init_extensions' );
 						}
 					}
@@ -99,17 +83,6 @@ class Plugin extends Base {
 			}
 		}
 
-	}
-
-	public function load_widgets() {
-		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( '\Elementor\Plugin' ) ) {
-				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-					require_once STYLEPRESS_PATH . 'extensions/widget/widget.php';
-					register_widget( "\StylePress\stylepress_template_widget" );
-				}
-			}
-		}
 	}
 
 	/**
@@ -126,14 +99,37 @@ class Plugin extends Base {
 					if ( isset( $elementor->widgets_manager ) ) {
 						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
 
-							// todo: option these out in 'Add-Ons' section
-							require_once STYLEPRESS_PATH . 'widgets/inner-content.php';
+							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
+							do_action( 'stylepress_init_widgets' );
 
 						}
 					}
 				}
 			}
 		}
+	}
+
+
+	public function is_editing_internal_content_page() {
+
+		$is_inner_content_page = false;
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+			$post = get_post();
+			if ( $post->post_type === Styles::CPT ) {
+				$post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
+				$categories      = Styles::get_instance()->get_categories();
+				foreach ( $categories as $category ) {
+					foreach ( $post_categories as $post_category ) {
+						if ( $post_category->slug === $category['slug'] && ! empty( $category['inner'] ) ) {
+							$is_inner_content_page = true;
+						}
+					}
+				}
+			}
+		}
+
+		return $is_inner_content_page;
+
 	}
 
 
@@ -142,26 +138,6 @@ class Plugin extends Base {
 		//current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' )
 	}
 
-	/**
-	 * This loads a custom "panel" template to the frontend Elementor editor page.
-	 * Only when the user is logged in and only when the Elementor editor has loaded.
-	 *
-	 * @since 2.0.0
-	 */
-	public function wp_print_footer_scripts() {
-		if ( ! is_admin() && $this->has_permission() ) {
-			if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-				if ( class_exists( '\Elementor\Plugin' ) ) {
-					if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-						$elementor = \Elementor\Plugin::instance();
-						if ( isset( $elementor->editor ) && $elementor->editor->is_edit_mode() ) {
-							include_once STYLEPRESS_PATH . 'templates/page-panel.php';
-						}
-					}
-				}
-			}
-		}
-	}
 
 	public function populate_globals() {
 
@@ -201,9 +177,7 @@ class Plugin extends Base {
 				if ( $page_styles ) {
 					foreach ( $page_styles as $category_slug => $chosen_style_id ) {
 						if ( $chosen_style_id != 0 ) {
-							if ( isset( $these_styles[ $category_slug ] ) ) {
-								$these_styles[ $category_slug ] = $chosen_style_id;
-							}
+							$these_styles[ $category_slug ] = $chosen_style_id;
 						}
 					}
 				}
@@ -267,22 +241,6 @@ class Plugin extends Base {
 
 		// todo - look for custom taxonomys
 		return 'post';
-	}
-
-	/**
-	 * Loads the compatibility with various popular themes.
-	 *
-	 * @since 2.0.0
-	 */
-	public function theme_compatibility() {
-
-		$theme = get_option( 'template' );
-		if ( $theme_name = strtolower( basename( $theme ) ) ) {
-			$filename = STYLEPRESS_PATH . 'themes/' . $theme_name . '/' . $theme_name . '.php';
-			if ( is_readable( $filename ) ) {
-				require_once $filename;
-			}
-		}
 	}
 
 

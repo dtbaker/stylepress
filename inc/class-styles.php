@@ -90,41 +90,60 @@ class Styles extends Base {
 	public function get_categories() {
 		$stylepress_categories   = [];
 		$stylepress_categories[] = [
-			'order'       => 10,
-			'slug'        => 'header',
-			'title'       => 'Header',
-			'plural'      => 'Headers',
-			'description' => 'These are the header designs for this style.',
+			'order'           => 10,
+			'slug'            => 'header',
+			'title'           => 'Header',
+			'plural'          => 'Headers',
+			'description'     => 'These are the header designs for this style.',
+			'global_selector' => true,
+			'render_section'  => true,
 		];
 		$stylepress_categories[] = [
-			'order'       => 20,
-			'slug'        => 'hero',
-			'title'       => 'Hero',
-			'plural'      => 'Heros',
-			'description' => 'These are the hero designs for this style.',
+			'order'           => 20,
+			'slug'            => 'hero',
+			'title'           => 'Hero',
+			'plural'          => 'Heros',
+			'description'     => 'These are the hero designs for this style.',
+			'global_selector' => true,
+			'render_section'  => true,
 		];
 		$stylepress_categories[] = [
-			'order'       => 30,
-			'slug'        => 'content',
-			'title'       => 'Content',
-			'plural'      => 'Content Area',
-			'inner'       => true,
-			'description' => 'These are the content designs for this style.',
+			'order'           => 30,
+			'slug'            => 'page_body',
+			'title'           => 'Page Body',
+			'plural'          => 'Page Body',
+			'inner'           => true,
+			'description'     => 'These are the page body layouts for this style.',
+			'global_selector' => true,
+			'render_section'  => true,
 		];
 		$stylepress_categories[] = [
-			'order'       => 40,
-			'slug'        => 'footer',
-			'title'       => 'Footer',
-			'plural'      => 'Footers',
-			'description' => 'These are the footer designs for this style.',
+			'order'           => 40,
+			'slug'            => 'footer',
+			'title'           => 'Footer',
+			'plural'          => 'Footers',
+			'description'     => 'These are the footer designs for this style.',
+			'global_selector' => true,
+			'render_section'  => true,
 		];
 		$stylepress_categories[] = [
-			'order'       => 50,
-			'slug'        => 'classes',
-			'title'       => 'Default Styles',
-			'plural'      => 'Classes',
-			'description' => 'These are the default classes to use when building out the page content',
-			'page_style'  => true,
+			'order'           => 50,
+			'slug'            => 'theme_styles',
+			'title'           => 'Theme Style',
+			'plural'          => 'Theme Styles',
+			'description'     => 'These are global theme styles that apply to all elements on the page (i.e. link color).',
+			'global_selector' => true,
+			'render_section'  => false,
+			'is_elementor_kit_style'  => true,
+		];
+		$stylepress_categories[] = [
+			'order'           => 60,
+			'slug'            => 'demo_content',
+			'title'           => 'Demo Content',
+			'plural'          => 'Demo Content',
+			'description'     => 'These are demo content that can be inserted through out the website.',
+			'global_selector' => false,
+			'render_section'  => false,
 		];
 
 		return apply_filters( 'stylepress_categories', $stylepress_categories );
@@ -172,11 +191,11 @@ class Styles extends Base {
 	/**
 	 * Returns a URL used to edit a particular design.
 	 *
-	 * @since 2.0.0
-	 *
 	 * @param int $design_id the design we want to edit.
 	 *
 	 * @return string
+	 * @since 2.0.0
+	 *
 	 */
 	public function get_design_edit_url( $design_id ) {
 		// defaul to Elementor, but we want to support other page builders down the track.
@@ -193,11 +212,11 @@ class Styles extends Base {
 	 * This lets us query what the currently selected page template is for a particular post ID
 	 * We use the other function to get the defaults for non-page-ID posts (like archive etc..)
 	 *
-	 * @since 2.0.0
-	 *
 	 * @param int $post_id Current post ID we're querying.
 	 *
 	 * @return array
+	 * @since 2.0.0
+	 *
 	 */
 	public function get_page_styles( $post_id ) {
 		$current_option = get_post_meta( $post_id, 'stylepress_style', true );
@@ -213,9 +232,9 @@ class Styles extends Base {
 	 * Works out what template is currently selected for the current page/post/archive/search/404 etc.
 	 * Copied from my Widget Area Manager plugin
 	 *
+	 * @return int
 	 * @since 2.0.0
 	 *
-	 * @return int
 	 */
 	public function get_default_styles() {
 
@@ -322,7 +341,8 @@ class Styles extends Base {
 			?>
 			<div class="stylepress__header">
 				<div class="stylepress__logo">
-					<img alt="StylePress" src="<?php echo esc_url( STYLEPRESS_URI . 'assets/images/logo-stylepress-sml.png' ); ?>">
+					<img alt="StylePress"
+					     src="<?php echo esc_url( STYLEPRESS_URI . 'src/images/logo-stylepress-sml.png' ); ?>">
 				</div>
 				<div class="stylepress_buttons">
 					<a

@@ -45,9 +45,9 @@ module.exports = {
     ]
   },
   entry: {
-    './assets/backend' : './src/js/backend/index.js',
-    './assets/frontend' : './src/js/frontend/index.js',
-    './assets/frontend-edit' : './src/js/frontend/edit.js',
+    './assets/backend' : './src/backend/index.js',
+    // './assets/frontend' : './src/js/frontend/index.js',
+    // './assets/frontend-edit' : './src/js/frontend/edit.js',
   },
   //devtool: 'cheap-eval-source-map',
   externals: {

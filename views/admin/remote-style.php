@@ -30,7 +30,7 @@ if(!$remote_style){
 		<p>
 			<a class="button button-primary"
 			   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_id=' . $remote_style_id .'&import_step=1' ) ); ?>">
-				<?php esc_html_e( 'Use This Style', 'stylepress' ); ?>
+				<?php esc_html_e( 'Import This Style', 'stylepress' ); ?>
 			</a>
 		</p>
 	</div>

@@ -32,10 +32,8 @@ spl_autoload_register(
 );
 
 Plugin::get_instance();
-ElementorCSS::get_instance();
-Frontend::get_instance();
 Styles::get_instance();
-ElementorTypography::get_instance();
+Frontend::get_instance();
 if(is_admin()){
 	Backend::get_instance();
 }

@@ -1,0 +1,54 @@
+
+.stylepress__header {
+  margin: 0 0 40px;
+  background: #FFF;
+  padding: 20px;
+  border-radius: 10px;
+}
+.wp-core-ui {
+  .stylepress_buttons {
+    margin: 20px 0 10px;
+    &--return {
+      font-size: 20px;
+      padding: 20px;
+      line-height: 1px;
+    }
+  }
+}
+.stylepress__logo {
+  img {
+    width: 334px;
+    height: 75px;
+  }
+}
+
+.stylepress__about {
+  float: right;
+  text-align: right;
+  padding: 5px 4px 20px;
+
+  .stylepress__link {
+    text-decoration: none;
+    color: #545c63;
+
+    img{
+      max-height: 10px;
+      width: auto;
+    }
+  }
+}
+
+.stylepress__links{
+
+  margin-bottom: 15px;
+
+  .stylepress__link:after {
+    content: '|';
+    color: #545c63;
+    padding: 0 4px 0 7px;
+  }
+
+  .stylepress__link:last-child:after {
+    display: none;
+  }
+}

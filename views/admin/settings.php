@@ -61,7 +61,7 @@ $edit_links = $manage_links = [];
 			<?php
 			$page_type = '_global';
 			foreach ( $categories as $category ) {
-				if ( true ) { //|| empty( $category['page_style'] ) ) { // push this out into a different UI element.
+				if ( $category['global_selector'] ) {
 					?>
 					<div class="stylepress__defaults-pagesection">
 						<label
@@ -70,7 +70,7 @@ $edit_links = $manage_links = [];
 						<select
 							class="stylepress__default-select js-stylepress-select"
 							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-							<option value=""> - choose a style - </option>
+							<option value=""> - choose a style -</option>
 							<?php
 							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
 							foreach ( $styles as $design_id => $design ) {
@@ -87,11 +87,13 @@ $edit_links = $manage_links = [];
 							} ?>
 						</select>
 						<span class="stylepress__default-link js-stylepress-link"></span>
-						<span class="stylepress__manage-link">
+						<?php if ( defined( 'STYLEPRESS_ALLOW_CREATION' ) && STYLEPRESS_ALLOW_CREATION ) { ?>
+							<span class="stylepress__manage-link">
 							 / <a href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG ) ); ?>">
 								Add New
 							</a>
 						</span>
+						<?php } ?>
 					</div>
 					<?php
 				}
@@ -109,9 +111,11 @@ $edit_links = $manage_links = [];
 			<thead>
 			<tr>
 				<th>Page Type</th>
-				<?php foreach ( $categories as $category ) { ?>
-					<th>Default <?php echo $category['title']; ?></th>
-				<?php } ?>
+				<?php foreach ( $categories as $category ) {
+					if ( $category['global_selector'] ) { ?>
+						<th>Default <?php echo $category['title']; ?></th>
+					<?php }
+				} ?>
 			</tr>
 			</thead>
 			<tbody>
@@ -121,25 +125,27 @@ $edit_links = $manage_links = [];
 						<?php esc_html_e( $page_type_name ); ?>
 					</td>
 					<?php foreach ( $categories as $category ) {
-						?>
-						<td>
-							<select
-								class="stylepress__default-select js-stylepress-select"
-								name="default_style[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
-								<option value="">Choose <?php echo esc_attr( $category['title'] ); ?> </option>
-								<?php
-								$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
-								foreach ( $styles as $design_id => $design ) { ?>
-									<option
-										value="<?php echo (int) $design_id; ?>"
-										<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
-										<?php echo esc_attr( $design ); ?>
-									</option>
+						if ( $category['global_selector'] ) {
+							?>
+							<td>
+								<select
+									class="stylepress__default-select js-stylepress-select"
+									name="default_style[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
+									<option value="">Choose <?php echo esc_attr( $category['title'] ); ?> </option>
 									<?php
-								} ?>
-							</select>
-						</td>
-					<?php } ?>
+									$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
+									foreach ( $styles as $design_id => $design ) { ?>
+										<option
+											value="<?php echo (int) $design_id; ?>"
+											<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
+											<?php echo esc_attr( $design ); ?>
+										</option>
+										<?php
+									} ?>
+								</select>
+							</td>
+						<?php }
+					} ?>
 				</tr>
 
 			<?php } ?>
@@ -161,7 +167,7 @@ $edit_links = $manage_links = [];
           $edit.html('');
           if (design_id !== '') {
             if (typeof edit_links[design_id] !== 'undefined') {
-              $edit.html('<a href="' + edit_links[design_id] + '">Edit</a>');
+              $edit.html('<a href="' + edit_links[design_id] + '" target="_blank">Edit</a>');
             }
           }
         }
