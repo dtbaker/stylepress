@@ -29,11 +29,11 @@ class Frontend extends Base {
 	 *
 	 * If the user has disabled stylepress for a particular item then we just render default.
 	 *
-	 * @since 2.0.0
-	 *
 	 * @param string $template_include The path to the current template file.
 	 *
 	 * @return string
+	 * @since 2.0.0
+	 *
 	 */
 	public function template_include( $template_include ) {
 

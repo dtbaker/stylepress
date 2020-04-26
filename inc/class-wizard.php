@@ -16,6 +16,8 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
  */
 class Wizard extends Base {
 
+	const PAGE_SLUG = 'stylepress-wizard';
+
 	public $current_step = 'introduction';
 	public $tgmpa_instance;
 	public $tgmpa_menu_slug = 'tgmpa-install-plugins';
@@ -24,21 +26,31 @@ class Wizard extends Base {
 	public function __construct() {
 
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'wp_ajax_envato_setup_plugins', array( $this, 'ajax_plugins' ) );
 		add_action( 'wp_ajax_envato_setup_content', array( $this, 'ajax_content' ) );
+
+	}
+
+	public function admin_init() {
 
 		if ( isset( $_GET['step'] ) ) {
 			$steps = $this->get_steps();
 			if ( isset( $steps[ $_GET['step'] ] ) ) {
 				$this->current_step = $_GET['step'];
+				if ( ! empty( $_REQUEST['save_step'] ) ) {
+					if ( isset( $steps[ $this->current_step ]['handler'] ) ) {
+						call_user_func( $steps[ $this->current_step ]['handler'] );
+					}
+				}
 			}
 		}
 	}
 
-	public function admin_head(){
+	public function admin_head() {
 		?>
 		<script type="text/javascript">
-			var stylepress_wizard = <?php echo json_encode(
+      var stylepress_wizard = <?php echo json_encode(
 				array(
 					'tgm_plugin_nonce' => array(
 						'update'  => wp_create_nonce( 'tgmpa-update' ),
@@ -61,10 +73,8 @@ class Wizard extends Base {
 	 * @since 2.0.0
 	 */
 	public function setup_page_callback() {
-		$this->content = $this->render_template(
-			'admin/wizard.php', [
-			]
-		);
+
+		$this->content = $this->render_template( 'admin/wizard.php' );
 		$this->header  = $this->render_template( 'admin/header.php' );
 		echo $this->render_template( 'wrapper.php' );
 	}
@@ -78,36 +88,38 @@ class Wizard extends Base {
 			'view'    => array( $this, 'envato_setup_introduction' ),
 			'handler' => '',
 		);
-		$steps['default_plugins'] = array(
-			'name'    => esc_html__( 'Plugins' ),
-			'view'    => array( $this, 'envato_setup_default_plugins' ),
-			'handler' => '',
-		);
 		$steps['style']           = array(
 			'name'    => esc_html__( 'Style' ),
 			'view'    => array( $this, 'envato_setup_color_style' ),
 			'handler' => array( $this, 'envato_setup_color_style_save' ),
+		);
+		$steps['default_plugins'] = array(
+			'name'    => esc_html__( 'Plugins' ),
+			'view'    => array( $this, 'envato_setup_default_plugins' ),
+			'handler' => '',
 		);
 		$steps['default_content'] = array(
 			'name'    => esc_html__( 'Content' ),
 			'view'    => array( $this, 'envato_setup_default_content' ),
 			'handler' => '',
 		);
-		$steps['design']          = array(
-			'name'    => esc_html__( 'Logo' ),
-			'view'    => array( $this, 'envato_setup_logo_design' ),
-			'handler' => array( $this, 'envato_setup_logo_design_save' ),
-		);
-		$steps['help_support']    = array(
+		//		$steps['design']          = array(
+		//			'name'    => esc_html__( 'Logo' ),
+		//			'view'    => array( $this, 'envato_setup_logo_design' ),
+		//			'handler' => array( $this, 'envato_setup_logo_design_save' ),
+		//		);
+		$steps['help_support'] = array(
 			'name'    => esc_html__( 'Support' ),
 			'view'    => array( $this, 'envato_setup_help_support' ),
 			'handler' => '',
 		);
-		$steps['next_steps']      = array(
+		$steps['next_steps']   = array(
 			'name'    => esc_html__( 'Ready!' ),
 			'view'    => array( $this, 'envato_setup_ready' ),
 			'handler' => '',
 		);
+
+		$steps = apply_filters( 'stylepress_setup_wizard_steps', $steps, $this );
 
 		return $steps;
 
@@ -122,56 +134,35 @@ class Wizard extends Base {
 
 
 	public function get_step_link( $step ) {
-		return add_query_arg( 'step', $step, admin_url( 'admin.php?page=' . STYLEPRESS_SLUG ) );
+		return add_query_arg( 'step', $step );
 	}
 
 	public function get_next_step_link() {
 		$keys = array_keys( $this->get_steps() );
 
-		return $this->get_step_link($keys[ array_search( $this->current_step, $keys ) + 1 ]);
+		return $this->get_step_link( $keys[ array_search( $this->current_step, $keys ) + 1 ] );
 	}
 
 	/**
 	 * Introduction step
 	 */
 	public function envato_setup_introduction() {
+		include STYLEPRESS_PATH . 'views/admin/wizard/welcome.php';
+	}
 
-		if ( isset( $_REQUEST['export'] ) ) {
-
-			include( 'envato-setup-export.php' );
-
-		} else if ( get_option( 'envato_setup_complete', false ) ) {
-			?>
-			<h1><?php printf( esc_html__( 'Welcome to the setup wizard for %s.' ), wp_get_theme() ); ?></h1>
-			<p><?php esc_html_e( 'It looks like you have already run the setup wizard. Below are some options: ' ); ?></p>
-			<ul>
-				<li>
-					<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-					   class="button-primary button button-next button-large"><?php esc_html_e( 'Run Setup Wizard Again' ); ?></a>
-				</li>
-			</ul>
-			<p class="envato-setup-actions step">
-				<a
-					href="<?php echo esc_url( wp_get_referer() && ! strpos( wp_get_referer(), 'update.php' ) ? wp_get_referer() : admin_url( '' ) ); ?>"
-					class="button button-large"><?php esc_html_e( 'Cancel' ); ?></a>
-			</p>
-			<?php
-		} else {
-			?>
-			<h1><?php printf( esc_html__( 'Welcome to the setup wizard for %s.' ), wp_get_theme() ); ?></h1>
-			<p><?php printf( esc_html__( 'Thank you for choosing the %s theme from ThemeForest. This quick setup wizard will help you configure your new website. This wizard will install the required WordPress plugins, default content, logo and tell you a little about Help &amp; Support options. It should only take 5 minutes.' ), wp_get_theme() ); ?></p>
-			<p class="envato-setup-actions step">
-				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button-primary button button-large button-next"><?php esc_html_e( 'Let\'s Go!' ); ?></a>
-				<a
-					href="<?php echo esc_url( wp_get_referer() && ! strpos( wp_get_referer(), 'update.php' ) ? wp_get_referer() : admin_url( '' ) ); ?>"
-					class="button button-large"><?php esc_html_e( 'Not right now' ); ?></a>
-			</p>
-			<?php
+	private function get_style_data() {
+		$current_style = Remote_Styles::get_instance()->get_current_site_style();
+		if ( $current_style ) {
+			return Remote_Styles::get_instance()->get_style( $current_style );
 		}
+
+		return false;
 	}
 
 	private function get_plugins() {
+
+		$current_style_data = $this->get_style_data();
+
 		$instance = call_user_func( array( get_class( $GLOBALS['tgmpa'] ), 'get_instance' ) );
 		$plugins  = array(
 			'all'      => array(), // Meaning: all plugins which still have open actions.
@@ -207,13 +198,14 @@ class Wizard extends Base {
 
 	public function envato_setup_default_plugins() {
 
+		$url     = wp_nonce_url( add_query_arg( array( 'plugins' => 'go' ) ), 'envato-setup' );
+		$plugins = $this->get_plugins();
+
 		tgmpa_load_bulk_installer();
 		// install plugins with TGM.
 		if ( ! class_exists( 'TGM_Plugin_Activation' ) || ! isset( $GLOBALS['tgmpa'] ) ) {
 			die( 'Failed to find TGM' );
 		}
-		$url     = wp_nonce_url( add_query_arg( array( 'plugins' => 'go' ) ), 'envato-setup' );
-		$plugins = $this->get_plugins();
 
 		// copied from TGM
 
@@ -234,56 +226,8 @@ class Wizard extends Base {
 
 		/* If we arrive here, we have the filesystem */
 
-		?>
-		<h1><?php esc_html_e( 'Default Plugins' ); ?></h1>
-		<form method="post">
-
-			<?php
-			$plugins = $this->get_plugins();
-			if ( count( $plugins['all'] ) ) {
-				?>
-				<p><?php esc_html_e( 'Your website needs a few essential plugins. The following plugins will be installed or updated:' ); ?></p>
-				<ul class="envato-wizard-plugins">
-					<?php foreach ( $plugins['all'] as $slug => $plugin ) { ?>
-						<li data-slug="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $plugin['name'] ); ?>
-							<span>
-    								<?php
-								    $keys = array();
-								    if ( isset( $plugins['install'][ $slug ] ) ) {
-									    $keys[] = 'Installation';
-								    }
-								    if ( isset( $plugins['update'][ $slug ] ) ) {
-									    $keys[] = 'Update';
-								    }
-								    if ( isset( $plugins['activate'][ $slug ] ) ) {
-									    $keys[] = 'Activation';
-								    }
-								    echo implode( ' and ', $keys ) . ' required';
-								    ?>
-    							</span>
-							<div class="spinner"></div>
-						</li>
-					<?php } ?>
-				</ul>
-				<?php
-			} else {
-				echo '<p><strong>' . esc_html_e( 'Good news! All plugins are already installed and up to date. Please continue.' ) . '</strong></p>';
-			} ?>
-
-			<p><?php esc_html_e( 'You can add and remove plugins later on from within WordPress.' ); ?></p>
-
-			<p class="envato-setup-actions step">
-				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button-primary button button-large button-next"
-				   data-callback="install_plugins"><?php esc_html_e( 'Continue' ); ?></a>
-				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step' ); ?></a>
-				<?php wp_nonce_field( 'envato-setup' ); ?>
-			</p>
-		</form>
-		<?php
+		include STYLEPRESS_PATH . 'views/admin/wizard/plugins.php';
 	}
-
 
 
 	public function ajax_plugins() {
@@ -350,40 +294,20 @@ class Wizard extends Base {
 
 	}
 
-
+	public function envato_setup_default_content() {
+		include STYLEPRESS_PATH . 'views/admin/wizard/content.php';
+	}
 
 	public function envato_setup_color_style() {
-		?>
-		<h1><?php esc_html_e( 'Site Style' ); ?></h1>
-		<form method="post">
-			<p><?php esc_html_e( 'Please choose your site style below. You can import additional styles later on from settings.' ); ?></p>
+		include STYLEPRESS_PATH . 'views/admin/wizard/style.php';
+	}
 
-			<div class="theme-presets">
-				<?php
-				$current_style = get_theme_mod( 'dtbwp_site_style', false );
-				foreach ( Styles::get_instance()->get_all_styles() as $style_name => $style_data ) {
-					?>
-					<div class="theme-preset <?php echo $style_name === $current_style ? 'current' : ''; ?>">
-						<a href="#" data-style="<?php echo esc_attr( $style_name ); ?>">
-							<img src="<?php echo esc_url($style_data['thumbnail_url']);?>" alt="<?php echo esc_attr($style_data['title']);?>" />
-							<br/>
-							<?php echo esc_html($style_data['title']);?>
-						</a>
-					</div>
-				<?php } ?>
-			</div>
+	public function envato_setup_help_support() {
+		include STYLEPRESS_PATH . 'views/admin/wizard/support.php';
+	}
 
-			<input type="hidden" name="new_style" id="new_style" value="" />
-
-			<p class="envato-setup-actions step">
-				<input type="submit" class="button-primary button button-large button-next"
-				       value="<?php esc_attr_e( 'Continue' ); ?>" name="save_step"/>
-				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step' ); ?></a>
-				<?php wp_nonce_field( 'envato-setup' ); ?>
-			</p>
-		</form>
-		<?php
+	public function envato_setup_ready() {
+		include STYLEPRESS_PATH . 'views/admin/wizard/ready.php';
 	}
 
 	/**
@@ -394,11 +318,160 @@ class Wizard extends Base {
 
 		$new_style = isset( $_POST['new_style'] ) ? $_POST['new_style'] : false;
 		if ( $new_style ) {
-			set_theme_mod( 'dtbwp_site_style', $new_style );
+			Remote_Styles::get_instance()->set_current_site_style( $new_style );
+			wp_safe_redirect( esc_url_raw( $this->get_next_step_link() ) );
+		} else {
+			wp_safe_redirect( esc_url_raw( $this->get_step_link( 'style' ) ) );
+		}
+		exit;
+	}
+
+
+	private function get_json( $file ) {
+
+		$current_style_data     = $this->get_style_data();
+		$json_content_directory = __DIR__ . '/content/something/';
+		$file_name              = $json_content_directory . basename( $file );
+		if ( is_file( $file_name ) ) {
+			return json_decode( file_get_contents( $file_name ), true );
 		}
 
-		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
+		return array();
+	}
+
+
+	public function content_default_get() {
+
+		$content = array();
+
+		// find out what content is in our default json file.
+		$available_content = $this->get_json( 'default.json' );
+		foreach ( $available_content as $post_type => $post_data ) {
+			if ( count( $post_data ) ) {
+				$first           = current( $post_data );
+				$post_type_title = ! empty( $first['type_title'] ) ? $first['type_title'] : ucwords( $post_type ) . 's';
+				if ( $post_type_title == 'Navigation Menu Items' ) {
+					$post_type_title = 'Navigation';
+				}
+				$content[ $post_type ] = array(
+					'title'            => $post_type_title,
+					'description'      => sprintf( esc_html__( 'This will create default %s as seen in the demo.' ), $post_type_title ),
+					'pending'          => esc_html__( 'Pending.' ),
+					'installing'       => esc_html__( 'Installing.' ),
+					'success'          => esc_html__( 'Success.' ),
+					'install_callback' => array( $this, '_content_install_type' ),
+					'checked'          => $this->is_possible_upgrade() ? 0 : 1,
+					// dont check if already have content installed.
+				);
+			}
+		}
+
+		$content['settings'] = array(
+			'title'            => esc_html__( 'Settings' ),
+			'description'      => esc_html__( 'Configure default settings.' ),
+			'pending'          => esc_html__( 'Pending.' ),
+			'installing'       => esc_html__( 'Installing Default Settings.' ),
+			'success'          => esc_html__( 'Success.' ),
+			'install_callback' => array( $this, '_content_install_settings' ),
+			'checked'          => $this->is_possible_upgrade() ? 0 : 1,
+			// dont check if already have content installed.
+		);
+
+		$content = apply_filters( 'stylepress_setup_wizard_content', $content, $this );
+
+		return $content;
+
+	}
+
+	public function is_possible_upgrade() {
+		$posts = get_posts();
+		$pages = get_pages();
+		if ( count( $posts ) > 1 || count( $pages ) > 3 ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function ajax_content() {
+		$content = $this->content_default_get();
+		if ( ! check_ajax_referer( 'envato_setup_nonce', 'wpnonce' ) || empty( $_POST['content'] ) && isset( $content[ $_POST['content'] ] ) ) {
+			wp_send_json_error( array( 'error' => 1, 'message' => esc_html__( 'No content Found' ) ) );
+		}
+
+		$json         = false;
+		$this_content = $content[ $_POST['content'] ];
+
+		if ( isset( $_POST['proceed'] ) ) {
+			// install the content!
+
+			$this->log( ' -!! STARTING SECTION for ' . $_POST['content'] );
+
+			// init delayed posts from transient.
+			$this->delay_posts = get_transient( 'delayed_posts' );
+			if ( ! is_array( $this->delay_posts ) ) {
+				$this->delay_posts = array();
+			}
+
+			if ( ! empty( $this_content['install_callback'] ) ) {
+				if ( $result = call_user_func( $this_content['install_callback'] ) ) {
+
+					$this->log( ' -- FINISH. Writing ' . count( $this->delay_posts, COUNT_RECURSIVE ) . ' delayed posts to transient ' );
+					set_transient( 'delayed_posts', $this->delay_posts, 60 * 60 * 24 );
+
+					if ( is_array( $result ) && isset( $result['retry'] ) ) {
+						// we split the stuff up again.
+						$json = array(
+							'url'         => admin_url( 'admin-ajax.php' ),
+							'action'      => 'envato_setup_content',
+							'proceed'     => 'true',
+							'retry'       => time(),
+							'retry_count' => $result['retry_count'],
+							'content'     => $_POST['content'],
+							'_wpnonce'    => wp_create_nonce( 'envato_setup_nonce' ),
+							'message'     => $this_content['installing'],
+							'logs'        => $this->logs,
+							'errors'      => $this->errors,
+						);
+					} else {
+						$json = array(
+							'done'    => 1,
+							'message' => $this_content['success'],
+							'debug'   => $result,
+							'logs'    => $this->logs,
+							'errors'  => $this->errors,
+						);
+					}
+				}
+			}
+		} else {
+
+			$json = array(
+				'url'      => admin_url( 'admin-ajax.php' ),
+				'action'   => 'envato_setup_content',
+				'proceed'  => 'true',
+				'content'  => $_POST['content'],
+				'_wpnonce' => wp_create_nonce( 'envato_setup_nonce' ),
+				'message'  => $this_content['installing'],
+				'logs'     => $this->logs,
+				'errors'   => $this->errors,
+			);
+		}
+
+		if ( $json ) {
+			$json['hash'] = md5( serialize( $json ) ); // used for checking if duplicates happen, move to next plugin
+			wp_send_json( $json );
+		} else {
+			wp_send_json( array(
+				'error'   => 1,
+				'message' => esc_html__( 'Error' ),
+				'logs'    => $this->logs,
+				'errors'  => $this->errors,
+			) );
+		}
+
 		exit;
+
 	}
 
 }

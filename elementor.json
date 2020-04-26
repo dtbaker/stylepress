@@ -9,8 +9,8 @@
       "default": "full",
       "options": {
         "full": "Large",
-        "dtbwp_gallery_square": "Square",
-        "dtbwp_gallery_rounded": "Rounded",
+        "stylepress_gallery_square": "Square",
+        "stylepress_gallery_rounded": "Rounded",
         "thumbnail": "Thumbnail"
       },
       "prefix_class": "stylepress-image-size-"

@@ -50,7 +50,7 @@ class Stylepress_Inner_Content extends Widget_Base {
 	 */
 	public function show_in_panel() {
 
-		return \StylePress\ElementorCSS::get_instance()->is_editing_internal_content_page();
+		return \StylePress\Plugin::get_instance()->is_editing_internal_content_page();
 
 	}
 

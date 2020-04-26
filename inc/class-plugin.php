@@ -192,15 +192,13 @@ class Plugin extends Base {
 	}
 
 
-
-
 	/**
 	 * Works out the type of page we're currently quer\ying.
 	 * Copied from my Widget Area Manager plugin
 	 *
+	 * @return string
 	 * @since 2.0.0
 	 *
-	 * @return string
 	 */
 	public function get_current_page_type() {
 		global $wp_query;
@@ -338,7 +336,7 @@ class Plugin extends Base {
 					$wpdb->query( $sql_query );
 				}
 
-				wp_redirect( get_edit_post_link( $new_post_id, 'edit' ) );
+				wp_safe_redirect( get_edit_post_link( $new_post_id, 'edit' ) );
 				exit;
 
 			}

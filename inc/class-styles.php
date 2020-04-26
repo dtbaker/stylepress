@@ -28,7 +28,24 @@ class Styles extends Base {
 
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
+		add_filter( 'elementor/init', array( $this, 'include_our_styles_in_elementor_popup' ), 10, 2 );
+		add_filter( 'elementor/template-library/create_new_dialog_types', array( $this, 'dont_allow_new' ), 10, 2 );
 
+	}
+
+	public function dont_allow_new( $types ) {
+		unset( $types['stylepress'] );
+
+		return $types;
+	}
+
+	public function include_our_styles_in_elementor_popup( $option_value ) {
+		require_once __DIR__ . '/elementor/source-stylepress.php';
+		\Elementor\Plugin::$instance->templates_manager->register_source( '\Elementor\TemplateLibrary\Source_StylePress' );
+
+		require_once __DIR__ . '/elementor/stylepress-document.php';
+		\Elementor\Plugin::$instance->documents
+			->register_document_type( 'stylepress', \Elementor\Modules\Library\Documents\Stylepress_Document::get_class_full_name() );
 	}
 
 	/**
@@ -41,7 +58,7 @@ class Styles extends Base {
 		$labels = array(
 			'name'               => 'Styles',
 			'singular_name'      => 'Style',
-			'menu_name'          => 'Styles',
+			'menu_name'          => 'StylePress',
 			'parent_item_colon'  => 'Parent Style:',
 			'all_items'          => 'All Styles',
 			'view_item'          => 'View Style',
@@ -60,8 +77,8 @@ class Styles extends Base {
 			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes', 'revisions' ),
 			'taxonomies'          => array(),
 			'hierarchical'        => true,
-			'public'              => false,
-			'show_in_menu'        => STYLEPRESS_DEBUG_OUTPUT ? true : false,
+			'public'              => defined( 'STYLEPRESS_ALLOW_EXPORT' ) && STYLEPRESS_ALLOW_EXPORT,
+			'show_in_menu'        => defined( 'STYLEPRESS_ALLOW_EXPORT' ) && STYLEPRESS_ALLOW_EXPORT,
 			'show_in_nav_menus'   => true,
 			'exclude_from_search' => true,
 			'menu_position'       => 36,
@@ -127,14 +144,14 @@ class Styles extends Base {
 			'render_section'  => true,
 		];
 		$stylepress_categories[] = [
-			'order'           => 50,
-			'slug'            => 'theme_styles',
-			'title'           => 'Theme Style',
-			'plural'          => 'Theme Styles',
-			'description'     => 'These are global theme styles that apply to all elements on the page (i.e. link color).',
-			'global_selector' => true,
-			'render_section'  => false,
-			'is_elementor_kit_style'  => true,
+			'order'                  => 50,
+			'slug'                   => 'theme_styles',
+			'title'                  => 'Theme Style',
+			'plural'                 => 'Theme Styles',
+			'description'            => 'These are global theme styles that apply to all elements on the page (i.e. link color).',
+			'global_selector'        => true,
+			'render_section'         => false,
+			'is_elementor_kit_style' => true,
 		];
 		$stylepress_categories[] = [
 			'order'           => 60,

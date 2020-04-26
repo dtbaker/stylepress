@@ -11,36 +11,11 @@ namespace StylePress;
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 /**
- * Handles importing/exporting our custom designs.
+ * Handles importing data from our custom designs.
  *
  * Class Plugin
  */
-class StylepressImportExport {
-
-	/**
-	 * Stores our instance that can (and is) accessed from various places.
-	 *
-	 * @var Plugin null
-	 *
-	 * @since 2.0.0
-	 */
-	private static $instance = null;
-
-	/**
-	 * Grab a static instance of this class.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return Plugin
-	 */
-	public static function get_instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-	}
-
+class Import extends Base {
 
 	public function export_data( $post_id ) {
 
@@ -460,8 +435,8 @@ class StylepressImportExport {
 				// we have to fix up all the visual composer inserted image ids
 				$replace_post_id_keys = array(
 					'parallax_image',
-					'dtbwp_row_image_top',
-					'dtbwp_row_image_bottom',
+					'stylepress_row_image_top',
+					'stylepress_row_image_bottom',
 					'image',
 					'item', // vc grid
 					'post_id',

@@ -63,11 +63,11 @@ class Base {
 	/**
 	 * Sets up a single instance of the plugin.
 	 *
+	 * @return static An instance of the class.
 	 * @since 2.0.0
 	 * @access public
 	 * @static
 	 *
-	 * @return static An instance of the class.
 	 */
 	public static function get_instance() {
 		$module = get_called_class();
@@ -89,7 +89,7 @@ class Base {
 	/**
 	 * Render a template
 	 *
-	 * @param  string $default_template_path The path to the template, relative to the plugin's `views` folder
+	 * @param string $default_template_path The path to the template, relative to the plugin's `views` folder
 	 *
 	 * @return string
 	 */

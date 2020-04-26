@@ -27,7 +27,6 @@ class Backend extends Base {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_action_stylepress_new_style', array( $this, 'stylepress_new_style' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
@@ -55,20 +54,6 @@ class Backend extends Base {
 
 	}
 
-	public function admin_init() {
-		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( '\Elementor\Widget_Base' ) ) {
-			// we need to put it here in admin_init because Elementor might not have loaded in our plugin init area.
-
-			add_action( 'admin_notices', function () {
-				$message      = esc_html__( 'Please install and activate the latest version of Elementor before attempting to use the StylePress plugin.', 'stylepress' );
-				$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
-				echo wp_kses_post( $html_message );
-			} );
-
-
-		}
-	}
-
 	/**
 	 * This is our custom "Full Site Builder" menu item that appears under the appearance tab.
 	 *
@@ -76,29 +61,65 @@ class Backend extends Base {
 	 */
 	public function admin_menu() {
 
+		// if this is a first time run, we change the menu around a bit
+		if ( get_option( 'envato_setup_complete', false ) ) {
 
-		add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
-			Wizard::get_instance(),
-			'setup_page_callback',
-		), STYLEPRESS_URI . 'src/images/icon.png' );
-		// hack to remove default submenu
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'Setup Wizard', 'stylepress' ), __( 'Setup Wizard', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
-			Wizard::get_instance(),
-			'setup_page_callback'
-		) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
+				Wizard::get_instance(),
+				'settings_page_callback',
+			), STYLEPRESS_URI . 'src/images/icon.png' );
+			// hack to remove default submenu
+			$page = add_submenu_page( self::PAGE_SLUG, __( 'Layout', 'stylepress' ), __( 'Layout', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
+				$this,
+				'settings_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'Layout', 'stylepress' ), __( 'Layout', 'stylepress' ), 'manage_options', self::SETTINGS_PAGE_SLUG, array(
-			$this,
-			'settings_page_callback'
-		) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+			$page = add_submenu_page( self::PAGE_SLUG, __( 'Site Styles', 'stylepress' ), __( 'Site Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
+				$this,
+				'default_styles_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
 
-		$page = add_submenu_page( self::PAGE_SLUG, __( 'Site Styles', 'stylepress' ), __( 'Site Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
-			$this,
-			'default_styles_page_callback'
-		) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+			$page = add_submenu_page( self::PAGE_SLUG, __( 'Setup Wizard', 'stylepress' ), __( 'Setup Wizard', 'stylepress' ), 'manage_options', Wizard::PAGE_SLUG, array(
+				Wizard::get_instance(),
+				'setup_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+			if ( defined( 'STYLEPRESS_ALLOW_EXPORT' ) && STYLEPRESS_ALLOW_EXPORT ) {
+				$page = add_submenu_page( self::PAGE_SLUG, __( 'Export', 'stylepress' ), __( 'Export', 'stylepress' ), 'manage_options', Export::PAGE_SLUG, array(
+					Export::get_instance(),
+					'export_page_callback'
+				) );
+				add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+			}
+
+		} else {
+
+			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', Wizard::PAGE_SLUG, array(
+				Wizard::get_instance(),
+				'setup_page_callback',
+			), STYLEPRESS_URI . 'src/images/icon.png' );
+			// hack to remove default submenu
+			$page = add_submenu_page( self::PAGE_SLUG, __( 'Setup Wizard', 'stylepress' ), __( 'Setup Wizard', 'stylepress' ), 'manage_options', Wizard::PAGE_SLUG, array(
+				Wizard::get_instance(),
+				'setup_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+			$page = add_submenu_page( Wizard::PAGE_SLUG, __( 'Layout', 'stylepress' ), __( 'Layout', 'stylepress' ), 'manage_options', self::SETTINGS_PAGE_SLUG, array(
+				$this,
+				'settings_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+
+			$page = add_submenu_page( Wizard::PAGE_SLUG, __( 'Site Styles', 'stylepress' ), __( 'Site Styles', 'stylepress' ), 'manage_options', self::STYLES_PAGE_SLUG, array(
+				$this,
+				'default_styles_page_callback'
+			) );
+			add_action( 'admin_print_styles-' . $page, array( $this, 'admin_page_assets' ) );
+		}
 
 
 	}
@@ -229,12 +250,12 @@ class Backend extends Base {
 
 		wp_set_object_terms( $post_id, $new_category, STYLEPRESS_SLUG . '-cat', false );
 
-		if($new_category === 'theme_styles'){
+		if ( $new_category === 'theme_styles' ) {
 			// hack to allow Elementor Theme Style editor:
 			update_post_meta( $post_id, '_elementor_template_type', 'kit' );
 		}
 
-		wp_redirect( admin_url( 'admin.php?page=' . self::STYLES_PAGE_SLUG . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::STYLES_PAGE_SLUG . ( $new_style_parent ? '&style_id=' . $new_style_parent : '' ) . '&saved#cat-' . $new_category ) );
 		exit;
 
 	}
@@ -292,7 +313,7 @@ class Backend extends Base {
 
 		Settings::get_instance()->set( 'stylepress_styles', $defaults_to_save );
 
-		wp_redirect( admin_url( 'admin.php?page=' . self::SETTINGS_PAGE_SLUG . '&saved' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SETTINGS_PAGE_SLUG . '&saved' ) );
 		exit;
 
 
@@ -371,7 +392,7 @@ class Backend extends Base {
 			foreach ( $_POST['stylepress_style'] as $page_type ) {
 				// sanitise each one.
 			}
-			update_post_meta( $post_id, 'stylepress_style', $_POST['stylepress_style'] ); // WPCS: sanitization ok. input var okay.
+			update_post_meta( $post_id, 'stylepress_style', sanitize_text_field( $_POST['stylepress_style'] ) ); // WPCS: sanitization ok. input var okay.
 		}
 
 	}

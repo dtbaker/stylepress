@@ -76,4 +76,25 @@
     background: #fff;
     overflow: hidden;
   }
+
+  &__styles {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__style {
+
+    display: flex;
+    padding: 10px;
+    margin: 0 10px 10px 0;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+    }
+
+    &--current {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 5px;
+    }
+  }
 }

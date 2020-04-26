@@ -34,12 +34,12 @@ var EnvatoWizard = (function($){
       e.preventDefault();
       renderMediaUploader();
     });
-    $('.theme-presets a').on( 'click', function(e) {
+    $('.js-stylepress-style-selector').on( 'click', function(e) {
       e.preventDefault();
-      var $presets = $(this).parents('.theme-presets').first();
-      $presets.find('.current').removeClass('current');
-      var $preset = $(this).parents('.theme-preset').first();
-      $preset.addClass('current');
+      var $presets = $(this).parent().parent();
+      $presets.find('.stylepress-setup-wizard__style--current').removeClass('stylepress-setup-wizard__style--current');
+      var $preset = $(this).parent();
+      $preset.addClass('stylepress-setup-wizard__style--current');
       var newstyle = $(this).data('style');
       $('#new_style').val(newstyle);
       return false;
@@ -136,7 +136,7 @@ var EnvatoWizard = (function($){
         $('.envato-wizard-plugins').addClass('installing');
         complete = function(){
           loading_content();
-          window.location.href=btn.href;
+          //window.location.href=btn.href;
         };
         find_next();
       }
