@@ -1,81 +1,19 @@
 {
   "slug": "stylepress",
   "skip-banner": true,
-  "name": "StylePress for Elementor",
-  "description": "Easy Full Site Builder for the powerful Elementor plugin. Apply styles to your entire website - no coding required.",
+  "name": "StylePress",
+  "description": "Easily apply styles to your entire website - no coding required.",
   "url": "https://stylepress.org",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "author": {
-    "name": "dtbaker",
-    "url": "https://dtbaker.net"
+    "name": "stylepress",
+    "url": "https://stylepress.org"
   },
   "history": {
-    "1.2.0": {
-      "date": "2018-10-06",
+    "2.0.0": {
+      "date": "2018-12-17",
       "changes": [
-        "Compatibility fixes"
-      ]
-    },
-    "1.0.19": {
-      "date": "2017-06-13",
-      "changes": [
-        "Fixes and features"
-      ]
-    },
-    "1.0.18": {
-      "date": "2017-06-01",
-      "changes": [
-        "Referral Link Fixes"
-      ]
-    },
-    "1.0.17": {
-      "date": "2017-04-24",
-      "changes": [
-        "Fix for nav menu icons"
-      ]
-    },
-    "1.0.16": {
-      "date": "2017-04-23",
-      "changes": [
-        "New widgets"
-      ]
-    },
-    "1.0.14": {
-      "date": "2017-03-30",
-      "changes": [
-        "New widget"
-      ]
-    },
-    "1.0.13": {
-      "date": "2017-03-16",
-      "changes": [
-        "Better CPT Support"
-      ]
-    },
-    "1.0.12": {
-      "date": "2017-03-14",
-      "changes": [
-        "Debug output",
-        "Better settings page",
-        "Import fixes"
-      ]
-    },
-    "1.0.11": {
-      "date": "2017-03-13",
-      "changes": [
-        "Import fixes"
-      ]
-    },
-    "1.0.10": {
-      "date": "2017-03-12",
-      "changes": [
-        "Style payments and download"
-      ]
-    },
-    "1.0.9": {
-      "date": "2017-03-09",
-      "changes": [
-        "Initial Dev Work"
+        "Lots of new features"
       ]
     }
   }

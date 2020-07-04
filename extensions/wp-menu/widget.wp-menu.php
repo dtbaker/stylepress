@@ -2,7 +2,7 @@
 /**
  * WordPress Nav Menu Widget
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 namespace Elementor;
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 //
 //
-//add_action( 'elementor/element/dtbaker_wp_menu/_section_background/before_section_end', function($widget, $args){
+//add_action( 'elementor/element/stylepress_wp_menu/_section_background/before_section_end', function($widget, $args){
 //    print_r($args);
 //    exit;
 //}, 10, 2);
@@ -23,11 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Creates our custom Elementor widget
  *
- * Class Widget_Dtbaker_WP_Menu
+ * Class Widget_stylepress_WP_Menu
  *
  * @package Elementor
  */
-class Widget_Dtbaker_WP_Menu extends Widget_Base {
+class Widget_stylepress_WP_Menu extends Widget_Base {
 
 
 	/**
@@ -36,7 +36,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'dtbaker_wp_menu';
+		return 'stylepress_wp_menu';
 	}
 
 	/**
@@ -50,12 +50,12 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 	/**
@@ -64,7 +64,21 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
+	}
+
+	/**
+	 * Whether the reload preview is required or not.
+	 *
+	 * Used to determine whether the reload preview is required.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return bool Whether the reload preview is required.
+	 */
+	public function is_reload_preview_required() {
+		//return true;
 	}
 
 	/**
@@ -82,7 +96,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_dtbaker_wp_menu',
+			'section_stylepress_wp_menu',
 			[
 				'label' => __( 'WordPress Menu', 'stylepress' ),
 			]
@@ -164,7 +178,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'dtbaker_menu_logo',
+			'stylepress_menu_logo',
 			[
 				'label' => __( 'Logo Image', 'elementor' ),
 			]
@@ -462,6 +476,28 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+
+		$this->add_control(
+			'dropdown_gap_from_top',
+			[
+				'label'     => __( 'Dropdown Gap From Top', 'elementor' ),
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'range'     => [
+					'%' => [
+						'min' => 1,
+						'max' => 300,
+					],
+				],
+				'default'   => [
+					'size' => 100,
+					'unit' => '%',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .stylepress-main-navigation .stylepress_menu ul ul' => 'top: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -807,7 +843,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 		$this->end_controls_section();
 
 
-		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
+		do_action( 'stylepress_wp_menu_elementor_controls', $this );
 
 
 	}
@@ -896,7 +932,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 												'container_id'    => 'primary-menu',
 												'menu_class'      => '',
 												'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-												'walker'          => new \stylepress_walker_nav_menu()
+												'walker'          => new \StylePress\stylepress_walker_nav_menu()
 											) );
 										} else {
 											echo "Menu Configuration Issue";
@@ -910,7 +946,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 												'container_id'    => 'primary-menu',
 												'menu_class'      => '',
 												'items_wrap'      => '<ul id="%1$s" class="%2$s ' . '">%3$s</ul>',
-												'walker'          => new \stylepress_walker_nav_menu(),
+												'walker'          => new \StylePress\stylepress_walker_nav_menu(),
 											)
 										);
 									}
@@ -1001,7 +1037,7 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 	 */
 	protected function content_template() {
 		?>
-		<div class="dtbaker-wp-menu-content-area">
+		<div class="stylepress-wp-menu-content-area">
 			WordPress Menu Will Appear Here
 		</div>
 		<?php
@@ -1009,4 +1045,4 @@ class Widget_Dtbaker_WP_Menu extends Widget_Base {
 
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_WP_Menu() );
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_stylepress_WP_Menu() );

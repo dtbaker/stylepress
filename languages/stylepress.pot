@@ -1,4 +1,4 @@
-# Copyright (C) 2017 
+# Copyright (C) 2017
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
@@ -13,9 +13,9 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.5.3\n"
 
-#: dtbaker-elementor.php:86
+#: stylepress.php:86
 msgid ""
-"The dtbaker Elementor plugin requires PHP version 5.4+, plugin is currently "
+"The stylepress Elementor plugin requires PHP version 5.4+, plugin is currently "
 "NOT ACTIVE."
 msgstr ""
 
@@ -89,8 +89,8 @@ msgstr ""
 
 #: templates/admin-page.php:45 templates/settings-page.php:45
 msgid ""
-"<a href=\"https://dtbaker.net/labs/elementor-full-page-site-builder/\">Read "
-"More on dtbaker.net</a>"
+"<a href=\"https://stylepress.net/labs/elementor-full-page-site-builder/\">Read "
+"More on stylepress.net</a>"
 msgstr ""
 
 #: templates/admin-page.php:86 templates/style-meta-box.php:85

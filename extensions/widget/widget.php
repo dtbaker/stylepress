@@ -1,19 +1,20 @@
 <?php
 
+namespace StylePress;
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
-class dtbaker_elementor_template_widget extends WP_Widget {
+class stylepress_template_widget extends \WP_Widget {
 	/**
 	 * Contact Us constructor
 	 */
 	function __construct() {
 		$widget_ops  = array(
-			'classname'   => 'dtbaker_elementor_template_widget',
-			'description' => __( 'Display an Elementor template', 'dtbaker_elementor' )
+			'classname'   => 'stylepress_template_widget',
+			'description' => __( 'Display an Elementor template', 'stylepress' )
 		);
-		$control_ops = array( 'id_base' => 'dtbaker_elementor_template_widget' );
-		parent::__construct( 'dtbaker_elementor_template_widget', __( 'Elementor Template', 'dtbaker_elementor' ), $widget_ops, $control_ops );
+		$control_ops = array( 'id_base' => 'stylepress_template_widget' );
+		parent::__construct( 'stylepress_template_widget', __( 'Elementor Template', 'stylepress' ), $widget_ops, $control_ops );
 	}
 
 
@@ -36,7 +37,7 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 
 			add_filter( 'elementor/frontend/builder_content_data', [ $this, 'filter_content_data' ] );
 
-			echo \Elementor\Plugin::elementor()->frontend->get_builder_content_for_display( $instance['template_id'] );
+			echo \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $instance['template_id'] );
 
 			remove_filter( 'elementor/frontend/builder_content_data', [ $this, 'filter_content_data' ] );
 
@@ -55,7 +56,7 @@ class dtbaker_elementor_template_widget extends WP_Widget {
 	 */
 	public function filter_content_data( $data ) {
 		if ( ! empty( $data ) ) {
-			$data = Plugin::elementor()->db->iterate_data( $data, function ( $element ) {
+			$data = \Elementor\Plugin::instance()->db->iterate_data( $data, function ( $element ) {
 				if ( 'widget' === $element['elType'] && 'sidebar' === $element['widgetType'] && $this->sidebar_id === $element['settings']['sidebar'] ) {
 					$element['settings']['sidebar'] = null;
 				}

@@ -2,7 +2,7 @@
 /**
  * WordPress Nav Menu Widget
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 namespace Elementor;
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Creates our custom Elementor widget
  *
- * Class Widget_Dtbaker_WP_Menu
+ * Class Widget_stylepress_WP_Menu
  *
  * @package Elementor
  */
-class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
+class Widget_stylepress_Dynamic_Field extends Widget_Base {
 
 	/**
 	 * Get Widgets name
@@ -27,7 +27,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'dtbaker_dynamic';
+		return 'stylepress_dynamic';
 	}
 
 	/**
@@ -41,12 +41,12 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_dtbaker_wp_menu',
+			'section_stylepress_wp_menu',
 			[
 				'label' => __( 'Dynamic Field', 'stylepress' ),
 			]
@@ -111,7 +111,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 				'type'       => Controls_Manager::RAW_HTML,
 				'separator'  => 'none',
 				'show_label' => false,
-				'raw'        => '<div id="dtbaker-dynamic-code"></div>',
+				'raw'        => '<div id="stylepress-dynamic-code"></div>',
 			]
 		);
 
@@ -129,7 +129,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 
 		$this->end_controls_section();
 
-		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
+		do_action( 'stylepress_wp_menu_elementor_controls', $this );
 
 	}
 
@@ -181,8 +181,8 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 			$callback = $settings['dynamic_html'];
 		}
 		if ( $callback ) {
-			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \DtbakerDynamicField::get_instance();
+			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
+			$dyno_generator = StylePressDynamicField::get_instance();
 
 			if ( preg_match_all( '#\{\{([a-z_]+)\}\}#imsU', $callback, $matches ) ) {
 				foreach ( $matches[1] as $key => $field ) {
@@ -202,7 +202,7 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 	 */
 	protected function content_template() {
 		?>
-		<div class="dtbaker-wp-menu-content-area">
+		<div class="stylepress-wp-menu-content-area">
 			{{Dynamic Field Here}}
 		</div>
 		<?php
@@ -211,4 +211,4 @@ class Widget_Dtbaker_Dynamic_Field extends Widget_Base {
 }
 
 
-Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Dynamic_Field() );
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_stylepress_Dynamic_Field() );

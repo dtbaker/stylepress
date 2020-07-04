@@ -1,16 +1,16 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_script( 'stylepress-formmods', DTBAKER_ELEMENTOR_URI . 'extensions/form/frontend.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
-	wp_enqueue_style( 'stylepress-formstyles', DTBAKER_ELEMENTOR_URI . 'extensions/form/form.css' );
+	wp_enqueue_script( 'stylepress-formmods', STYLEPRESS_URI . 'extensions/form/frontend.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
+	wp_enqueue_style( 'stylepress-formstyles', STYLEPRESS_URI . 'extensions/form/form.css' );
 } );
 
 
 add_action( 'elementor/editor/before_enqueue_scripts', function () {
-	wp_enqueue_script( 'stylepress-forms', DTBAKER_ELEMENTOR_URI . 'extensions/form/form.js', false, DTBAKER_ELEMENTOR_VERSION, true );
+	wp_enqueue_script( 'stylepress-forms', STYLEPRESS_URI . 'extensions/form/form.js', false, STYLEPRESS_VERSION, true );
 }, 99999 );
 
 

@@ -1,9 +1,9 @@
-=== StylePress for Elementor ===
+=== StylePress  ===
 Contributors: dtbaker
-Donate link: https://dtbaker.net
+Donate link: https://stylepress.org
 Tags: page builder, editor, elementor, builder, visual editor, front-end editor, design, drag and drop builder, front-end builder, landing page, page builder plugin, site builder, template builder, visual builder, website builder, wysiwyg
 Requires at least: 4.9
-Tested up to: 4.9.8
+Tested up to: 5.0.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,44 +19,21 @@ It provides two things:
 - A full site builder using Elementor (design your entire website without a Theme)
 - Adds extra widgets to Elementor (e.g. Tooltip, Navbar, Mailchimp, Modal Popups, Page Slider, etc..)
 
-Watch this introduction video that covers some of the basics:
-
-https://www.youtube.com/watch?v=2I5WLvLarKE
-
 Design your entire website without a theme. Easily apply a Style to every page of your site automatically using the drag and drop editor.
-
-= How to create a website design without a WordPress theme: =
-
-- Go to the StylePress > Styles menu.
-- Click "Create New Style".
-- Design your layout using the Easy Elementor Drag & Drop editor.
-- Add the "Inner Content" widget to the area that will display your content.
-- Go to StylePress > Settings
-- Apply your Style to the "Global" area
-
-= Tips: =
-
-- Make sure "Remove Theme CSS" is ticked in StylePress > Settings.
-- If you find it hard to set global font default, go into Elementor > Settings and tick "Disable Global Colors" and "Disable Global Fonts". Then install the "Easy Google Fonts" plugin and set all your defaults from Appearance > Typography.
 
 = Contributions & Bugs: =
 
 Head over to github: https://github.com/dtbaker/stylepress
 
-Please leave
-
-Copyright @dtbaker
+Copyright @stylepress
 
 More details on our dedicated website: https://stylepress.org
-
-Check out other work by dtbaker here: https://dtbaker.net
 
 == Installation ==
 
 This section describes how to install the plugin and get it working.
 
-1. Go to Plugins > Add New and search for "Elementor" to install the Elementor Page Builder plugin.
-1. Go to Plugins > Add New and search for "StylePress for Elementor" to install this plugin.
+1. Go to Plugins > Add New and search for "StylePress" to install this plugin.
 1. Activate the plugin through the "Plugins" screen in WordPress.
 1. Go to the new StylePress > Styles menu in WordPress backend.
 1. Create or Edit the available styles.
@@ -82,6 +59,9 @@ Go into the Elementor > Settings window and disable the default Elementor fonts 
 3. Overview of the settings page. You can set various default styles for various page types.
 
 == Changelog ==
+
+= 1.2.1 =
+* Fix widget and shortcode compatibility.
 
 = 1.2.0 =
 * Compatibility fixes

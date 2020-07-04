@@ -1,81 +1,103 @@
 <?php
 /**
- * Layout for previewing our site wide styles
+ * This is used in the back end editor, and the front end display.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+namespace StylePress;
 
-// we render our content first because this will register our styles for the wp_head() call.
-// hmm but this messes with some wp_footer scripts. eg popup.js isn't loading in the footer any more.
+defined( 'STYLEPRESS_VERSION' ) || exit;
 
-// alright lets call wp_head() once, then render our inner content, then try to catch any missed wp_head scripts/styles and manually inject them into the header.
+do_action( 'get_header', 'stylepress' );
 
+$categories = Styles::get_instance()->get_categories();
 
-ob_start();
+$elementor_kit_template = false;
 
-?><!DOCTYPE html>
-<html <?php language_attributes(); ?> class="no-js">
+?>
+<!doctype html>
+<html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<?php wp_head();
-	$initial_head = ob_get_clean();
-
-
-	ob_start();
-
-
-	$page_type = DtbakerElementorManager::get_instance()->get_current_page_type();
-	DtbakerElementorManager::get_instance()->debug_message( "render.php: Rendering full page output for page type '$page_type' in render.php using the style: " . (
-		! empty( $GLOBALS['our_elementor_template'] ) ? '<a href="' . get_permalink( $GLOBALS['our_elementor_template'] ) . '">' . esc_html( get_the_title( $GLOBALS['our_elementor_template'] ) ) . '</a> ' . $GLOBALS['our_elementor_template'] : 'NONE'
-		) . '' );
-
-	if ( DtbakerElementorManager::get_instance()->removing_theme_css ) {
-		DtbakerElementorManager::get_instance()->debug_message( "render.php: Removing the default theme CSS files" );
-	}
-
-	do_action( 'stylepress/before-render' );
-
-	?>
-	<!-- stylepress render template begin -->
 	<?php
-	if ( ! empty( $GLOBALS['our_elementor_template'] ) && $GLOBALS['our_elementor_template'] > 0 ) {
-		$GLOBALS['stylepress_only_render'] = 'all';
-		echo Elementor\Plugin::instance()->frontend->get_builder_content( $GLOBALS['our_elementor_template'], false );
-	} else {
-		echo 'Please select a global site style';
+	// pull in the default Elementor Theme:
+	if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
+		foreach ( $categories as $category ) {
+			if ( ! empty( $category['is_elementor_kit_style'] ) ) {
+				if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
+					if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
+						$elementor_kit_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
+						// We override the Elementor default active kit here based on the current page selection:
+						add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $elementor_kit_template ) {
+							if ( $elementor_kit_template && $elementor_kit_template->ID ) {
+								$elementor_template_type = get_post_meta( $elementor_kit_template->ID, '_elementor_template_type', true );
+								if ( $elementor_template_type === 'kit' ) {
+									$kit_id = $elementor_kit_template->ID;
+								}
+							}
+
+							return $kit_id;
+						} );
+					}
+				}
+			}
+		}
 	}
-	?>
-	<!-- stylepress render template end -->
-	<?php
-
-	do_action( 'stylepress/after-render' );
-
-	$inner_content = ob_get_clean();
-
-
-	echo $initial_head;
-
-
-	global $wp_scripts;
-	$wp_scripts->do_head_items();
-
-	// same for styles somehow?
-	//global $wp_styles;
-	//print_r($wp_styles);exit;
-
+	wp_head();
 	?>
 </head>
-
-<body <?php body_class( 'stylepress-render' ); ?>>
+<body <?php body_class(); ?>>
 <?php
+if ( $elementor_kit_template ) {
+	Plugin::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
+}
+Plugin::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
+Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset( $GLOBALS['stylepress_render']['queried_object']->ID ) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
 
-echo $inner_content;
+do_action( 'stylepress/before-render' );
+if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
+	foreach ( $categories as $category ) {
+		if ( ! $category['render_section'] ) {
+			continue;
+		}
+		if ( STYLEPRESS_DEBUG_OUTPUT ) {
+			if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
+				if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
+					$template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
+					Plugin::get_instance()->debug_message( 'Rendering template ' . esc_html( $template->post_title ) . ' (#' . $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] . ') for section ' . $category['slug'] );
+				} else {
+					Plugin::get_instance()->debug_message( 'Blank template chosen for section ' . $category['slug'] );
+				}
+			} else {
+				Plugin::get_instance()->debug_message( 'No template chosen for section ' . $category['slug'] );
+			}
+		}
+		if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
+			if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
+				$with_css = false;
+				echo \Elementor\Plugin::$instance->frontend->get_builder_content( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ], $with_css );
+			}
+		}
+		if ( ! empty( $category['inner'] ) && empty( $GLOBALS['stylepress_render']['has_done_inner_content'] ) ) {
+			// todo: we may with to turn off this defualt behaviour for pages that don't want the default content displaying
+			// e.g. we got the first blog post content showing on archive page that had a stylepress-loop widget.
+			// this might be an issue for shops too
+			Plugin::get_instance()->debug_message( 'Rendering default inner_content() from render.php' );
+			if ( have_posts() ) {
+				the_post();
+				the_content();
+			}
+		}
+	}
+}
 
+do_action( 'stylepress/after-render' );
+do_action( 'get_footer', 'stylepress' );
 wp_footer();
 ?>
+
 </body>
 </html>

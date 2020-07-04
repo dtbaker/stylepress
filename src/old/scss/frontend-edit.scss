@@ -1,0 +1,35 @@
+
+.stylepress__header--editor {
+  margin: 30px;
+  background: #EFEFEF;
+  padding: 20px;
+  border-radius: 10px;
+}
+.stylepress__editor-info{
+  margin: 20px 0 0 0;
+  h3{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  span{
+    font-weight: bold;
+  }
+}
+
+.stylepress__editor-infotext{
+  &--warning{
+    background: #ff7f80;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+  }
+}
+
+.stylepress-inner-page-content-area {
+  text-align: center;
+  padding: 80px 20px;
+  color: #000;
+  background: #FFF;
+  background: -webkit-repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
+  background: repeating-linear-gradient(45deg, #efefef, #efefef 10px, #FFFFFF 10px, #FFFFFF 20px);
+}

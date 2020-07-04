@@ -13,7 +13,7 @@ use Elementor\Scheme_Color;
 
 
 /**
- * Class Skin_Dtbaker
+ * Class Skin_stylepress
  */
 class Skin_StylePressButtonDynamic extends Skin_Base {
 
@@ -67,8 +67,8 @@ class Skin_StylePressButtonDynamic extends Skin_Base {
 	public function render() {
 		$settings = $this->parent->get_settings();
 
-		require_once DTBAKER_ELEMENTOR_PATH . 'widgets/class.dynamic-field.php';
-		$dyno_generator      = \DtbakerDynamicField::get_instance();
+		require_once STYLEPRESS_PATH . 'widgets/class.dynamic-field.php';
+		$dyno_generator      = StylePressDynamicField::get_instance();
 		$available_callbacks = $this->get_replace_fields();
 
 		if ( ! empty( $settings['link']['url'] ) ) {

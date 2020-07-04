@@ -1,31 +1,34 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+namespace StylePress;
 
-define( 'STYLEPRESS_MENU_DISPLAY_MEGA', 1 );
-define( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT', 2 );
+defined( 'STYLEPRESS_PATH' ) || exit;
+
+if ( ! defined( 'STYLEPRESS_MENU_DISPLAY_MEGA' ) ) {
+	define( 'STYLEPRESS_MENU_DISPLAY_MEGA', 1 );
+}
+if ( ! defined( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT' ) ) {
+	define( 'STYLEPRESS_MENU_DISPLAY_SLIDEOUT', 2 );
+}
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/menu.css', false );
-	wp_enqueue_script( 'stylepress-nav-menu', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/navigation.js', array( 'jquery' ), DTBAKER_ELEMENTOR_VERSION, true );
+	wp_enqueue_style( 'stylepress-nav-menu', STYLEPRESS_URI . 'extensions/wp-menu/menu.css', false );
+	wp_enqueue_script( 'stylepress-nav-menu', STYLEPRESS_URI . 'extensions/wp-menu/navigation.js', array( 'jquery' ), STYLEPRESS_VERSION, true );
 } );
 
 
 add_action( 'admin_enqueue_scripts', function ( $hook ) {
 	if ( $hook == 'nav-menus.php' ) {
-		wp_enqueue_script( 'stylepress-nav-menu-edit', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/admin-nav-menu.js' );
-		wp_enqueue_style( 'stylepress-nav-menu-edit', DTBAKER_ELEMENTOR_URI . 'extensions/wp-menu/admin-nav-menu.css' );
+		//		wp_enqueue_script( 'stylepress-nav-menu-edit', STYLEPRESS_URI . 'extensions/wp-menu/admin-nav-menu.js' );
+		//		wp_enqueue_style( 'stylepress-nav-menu-edit', STYLEPRESS_URI . 'extensions/wp-menu/admin-nav-menu.css' );
 	}
 } );
 
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/widget.wp-menu.php';
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/widget.wp-menu.php';
 
 
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/walker-edit-page.php';
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/wp-menu/walker-display.php';
-function stylepress_edit_walker( $walker, $menu_id ) {
-	return 'Walker_Nav_Menu_Edit_StylePress';
-}
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/walker-edit-page.php';
+require_once STYLEPRESS_PATH . 'extensions/wp-menu/walker-display.php';
 
 // change our walker for all menu types if we detect a megamenu or stylepress template dropdown
 add_filter( 'wp_nav_menu_args', function ( $args ) {
@@ -57,7 +60,7 @@ add_filter( 'wp_nav_menu_args', function ( $args ) {
 		}
 		if ( $has_stylepress ) {
 			$GLOBALS['stylepress_nav_slideouts'] = array();
-			$args['walker']                      = new \stylepress_walker_nav_menu();
+			$args['walker']                      = new stylepress_walker_nav_menu();
 			$args['do_stylepress']               = true;
 			$args['container']                   = 'div';
 			$args['container_class']             .= ' main-nav stylepress_menu';
@@ -96,34 +99,16 @@ add_filter( 'wp_nav_menu_args', function ( $args ) {
 
 
 // add custom menu fields to menu
-add_filter( 'wp_setup_nav_menu_item', 'stylepress_add_custom_nav_fields' );
-
-// save menu custom fields
-add_action( 'wp_update_nav_menu_item', 'stylepress_update_custom_nav_fields', 10, 3 );
-
-// edit menu walker
-add_filter( 'wp_edit_nav_menu_walker', 'stylepress_edit_walker', 10, 2 );
-
-
-function stylepress_add_custom_nav_fields( $menu_item ) {
+add_filter( 'wp_setup_nav_menu_item', function ( $menu_item ) {
 	$menu_item->displaytype = get_post_meta( $menu_item->ID, '_menu_item_displaytype', true );
 	$menu_item->slideout    = get_post_meta( $menu_item->ID, '_menu_item_slideout', true );
 
 	return $menu_item;
+} );
 
-}
-
-/**
- * Save menu custom fields
- *
- * @access      public
- * @since       1.0
- * @return      void
- */
-function stylepress_update_custom_nav_fields( $menu_id, $menu_item_db_id, $args ) {
-
+// save menu custom fields
+add_action( 'wp_update_nav_menu_item', function ( $menu_id, $menu_item_db_id, $args ) {
 	// todo: do we need to nonce this?
-
 	$custom_fields = array( 'slideout', 'displaytype' );
 	if ( isset( $_POST['menu-item-db-id'] ) && is_array( $_POST['menu-item-db-id'] ) ) {
 		foreach ( $_POST['menu-item-db-id'] as $key => $db_id ) {
@@ -136,5 +121,10 @@ function stylepress_update_custom_nav_fields( $menu_id, $menu_item_db_id, $args 
 			}
 		}
 	}
+}, 10, 3 );
 
-}
+// edit menu walker
+add_filter( 'wp_edit_nav_menu_walker', function () {
+	return 'StylePress\Walker_Nav_Menu_Edit_StylePress';
+}, 10, 2 );
+

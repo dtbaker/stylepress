@@ -1,8 +1,8 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
-class DtbakerElementorShortcode {
+class StylepressShortcode {
 
 	const SHORTCODE = 'elementor-template';
 
@@ -35,7 +35,7 @@ class DtbakerElementorShortcode {
 			$include_css = (bool) $attributes['css'];
 		}
 
-		return \Elementor\Plugin::elementor()->frontend->get_builder_content_for_display( $attributes['id'], $include_css );
+		return \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $attributes['id'], $include_css );
 	}
 
 	private function add_actions() {
@@ -50,4 +50,4 @@ class DtbakerElementorShortcode {
 	}
 }
 
-$shortcode = new DtbakerElementorShortcode();
+$shortcode = new StylepressShortcode();

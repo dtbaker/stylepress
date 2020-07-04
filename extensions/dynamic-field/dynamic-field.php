@@ -1,9 +1,10 @@
 <?php
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+namespace StylePress;
 
+defined( 'STYLEPRESS_PATH' ) || exit;
 
-require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/widget.dynamic-field.php';
+require_once STYLEPRESS_PATH . 'extensions/dynamic-field/widget.dynamic-field.php';
 
 // add dynamic filters onto pre-built elements.
 function stylepress_register_dynamic_background( $widget, $args ) {
@@ -62,8 +63,8 @@ function stylepress_register_dynamics( $widget, $args ) {
 	<br><br>
 	<ul>
 		<?php
-		require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-		$dyno_generator      = \DtbakerDynamicField::get_instance();
+		require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
+		$dyno_generator      = StylePressDynamicField::get_instance();
 		$available_callbacks = $dyno_generator->get_replace_fields();
 		foreach ( $available_callbacks as $key => $title ) { ?>
 			<li>{{<?php echo $key; ?>}} <span><?php echo $title; ?></span></li>
@@ -113,8 +114,8 @@ function stylepress_dynamic_before_render( $widget ) {
 	if ( $widget->get_name() === 'section' || $widget->get_name() === 'column' ) {
 		$settings = $widget->get_active_settings();
 		if ( ! empty( $settings['stylepress_enable_dynamic_bg'] ) && $settings['stylepress_enable_dynamic_bg'] === 'yes' ) {
-			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \DtbakerDynamicField::get_instance();
+			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
+			$dyno_generator = StylePressDynamicField::get_instance();
 			$image_url      = $dyno_generator->post_thumbnail();
 			if ( $image_url ) {
 				$widget->add_render_attribute( '_wrapper', 'style', 'background-image: url("' . esc_url( $image_url ) . '") !important;' );
@@ -157,8 +158,8 @@ function stylepress_dynamic_before_render( $widget ) {
 					$do_link = true;
 					break;
 			}
-			require_once DTBAKER_ELEMENTOR_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
-			$dyno_generator = \DtbakerDynamicField::get_instance();
+			require_once STYLEPRESS_PATH . 'extensions/dynamic-field/class.dynamic-field.php';
+			$dyno_generator = StylePressDynamicField::get_instance();
 			//			$available_callbacks = $dyno_generator->get_replace_fields();
 
 			foreach ( $fields as $field ) {
@@ -206,9 +207,9 @@ function stylepress_dynamic_before_render( $widget ) {
 		/*
 //		print_r($settings);
 		//$widget->set_settings($key,$val);
-		if ( ! empty( $settings['dtbaker_modal_content'] ) ) {
+		if ( ! empty( $settings['stylepress_modal_content'] ) ) {
 
-			$popup_template = (int)$settings['dtbaker_modal_content'];
+			$popup_template = (int)$settings['stylepress_modal_content'];
 			$width = '400px';
 			if ( ! empty( $settings['modal_width'] ) ) {
 				$width = $settings['modal_width']['size'] . $settings['modal_width']['unit'];
@@ -242,10 +243,10 @@ function stylepress_dynamic_before_render( $widget ) {
 }
 
 foreach ( $supported_widgets as $widget_name => $widget_options ) {
-	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'stylepress_register_dynamics', 10, 2 );
+	add_action( 'elementor/element/' . $widget_name . '/' . $widget_options['section'] . '/after_section_end', 'StylePress\stylepress_register_dynamics', 10, 2 );
 }
-add_action( 'elementor/frontend/widget/before_render', 'stylepress_dynamic_before_render', 10, 1 );
-add_action( 'elementor/frontend/element/before_render', 'stylepress_dynamic_before_render', 10, 1 );
+add_action( 'elementor/frontend/widget/before_render', 'StylePress\stylepress_dynamic_before_render', 10, 1 );
+add_action( 'elementor/frontend/element/before_render', 'StylePress\stylepress_dynamic_before_render', 10, 1 );
 
 // dynamic background image on certain elements.
-add_action( 'elementor/element/section/section_background/before_section_end', 'stylepress_register_dynamic_background', 10, 2 );
+add_action( 'elementor/element/section/section_background/before_section_end', 'StylePress\stylepress_register_dynamic_background', 10, 2 );

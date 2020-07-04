@@ -1,6 +1,8 @@
 <?php
 
-class stylepress_walker_nav_menu extends Walker_Nav_Menu {
+namespace StylePress;
+
+class stylepress_walker_nav_menu extends \Walker_Nav_Menu {
 
 	// add classes to ul sub-menus
 	function display_element( $element, &$children_elements, $max_depth, $depth = 0, $args, &$output ) {

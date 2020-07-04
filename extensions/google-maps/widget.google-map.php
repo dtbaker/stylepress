@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-class StylePress_Google_Map extends Widget_Base {
+class StylePress_Custom_Google_Map extends Widget_Base {
 
 	public function get_name() {
 		return 'stylepress-google-map';
@@ -22,12 +22,12 @@ class StylePress_Google_Map extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 
@@ -37,7 +37,7 @@ class StylePress_Google_Map extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 	/**
@@ -144,6 +144,16 @@ class StylePress_Google_Map extends Widget_Base {
 			]
 		);
 
+		if ( ! get_option( 'google_maps_api_key', '' ) ) {
+			$this->add_control(
+				'maps_api_key',
+				[
+					'label' => sprintf( __( '<strong>Important</strong> <a href="%s" target="_blank">Please click here to enter a Google Maps API Key in the Customizer.</a> A Google Maps API key is required for maps to generate correctly.', 'stylepress' ), admin_url( '/customize.php?autofocus[section]=stylepress_google_map' ) ),
+					'type'  => Controls_Manager::RAW_HTML,
+				]
+			);
+		}
+
 
 		$this->end_controls_section();
 
@@ -239,7 +249,7 @@ class StylePress_Google_Map extends Widget_Base {
 		$this->end_controls_section();
 
 
-		do_action( 'dtbaker_wp_menu_elementor_controls', $this );
+		do_action( 'stylepress_wp_menu_elementor_controls', $this );
 	}
 
 	protected function render() {
@@ -247,7 +257,7 @@ class StylePress_Google_Map extends Widget_Base {
 		$instance = $this->get_settings();
 
 		$shortcode = '[stylepress_google_map ';
-		foreach ( \stylepress_dtbaker_Shortcode_Google_Map::get_instance()->fields as $field ) {
+		foreach ( \StylePress\StylePress_Shortcode_Google_Map::get_instance()->fields as $field ) {
 			$value = isset( $instance[ $field['name'] ] ) ? $instance[ $field['name'] ] : $field['default'];
 			if ( $field['name'] == 'mapstyle' ) {
 				$value = str_replace( '[', '&#91;', $value );
@@ -269,11 +279,11 @@ class StylePress_Google_Map extends Widget_Base {
 
 	protected function content_template() {
 		?>
-		<div class="elementor-dtbaker-google-map-wrapper elementor-google-map">
+		<div class="elementor-stylepress-google-map-wrapper elementor-google-map">
 			The Google Map Will Appear Here
 		</div>
 		<?php
 	}
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Google_Map() );
+Plugin::instance()->widgets_manager->register_widget_type( new StylePress_Custom_Google_Map() );

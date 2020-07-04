@@ -2,24 +2,25 @@
 
 
 /**
- * Class dtbaker_Widget_Google_Map and dtbaker_Shortcode_Google_Map
+ * Class stylepress_Widget_Google_Map and stylepress_Shortcode_Google_Map
  * Easily create a Google Map on any WordPress post/page (with an insert map button).
  * Easily create a Google Map in any Widget Area.
- * Author: dtbaker@gmail.com
+ * Author: stylepress@gmail.com
  * Copyright 2014
  */
 
+namespace StylePress;
 
-defined( 'DTBAKER_ELEMENTOR_PATH' ) || exit;
+defined( 'STYLEPRESS_PATH' ) || exit;
 
 
 add_action( 'wp_enqueue_scripts', function () {
 
 
 	// ?libraries=places
-	wp_register_script( 'googlemaps', 'https://maps.googleapis.com/maps/api/js?key=' . esc_attr( get_option( 'google_maps_api_key', 'AIzaSyBsnYWO4SSibatp0SjsU9D2aZ6urI-_cJ8' ) ) . '&sensor=false', false, '3' );
+	wp_register_script( 'googlemaps', 'https://maps.googleapis.com/maps/api/js?key=' . esc_attr( get_option( 'google_maps_api_key', '' ) ) . '&sensor=false', false, '3' );
 
-	wp_register_style( 'stylepress-google-map', DTBAKER_ELEMENTOR_URI . 'extensions/google-maps/google-maps.css' );
+	wp_register_style( 'stylepress-google-map', STYLEPRESS_URI . 'extensions/google-maps/google-maps.css' );
 
 	if ( isset( $_GET['elementor'] ) || isset( $_GET['elementor-preview'] ) ) { //\Elementor\Plugin::$instance->editor->is_edit_mode()){
 		wp_enqueue_script( 'googlemaps' );
@@ -29,16 +30,16 @@ add_action( 'wp_enqueue_scripts', function () {
 } );
 
 
-$widget_file = DTBAKER_ELEMENTOR_PATH . 'extensions/google-maps/widget.google-map.php';
+$widget_file = STYLEPRESS_PATH . 'extensions/google-maps/widget.google-map.php';
 //$template_file = locate_template( $widget_file );
 //if ( $template_file && is_readable( $template_file ) ) {
 require_once $widget_file;
 
 
-add_action( 'customize_register', 'stylepress_register_google_maps_customize_control' );
+add_action( 'customize_register', 'StylePress\stylepress_register_google_maps_customize_control' );
 
 function stylepress_register_google_maps_customize_control() {
-	class stylepress_Google_Maps_Custom_Text_Control extends WP_Customize_Control {
+	class stylepress_Google_Maps_Custom_Text_Control extends \WP_Customize_Control {
 		public $type = 'google_maps_customtext';
 		public $extra = ''; // we add this for the extra description
 
@@ -52,7 +53,7 @@ function stylepress_register_google_maps_customize_control() {
 	}
 }
 
-class stylepress_dtbaker_Widget_Google_Map extends WP_Widget {
+class stylepress_Widget_Google_Map extends \WP_Widget {
 	/** constructor */
 	function __construct() {
 		$widget_ops = array(
@@ -68,8 +69,8 @@ class stylepress_dtbaker_Widget_Google_Map extends WP_Widget {
 		echo $before_widget;
 		echo $title ? ( $before_title . $title . $after_title ) : '';
 		// fire our shortcode below to generate map output.
-		$shortcode = dtbaker_Shortcode_Google_Map::get_instance();
-		echo $shortcode->dtbaker_shortcode_gmap( $instance, isset( $instance['innercontent'] ) ? $instance['innercontent'] : '' );
+		$shortcode = StylePress_Shortcode_Google_Map::get_instance();
+		echo $shortcode->stylepress_shortcode_gmap( $instance, isset( $instance['innercontent'] ) ? $instance['innercontent'] : '' );
 		echo $after_widget;
 	}
 
@@ -88,7 +89,7 @@ class stylepress_dtbaker_Widget_Google_Map extends WP_Widget {
 			</label></p>
 		<?php
 		// pull the same fields in from our mce popup below:
-		$shortcode = dtbaker_Shortcode_Google_Map::get_instance();
+		$shortcode = StylePress_Shortcode_Google_Map::get_instance();
 		foreach ( $shortcode->fields as $field ) {
 			?>
 			<p><label for="<?php echo $this->get_field_id( $field['name'] ); ?>"><?php echo $field['label']; ?>
@@ -118,7 +119,7 @@ class stylepress_dtbaker_Widget_Google_Map extends WP_Widget {
 }
 
 
-class stylepress_dtbaker_Shortcode_Google_Map {
+class StylePress_Shortcode_Google_Map {
 	private static $instance = null;
 
 	public static function get_instance() {
@@ -132,8 +133,10 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 	public function init() {
 		// comment this 'add_action' out to disable shortcode backend mce view feature
 		add_action( 'admin_init', array( $this, 'init_plugin' ), 20 );
-		add_shortcode( 'stylepress_google_map', array( $this, 'dtbaker_shortcode_gmap' ) );
-		add_action( 'widgets_init', create_function( '', 'return register_widget("stylepress_dtbaker_Widget_Google_Map");' ) );
+		add_shortcode( 'stylepress_google_map', array( $this, 'stylepress_shortcode_gmap' ) );
+		add_action( 'widgets_init', function(){
+			register_widget("stylepress_Widget_Google_Map");
+		} );
 
 		add_action( 'customize_register', array( $this, 'customize_register' ), 30 );
 
@@ -143,7 +146,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 	public function customize_register( $wp_customize ) {
 
 
-		$wp_customize->add_section( 'dtbaker_google_map', array(
+		$wp_customize->add_section( 'stylepress_google_map', array(
 			'title'       => __( 'Google Map' ),
 			'description' => '',
 			'priority'    => 120,
@@ -157,7 +160,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 		$wp_customize->add_control( 'google_maps_api_key', array(
 			'settings' => 'google_maps_api_key',
 			'label'    => 'Google Maps API Key',
-			'section'  => 'dtbaker_google_map',
+			'section'  => 'stylepress_google_map',
 			'type'     => 'text',
 		) );
 
@@ -171,7 +174,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 			);
 
 			$wp_customize->add_control( new stylepress_Google_Maps_Custom_Text_Control( $wp_customize, 'google_maps_customtext', array(
-					'section'  => 'dtbaker_google_map',
+					'section'  => 'stylepress_google_map',
 					'settings' => 'google_maps_api_key_description',
 					'extra'    => 'Here is my extra description text ...'
 				) )
@@ -184,7 +187,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 	}
 
 	// front end shortcode displaying:
-	public function dtbaker_shortcode_gmap( $atts = array(), $innercontent = '', $code = '' ) {
+	public function stylepress_shortcode_gmap( $atts = array(), $innercontent = '', $code = '' ) {
 		//		if(!isset($atts['address']))return;
 		static $map_id = 0;
 		$map_id ++;
@@ -207,10 +210,10 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 			<?php if ( ! empty( $enlarge_button ) ) { ?>
 				<div class="stylepress_map_buttons">
 					<a href="http://maps.google.com/maps?q=<?php echo urlencode( esc_html( $address ) ); ?>"
-					   class="dtbaker_button"
+					   class="stylepress_button"
 					   target="_blank"><?php _e( 'Enlarge Map', 'plugin-textdomain-here' ); ?></a>
 					<a href="https://maps.google.com?daddr=<?php echo urlencode( esc_html( $address ) ); ?>"
-					   class="dtbaker_button"
+					   class="stylepress_button"
 					   target="_blank"><?php _e( 'Get Directions', 'plugin-textdomain-here' ); ?></a>
 				</div>
 			<?php } ?>
@@ -293,7 +296,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 		return preg_replace( "#\s+#", ' ', ob_get_clean() );
 	}
 
-	// copied from dtbaker location plugin
+	// copied from stylepress location plugin
 	public static function get_map_styles( $type, $atts = array() ) {
 
 		if ( ! empty( $atts['mapstyle'] ) ) {
@@ -354,7 +357,7 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 				),
 			),
 		);
-		$styles = apply_filters( 'dtbaker_google_map_styles', $styles );
+		$styles = apply_filters( 'stylepress_google_map_styles', $styles );
 		switch ( $type ) {
 			case 'js':
 				$js_array = array();
@@ -438,6 +441,6 @@ class stylepress_dtbaker_Shortcode_Google_Map {
 	);
 }
 
-stylepress_dtbaker_Shortcode_Google_Map::get_instance()->init();
+StylePress_Shortcode_Google_Map::get_instance()->init();
 
 

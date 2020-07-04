@@ -13,7 +13,7 @@ use Elementor\Scheme_Color;
 
 
 /**
- * Class Skin_Dtbaker
+ * Class Skin_stylepress
  */
 class Skin_StylePressIconList extends Skin_Base {
 

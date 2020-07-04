@@ -5,5 +5,5 @@
  *
  * More styles will be remotely downloaded if the user chooses tod o so.
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */

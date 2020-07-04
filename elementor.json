@@ -9,8 +9,8 @@
       "default": "full",
       "options": {
         "full": "Large",
-        "dtbwp_gallery_square": "Square",
-        "dtbwp_gallery_rounded": "Rounded",
+        "stylepress_gallery_square": "Square",
+        "stylepress_gallery_rounded": "Rounded",
         "thumbnail": "Thumbnail"
       },
       "prefix_class": "stylepress-image-size-"
@@ -18,7 +18,7 @@
     {
       "element": "heading",
       "appendto": "stylepress_title_style",
-      "name": "dtbaker_title_under",
+      "name": "stylepress_title_under",
       "title": "Title Underline",
       "type": "select",
       "default": "underline",

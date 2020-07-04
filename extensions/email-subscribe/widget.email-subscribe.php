@@ -2,7 +2,7 @@
 /**
  * WordPress Nav Menu Widget
  *
- * @package dtbaker-elementor
+ * @package stylepress
  */
 
 namespace Elementor;
@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Creates our custom Elementor widget
  *
- * Class Widget_Dtbaker_WP_Menu
+ * Class Widget_stylepress_WP_Menu
  *
  * @package Elementor
  */
-class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
+class Widget_stylepress_Email_Subscribe extends Widget_Base {
 
 
 	/**
@@ -42,12 +42,12 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 
 	/**
 	 * Get the current icon for display on frontend.
-	 * The extra 'dtbaker-elementor-widget' class is styled differently in frontend.css
+	 * The extra 'stylepress-widget' class is styled differently in frontend.css
 	 *
 	 * @return string
 	 */
 	public function get_icon() {
-		return 'dtbaker-stylepress-elementor-widget';
+		return 'stylepress-elementor-widget';
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return [ 'dtbaker-elementor' ];
+		return [ 'stylepress' ];
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_dtbaker_wp_menu',
+			'section_stylepress_wp_menu',
 			[
 				'label' => __( 'Email Subscribe', 'stylepress' ),
 			]
@@ -234,4 +234,4 @@ class Widget_Dtbaker_Email_Subscribe extends Widget_Base {
 }
 
 
-Plugin::instance()->widgets_manager->register_widget_type( new Widget_Dtbaker_Email_Subscribe() );
+Plugin::instance()->widgets_manager->register_widget_type( new Widget_stylepress_Email_Subscribe() );
