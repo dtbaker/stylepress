@@ -32,26 +32,6 @@ class Backend extends Base {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_meta_box' ) );
 		add_action( 'admin_action_stylepress_save', array( $this, 'stylepress_save' ) );
-		add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'editor_scripts' ), 99999 );
-	}
-
-	/**
-	 * This is our Elementor injection script. We load some custom JS to modify the Elementor control panel during live editing.
-	 *
-	 * @since 2.0.0
-	 */
-	public function editor_scripts() {
-		// load our backend scripts within the editor as well:
-		return;
-		// $this->admin_page_assets(); this failed due to the  ['wp-element', 'wp-components' ] styles breaking elementor
-		wp_register_script( 'stylepress-admin', STYLEPRESS_URI . 'assets/backend.js', false, STYLEPRESS_VERSION );
-		wp_localize_script( 'stylepress-admin', 'stylepress_admin', array(
-				'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-				'admin_nonce' => wp_create_nonce( 'stylepress-admin-nonce' ),
-			)
-		);
-		wp_enqueue_script( 'stylepress-admin' );
-
 	}
 
 	/**
@@ -62,7 +42,7 @@ class Backend extends Base {
 	public function admin_menu() {
 
 		// if this is a first time run, we change the menu around a bit
-		if ( get_option( 'envato_setup_complete', false ) ) {
+		if ( get_option( 'stylepress_setup_wizard_complete', false ) ) {
 
 			add_menu_page( __( 'StylePress', 'stylepress' ), __( 'StylePress', 'stylepress' ), 'manage_options', self::PAGE_SLUG, array(
 				Wizard::get_instance(),
@@ -176,7 +156,7 @@ class Backend extends Base {
 				'admin/sections.php', [
 				]
 			);
-		} else if ( isset( $_GET['remote_style_id'] ) ) {
+		} else if ( isset( $_GET['remote_style_slug'] ) ) {
 			if ( isset( $_GET['import_step'] ) ) {
 				$this->content = $this->render_template(
 					'admin/remote-style-import.php', [

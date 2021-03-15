@@ -205,6 +205,7 @@ class Source_StylePress extends Source_Base {
 	 */
 	public function get_item( $template_id ) {
 		$post = get_post( $template_id );
+		$parent_style = get_post( $post->post_parent );
 
 		$user = get_user_by( 'id', $post->post_author );
 
@@ -220,7 +221,7 @@ class Source_StylePress extends Source_Base {
 			'template_id'     => $post->ID,
 			'source'          => 'local', //$this->get_id(),
 			'type'            => $type,
-			'title'           => $post->post_title,
+			'title'           => $parent_style->post_title .' &raquo; ' . $post->post_title,
 			'thumbnail'       => get_the_post_thumbnail_url( $post ),
 			'date'            => $date,
 			'human_date'      => date_i18n( get_option( 'date_format' ), $date ),
@@ -457,8 +458,7 @@ class Source_StylePress extends Source_Base {
 	 */
 	private function save_item_type( $post_id, $type ) {
 		update_post_meta( $post_id, Document::TYPE_META_KEY, $type );
-
-		wp_set_object_terms( $post_id, $type, self::TAXONOMY_TYPE_SLUG );
+		wp_cache_flush();
 	}
 
 
@@ -624,6 +624,7 @@ class Source_StylePress extends Source_Base {
 			add_action( 'manage_' . self::CPT . '_posts_custom_column', [ $this, 'admin_columns_content' ], 10, 2 );
 
 			if ( $this->is_current_screen() ) {
+				add_filter( 'the_title', [ $this, 'add_stylepress_parent_suffix' ], 11, 2 );
 				add_action( 'manage_elementor_library_posts_columns', [ $this, 'admin_columns_headers' ] );
 				add_action( 'manage_elementor_library_posts_custom_column', [ $this, 'admin_columns_content' ], 10, 2 );
 			}
@@ -633,6 +634,15 @@ class Source_StylePress extends Source_Base {
 		}
 
 		add_action( 'template_redirect', [ $this, 'block_template_frontend' ] );
+	}
+
+	public function add_stylepress_parent_suffix($title, $post_id){
+		$post = get_post($post_id);
+		$parent = get_post($post->post_parent);
+		if($parent ){
+			return $parent->post_title .' &raquo; ' . $title;
+		}
+		return $title;
 	}
 
 	/**
@@ -682,7 +692,7 @@ class Source_StylePress extends Source_Base {
 		$offset = 2;
 
 		$posts_columns = array_slice( $posts_columns, 0, $offset, true ) + [
-				'stylepress_type'        => __( 'StylePress', 'elementor' ),
+				'stylepress_type'        => __( 'StylePress Category', 'elementor' ),
 				'elementor_library_type' => __( 'Elementor Type', 'elementor' ),
 			] + array_slice( $posts_columns, $offset, null, true );
 

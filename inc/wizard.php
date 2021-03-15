@@ -27,8 +27,8 @@ class Wizard extends Base {
 
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'wp_ajax_envato_setup_plugins', array( $this, 'ajax_plugins' ) );
-		add_action( 'wp_ajax_envato_setup_content', array( $this, 'ajax_content' ) );
+		add_action( 'wp_ajax_stylepress_setup_plugins', array( $this, 'ajax_plugins' ) );
+		add_action( 'wp_ajax_stylepress_setup_content', array( $this, 'ajax_content' ) );
 
 	}
 
@@ -58,7 +58,7 @@ class Wizard extends Base {
 					),
 					'tgm_bulk_url'     => admin_url( $this->tgmpa_url ),
 					'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-					'wpnonce'          => wp_create_nonce( 'envato_setup_nonce' ),
+					'wpnonce'          => wp_create_nonce( 'stylepress_setup_nonce' ),
 					'verify_text'      => esc_html__( '...verifying' ),
 				)
 			);?>;
@@ -85,37 +85,37 @@ class Wizard extends Base {
 		$steps                    = array();
 		$steps['introduction']    = array(
 			'name'    => esc_html__( 'Introduction' ),
-			'view'    => array( $this, 'envato_setup_introduction' ),
+			'view'    => array( $this, 'stylepress_setup_introduction' ),
 			'handler' => '',
 		);
 		$steps['style']           = array(
 			'name'    => esc_html__( 'Style' ),
-			'view'    => array( $this, 'envato_setup_color_style' ),
-			'handler' => array( $this, 'envato_setup_color_style_save' ),
+			'view'    => array( $this, 'stylepress_setup_color_style' ),
+			'handler' => array( $this, 'stylepress_setup_color_style_save' ),
 		);
 		$steps['default_plugins'] = array(
 			'name'    => esc_html__( 'Plugins' ),
-			'view'    => array( $this, 'envato_setup_default_plugins' ),
+			'view'    => array( $this, 'stylepress_setup_default_plugins' ),
 			'handler' => '',
 		);
 		$steps['default_content'] = array(
 			'name'    => esc_html__( 'Content' ),
-			'view'    => array( $this, 'envato_setup_default_content' ),
+			'view'    => array( $this, 'stylepress_setup_default_content' ),
 			'handler' => '',
 		);
 		//		$steps['design']          = array(
 		//			'name'    => esc_html__( 'Logo' ),
-		//			'view'    => array( $this, 'envato_setup_logo_design' ),
-		//			'handler' => array( $this, 'envato_setup_logo_design_save' ),
+		//			'view'    => array( $this, 'stylepress_setup_logo_design' ),
+		//			'handler' => array( $this, 'stylepress_setup_logo_design_save' ),
 		//		);
 		$steps['help_support'] = array(
 			'name'    => esc_html__( 'Support' ),
-			'view'    => array( $this, 'envato_setup_help_support' ),
+			'view'    => array( $this, 'stylepress_setup_help_support' ),
 			'handler' => '',
 		);
 		$steps['next_steps']   = array(
 			'name'    => esc_html__( 'Ready!' ),
-			'view'    => array( $this, 'envato_setup_ready' ),
+			'view'    => array( $this, 'stylepress_setup_ready' ),
 			'handler' => '',
 		);
 
@@ -146,22 +146,13 @@ class Wizard extends Base {
 	/**
 	 * Introduction step
 	 */
-	public function envato_setup_introduction() {
+	public function stylepress_setup_introduction() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/welcome.php';
-	}
-
-	private function get_style_data() {
-		$current_style = Remote_Styles::get_instance()->get_current_site_style();
-		if ( $current_style ) {
-			return Remote_Styles::get_instance()->get_style( $current_style );
-		}
-
-		return false;
 	}
 
 	private function get_plugins() {
 
-		$current_style_data = $this->get_style_data();
+		$current_style_data = Remote_Styles::get_instance()->get_current_remote_style_data();
 
 		$instance = call_user_func( array( get_class( $GLOBALS['tgmpa'] ), 'get_instance' ) );
 		$plugins  = array(
@@ -196,7 +187,7 @@ class Wizard extends Base {
 	}
 
 
-	public function envato_setup_default_plugins() {
+	public function stylepress_setup_default_plugins() {
 
 		$url     = wp_nonce_url( add_query_arg( array( 'plugins' => 'go' ) ), 'envato-setup' );
 		$plugins = $this->get_plugins();
@@ -231,7 +222,7 @@ class Wizard extends Base {
 
 
 	public function ajax_plugins() {
-		if ( ! check_ajax_referer( 'envato_setup_nonce', 'wpnonce' ) || empty( $_POST['slug'] ) ) {
+		if ( ! check_ajax_referer( 'stylepress_setup_nonce', 'wpnonce' ) || empty( $_POST['slug'] ) ) {
 			wp_send_json_error( array( 'error' => 1, 'message' => esc_html__( 'No Slug Found' ) ) );
 		}
 		$json = array();
@@ -294,31 +285,31 @@ class Wizard extends Base {
 
 	}
 
-	public function envato_setup_default_content() {
+	public function stylepress_setup_default_content() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/content.php';
 	}
 
-	public function envato_setup_color_style() {
+	public function stylepress_setup_color_style() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/style.php';
 	}
 
-	public function envato_setup_help_support() {
+	public function stylepress_setup_help_support() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/support.php';
 	}
 
-	public function envato_setup_ready() {
+	public function stylepress_setup_ready() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/ready.php';
 	}
 
 	/**
 	 * Save logo & design options
 	 */
-	public function envato_setup_color_style_save() {
+	public function stylepress_setup_color_style_save() {
 		check_admin_referer( 'envato-setup' );
 
-		$new_style = isset( $_POST['new_style'] ) ? $_POST['new_style'] : false;
-		if ( $new_style ) {
-			Remote_Styles::get_instance()->set_current_site_style( $new_style );
+		$new_style_slug = isset( $_POST['new_style'] ) ? $_POST['new_style'] : false;
+		if ( $new_style_slug ) {
+			Remote_Styles::get_instance()->set_chosen_remote_style_slug( $new_style_slug );
 			wp_safe_redirect( esc_url_raw( $this->get_next_step_link() ) );
 		} else {
 			wp_safe_redirect( esc_url_raw( $this->get_step_link( 'style' ) ) );
@@ -329,7 +320,7 @@ class Wizard extends Base {
 
 	private function get_json( $file ) {
 
-		$current_style_data     = $this->get_style_data();
+		$current_style_data     = Remote_Styles::get_instance()->get_current_remote_style_data();
 		$json_content_directory = __DIR__ . '/content/something/';
 		$file_name              = $json_content_directory . basename( $file );
 		if ( is_file( $file_name ) ) {
@@ -395,7 +386,7 @@ class Wizard extends Base {
 
 	public function ajax_content() {
 		$content = $this->content_default_get();
-		if ( ! check_ajax_referer( 'envato_setup_nonce', 'wpnonce' ) || empty( $_POST['content'] ) && isset( $content[ $_POST['content'] ] ) ) {
+		if ( ! check_ajax_referer( 'stylepress_setup_nonce', 'wpnonce' ) || empty( $_POST['content'] ) && isset( $content[ $_POST['content'] ] ) ) {
 			wp_send_json_error( array( 'error' => 1, 'message' => esc_html__( 'No content Found' ) ) );
 		}
 
@@ -423,12 +414,12 @@ class Wizard extends Base {
 						// we split the stuff up again.
 						$json = array(
 							'url'         => admin_url( 'admin-ajax.php' ),
-							'action'      => 'envato_setup_content',
+							'action'      => 'stylepress_setup_content',
 							'proceed'     => 'true',
 							'retry'       => time(),
 							'retry_count' => $result['retry_count'],
 							'content'     => $_POST['content'],
-							'_wpnonce'    => wp_create_nonce( 'envato_setup_nonce' ),
+							'_wpnonce'    => wp_create_nonce( 'stylepress_setup_nonce' ),
 							'message'     => $this_content['installing'],
 							'logs'        => $this->logs,
 							'errors'      => $this->errors,
@@ -448,10 +439,10 @@ class Wizard extends Base {
 
 			$json = array(
 				'url'      => admin_url( 'admin-ajax.php' ),
-				'action'   => 'envato_setup_content',
+				'action'   => 'stylepress_setup_content',
 				'proceed'  => 'true',
 				'content'  => $_POST['content'],
-				'_wpnonce' => wp_create_nonce( 'envato_setup_nonce' ),
+				'_wpnonce' => wp_create_nonce( 'stylepress_setup_nonce' ),
 				'message'  => $this_content['installing'],
 				'logs'     => $this->logs,
 				'errors'   => $this->errors,

@@ -16,102 +16,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
  * Class Plugin
  */
 class Plugin extends Base {
-
-
-	/**
-	 * Initializes the plugin and sets all required filters.
-	 *
-	 * @since 2.0.0
-	 */
-	public function __construct() {
-
-		add_action( 'elementor/init', array( $this, 'elementor_init_complete' ), 40 );
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'elementor_add_new_widgets' ) );
-		//add_action( 'init', array( $this, 'load_extensions' ) );
-	}
-
-	/**
-	 * Runs once elementor has completed loading.
-	 * This method loads our custom Elementor classes and injects them into the elementor widget_manager
-	 * so our widgets appear in the Elementor ui.
-	 *
-	 * @since 2.0.0
-	 */
-	public function elementor_init_complete() {
-
-		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( '\Elementor\Widget_Base' ) ) {
-			if ( class_exists( '\Elementor\Plugin' ) ) {
-				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-					$elementor = \Elementor\Plugin::instance();
-
-					// We have to enqueue styles on all pages, even non elementor pages, so global styles work.
-					// reference: wp-content/plugins/elementor/includes/frontend.php:209
-					add_action( 'wp_enqueue_scripts', [ $elementor->frontend, 'enqueue_styles' ] );
-
-					if ( $elementor && isset( $elementor->elements_manager ) ) {
-						if ( method_exists( $elementor->elements_manager, 'add_category' ) ) {
-							$elementor->elements_manager->add_category(
-								'stylepress',
-								[
-									'title' => 'StylePress',
-									'icon'  => 'eicon-font'
-								]
-							);
-						}
-					}
-				}
-			}
-		}
-	}
-
-
-	public function load_extensions() {
-
-		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( '\Elementor\Plugin' ) ) {
-
-				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-					$elementor = \Elementor\Plugin::instance();
-					if ( isset( $elementor->widgets_manager ) ) {
-						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
-
-							//require_once STYLEPRESS_PATH . 'extensions/woocommerce/woocommerce.php';
-							do_action( 'stylepress_init_extensions' );
-						}
-					}
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Adds our new widgets to the Elementor widget area.
-	 *
-	 * @since 2.0.0
-	 */
-	public function elementor_add_new_widgets() {
-		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			if ( class_exists( '\Elementor\Plugin' ) ) {
-
-				if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-					$elementor = \Elementor\Plugin::instance();
-					if ( isset( $elementor->widgets_manager ) ) {
-						if ( method_exists( $elementor->widgets_manager, 'register_widget_type' ) ) {
-
-							require_once STYLEPRESS_PATH . 'extensions/inner-content/inner-content.php';
-							do_action( 'stylepress_init_widgets' );
-
-						}
-					}
-				}
-			}
-		}
-	}
-
-
 	public function is_editing_internal_content_page() {
-
 		$is_inner_content_page = false;
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
 			$post = get_post();
@@ -129,7 +34,6 @@ class Plugin extends Base {
 		}
 
 		return $is_inner_content_page;
-
 	}
 
 
@@ -140,7 +44,6 @@ class Plugin extends Base {
 
 
 	public function populate_globals() {
-
 		if ( isset( $GLOBALS['stylepress_render'] ) ) {
 			return;
 		}
@@ -191,6 +94,32 @@ class Plugin extends Base {
 		$GLOBALS['stylepress_render']['styles']         = $these_styles;
 	}
 
+	public function get_active_style_id() {
+		return get_theme_mod( 'stylepress_active_style_id' );
+	}
+
+	public function set_active_style_id( $style_id ) {
+		set_theme_mod( 'stylepress_active_style_id', $style_id );
+	}
+
+	public function get_active_style_data() {
+		$active_style_id = $this->get_active_style_id();
+		if($active_style_id) {
+			return $this->get_style_data( $active_style_id );
+		}
+	}
+
+	/**
+	 * When a remote style is imported it comes with a bunch of data we use for TGM and other things.
+	 * This is stored in the stylepress_data post meta object.
+	 *
+	 * @param $style_id
+	 *
+	 * @return mixed
+	 */
+	public function get_style_data( $style_id ) {
+		return get_post_meta($style_id, 'stylepress_data', true);
+	}
 
 	/**
 	 * Works out the type of page we're currently quer\ying.

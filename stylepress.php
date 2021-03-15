@@ -80,16 +80,8 @@ function stylepress_load_plugin_textdomain() {
  */
 if ( ! function_exists( 'stylepress_fail_php_version' ) ) {
 	function stylepress_fail_php_version() {
-		$message      = esc_html__( 'The StylePress for Elementor plugin requires PHP version 5.4+, plugin is currently NOT ACTIVE.', 'stylepress' );
+		$message      = esc_html__( 'The StylePress plugin requires PHP version 5.4+, plugin is currently NOT ACTIVE.', 'stylepress' );
 		$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 		echo wp_kses_post( $html_message );
 	}
-}
-
-if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
-	define( 'ELEMENTOR_PARTNER_ID', 2114 );
-}
-
-if(file_exists(__DIR__.'/remote.php')){
-	include(__DIR__.'/remote.php');
 }

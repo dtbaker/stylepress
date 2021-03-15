@@ -11,16 +11,16 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 
 	<div class="stylepress-setup-wizard__styles">
 		<?php
-		$current_style         = Remote_Styles::get_instance()->get_current_site_style();
+		$current_style_slug    = Remote_Styles::get_instance()->get_chosen_remote_style_slug();
 		$current_style_to_save = false;
-		foreach ( Remote_Styles::get_instance()->get_all_styles( 'styles' ) as $style_name => $style_data ) {
-			if ( $current_style === $style_name ) {
-				$current_style_to_save = $style_name;
+		foreach ( Remote_Styles::get_instance()->get_all_remote_styles() as $style_slug => $style_data ) {
+			if ( $current_style_slug === $style_slug ) {
+				$current_style_to_save = $style_slug;
 			}
 			?>
 			<div
-				class="stylepress-setup-wizard__style <?php echo $style_name === $current_style ? 'stylepress-setup-wizard__style--current' : ''; ?>">
-				<a href="#" data-style="<?php echo esc_attr( $style_name ); ?>" class="js-stylepress-style-selector">
+				class="stylepress-setup-wizard__style <?php echo $style_slug === $current_style_slug ? 'stylepress-setup-wizard__style--current' : ''; ?>">
+				<a href="#" data-style="<?php echo esc_attr( $style_slug ); ?>" class="js-stylepress-style-selector">
 					<img src="<?php echo esc_url( $style_data['thumbnail_url'] ); ?>"
 					     alt="<?php echo esc_attr( $style_data['title'] ); ?>"/>
 					<br/>

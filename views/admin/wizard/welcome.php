@@ -4,7 +4,7 @@ namespace StylePress;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-if ( get_option( 'envato_setup_complete', false ) ) {
+if ( get_option( 'stylepress_setup_wizard_complete', false ) ) {
 	?>
 	<h1><?php printf( esc_html__( 'Welcome to the setup wizard for %s.' ), wp_get_theme() ); ?></h1>
 	<p><?php esc_html_e( 'It looks like you have already run the setup wizard. Below are some options: ' ); ?></p>

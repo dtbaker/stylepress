@@ -10,12 +10,12 @@ namespace StylePress;
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 
-$remote_style_id = isset( $_GET['remote_style_id'] ) ? $_GET['remote_style_id'] : 0;
-if(!$remote_style_id){
+$remote_style_slug = isset( $_GET['remote_style_slug'] ) ? $_GET['remote_style_slug'] : 0;
+if(!$remote_style_slug){
 	wp_die('Invalid style ID');
 }
 
-$remote_style = Remote_Styles::get_instance()->get_style($remote_style_id);
+$remote_style = Remote_Styles::get_instance()->get_remote_style_data($remote_style_slug);
 if(!$remote_style){
 	wp_die('Invalid style');
 }
@@ -29,7 +29,7 @@ if(!$remote_style){
 		<img src="<?php echo esc_url($remote_style['thumbnail_url']); ?>">
 		<p>
 			<a class="button button-primary"
-			   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_id=' . $remote_style_id .'&import_step=1' ) ); ?>">
+			   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_slug=' . $remote_style_slug .'&import_step=1' ) ); ?>">
 				<?php esc_html_e( 'Import This Style', 'stylepress' ); ?>
 			</a>
 		</p>

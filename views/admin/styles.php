@@ -89,21 +89,20 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 			</h3>
 			<div class="stylepress__category-content">
 				<?php
-				$category = 'styles';
-				$designs  = Remote_Styles::get_instance()->get_all_styles( $category );
+				$designs  = Remote_Styles::get_instance()->get_all_remote_styles();
 				foreach ( $designs as $design_id => $design ) {
 					?>
 					<div class="stylepress__style">
 						<div class="stylepress__style-inner">
 							<a
-								href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_id=' . $design_id ) ); ?>"
+								href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_slug=' . $design_id ) ); ?>"
 								class="stylepress__style-thumb"
 								style="background-image: url(<?php echo esc_url( $design['thumbnail_url'] ); ?>);">
 							</a>
 							<h3 class="stylepress__style-name"><?php echo esc_html( $design['title'] ); ?></h3>
 							<div class="stylepress__style-action">
 								<a class="button button-primary"
-								   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_id=' . $design_id ) ); ?>">
+								   href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG . '&remote_style_slug=' . $design_id ) ); ?>">
 									<?php esc_html_e( 'Preview Style', 'stylepress' ); ?>
 								</a>
 							</div>

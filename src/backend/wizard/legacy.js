@@ -99,7 +99,7 @@ var EnvatoWizard = (function($){
         // query our ajax handler to get the ajax to send to TGM
         // if we don't get a reply we can assume everything worked and continue onto the next one.
         jQuery.post(stylepress_wizard.ajaxurl, {
-          action: 'envato_setup_plugins',
+          action: 'stylepress_setup_plugins',
           wpnonce: stylepress_wizard.wpnonce,
           slug: current_item
         }, ajax_callback).fail(ajax_callback);
@@ -185,7 +185,7 @@ var EnvatoWizard = (function($){
           console.log("Doing 2 "+current_item);
           // process htis one!
           jQuery.post(stylepress_wizard.ajaxurl, {
-            action: 'envato_setup_content',
+            action: 'stylepress_setup_content',
             wpnonce: stylepress_wizard.wpnonce,
             content: current_item
           }, ajax_callback).fail(ajax_callback);

@@ -12,7 +12,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 // Change this to your theme folder images/stock/ path, whatever that may be.
 // The importer will look for local 'images/stock/*.jpg' files during import.
 
-// Also change the json export path near the bottom: theme/plugins/envato_setup/content/
+// Also change the json export path near the bottom: theme/plugins/stylepress_setup/content/
 
 require_once( ABSPATH . 'wp-admin/includes/file.php' );
 require_once( ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php' );

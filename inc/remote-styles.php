@@ -23,7 +23,6 @@ class Remote_Styles extends Base {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-
 		add_action( 'after_setup_theme', [ $this, 'load_chosen_style_dependencies' ] );
 		add_filter( 'tgmpa_load', array( $this, 'tgmpa_load' ), 10, 1 );
 	}
@@ -32,36 +31,42 @@ class Remote_Styles extends Base {
 		return is_admin() || current_user_can( 'install_themes' );
 	}
 
-	public function get_all_styles( $category_slug = false, $include_empty = false, $parent_id = false ) {
+	public function get_all_remote_styles() {
 		$styles = array();
 
-		$styles = apply_filters( 'stylepress_remote_styles', $styles, $category_slug, $include_empty, $parent_id );
+		$styles = apply_filters( 'stylepress_remote_styles', $styles );
 
 		return $styles;
 	}
 
-	public function get_style( $style_id ) {
-		return apply_filters( 'stylepress_remote_style', false, $style_id );
+	public function get_chosen_remote_style_slug() {
+		return get_theme_mod( 'stylepress_remote_style_slug' );
 	}
 
-	public function set_current_site_style( $new_style ) {
-		set_theme_mod( 'stylepress_site_style', $new_style );
+	public function set_chosen_remote_style_slug( $style_slug ) {
+		set_theme_mod( 'stylepress_remote_style_slug', $style_slug );
 	}
 
-	public function get_current_site_style() {
-		return get_theme_mod( 'stylepress_site_style' );
+	public function get_remote_style_data( $remote_style_slug ) {
+		return apply_filters( 'stylepress_remote_style_data', false, $remote_style_slug );
+	}
+
+	public function get_current_remote_style_data() {
+		$current_style_slug = $this->get_chosen_remote_style_slug();
+		if ( $current_style_slug ) {
+			return $this->get_remote_style_data( $current_style_slug );
+		}
+
+		return false;
 	}
 
 	public function load_chosen_style_dependencies() {
-
-		require_once __DIR__ . '/class-tgm-plugin-activation.php';
-		$current_style = $this->get_current_site_style();
-		if ( $current_style ) {
-			$style_data = $this->get_style( $current_style );
-
+		if ( is_admin() ) {
+			// todo: move this into main plugin and run once we import a remote style locally.
+			require_once __DIR__ . '/tgm-plugin-activation.php';
+			$style_data = $this->get_current_remote_style_data();
 			if ( $style_data && ! empty( $style_data['tgmpa'] ) ) {
 				if ( ! empty( $style_data['tgmpa'] ) ) {
-
 					$GLOBALS['tgmpa']->init();
 					$config = array(
 						'id'           => 'stylepress',
@@ -78,8 +83,6 @@ class Remote_Styles extends Base {
 				}
 			}
 		}
-
-
 	}
 }
 

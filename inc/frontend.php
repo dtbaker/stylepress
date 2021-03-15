@@ -66,13 +66,16 @@ class Frontend extends Base {
 		wp_enqueue_script( 'stylepress-js' );
 
 
-		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+		if ( $this->is_currently_in_edit_mode() ) {
 			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
 			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.css', false, STYLEPRESS_VERSION );
 			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.js', false, STYLEPRESS_VERSION, true );
 
 		}
+	}
 
+	public function is_currently_in_edit_mode() {
+		return \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode();
 	}
 
 

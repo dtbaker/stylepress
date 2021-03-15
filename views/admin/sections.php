@@ -24,11 +24,12 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 <div class="stylepress__main">
 	<div class="stylepress__summary">
 		<h3>Style: <?php echo esc_html( $parent_style->post_title ); ?></h3>
+		<p>Builder: (todo) </p>
 		<img src="<?php if ( has_post_thumbnail( $parent_style->ID ) ) {
 			echo esc_url( get_the_post_thumbnail_url( $parent_style->ID, 'full' ) );
 		} else {
 			echo esc_url( STYLEPRESS_URI . 'src/images/wp-theme-thumb-logo-sml.jpg' );
-		} ?>">
+		} ?>" alt="Style Preview Graphic" />
 		<p>Below are a list of designs included within this style.</p>
 	</div>
 	<?php foreach ( $categories as $category ) { ?>

@@ -25,27 +25,8 @@ class Styles extends Base {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
-		add_filter( 'elementor/init', array( $this, 'include_our_styles_in_elementor_popup' ), 10, 2 );
-		add_filter( 'elementor/template-library/create_new_dialog_types', array( $this, 'dont_allow_new' ), 10, 2 );
-
-	}
-
-	public function dont_allow_new( $types ) {
-		unset( $types['stylepress'] );
-
-		return $types;
-	}
-
-	public function include_our_styles_in_elementor_popup( $option_value ) {
-		require_once __DIR__ . '/elementor/source-stylepress.php';
-		\Elementor\Plugin::$instance->templates_manager->register_source( '\Elementor\TemplateLibrary\Source_StylePress' );
-
-		require_once __DIR__ . '/elementor/stylepress-document.php';
-		\Elementor\Plugin::$instance->documents
-			->register_document_type( 'stylepress', \Elementor\Modules\Library\Documents\Stylepress_Document::get_class_full_name() );
 	}
 
 	/**
@@ -215,11 +196,9 @@ class Styles extends Base {
 	 *
 	 */
 	public function get_design_edit_url( $design_id ) {
-		// defaul to Elementor, but we want to support other page builders down the track.
-		if ( class_exists( '\Elementor\Plugin' ) ) {
-			if ( is_callable( '\Elementor\Plugin', 'instance' ) ) {
-				return \Elementor\Plugin::$instance->documents->get( $design_id )->get_edit_url();
-			}
+		// if this is an "Elementor" style then we use the Elementor edit page url, otherwise default to the standard WP edit post link
+		if ( Elementor\Integration::is_elementor_active() ) {
+			return Elementor\Integration::get_instance()->edit_url_for_design( $design_id );
 		}
 
 		return get_edit_post_link( $design_id, 'edit' );

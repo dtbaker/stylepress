@@ -4,8 +4,7 @@ namespace StylePress;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-update_option( 'envato_setup_complete', time() );
-update_option( 'stylepress_update_notice', strtotime('-4 days') );
+update_option( 'stylepress_setup_wizard_complete', time() );
 ?>
 <a href="https://twitter.com/share" class="twitter-share-button"
    data-url="http://themeforest.net/user/dtbaker/portfolio?ref=dtbaker"

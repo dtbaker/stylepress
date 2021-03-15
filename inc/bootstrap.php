@@ -21,13 +21,12 @@ spl_autoload_register(
 			return;
 		}
 		$relative_class = strtolower( substr( $class, $len + 1 ) );
-		$relative_class = 'class-' . $relative_class;
 		$file           = $base_dir . DIRECTORY_SEPARATOR . str_replace( [ '\\', '_' ], [
 				'/',
 				'-'
 			], $relative_class ) . '.php';
 		if ( file_exists( $file ) ) {
-			require $file;
+			require_once $file;
 		} else {
 			wp_die( esc_html( 'Filename: ' . $file . ' ' . basename( $file ) . ' missing.' ) );
 		}
@@ -36,6 +35,7 @@ spl_autoload_register(
 
 
 Plugin::get_instance();
+Elementor\Integration::get_instance();
 Styles::get_instance();
 Frontend::get_instance();
 if ( is_admin() || wp_doing_ajax() ) {

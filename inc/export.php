@@ -29,7 +29,7 @@ class Export extends Base {
 		require_once( ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php' );
 
 		// Export Path(s)
-		$stylefolder                   = basename( Remote_Styles::get_instance()->get_current_site_style() );
+		$stylefolder                   = basename( Plugin::get_instance()->get_current_site_style() );
 		$export_path                   = trailingslashit( WP_CONTENT_DIR ) . 'stylepress-export/' . basename( $stylefolder );
 		$export_images_path            = trailingslashit( $export_path ) . 'images';
 		$export_content_path           = trailingslashit( $export_path ) . 'content';
