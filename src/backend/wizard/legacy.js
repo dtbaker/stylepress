@@ -20,16 +20,7 @@ var EnvatoWizard = (function($){
       e.preventDefault();
       renderMediaUploader();
     });
-    $('.js-stylepress-style-selector').on( 'click', function(e) {
-      e.preventDefault();
-      var $presets = $(this).parent().parent();
-      $presets.find('.stylepress-setup-wizard__style--current').removeClass('stylepress-setup-wizard__style--current');
-      var $preset = $(this).parent();
-      $preset.addClass('stylepress-setup-wizard__style--current');
-      var newstyle = $(this).data('style');
-      $('#new_style').val(newstyle);
-      return false;
-    });
+
   }
 
   function loading_content(){

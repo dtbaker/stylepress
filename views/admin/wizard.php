@@ -32,6 +32,9 @@ $step_keys    = array_keys( $output_steps );
 		<?php } ?>
 	</ol>
 
+	<div class="stylepress-setup-wizard__message">
+		<div data-wizard-manager-target="errorMessage"></div>
+	</div>
 	<div class="stylepress-setup-wizard__content">
 		<?php
 		$wizard->step_output();

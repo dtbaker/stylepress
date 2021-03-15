@@ -3,17 +3,15 @@ import { Controller } from 'stimulus';
 
 const dtbaker_loading_button = (btn) => {
   var $button = jQuery(btn);
-  if($button.data('done-loading') === 'yes')return false;
-  var existing_text = $button.text();
   var existing_width = $button.outerWidth();
   var loading_text = '⡀⡀⡀⡀⡀⡀⡀⡀⡀⡀⠄⠂⠁⠁⠂⠄';
   var completed = false;
 
   $button.css('width',existing_width);
   var _modifier = $button.is('input') || $button.is('button') ? 'val' : 'text';
+  var existing_text = $button[_modifier]();
   $button[_modifier](loading_text);
   // $button.attr('disabled',true);
-  $button.data('done-loading','yes');
 
   var anim_index = [0,1,2];
 
@@ -51,22 +49,56 @@ export default class extends Controller {
     ajaxNonce: String
   }
 
-  static targets = ['nextButton','backButton']
+  static targets = ['errorMessage','nextButton','backButton']
 
   connect(){
+    this.stepRequirements = []
     this.setupNavButtons()
+  }
+
+  setErrorMessage (message){
+    this.errorMessageTarget.innerText = message
+  }
+
+  clearErrorMessage (){
+    this.errorMessageTarget.innerText = ''
+  }
+
+  registerStepRequirement(callback) {
+    this.stepRequirements.push(callback)
   }
 
   setupNavButtons() {
     const nextStepUrl = this.nextUrlValue
     const prevStepUrl = this.prevUrlValue
-    this.nextButtonTarget.addEventListener('click', function(e){
-      dtbaker_loading_button(this);
-      window.location.href = nextStepUrl
+    this.nextButtonTarget.addEventListener('click', (e) => {
+      e.preventDefault()
+      this.clearErrorMessage()
+      const loadingButton = dtbaker_loading_button(this.nextButtonTarget)
+      const requirementPromises = this.stepRequirements.map(callback => {
+        return callback()
+      })
+      Promise.all(requirementPromises)
+        .then((results) => {
+          let nextStepUrlWithQueryParams = nextStepUrl
+          results.forEach(result => {
+            if(result.args){
+              for (const [key, value] of Object.entries(result.args)) {
+                nextStepUrlWithQueryParams = `${nextStepUrlWithQueryParams}&${key}=${value}`
+              }
+            }
+          })
+          window.location.href = nextStepUrlWithQueryParams
+        })
+        .catch((err) => {
+          this.setErrorMessage(err.toString())
+          loadingButton.done()
+        })
+      return false
     });
     this.backButtonTarget.addEventListener('click', function(e){
       e.preventDefault()
-      dtbaker_loading_button(this);
+      dtbaker_loading_button(this.backButtonTarget);
       window.location.href = prevStepUrl
       return false
     });
