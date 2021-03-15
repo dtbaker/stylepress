@@ -39,20 +39,17 @@ class Remote_Styles extends Base {
 		return $styles;
 	}
 
-	public function get_chosen_remote_style_slug() {
-		return get_theme_mod( 'stylepress_remote_style_slug' );
-	}
-
-	public function set_chosen_remote_style_slug( $style_slug ) {
-		set_theme_mod( 'stylepress_remote_style_slug', $style_slug );
-	}
-
 	public function get_remote_style_data( $remote_style_slug ) {
 		return apply_filters( 'stylepress_remote_style_data', false, $remote_style_slug );
 	}
 
+	public function is_remote_style_imported( $remote_style_slug ) {
+		// todo:
+		return false;
+	}
+
 	public function get_current_remote_style_data() {
-		$current_style_slug = $this->get_chosen_remote_style_slug();
+		$current_style_slug = false; //$this->get_chosen_remote_style_slug();
 		if ( $current_style_slug ) {
 			return $this->get_remote_style_data( $current_style_slug );
 		}

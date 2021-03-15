@@ -90,8 +90,13 @@ class Wizard extends Base {
 		);
 		$steps['style']           = array(
 			'name'    => esc_html__( 'Style' ),
-			'view'    => array( $this, 'stylepress_setup_color_style' ),
-			'handler' => array( $this, 'stylepress_setup_color_style_save' ),
+			'view'    => array( $this, 'stylepress_setup_remote_style' ),
+			'handler' => array( $this, 'stylepress_setup_remote_style_save' ),
+		);
+		$steps['import']           = array(
+			'name'    => esc_html__( 'Import' ),
+			'view'    => array( $this, 'stylepress_setup_remote_import' ),
+			'handler' => array( $this, 'stylepress_setup_remote_import_save' ),
 		);
 		$steps['default_plugins'] = array(
 			'name'    => esc_html__( 'Plugins' ),
@@ -143,6 +148,16 @@ class Wizard extends Base {
 		return $this->get_step_link( $keys[ array_search( $this->current_step, $keys ) + 1 ] );
 	}
 
+	public function get_prev_step_link() {
+		$keys = array_keys( $this->get_steps() );
+
+		$link = $this->get_step_link( $keys[ array_search( $this->current_step, $keys ) - 1 ] );
+		if(!$link){
+			$link = admin_url( '' );
+		}
+		return $link;
+	}
+
 	/**
 	 * Introduction step
 	 */
@@ -189,7 +204,7 @@ class Wizard extends Base {
 
 	public function stylepress_setup_default_plugins() {
 
-		$url     = wp_nonce_url( add_query_arg( array( 'plugins' => 'go' ) ), 'envato-setup' );
+		$url     = wp_nonce_url( add_query_arg( array( 'plugins' => 'go' ) ), 'stylepress' );
 		$plugins = $this->get_plugins();
 
 		tgmpa_load_bulk_installer();
@@ -289,8 +304,12 @@ class Wizard extends Base {
 		include STYLEPRESS_PATH . 'views/admin/wizard/content.php';
 	}
 
-	public function stylepress_setup_color_style() {
+	public function stylepress_setup_remote_style() {
 		include STYLEPRESS_PATH . 'views/admin/wizard/style.php';
+	}
+
+	public function stylepress_setup_remote_import() {
+		include STYLEPRESS_PATH . 'views/admin/wizard/import.php';
 	}
 
 	public function stylepress_setup_help_support() {
@@ -302,15 +321,31 @@ class Wizard extends Base {
 	}
 
 	/**
-	 * Save logo & design options
+	 * Choose selected remote style
 	 */
-	public function stylepress_setup_color_style_save() {
-		check_admin_referer( 'envato-setup' );
+	public function stylepress_setup_remote_style_save() {
+		check_admin_referer( 'stylepress' );
 
 		$new_style_slug = isset( $_POST['new_style'] ) ? $_POST['new_style'] : false;
 		if ( $new_style_slug ) {
-			Remote_Styles::get_instance()->set_chosen_remote_style_slug( $new_style_slug );
-			wp_safe_redirect( esc_url_raw( $this->get_next_step_link() ) );
+			wp_safe_redirect( esc_url_raw( add_query_arg(
+				array(
+					'remote_style' => $new_style_slug,
+					'remote_style_hash' => wp_create_nonce('install style '.$new_style_slug),
+				),
+				$this->get_next_step_link() ) ) );
+		} else {
+			wp_safe_redirect( esc_url_raw( $this->get_step_link( 'style' ) ) );
+		}
+		exit;
+	}
+
+	public function stylepress_setup_remote_import_save() {
+		check_admin_referer( 'stylepress' );
+
+		$new_style_slug = isset( $_POST['remote_style'] ) ? $_POST['remote_style'] : false;
+		if ( $new_style_slug ) {
+			wp_safe_redirect( esc_url_raw( add_query_arg( 'remote_style', $new_style_slug, $this->get_next_step_link() ) ) );
 		} else {
 			wp_safe_redirect( esc_url_raw( $this->get_step_link( 'style' ) ) );
 		}

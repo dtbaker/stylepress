@@ -19,7 +19,6 @@ module.exports = {
       ...defaultConfig.module.rules,
       {
         test: /\.s?css$/,
-        exclude: /\.module\.s?css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
@@ -28,26 +27,12 @@ module.exports = {
         options: {
           outputPath: "images",
         },
-      },
-      {
-        test: /\.module\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-            },
-          },
-          "sass-loader",
-        ],
       }
     ]
   },
   entry: {
     './assets/backend' : './src/backend/index.js',
-    // './assets/frontend' : './src/js/frontend/index.js',
-    // './assets/frontend-edit' : './src/js/frontend/edit.js',
+    './assets/frontend' : './src/frontend/index.js',
   },
   //devtool: 'cheap-eval-source-map',
   externals: {

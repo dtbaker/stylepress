@@ -32,8 +32,8 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 </ul>
 <p>More details about item support can be found in the ThemeForest <a
 		href="http://themeforest.net/page/item_support_policy" target="_blank">Item Support Polity</a>. </p>
-<p class="envato-setup-actions step">
+<p class="stylepress-actions step">
 	<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 	   class="button button-primary button-large button-next"><?php esc_html_e( 'Agree and Continue' ); ?></a>
-	<?php wp_nonce_field( 'envato-setup' ); ?>
+	<?php wp_nonce_field( 'stylepress' ); ?>
 </p>

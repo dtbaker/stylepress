@@ -16,20 +16,6 @@ var EnvatoWizard = (function($){
 
   function window_loaded(){
     // init button clicks:
-    $('.button-next').on( 'click', function(e) {
-      var loading_button = dtbaker_loading_button(this);
-      if(!loading_button){
-        return false;
-      }
-      if($(this).data('callback') && typeof callbacks[$(this).data('callback')] != 'undefined'){
-        // we have to process a callback before continue with form submission
-        callbacks[$(this).data('callback')](this);
-        return false;
-      }else{
-        loading_content();
-        return true;
-      }
-    });
     $('.button-upload').on( 'click', function(e) {
       e.preventDefault();
       renderMediaUploader();
@@ -47,7 +33,7 @@ var EnvatoWizard = (function($){
   }
 
   function loading_content(){
-    // $('.envato-setup-content').block({
+    // $('.stylepress-content').block({
     //   message: null,
     //   overlayCSS: {
     //     background: '#fff',
@@ -114,7 +100,7 @@ var EnvatoWizard = (function($){
         }
         $current_node.find('.spinner').css('visibility','hidden');
       }
-      var $li = $('.envato-wizard-plugins li');
+      var $li = $('.stylepress-wizard-plugins li');
       $li.each(function(){
         if(current_item === '' || do_next){
           current_item = $(this).data('slug');
@@ -133,7 +119,7 @@ var EnvatoWizard = (function($){
 
     return {
       init: function(btn){
-        $('.envato-wizard-plugins').addClass('installing');
+        $('.stylepress-wizard-plugins').addClass('installing');
         complete = function(){
           loading_content();
           //window.location.href=btn.href;
@@ -204,8 +190,8 @@ var EnvatoWizard = (function($){
         }
         $current_node.find('.spinner').css('visibility','hidden');
       }
-      var $items = $('tr.envato_default_content');
-      var $enabled_items = $('tr.envato_default_content input:checked');
+      var $items = $('tr.stylepress_default_content');
+      var $enabled_items = $('tr.stylepress_default_content input:checked');
       $items.each(function(){
         if (current_item === '' || do_next) {
           current_item = $(this).data('content');
@@ -224,8 +210,8 @@ var EnvatoWizard = (function($){
 
     return {
       init: function(btn){
-        $('.envato-setup-pages').addClass('installing');
-        $('.envato-setup-pages').find('input').prop("disabled", true);
+        $('.stylepress-pages').addClass('installing');
+        $('.stylepress-pages').find('input').prop("disabled", true);
         complete = function(){
           loading_content();
           window.location.href=btn.href;
@@ -272,51 +258,6 @@ var EnvatoWizard = (function($){
     });
     // Now display the actual file_frame
     file_frame.open();
-
-  }
-
-  function dtbaker_loading_button(btn){
-
-    var $button = jQuery(btn);
-    if($button.data('done-loading') === 'yes')return false;
-    var existing_text = $button.text();
-    var existing_width = $button.outerWidth();
-    var loading_text = '⡀⡀⡀⡀⡀⡀⡀⡀⡀⡀⠄⠂⠁⠁⠂⠄';
-    var completed = false;
-
-    $button.css('width',existing_width);
-    $button.addClass('dtbaker_loading_button_current');
-    var _modifier = $button.is('input') || $button.is('button') ? 'val' : 'text';
-    $button[_modifier](loading_text);
-    //$button.attr('disabled',true);
-    $button.data('done-loading','yes');
-
-    var anim_index = [0,1,2];
-
-    // animate the text indent
-    function moo() {
-      if (completed)return;
-      var current_text = '';
-      // increase each index up to the loading length
-      for(var i = 0; i < anim_index.length; i++){
-        anim_index[i] = anim_index[i]+1;
-        if(anim_index[i] >= loading_text.length)anim_index[i] = 0;
-        current_text += loading_text.charAt(anim_index[i]);
-      }
-      $button[_modifier](current_text);
-      setTimeout(function(){ moo();},60);
-    }
-
-    moo();
-
-    return {
-      done: function(){
-        completed = true;
-        $button[_modifier](existing_text);
-        $button.removeClass('dtbaker_loading_button_current');
-        $button.attr('disabled',false);
-      }
-    }
 
   }
 

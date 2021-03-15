@@ -28,8 +28,8 @@ update_option( 'stylepress_setup_wizard_complete', time() );
 	if you are happy with this theme. <br/>Follow <a href="https://twitter.com/dtbaker" target="_blank">@dtbaker</a>
 	on Twitter to see updates. Thanks! </p>
 
-<div class="envato-setup-next-steps">
-	<div class="envato-setup-next-steps-first">
+<div class="stylepress-next-steps">
+	<div class="stylepress-next-steps-first">
 		<h2><?php esc_html_e( 'Next Steps' ); ?></h2>
 		<ul>
 			<li class="setup-product"><a class="button button-primary button-large"
@@ -41,7 +41,7 @@ update_option( 'stylepress_setup_wizard_complete', time() );
 			</li>
 		</ul>
 	</div>
-	<div class="envato-setup-next-steps-last">
+	<div class="stylepress-next-steps-last">
 		<h2><?php esc_html_e( 'More Resources' ); ?></h2>
 		<ul>
 			<li class="documentation"><a href="http://dtbaker.net/envato/documentation/"
