@@ -1,6 +1,6 @@
 <?php
 
-namespace StylePress;
+namespace StylePress\Wizard;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
@@ -41,13 +41,4 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 		<?php } ?>
 		</tbody>
 	</table>
-
-	<p class="stylepress-actions step">
-		<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-		   class="button-primary button button-large button-next"
-		   data-callback="install_content"><?php esc_html_e( 'Continue' ); ?></a>
-		<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-		   class="button button-large button-next"><?php esc_html_e( 'Skip this step' ); ?></a>
-		<?php wp_nonce_field( 'stylepress' ); ?>
-	</p>
 </form>

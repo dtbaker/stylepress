@@ -1,6 +1,6 @@
 <?php
 
-namespace StylePress;
+namespace StylePress\Wizard;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
@@ -8,7 +8,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 <h1><?php esc_html_e( 'Required Plugins' ); ?></h1>
 <form method="post">
 	<?php
-	$plugins = $this->get_plugins();
+	$plugins = array();
 	if ( count( $plugins['all'] ) ) {
 		?>
 		<p><?php esc_html_e( 'Your website needs a few essential plugins. The following plugins will be installed or updated:' ); ?></p>
@@ -40,13 +40,4 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
 	} ?>
 
 	<p><?php esc_html_e( 'You can add and remove plugins later on from within WordPress.' ); ?></p>
-
-	<p class="stylepress-actions step">
-		<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-		   class="button-primary button button-large button-next"
-		   data-callback="install_plugins"><?php esc_html_e( 'Continue' ); ?></a>
-		<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-		   class="button button-large button-next"><?php esc_html_e( 'Skip this step' ); ?></a>
-		<?php wp_nonce_field( 'stylepress' ); ?>
-	</p>
 </form>

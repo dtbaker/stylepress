@@ -1,65 +1,65 @@
-import { api } from "./api"
-import { error } from "./error"
+import { api } from './api';
+import { error } from './error';
 
 class Config {
   constructor() {
-    this.config = {}
-    this.stateData = {}
+    this.config = {};
+    this.stateData = {};
   }
 
-  set = (config) => {
-    this.config = Object.assign({}, this.config, config)
+  set = ( config ) => {
+    this.config = Object.assign({}, this.config, config );
   }
 
-  persist = (key, value) => {
-    return new Promise((resolve, reject) => {
+  persist = ( key, value ) => {
+    return new Promise( ( resolve, reject ) => {
       api
         .post(
-          "options/set",
+          'options/set',
           {
             key,
-            value,
+            value
           },
           { abortExisting: true, ignoreErrors: true },
         )
         .then(
-          (json) => {
-            if (json) {
-              if (typeof json.config !== "undefined") {
-                this.set(json.config)
+          ( json ) => {
+            if ( json ) {
+              if ( 'undefined' !== typeof json.config ) {
+                this.set( json.config );
               }
-              resolve(json)
+              resolve( json );
             } else {
-              reject()
+              reject();
             }
           },
-          (err) => {
-            reject(err)
+          ( err ) => {
+            reject( err );
           },
         )
-        .finally(() => {})
-    })
+        .finally( () => {});
+    });
   }
 
-  get = (key) => {
-    return typeof this.config[key] !== "undefined" ? this.config[key] : false
+  get = ( key ) => {
+    return 'undefined' !== typeof this.config[key] ? this.config[key] : false;
   }
 
-  state = (key, value) => {
-    if (typeof value !== "undefined") {
-      this.stateData[key] = value
-      return value
+  state = ( key, value ) => {
+    if ( 'undefined' !== typeof value ) {
+      this.stateData[key] = value;
+      return value;
     }
-    return typeof this.stateData[key] !== "undefined" ? this.stateData[key] : false
+    return 'undefined' !== typeof this.stateData[key] ? this.stateData[key] : false;
   }
 
-  shouldWeShowPremiumContent = (searchQuery) => {
-    return (searchQuery.premium && searchQuery.premium === `show`) || !searchQuery.premium
+  shouldWeShowPremiumContent = ( searchQuery ) => {
+    return ( searchQuery.premium && 'show' === searchQuery.premium ) || ! searchQuery.premium;
   }
 
-  shouldWeShowElementorProContent = (searchQuery) => {
-    return (searchQuery.elementor && searchQuery.elementor === `pro`) || !searchQuery.elementor
+  shouldWeShowElementorProContent = ( searchQuery ) => {
+    return ( searchQuery.elementor && 'pro' === searchQuery.elementor ) || ! searchQuery.elementor;
   }
 }
 
-export const config = new Config()
+export const config = new Config();

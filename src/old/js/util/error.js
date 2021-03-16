@@ -1,23 +1,23 @@
-import { modal } from "./modal"
+import { modal } from './modal';
 
 class Error {
   constructor() {}
 
   pageLoaded = () => {}
 
-  displayError = (title, message, debug, reactivate, tryAgain) => {
-    if (reactivate !== false) {
-      reactivate = true
+  displayError = ( title, message, debug, reactivate, tryAgain ) => {
+    if ( false !== reactivate ) {
+      reactivate = true;
     }
-    modal.closeModal()
+    modal.closeModal();
     modal.openModal({
       title,
       message,
       debug,
       tryAgain,
-      reactivate,
-    })
+      reactivate
+    });
   }
 }
 
-export const error = new Error()
+export const error = new Error();

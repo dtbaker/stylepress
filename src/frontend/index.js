@@ -1,2 +1,2 @@
 
-import './stimulus'
+import './stimulus';

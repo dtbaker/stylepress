@@ -29,9 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-// dev stuff by stylepress:
-//set_time_limit(2);
-
 /* Set plugin version constant. */
 define( 'STYLEPRESS_VERSION', '2.0.0' );
 
@@ -49,15 +46,12 @@ define( 'STYLEPRESS_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 /* Set the constant path to the plugin directory URI. */
 define( 'STYLEPRESS_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
-
 add_action( 'plugins_loaded', 'stylepress_load_plugin_textdomain' );
 
 if ( ! version_compare( PHP_VERSION, '5.4', '>=' ) ) {
 	add_action( 'admin_notices', 'stylepress_fail_php_version' );
 } else {
-
-	require_once STYLEPRESS_PATH . 'inc/bootstrap.php';
-
+	require_once STYLEPRESS_PATH . 'components/bootstrap.php';
 }
 
 /**

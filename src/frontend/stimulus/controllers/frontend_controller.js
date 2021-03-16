@@ -1,7 +1,7 @@
 import { Controller } from 'stimulus';
 
 export default class extends Controller {
-  connect(){
-    console.log('frontend hello')
+  connect() {
+    console.log( 'frontend hello' );
   }
 }

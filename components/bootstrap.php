@@ -33,13 +33,20 @@ spl_autoload_register(
 	}
 );
 
-
-Plugin::get_instance();
-Elementor\Integration::get_instance();
-Styles::get_instance();
-Frontend::get_instance();
-if ( is_admin() || wp_doing_ajax() ) {
-	Backend::get_instance();
-	Wizard::get_instance();
-	Remote_Styles::get_instance();
+if ( is_admin() ) {
+	Backend\Ui::get_instance();
 }
+
+if ( wp_doing_ajax() ) {
+	Wizard\Ajax::get_instance();
+}
+
+//Plugin::get_instance();
+//Elementor\Integration::get_instance();
+//Styles::get_instance();
+//Frontend::get_instance();
+//if ( is_admin() || wp_doing_ajax() ) {
+//	Backend::get_instance();
+//	Wizard::get_instance();
+//	Remote_Styles::get_instance();
+//}

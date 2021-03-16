@@ -4,11 +4,11 @@
  * @package stylepress
  */
 
-import '../../scss/frontend-edit.scss'
+import '../../scss/frontend-edit.scss';
 
-(function ($) {
+( function( $ ) {
 
-  window.parent.elementor.on('elementor:init', function () {
+  window.parent.elementor.on( 'elementor:init', function() {
   });
 
-})(jQuery);
+}( jQuery ) );

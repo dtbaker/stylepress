@@ -1,20 +1,21 @@
-import $ from "jquery"
-import React, { Component } from "react"
-import ReactDOM from "react-dom"
-import styles from "./modal.module.css"
-import { config } from "./config"
+import $ from 'jquery';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import styles from './modal.module.css';
+import { config } from './config';
 
 class ModalPopup extends Component {
-  constructor(props) {
-    super(props)
+  constructor( props ) {
+    super( props );
     this.state = {
       showDebugDetails: false,
       modalOpen: false,
-      modalData: {},
-    }
+      modalData: {}
+    };
   }
 
   componentDidMount() {
+
     /* $("body").on("click", (event) => {
       const { modalOpen } = this.state
       if (modalOpen && !$(event.target).parents(`.${styles.inner}`).length) {
@@ -23,30 +24,30 @@ class ModalPopup extends Component {
     }) */
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { modalData, modalOpen } = this.state
-    if (modalOpen) {
-      if (typeof modalData.message !== "string") {
-        this.modalBody && this.modalBody.appendChild(modalData.message)
+  componentDidUpdate( prevProps, prevState, snapshot ) {
+    const { modalData, modalOpen } = this.state;
+    if ( modalOpen ) {
+      if ( 'string' !== typeof modalData.message ) {
+        this.modalBody && this.modalBody.appendChild( modalData.message );
       }
     }
   }
 
   closeModal = () => {
-    this.setState({ modalOpen: false })
-    $("body").removeClass("envato-elements--modal-open")
+    this.setState({ modalOpen: false });
+    $( 'body' ).removeClass( 'envato-elements--modal-open' );
   }
 
-  openModal = (templateData) => {
+  openModal = ( templateData ) => {
     this.setState({
       modalOpen: true,
-      modalData: templateData,
-    })
-    $("body").addClass("envato-elements--modal-open")
+      modalData: templateData
+    });
+    $( 'body' ).addClass( 'envato-elements--modal-open' );
   }
 
   render() {
-    const { modalData, modalOpen, showDebugDetails } = this.state
+    const { modalData, modalOpen, showDebugDetails } = this.state;
     return (
       <div data-elements-modal="yes" className={`${styles.wrap} ${modalOpen ? styles.open : styles.closed}`}>
         {modalOpen ? (
@@ -58,103 +59,103 @@ class ModalPopup extends Component {
                   Close
                 </button>
               </div>
-              <div className={styles.body} ref={(modalBody) => (this.modalBody = modalBody)}>
-                {typeof modalData.message !== "object" ? modalData.message : ""}
+              <div className={styles.body} ref={( modalBody ) => ( this.modalBody = modalBody )}>
+                {'object' !== typeof modalData.message ? modalData.message : ''}
               </div>
-              {typeof modalData.tryAgain === "function" || typeof modalData.debug !== "undefined" ? (
+              {'function' === typeof modalData.tryAgain || 'undefined' !== typeof modalData.debug ? (
                 <div className={styles.debugActions}>
-                  {typeof modalData.tryAgain === "function" ? (
+                  {'function' === typeof modalData.tryAgain ? (
                     <button
                       className={styles.buttonRetry}
                       onClick={() => {
-                        this.closeModal()
-                        modalData.tryAgain()
+                        this.closeModal();
+                        modalData.tryAgain();
                       }}>
                       Try Again
                     </button>
                   ) : null}
                   <button
                     className={styles.buttonRefresh}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      window.location.reload()
-                      return false
+                    onClick={( e ) => {
+                      e.preventDefault();
+                      window.location.reload();
+                      return false;
                     }}>
                     Refresh Page
                   </button>
-                  {typeof modalData.debug !== "undefined" ? (
+                  {'undefined' !== typeof modalData.debug ? (
                     <button
                       className={styles.buttonDebug}
                       onClick={() => {
-                        this.setState({ showDebugDetails: !showDebugDetails })
+                        this.setState({ showDebugDetails: ! showDebugDetails });
                       }}>
-                      {showDebugDetails ? `Hide` : `Show`} Debug Details
+                      {showDebugDetails ? 'Hide' : 'Show'} Debug Details
                     </button>
                   ) : null}
-                  <a href={config.get("license_deactivate")} className={styles.buttonRefresh}>
+                  <a href={config.get( 'license_deactivate' )} className={styles.buttonRefresh}>
                     Reset Plugin Settings
                   </a>
                 </div>
               ) : null}
-              {showDebugDetails && typeof modalData.debug !== "undefined" ? (
+              {showDebugDetails && 'undefined' !== typeof modalData.debug ? (
                 <div className={styles.debug}>
                   <textarea
                     className={styles.debugText}
-                    onClick={(e) => {
-                      e.target.focus()
-                      e.target.select()
+                    onClick={( e ) => {
+                      e.target.focus();
+                      e.target.select();
                     }}
                     defaultValue={
-                      modalData.debug && modalData.debug.debug
-                        ? modalData.debug.debug
-                        : typeof modalData.debug === "object"
-                        ? JSON.stringify(modalData.debug)
-                        : modalData.debug
+                      modalData.debug && modalData.debug.debug ?
+                        modalData.debug.debug :
+                        'object' === typeof modalData.debug ?
+                        JSON.stringify( modalData.debug ) :
+                        modalData.debug
                     }
                   />
                 </div>
               ) : (
-                ""
+                ''
               )}
               <div className={styles.footer}>
                 {/* <span>[put email address here]</span> */}
-                {modalData.reactivate ? <span>[put a link to reactivate plugin here]</span> : ""}
+                {modalData.reactivate ? <span>[put a link to reactivate plugin here]</span> : ''}
               </div>
             </div>
           </div>
         ) : (
-          ""
+          ''
         )}
       </div>
-    )
+    );
   }
 }
 
 class Modal {
   constructor() {
-    this.$modalDom = null
+    this.$modalDom = null;
   }
 
   init = () => {
-    this.$modalDom = document.createElement("div")
-    document.body.appendChild(this.$modalDom)
+    this.$modalDom = document.createElement( 'div' );
+    document.body.appendChild( this.$modalDom );
     ReactDOM.render(
       <ModalPopup
-        ref={(modalComponent) => {
-          this.modalComponent = modalComponent
+        ref={( modalComponent ) => {
+          this.modalComponent = modalComponent;
         }}
       />,
       this.$modalDom,
-    )
+    );
   }
 
   closeModal = () => {
-    this.modalComponent.closeModal()
+    this.modalComponent.closeModal();
   }
 
-  openModal = (templateData) => {
-    this.modalComponent.openModal(templateData)
+  openModal = ( templateData ) => {
+    this.modalComponent.openModal( templateData );
   }
 }
 
-export const modal = new Modal()
+export const modal = new Modal();

@@ -17,6 +17,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@wordpress/scripts": "^3.4.0",
     "css-loader": "^3.2.0",
+    "eslint-config-wordpress": "^2.0.0",
     "file-loader": "^4.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",

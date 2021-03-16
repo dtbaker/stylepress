@@ -1,6 +1,6 @@
 <?php
 
-namespace StylePress;
+namespace StylePress\Wizard;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
