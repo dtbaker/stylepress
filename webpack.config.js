@@ -34,12 +34,14 @@ module.exports = {
   },
   resolve: {
     alias: {
+      scss: path.resolve( __dirname, 'src/scss/' ),
       lib: path.resolve( __dirname, 'src/lib/' )
     }
   },
   entry: {
     './assets/wizard': path.resolve( __dirname, 'components/wizard/wizard.js' ),
-    './assets/backend': path.resolve( __dirname, 'src/backend/index.js' ),
+    './assets/layout': path.resolve( __dirname, 'components/layout/layout.js' ),
+    './assets/styles': path.resolve( __dirname, 'components/styles/styles.js' ),
     './assets/frontend': path.resolve( __dirname, 'src/frontend/index.js' )
   },
 

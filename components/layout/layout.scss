@@ -1,28 +1,28 @@
 
-div.stylepress__defaults--basic {
+div.stylepress__layout--basic {
   display: block;
 }
 
-div.stylepress__defaults--advanced {
+div.stylepress__layout--advanced {
   display: none;
 }
 
-#stylepress_advanced:checked ~ div.stylepress__defaults--basic {
+#stylepress_advanced:checked ~ div.stylepress__layout--basic {
   display: none;
 }
 
-#stylepress_advanced:checked ~ div.stylepress__defaults--advanced {
+#stylepress_advanced:checked ~ div.stylepress__layout--advanced {
   display: block;
 }
 
-.stylepress__defaults-page{
+.stylepress__layout-page{
   width: 500px;
   border: 3px solid #ccc;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   background: #FFF;
 }
-.stylepress__defaults-pagesection{
+.stylepress__layout-pagesection{
   border-bottom: 1px solid #CCC;
   padding: 20px 15px;
   position:relative;

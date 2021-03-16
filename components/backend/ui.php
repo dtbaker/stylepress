@@ -9,6 +9,8 @@
 
 namespace StylePress\Backend;
 
+use StylePress\Styles\Cpt;
+
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 /**
@@ -38,8 +40,8 @@ class Ui extends \StylePress\Core\Base {
 		$top_level_slug = \StylePress\Wizard\Wizard::get_instance()->add_top_level_menu();
 
 		if($top_level_slug) {
-			Layout::get_instance()->add_submenu($top_level_slug);
-			Styles::get_instance()->add_submenu($top_level_slug);
+			\StylePress\Layout\Layout::get_instance()->add_submenu($top_level_slug);
+			\StylePress\Styles\Styles::get_instance()->add_submenu($top_level_slug);
 		}
 	}
 
@@ -52,7 +54,7 @@ class Ui extends \StylePress\Core\Base {
 		if(\StylePress\Core\Permissions::get_instance()->can_edit_post_meta_boxes()) {
 			$post_types = get_post_types();
 			foreach ( $post_types as $post_type ) {
-				if ( ! in_array( $post_type, array( Styles::CPT, 'elementor_library' ), true ) ) {
+				if ( ! in_array( $post_type, array( Cpt::CPT, 'elementor_library' ), true ) ) {
 					add_meta_box(
 						'stylepress_style_metabox',
 						__( 'StylePress', 'stylepress' ),

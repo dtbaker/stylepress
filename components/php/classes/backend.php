@@ -9,6 +9,8 @@
 
 namespace StylePress;
 
+use StylePress\Styles\Cpt;
+
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 /**
@@ -218,7 +220,7 @@ class Backend extends Base {
 		}
 
 		$post_id = wp_insert_post( [
-			'post_type'   => Styles::CPT,
+			'post_type'   => Cpt::CPT,
 			'post_status' => 'publish',
 			'post_title'  => $new_style_name,
 			'post_parent' => $new_style_parent,

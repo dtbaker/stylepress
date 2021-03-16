@@ -10,6 +10,8 @@
 
 namespace StylePress;
 
+use StylePress\Frontend\Render;
+
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 spl_autoload_register(
@@ -33,12 +35,18 @@ spl_autoload_register(
 	}
 );
 
-if ( is_admin() ) {
-	Backend\Ui::get_instance();
-}
+// Needed for the CPT registration:
+Styles\Cpt::get_instance();
 
-if ( wp_doing_ajax() ) {
+if ( is_admin() ) {
+	// Adds the menu items to the nav area:
+	Backend\Ui::get_instance();
+}else if ( wp_doing_ajax() ) {
+	// Registers our ajax callbacks
 	Wizard\Ajax::get_instance();
+}else{
+	// Frontend requests, load the template modification classes
+	Render::get_instance();
 }
 
 //Plugin::get_instance();

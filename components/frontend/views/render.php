@@ -5,13 +5,16 @@
  * @package stylepress
  */
 
-namespace StylePress;
+namespace StylePress\Frontend;
+
+use StylePress\Logging\Debug;
+use StylePress\Styles\Data;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
 do_action( 'get_header', 'stylepress' );
 
-$categories = Styles::get_instance()->get_categories();
+$categories = Data::get_instance()->get_categories();
 
 $elementor_kit_template = false;
 
@@ -52,10 +55,10 @@ $elementor_kit_template = false;
 <body <?php body_class(); ?>>
 <?php
 if ( $elementor_kit_template ) {
-	Plugin::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
+	Debug::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
 }
-Plugin::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
-Plugin::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset( $GLOBALS['stylepress_render']['queried_object']->ID ) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
+Debug::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
+Debug::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset( $GLOBALS['stylepress_render']['queried_object']->ID ) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
 
 do_action( 'stylepress/before-render' );
 if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
@@ -67,12 +70,12 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
 				if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
 					$template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
-					Plugin::get_instance()->debug_message( 'Rendering template ' . esc_html( $template->post_title ) . ' (#' . $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] . ') for section ' . $category['slug'] );
+					Debug::get_instance()->debug_message( 'Rendering template ' . esc_html( $template->post_title ) . ' (#' . $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] . ') for section ' . $category['slug'] );
 				} else {
-					Plugin::get_instance()->debug_message( 'Blank template chosen for section ' . $category['slug'] );
+					Debug::get_instance()->debug_message( 'Blank template chosen for section ' . $category['slug'] );
 				}
 			} else {
-				Plugin::get_instance()->debug_message( 'No template chosen for section ' . $category['slug'] );
+				Debug::get_instance()->debug_message( 'No template chosen for section ' . $category['slug'] );
 			}
 		}
 		if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
@@ -85,7 +88,7 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 			// todo: we may with to turn off this defualt behaviour for pages that don't want the default content displaying
 			// e.g. we got the first blog post content showing on archive page that had a stylepress-loop widget.
 			// this might be an issue for shops too
-			Plugin::get_instance()->debug_message( 'Rendering default inner_content() from render.php' );
+			Debug::get_instance()->debug_message( 'Rendering default inner_content() from render.php' );
 			if ( have_posts() ) {
 				the_post();
 				the_content();

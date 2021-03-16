@@ -21,7 +21,7 @@ class Stylepress_Document extends Library_Document {
 
 		$properties['support_kit'] = true;
 		$properties['cpt']         = [
-			\StylePress\Styles::CPT
+			\StylePress\Styles\Cpt::CPT
 		];
 
 		return $properties;

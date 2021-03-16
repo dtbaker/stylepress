@@ -5,18 +5,17 @@
  * @package stylepress
  */
 
-namespace StylePress;
+namespace StylePress\Styles;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-//$page_types = Settings::get_instance()->get_all_page_types();
-$categories      = Styles::get_instance()->get_categories();
+$categories      = Data::get_instance()->get_categories();
 $parent_style_id = isset( $_GET['style_id'] ) ? (int) $_GET['style_id'] : 0;
 $parent_style    = false;
 if ( $parent_style_id ) {
 	$parent_style = get_post( $parent_style_id );
 }
-if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
+if ( ! $parent_style || $parent_style->post_type !== Cpt::CPT ) {
 	wp_die( 'Invalid parent style' );
 }
 ?>
@@ -41,13 +40,13 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 			</h3>
 			<div class="stylepress__category-content">
 				<?php
-				$designs = Styles::get_instance()->get_all_styles( $category['slug'], false, $parent_style_id );
+				$designs = Data::get_instance()->get_all_styles( $category['slug'], false, $parent_style_id );
 				//						$designs[] = 'asdf';
 				foreach ( $designs as $design_id => $design ) {
 					?>
 					<div class="stylepress__style">
 						<div class="stylepress__style-inner">
-							<a href="<?php echo esc_url( Styles::get_instance()->get_design_edit_url( $design_id ) ); ?>"
+							<a href="<?php echo esc_url( Data::get_instance()->get_design_edit_url( $design_id ) ); ?>"
 							   class="stylepress__style-thumb"
 							   style="background-image: url(<?php if ( has_post_thumbnail( $design_id ) ) {
 								   echo esc_url( get_the_post_thumbnail_url( $design_id, 'full' ) );
@@ -97,7 +96,7 @@ if ( ! $parent_style || $parent_style->post_type !== Styles::CPT ) {
 
 							<div class="stylepress__style-action">
 								<a class="button button-primary"
-								   href="<?php echo esc_url( Styles::get_instance()->get_design_edit_url( $design_id ) ); ?>">
+								   href="<?php echo esc_url( Data::get_instance()->get_design_edit_url( $design_id ) ); ?>">
 									<?php esc_html_e( 'Edit Style', 'stylepress' ); ?>
 								</a>
 							</div>

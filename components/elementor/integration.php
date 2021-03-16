@@ -14,7 +14,7 @@ defined( 'STYLEPRESS_VERSION' ) || exit;
  *
  * Class Plugin
  */
-class Integration extends \StylePress\Base {
+class Integration extends \StylePress\Core\Base {
 
 	/**
 	 * Initializes the plugin and sets all required filters.
@@ -45,10 +45,10 @@ class Integration extends \StylePress\Base {
 	}
 
 	public function include_our_styles_in_elementor_popup( $option_value ) {
-		require_once __DIR__ . '/elementor/source-stylepress.php';
+		require_once __DIR__ . '/source-stylepress.php';
 		\Elementor\Plugin::$instance->templates_manager->register_source( '\Elementor\TemplateLibrary\Source_StylePress' );
 
-		require_once __DIR__ . '/elementor/stylepress-document.php';
+		require_once __DIR__ . '/stylepress-document.php';
 		\Elementor\Plugin::$instance->documents
 			->register_document_type( 'stylepress', \Elementor\Modules\Library\Documents\Stylepress_Document::get_class_full_name() );
 	}

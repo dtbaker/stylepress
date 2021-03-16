@@ -5,13 +5,13 @@
  * @package stylepress
  */
 
-namespace StylePress;
+namespace StylePress\Backend;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-$default_styles = Styles::get_instance()->get_default_styles();
-$page_types     = Settings::get_instance()->get_all_page_types();
-$categories     = Styles::get_instance()->get_categories();
+$default_styles = \StylePress\Styles\Data::get_instance()->get_default_styles();
+$categories     = \StylePress\Styles\Data::get_instance()->get_categories();
+$page_types     = \StylePress\Core\Settings::get_instance()->get_all_page_types();
 
 ?>
 
@@ -28,17 +28,17 @@ $categories     = Styles::get_instance()->get_categories();
 $edit_links = $manage_links = [];
 ?>
 <form method="POST" action="<?php echo admin_url( 'admin.php' ); ?>">
-	<input type="hidden" name="action" value="stylepress_save"/>
-	<?php wp_nonce_field( 'stylepress_save_options', 'stylepress_save_options' ); ?>
+	<input type="hidden" name="action" value="stylepress_layout_save"/>
+	<?php wp_nonce_field( 'stylepress_layout_save_options', 'stylepress_layout_save_options' ); ?>
 
 	<label for="stylepress_advanced"><?php esc_html_e( 'Advanced View', 'stylepress' ); ?></label>
 	<input type="checkbox" name="stylepress_advanced" id="stylepress_advanced"
-	       value="1"<?php checked( 1, Settings::get_instance()->get( 'stylepress_advanced' ) ); ?>>
+	       value="1"<?php checked( 1, \StylePress\Core\Settings::get_instance()->get( 'stylepress_advanced' ) ); ?>>
 
-	<div class="stylepress__defaults stylepress__defaults--basic">
+	<div class="stylepress__layout stylepress__layout--basic">
 
-		<div class="stylepress__defaults-page">
-			<div class="stylepress__defaults-pagesection stylepress-chrome">
+		<div class="stylepress__layout-page">
+			<div class="stylepress__layout-pagesection stylepress-chrome">
 				<div class="stylepress-chrome-row">
 					<div class="stylepress-chrome-column stylepress-chrome-left">
 						<span class="stylepress-chrome-dot" style="background:#ED594A;"></span>
@@ -63,7 +63,7 @@ $edit_links = $manage_links = [];
 			foreach ( $categories as $category ) {
 				if ( $category['global_selector'] ) {
 					?>
-					<div class="stylepress__defaults-pagesection">
+					<div class="stylepress__layout-pagesection">
 						<label
 							for="default-basic-<?php echo esc_attr( $category['slug'] ); ?>"><?php echo esc_html( $category['title'] ); ?>
 						</label>
@@ -72,28 +72,20 @@ $edit_links = $manage_links = [];
 							name="default_style_simple[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
 							<option value=""> - choose a style -</option>
 							<?php
-							$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
+							$styles = \StylePress\Styles\Data::get_instance()->get_all_styles( $category['slug'], true );
 							foreach ( $styles as $design_id => $design ) {
-								if ( $design_id > 0 ) {
-									$edit_links[ $design_id ] = Styles::get_instance()->get_design_edit_url( $design_id );
-								}
 								?>
 								<option
 									value="<?php echo (int) $design_id; ?>"
-									<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>>
+									data-edit-link="<?php echo $design_id > 0 ? esc_attr(\StylePress\Styles\Data::get_instance()->get_design_edit_url( $design_id )) : '';?>"
+									<?php selected( $design_id, isset( $default_styles[ $page_type ] ) && ! empty( $default_styles[ $page_type ][ $category['slug'] ] ) ? $default_styles[ $page_type ][ $category['slug'] ] : false ); ?>
+								>
 									<?php echo esc_attr( $design ); ?>
 								</option>
 								<?php
 							} ?>
 						</select>
 						<span class="stylepress__default-link js-stylepress-link"></span>
-						<?php if ( defined( 'STYLEPRESS_ALLOW_CREATION' ) && STYLEPRESS_ALLOW_CREATION ) { ?>
-							<span class="stylepress__manage-link">
-							 / <a href="<?php echo esc_url( admin_url( 'admin.php?page=' . Backend::STYLES_PAGE_SLUG ) ); ?>">
-								Add New
-							</a>
-						</span>
-						<?php } ?>
 					</div>
 					<?php
 				}
@@ -105,7 +97,7 @@ $edit_links = $manage_links = [];
 		       type="submit" value="<?php esc_attr_e( 'Save Settings', 'stylepress' ); ?>">
 
 	</div>
-	<div class="stylepress__defaults stylepress__defaults--advanced">
+	<div class="stylepress__layout stylepress__layout--advanced">
 
 		<table class="widefat striped">
 			<thead>
@@ -133,7 +125,7 @@ $edit_links = $manage_links = [];
 									name="default_style[<?php echo esc_attr( $page_type ); ?>][<?php echo esc_attr( $category['slug'] ); ?>]">
 									<option value="">Choose <?php echo esc_attr( $category['title'] ); ?> </option>
 									<?php
-									$styles = Styles::get_instance()->get_all_styles( $category['slug'], true );
+									$styles = \StylePress\Styles\Data::get_instance()->get_all_styles( $category['slug'], true );
 									foreach ( $styles as $design_id => $design ) { ?>
 										<option
 											value="<?php echo (int) $design_id; ?>"
@@ -156,23 +148,4 @@ $edit_links = $manage_links = [];
 		       type="submit" value="<?php esc_attr_e( 'Save Settings', 'stylepress' ); ?>">
 
 	</div>
-
-	<script type="text/javascript">
-    jQuery(function ($) {
-      var edit_links = <?php echo json_encode( $edit_links );?>;
-      $('.js-stylepress-select').change(function () {
-        var design_id = $(this).val();
-        var $edit = $(this).parent().find('.js-stylepress-link');
-        if ($edit.length > 0) {
-          $edit.html('');
-          if (design_id !== '') {
-            if (typeof edit_links[design_id] !== 'undefined') {
-              $edit.html('<a href="' + edit_links[design_id] + '" target="_blank">Edit</a>');
-            }
-          }
-        }
-      }).change();
-    });
-	</script>
-
 </form>
