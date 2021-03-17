@@ -63,7 +63,7 @@ class Render extends \StylePress\Core\Base {
 	 */
 	public function get_current_page_type() {
 		global $wp_query;
-		//print_r($wp_query);
+		//		print_r($wp_query->query_vars);
 		if ( is_search() ) {
 			return 'search';
 		} else if ( is_404() ) {
@@ -74,12 +74,9 @@ class Render extends \StylePress\Core\Base {
 			return 'product_category';
 		} else if ( is_category() ) {
 			return 'category';
-		} else if ( isset( $wp_query->query_vars ) && ! empty( $wp_query->query_vars['post_type'] ) ) {
-			if ( is_array( $wp_query->query_vars['post_type'] ) ) {
-				$post_type = $wp_query->query_vars['post_type'][0];
-			} else {
-				$post_type = $wp_query->query_vars['post_type'];
-			}
+		} else if ( isset( $wp_query->query_vars ) && ! empty( $wp_query->query_vars['post_type'] ) && ! is_array( $wp_query->query_vars['post_type'] ) ) {
+			// Elementor sets an array as post_type since the introduction of landing pages.
+			$post_type = $wp_query->query_vars['post_type'];
 
 			return $post_type . ( is_singular() ? '' : 's' );
 		} else if ( ! empty( $wp_query->query_vars['taxonomy'] ) ) {
@@ -138,10 +135,10 @@ class Render extends \StylePress\Core\Base {
 			// If stylepress has been disabled for this particular post then we just use the normal template include.
 			// Not sure how to do this for category pages. We'll have to add a taxonomy settings area to each tax.
 			// It can be disabled because a custom template is chosen, or via the disabled flag in advanced layouts.
-			if(!empty($these_styles['_disabled'])){
-				Debug::get_instance()->debug_message( 'Skipping stylepress because post type is flagged as disabled in layout settings.');
+			if ( ! empty( $these_styles['_disabled'] ) ) {
+				Debug::get_instance()->debug_message( 'Skipping stylepress because post type is flagged as disabled in layout settings.' );
 				$GLOBALS['stylepress_render']['template'] = false;
-			}else if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
+			} else if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
 				$enabled = Data::get_instance()->is_stylpress_enabled( $post );
 				if ( ! $enabled['enabled'] ) {
 					Debug::get_instance()->debug_message( 'Skipping stylepress template because ' . $enabled['reason'] );
@@ -184,7 +181,7 @@ class Render extends \StylePress\Core\Base {
 		);
 		wp_enqueue_script( 'stylepress-js' );
 
-		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+		if ( \StylePress\Elementor\Integration::is_in_edit_mode() ) {
 			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
 			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.css', false, STYLEPRESS_VERSION );
 			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.js', false, STYLEPRESS_VERSION, true );

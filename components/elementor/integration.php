@@ -42,6 +42,10 @@ class Integration extends \StylePress\Core\Base {
 		return \Elementor\Plugin::$instance->documents->get( $design_id )->get_edit_url();
 	}
 
+	public static function is_in_edit_mode(){
+		return self::is_elementor_active() && (\Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode());
+	}
+
 	public function dont_allow_new( $types ) {
 		unset( $types['stylepress'] );
 
