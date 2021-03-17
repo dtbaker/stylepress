@@ -7,20 +7,24 @@
 
 namespace StylePress;
 
+use StylePress\Styles\Data;
+
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-$categories = Styles::get_instance()->get_categories();
+$categories = Data::get_instance()->get_categories();
 $post = get_post();
 $is_inner_template = false;
 $current_page_category = false;
 $post_categories = get_the_terms( $post->ID, STYLEPRESS_SLUG . '-cat' );
 
-foreach ( $categories as $category ) {
-	foreach ( $post_categories as $post_category ) {
-		if ( $post_category->slug === $category['slug'] ) {
-			$current_page_category = $category;
-			if ( ! empty( $category['inner'] ) ) {
-				$is_inner_template = true;
+if($post_categories) {
+	foreach ( $categories as $category ) {
+		foreach ( $post_categories as $post_category ) {
+			if ( $post_category->slug === $category['slug'] ) {
+				$current_page_category = $category;
+				if ( ! empty( $category['inner'] ) ) {
+					$is_inner_template = true;
+				}
 			}
 		}
 	}
@@ -35,26 +39,26 @@ foreach ( $categories as $category ) {
 	<?php
 
 	// We override the Elementor default active kit here based on the current page selection:
-	$elementor_template_type = get_post_meta( $post->ID, '_elementor_template_type', true );
-	if ( $elementor_template_type === 'kit' ) {
-		add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $post ) {
-			if ( $post && $post->ID ) {
-				$kit_id = $post->ID;
-			}
-
-			return $kit_id;
-		} );
-	} else {
-		// we're editing another type of non kit page
-		add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $current_page_category ) {
-			$default_styles = Styles::get_instance()->get_default_styles();
-			if ( $default_styles && ! empty( $default_styles['_global'] ) && ! empty( $default_styles['_global']['theme_styles'] ) ) {
-				$kit_id = $default_styles['_global']['theme_styles'];
-			}
-
-			return $kit_id;
-		} );
-	}
+//	$elementor_template_type = get_post_meta( $post->ID, '_elementor_template_type', true );
+//	if ( $elementor_template_type === 'kit' ) {
+//		add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $post ) {
+//			if ( $post && $post->ID ) {
+//				$kit_id = $post->ID;
+//			}
+//
+//			return $kit_id;
+//		} );
+//	} else {
+//		// we're editing another type of non kit page
+//		add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $current_page_category ) {
+//			$default_styles = Styles::get_instance()->get_default_styles();
+//			if ( $default_styles && ! empty( $default_styles['_global'] ) && ! empty( $default_styles['_global']['theme_styles'] ) ) {
+//				$kit_id = $default_styles['_global']['theme_styles'];
+//			}
+//
+//			return $kit_id;
+//		} );
+//	}
 	wp_head(); ?>
 </head>
 <body <?php body_class( 'stylepress-editor' ); ?>>

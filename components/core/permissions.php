@@ -21,8 +21,8 @@ class Permissions extends Base {
 		return current_user_can('manage_options');
 	}
 
-	public function can_edit_post_meta_boxes() {
-		return current_user_can('manage_options');
+	public function can_edit_post_meta_boxes($post = false) {
+		return current_user_can('edit_posts');
 	}
 }
 

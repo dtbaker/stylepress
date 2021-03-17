@@ -9,7 +9,9 @@
 
 namespace StylePress\Backend;
 
+use StylePress\Frontend\Render;
 use StylePress\Styles\Cpt;
+use StylePress\Styles\Data;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
@@ -78,7 +80,13 @@ class Ui extends \StylePress\Core\Base {
 	 */
 	public function meta_box_display( $post ) {
 		if(\StylePress\Core\Permissions::get_instance()->can_edit_post_meta_boxes($post)) {
-			include_once STYLEPRESS_PATH . 'metaboxes/post-meta-box.php';
+			$default_styles = Data::get_instance()->get_default_styles();
+			$page_styles    = Data::get_instance()->get_page_styles( $post->ID );
+			$page_status = Data::get_instance()->is_stylpress_enabled( $post );
+			$categories = Data::get_instance()->get_categories();
+			$page_type = Render::get_instance()->get_current_page_type();
+
+			include_once __DIR__ . '/views/post-meta-box.php';
 		}
 	}
 
@@ -107,11 +115,16 @@ class Ui extends \StylePress\Core\Base {
 		}
 
 		if ( isset( $_POST['stylepress_style'] ) && is_array( $_POST['stylepress_style'] ) ) { // WPCS: sanitization ok. input var okay.
-			$default_styles = [];
-			foreach ( $_POST['stylepress_style'] as $page_type ) {
-				// sanitise each one.
+			$custom_post_styles = [];
+			$categories = Data::get_instance()->get_categories();
+			$default_styles = Data::get_instance()->get_default_styles();
+
+			foreach ( $categories as $category ) {
+				if ( $category['global_selector'] && !empty($_POST['stylepress_style'][$category['slug']])) {
+					$custom_post_styles[$category['slug']] = $_POST['stylepress_style'][$category['slug']];
+				}
 			}
-			update_post_meta( $post_id, 'stylepress_style', sanitize_text_field( $_POST['stylepress_style'] ) ); // WPCS: sanitization ok. input var okay.
+			update_post_meta( $post_id, 'stylepress_style', $custom_post_styles ); // WPCS: sanitization ok. input var okay.
 		}
 	}
 }

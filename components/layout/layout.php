@@ -80,6 +80,10 @@ class Layout extends \StylePress\Core\Base {
 		foreach ( $page_types as $page_type => $page_type_name ) {
 			$defaults_to_save[ $page_type ] = [];
 			if ( isset( $user_provided_defaults[ $page_type ] ) && is_array( $user_provided_defaults[ $page_type ] ) ) {
+				// check if user has disabled this type all together
+				if ( isset( $user_provided_defaults[ $page_type ][ '_disabled' ] ) ) {
+					$defaults_to_save[ $page_type ][ '_disabled' ] = 'disabled';
+				}
 				// store defaults for each page type here.
 				foreach ( $categories as $category ) {
 					if ( isset( $user_provided_defaults[ $page_type ][ $category['slug'] ] ) ) {

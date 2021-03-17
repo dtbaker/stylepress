@@ -74,9 +74,15 @@ class Render extends \StylePress\Core\Base {
 			return 'product_category';
 		} else if ( is_category() ) {
 			return 'category';
-		} else if ( isset( $wp_query->query_vars ) && isset( $wp_query->query_vars['post_type'] ) && $wp_query->query_vars['post_type'] ) {
-			return $wp_query->query_vars['post_type'] . ( is_singular() ? '' : 's' );
-		} else if ( isset( $wp_query->query_vars['taxonomy'] ) && $wp_query->query_vars['taxonomy'] ) {
+		} else if ( isset( $wp_query->query_vars ) && ! empty( $wp_query->query_vars['post_type'] ) ) {
+			if ( is_array( $wp_query->query_vars['post_type'] ) ) {
+				$post_type = $wp_query->query_vars['post_type'][0];
+			} else {
+				$post_type = $wp_query->query_vars['post_type'];
+			}
+
+			return $post_type . ( is_singular() ? '' : 's' );
+		} else if ( ! empty( $wp_query->query_vars['taxonomy'] ) ) {
 			$current_page_id = $wp_query->query_vars['taxonomy'];
 			$value           = get_query_var( $wp_query->query_vars['taxonomy'] );
 			if ( $value ) {
@@ -110,6 +116,7 @@ class Render extends \StylePress\Core\Base {
 		global $post;
 		$GLOBALS['stylepress_render'] = [];
 
+		// TODO: remove integration with Elementor here
 		if ( $post && ! empty( $post->ID ) && 'elementor_library' === $post->post_type ) {
 			$page_templates_module = \Elementor\Plugin::$instance->modules_manager->get_modules( 'page-templates' );
 			$path                  = $page_templates_module->get_template_path( 'elementor_canvas' );
@@ -117,7 +124,9 @@ class Render extends \StylePress\Core\Base {
 				$GLOBALS['stylepress_render']['template'] = $path;
 			}
 		} else if ( $post && ! empty( $post->ID ) && Cpt::CPT === $post->post_type ) {
-			$GLOBALS['stylepress_render']['template'] = STYLEPRESS_PATH . 'templates/editor.php';
+			// User is editing one of our stylepress templates, use a special template so we can show some stuff
+			// Really only useful in Elementor or when previewing the template on the frontend.
+			$GLOBALS['stylepress_render']['template'] = __DIR__ . '/views/editor.php';
 		}
 
 		$default_styles = Data::get_instance()->get_default_styles();
@@ -128,7 +137,11 @@ class Render extends \StylePress\Core\Base {
 		if ( $these_styles ) {
 			// If stylepress has been disabled for this particular post then we just use the normal template include.
 			// Not sure how to do this for category pages. We'll have to add a taxonomy settings area to each tax.
-			if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
+			// It can be disabled because a custom template is chosen, or via the disabled flag in advanced layouts.
+			if(!empty($these_styles['_disabled'])){
+				Debug::get_instance()->debug_message( 'Skipping stylepress because post type is flagged as disabled in layout settings.');
+				$GLOBALS['stylepress_render']['template'] = false;
+			}else if ( $queried_object && $queried_object instanceof \WP_Post && $queried_object->ID ) {
 				$enabled = Data::get_instance()->is_stylpress_enabled( $post );
 				if ( ! $enabled['enabled'] ) {
 					Debug::get_instance()->debug_message( 'Skipping stylepress template because ' . $enabled['reason'] );
@@ -155,7 +168,6 @@ class Render extends \StylePress\Core\Base {
 	}
 
 
-
 	/**
 	 * Register some frontend css files
 	 *
@@ -172,19 +184,25 @@ class Render extends \StylePress\Core\Base {
 		);
 		wp_enqueue_script( 'stylepress-js' );
 
-
-		if ( $this->is_currently_in_edit_mode() ) {
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
 			// This loads extra scripts into the editor iframe only in edit mode. Used for the styling of the helper text at the top of the edit iframe.
 			wp_enqueue_style( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.css', false, STYLEPRESS_VERSION );
 			wp_enqueue_script( 'stylepress-editor-in', STYLEPRESS_URI . 'build/assets/frontend-edit.js', false, STYLEPRESS_VERSION, true );
-
 		}
 	}
 
-	public function is_currently_in_edit_mode() {
-		return \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode();
+	public function render_content( $post_id ) {
+		if ( post_password_required( $post_id ) ) {
+			return;
+		}
+
+		// TODO: remove reliance on Elementor like this
+		if ( \StylePress\Elementor\Integration::is_post_built_with_elementor( $post_id ) ) {
+			$with_css = false;
+			echo \Elementor\Plugin::$instance->frontend->get_builder_content( $post_id, $with_css );
+		} else {
+			echo apply_filters( 'the_content', get_the_content( null, null, $post_id ) );
+		}
 	}
-
-
 }
 

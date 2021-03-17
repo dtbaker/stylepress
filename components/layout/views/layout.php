@@ -103,6 +103,7 @@ $edit_links = $manage_links = [];
 			<thead>
 			<tr>
 				<th>Page Type</th>
+				<th>Disable</th>
 				<?php foreach ( $categories as $category ) {
 					if ( $category['global_selector'] ) { ?>
 						<th>Default <?php echo $category['title']; ?></th>
@@ -115,6 +116,15 @@ $edit_links = $manage_links = [];
 				<tr class="stylepress-row<?php echo esc_attr( $page_type ); ?>">
 					<td>
 						<?php esc_html_e( $page_type_name ); ?>
+					</td>
+					<td>
+						<input
+							type="checkbox"
+							class=""
+							value="1"
+							name="default_style[<?php echo esc_attr( $page_type ); ?>][_disabled]"
+							<?php echo checked('disabled', isset($default_styles[ $page_type ][ '_disabled' ]) ? $default_styles[ $page_type ][ '_disabled' ] : ''); ?>
+						>
 					</td>
 					<?php foreach ( $categories as $category ) {
 						if ( $category['global_selector'] ) {

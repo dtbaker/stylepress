@@ -34,7 +34,11 @@ class Integration extends \StylePress\Core\Base {
 		return class_exists( '\Elementor\Plugin' ) && is_callable( '\Elementor\Plugin', 'instance' );
 	}
 
-	public function edit_url_for_design( $design_id ){
+	public static function is_post_built_with_elementor($post_id) {
+		return self::is_elementor_active() && \Elementor\Plugin::$instance->db->is_built_with_elementor( $post_id );
+	}
+
+	public static function edit_url_for_design( $design_id ){
 		return \Elementor\Plugin::$instance->documents->get( $design_id )->get_edit_url();
 	}
 

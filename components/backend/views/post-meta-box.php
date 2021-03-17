@@ -5,14 +5,12 @@
  * @package stylepress
  */
 
-namespace StylePress;
+namespace StylePress\Backend;
+
+use StylePress\Styles\Data;
 
 defined( 'STYLEPRESS_VERSION' ) || exit;
 
-$default_styles = Styles::get_instance()->get_default_styles();
-$page_styles    = Styles::get_instance()->get_page_styles( $post->ID );
-
-$page_status = Styles::get_instance()->is_stylpress_enabled( $post );
 
 if ( ! $page_status['enabled'] ) {
 	?>
@@ -34,16 +32,18 @@ if ( ! $page_status['enabled'] ) {
 	<p>
 		<small><?php
 			// Translators: The first %s is a link <a href=""> and the second %s is a closing link </a>.
-			printf( esc_html__( 'Choose the styles for each section here. Create new styles from the %1$sStylePress%2$s page.', 'stylepress' ), '<a href="' . esc_url( admin_url( 'admin.php?page=stylepress' ) ) . '">', '</a>' ); ?></small>
+			printf( esc_html__( 'Choose the styles for this "%s" below.', 'stylepress' ), $page_type ); ?></small>
 	</p>
 	<?php
 	wp_nonce_field( 'stylepress_style_nonce', 'stylepress_style_nonce' );
 
-	$categories = Styles::get_instance()->get_categories();
-
 	foreach ( $categories as $category ) {
 		if ( $category['global_selector'] ) {
-			$designs = Styles::get_instance()->get_all_styles( $category['slug'], true );
+			$default_style_for_category = false;
+			if(!empty($default_styles[$page_type]) && !empty($default_styles[$page_type][$category['slug'] ])){
+				$default_style_for_category = $default_styles[$page_type][$category['slug'] ];
+			}
+			$designs = Data::get_instance()->get_all_styles( $category['slug'], true );
 			if ( $designs ) {
 				?>
 				<p class="post-attributes-label-wrapper">
@@ -57,8 +57,8 @@ if ( ! $page_status['enabled'] ) {
 					<option value="0"><?php
 						// Translators: %s contains the current default style.
 						printf( esc_html__( 'Default %s', 'stylepress' ), esc_attr(
-							$default_styles[ $category['slug'] ] !== false && isset( $designs[ $default_styles[ $category['slug'] ] ] ) ?
-								'(' . $designs[ $default_styles[ $category['slug'] ] ] . ')' :
+							$default_style_for_category && isset( $designs[ $default_style_for_category ] ) ?
+								'(' . $designs[ $default_style_for_category ] . ')' :
 								'' ) );
 						?></option>
 					<?php foreach ( $designs as $design_id => $design_name ) {

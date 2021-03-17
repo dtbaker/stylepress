@@ -129,7 +129,7 @@ class Data extends \StylePress\Core\Base {
 	public function get_design_edit_url( $design_id ) {
 		// if this is an "Elementor" style then we use the Elementor edit page url, otherwise default to the standard WP edit post link
 		if ( \StylePress\Elementor\Integration::is_elementor_active() ) {
-			return \StylePress\Elementor\Integration::get_instance()->edit_url_for_design( $design_id );
+			return \StylePress\Elementor\Integration::edit_url_for_design( $design_id );
 		}
 
 		return get_edit_post_link( $design_id, 'edit' );

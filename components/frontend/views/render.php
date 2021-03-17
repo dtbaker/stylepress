@@ -27,36 +27,36 @@ $elementor_kit_template = false;
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<?php
 	// pull in the default Elementor Theme:
-	if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
-		foreach ( $categories as $category ) {
-			if ( ! empty( $category['is_elementor_kit_style'] ) ) {
-				if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
-					if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
-						$elementor_kit_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
-						// We override the Elementor default active kit here based on the current page selection:
-						add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $elementor_kit_template ) {
-							if ( $elementor_kit_template && $elementor_kit_template->ID ) {
-								$elementor_template_type = get_post_meta( $elementor_kit_template->ID, '_elementor_template_type', true );
-								if ( $elementor_template_type === 'kit' ) {
-									$kit_id = $elementor_kit_template->ID;
-								}
-							}
-
-							return $kit_id;
-						} );
-					}
-				}
-			}
-		}
-	}
+//	if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
+//		foreach ( $categories as $category ) {
+//			if ( ! empty( $category['is_elementor_kit_style'] ) ) {
+//				if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
+//					if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
+//						$elementor_kit_template = get_post( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] );
+//						// We override the Elementor default active kit here based on the current page selection:
+//						add_action( 'pre_option_elementor_active_kit', function ( $kit_id ) use ( $elementor_kit_template ) {
+//							if ( $elementor_kit_template && $elementor_kit_template->ID ) {
+//								$elementor_template_type = get_post_meta( $elementor_kit_template->ID, '_elementor_template_type', true );
+//								if ( $elementor_template_type === 'kit' ) {
+//									$kit_id = $elementor_kit_template->ID;
+//								}
+//							}
+//
+//							return $kit_id;
+//						} );
+//					}
+//				}
+//			}
+//		}
+//	}
 	wp_head();
 	?>
 </head>
 <body <?php body_class(); ?>>
 <?php
-if ( $elementor_kit_template ) {
-	Debug::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
-}
+//if ( $elementor_kit_template ) {
+//	Debug::get_instance()->debug_message( 'Using Elementor Kit:  ' . esc_html( $elementor_kit_template->post_title ) . ' (#' . $elementor_kit_template->ID . ')' );
+//}
 Debug::get_instance()->debug_message( 'Page Type Detected as:  ' . $GLOBALS['stylepress_render']['page_type'] );
 Debug::get_instance()->debug_message( 'Queried object detected as:  ' . ( $GLOBALS['stylepress_render']['queried_object'] && isset( $GLOBALS['stylepress_render']['queried_object']->ID ) ? $GLOBALS['stylepress_render']['queried_object']->ID : 'Unknown' ) );
 
@@ -80,8 +80,12 @@ if ( ! empty( $GLOBALS['stylepress_render'] ) ) {
 		}
 		if ( isset( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] ) ) {
 			if ( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ] > 0 ) {
-				$with_css = false;
-				echo \Elementor\Plugin::$instance->frontend->get_builder_content( $GLOBALS['stylepress_render']['styles'][ $category['slug'] ], $with_css );
+				Render::get_instance()->render_content($GLOBALS['stylepress_render']['styles'][ $category['slug'] ]);
+			}else{
+				// chose to render blank here. flag this inner section as blank if needed
+				if( ! empty( $category['inner'] ) ) {
+					$GLOBALS['stylepress_render']['has_done_inner_content'] = true;
+				}
 			}
 		}
 		if ( ! empty( $category['inner'] ) && empty( $GLOBALS['stylepress_render']['has_done_inner_content'] ) ) {

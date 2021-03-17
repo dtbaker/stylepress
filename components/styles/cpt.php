@@ -55,7 +55,7 @@ class Cpt extends \StylePress\Core\Base {
 		$args = array(
 			'description'         => 'Styles',
 			'labels'              => $labels,
-			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes', 'revisions' ),
+			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes', 'revisions', 'editor' ),
 			'taxonomies'          => array(),
 			'hierarchical'        => true,
 			'public'              => defined( 'STYLEPRESS_ALLOW_EXPORT' ) && STYLEPRESS_ALLOW_EXPORT,
@@ -70,6 +70,7 @@ class Cpt extends \StylePress\Core\Base {
 			'rewrite'             => false,
 			'capability_type'     => 'post',
 			'map_meta_cap'        => true,
+			'show_in_rest'        => true,
 		);
 
 		register_post_type( self::CPT, $args );
@@ -78,8 +79,9 @@ class Cpt extends \StylePress\Core\Base {
 			STYLEPRESS_SLUG . '-cat',
 			self::CPT,
 			array(
-				'hierarchical' => false,
+				'hierarchical' => true,
 				'label'        => 'Category',
+				'show_in_rest' => true,
 			)
 		);
 
