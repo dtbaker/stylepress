@@ -27,6 +27,17 @@ class Cpt extends \StylePress\Core\Base {
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_custom_post_type' ) );
 		add_filter( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 5 );
+		add_filter( 'use_block_editor_for_post', array( $this, 'use_block_editor_for_post' ), 10, 2 );
+	}
+
+	public function use_block_editor_for_post( $use_block_editor, $post ) {
+		if ( $post->post_type === self::CPT && $post->post_parent === 0 ) {
+			remove_post_type_support( self::CPT, 'editor' );
+
+			return false;
+		}
+
+		return $use_block_editor;
 	}
 
 	/**
@@ -55,7 +66,15 @@ class Cpt extends \StylePress\Core\Base {
 		$args = array(
 			'description'         => 'Styles',
 			'labels'              => $labels,
-			'supports'            => array( 'title', 'author', 'thumbnail', 'elementor', 'page-attributes', 'revisions', 'editor' ),
+			'supports'            => array(
+				'title',
+				'author',
+				'thumbnail',
+				'elementor',
+				'page-attributes',
+				'revisions',
+				'editor'
+			),
 			'taxonomies'          => array(),
 			'hierarchical'        => true,
 			'public'              => defined( 'STYLEPRESS_ALLOW_EXPORT' ) && STYLEPRESS_ALLOW_EXPORT,
