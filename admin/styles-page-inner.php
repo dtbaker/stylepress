@@ -122,31 +122,26 @@ if ( $post && $style_id ) {
 							}
 
 							?>
-							<tr>
-								<td>
-									<a class=""
-									   href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php echo esc_html( $style->post_title ); ?></a>
-								</td>
-								<td>
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=dtbaker-stylepress-settings' ) ); ?>">
-										<?php if ( $used ) { ?>
-											<i class="fa fa-check"></i> Style Applied To: <?php echo implode( ', ', $used ); ?>.
-										<?php } else { ?>
-											<i class="fa fa-times"></i> Style Not Used.
-										<?php } ?>
-									</a>
-								</td>
-								<td>
-									<a class="button button"
-									   href="<?php echo esc_url( get_edit_post_link( $style->ID ) ); ?>">Settings</a>
-									<a class="button button"
-									   href="<?php print wp_nonce_url( admin_url( 'admin.php?action=stylepress_clone&post_id=' . (int) $style->ID ), 'stylepress_clone', 'stylepress_clone' ); ?>"><?php esc_html_e( 'Clone', 'stylepress' ); ?></a>
-									<a class="button button"
-									   href="<?php echo esc_url( get_permalink( $style->ID ) ); ?>"><?php esc_html_e( 'Preview', 'stylepress' ); ?></a>
-									<a class="button button-primary"
-									   href="<?php echo esc_url( \Elementor\Utils::get_edit_link( $style->ID ) ); ?>"><?php esc_html_e( 'Elementor', 'stylepress' ); ?></a>
-								</td>
-							</tr>
+														<tr>
+									<td>
+										<a class="" href="<?php echo esc_url('post.php?post=' . (int) $style->ID . '&action=elementor'); ?>"><?php echo esc_html($style->post_title); ?></a>
+									</td>
+									<td>
+										<a href="<?php echo esc_url(admin_url('admin.php?page=dtbaker-stylepress-settings')); ?>">
+											<?php if ($used) { ?>
+												<i class="fa fa-check"></i> Style Applied To: <?php echo implode(', ', $used); ?>.
+											<?php } else { ?>
+												<i class="fa fa-times"></i> Style Not Used.
+											<?php   } ?>
+										</a>
+									</td>
+									<td>
+										<a class="button button" href="<?php echo esc_url(get_edit_post_link($style->ID)); ?>">Settings</a>
+										<a class="button button" href="<?php print wp_nonce_url(admin_url('admin.php?action=stylepress_clone&post_id=' . (int) $style->ID), 'stylepress_clone', 'stylepress_clone'); ?>"><?php esc_html_e('Clone', 'stylepress'); ?></a>
+										<a class="button button" href="<?php echo esc_url(get_permalink($style->ID)); ?>"><?php esc_html_e('Preview', 'stylepress'); ?></a>
+										<a class="button button-primary" href="<?php echo esc_url('post.php?post=' . (int) $style->ID . '&action=elementor'); ?>"><?php esc_html_e('Elementor', 'stylepress'); ?></a>
+									</td>
+								</tr>
 							<?php
 						}
 						?>
